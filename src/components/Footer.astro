@@ -1,0 +1,120 @@
+---
+import { Image } from "astro:assets";
+
+import logo from "../assets/icon/logo.svg";
+import facebook from "../assets/icon/facebook.svg";
+import insta from "../assets/icon/insta.svg";
+import discord from "../assets/icon/discord.svg";
+import footerBg from "../assets/img/footer.avif";
+---
+
+<footer class="relative w-full overflow-hidden border-t border-white/10">
+
+  <!-- Background image -->
+  <Image
+    src={footerBg}
+    alt=""
+    role="presentation"
+    class="absolute inset-0 h-full w-full object-cover"
+    loading="eager"
+    quality={90}
+  />
+
+  <!-- Overlay sombre -->
+  <div class="absolute inset-0 bg-black/75"></div>
+
+  <div class="relative mx-auto w-full max-w-[1200px] px-10 pt-12 pb-6">
+
+    <!-- Logo -->
+    <div class="flex items-start gap-3">
+      <Image src={logo} alt="BARGO" class="h-10 w-auto" />
+      <div class="leading-tight">
+        <div class="text-xl font-semibold tracking-wide text-white">BARGO</div>
+        <div class="text-xs text-white/70">Bar Groupe Organisé</div>
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <div class="mt-10 grid grid-cols-4 gap-12">
+
+      <!-- NAVIGATION -->
+      <div>
+        <div class="text-sm font-semibold uppercase tracking-widest text-green-500">
+          Navigation
+        </div>
+
+        <div class="mt-6 space-y-4 text-sm text-white/80">
+          <a href="/bar" class="block hover:text-white transition">Voir tous les bars</a>
+          <a href="/session" class="block hover:text-white transition">Liste des jeux</a>
+          <a href="/boutique" class="block hover:text-white transition">Boutique</a>
+        </div>
+      </div>
+
+      <!-- INFOS -->
+      <div class="relative">
+        <div class="absolute -left-6 top-0 h-[180px] w-px bg-white/20"></div>
+
+        <div class="text-sm font-semibold uppercase tracking-widest text-green-500">
+          Informations
+        </div>
+
+        <div class="mt-6 space-y-4 text-sm text-white/80">
+          <a href="/partenaires" class="block hover:text-white transition">Partenaires</a>
+          <a href="/apropos" class="block hover:text-white transition">À propos</a>
+          <a href="/contact" class="block hover:text-white transition">Contact</a>
+        </div>
+      </div>
+
+      <!-- PREVENTION -->
+      <div class="relative">
+        <div class="absolute -left-6 top-0 h-[180px] w-px bg-white/20"></div>
+
+        <div class="text-sm font-semibold uppercase tracking-widest text-green-500">
+          Prévention
+        </div>
+
+        <p class="mt-6 max-w-[320px] text-sm leading-relaxed text-white/80">
+          Votre sécurité avant tout.<br />
+          L'abus d'alcool est dangereux pour la santé.<br />
+          BARGO vous accompagne pour des soirées responsables.
+        </p>
+      </div>
+
+      <!-- SUIVEZ-NOUS -->
+      <div class="relative">
+        <div class="absolute -left-6 top-0 h-[180px] w-px bg-white/20"></div>
+
+        <div class="text-sm font-semibold uppercase tracking-widest text-green-500">
+          Suivez-nous
+        </div>
+
+        <div class="mt-8 flex items-center gap-6">
+          <a href="#" aria-label="Facebook" class="opacity-90 hover:opacity-100 transition">
+            <Image src={facebook} alt="" class="h-5 w-5" />
+          </a>
+
+          <a href="#" aria-label="Instagram" class="opacity-90 hover:opacity-100 transition">
+            <Image src={insta} alt="" class="h-5 w-5" />
+          </a>
+
+          <a href="#" aria-label="Discord" class="opacity-90 hover:opacity-100 transition">
+            <Image src={discord} alt="" class="h-5 w-5" />
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Ligne horizontale -->
+    <div class="mt-12 h-px w-full bg-white/25"></div>
+
+    <!-- Bas -->
+    <div class="mt-6 flex items-center justify-between text-xs text-white/70">
+      <a href="/mention_legal" class="hover:text-white transition">
+        Mentions légales
+      </a>
+      <div>© 2026 BARGO</div>
+    </div>
+
+  </div>
+</footer>
