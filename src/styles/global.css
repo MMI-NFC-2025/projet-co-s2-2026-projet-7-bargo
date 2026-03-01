@@ -1,1 +1,31 @@
 @import "tailwindcss";
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Manrope:wght@500;700&display=swap");
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+ h1 {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: 90px;
+    line-height: 100%;
+    letter-spacing: 0.06em;
+  }
+
+  h2 {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 100%;
+    letter-spacing: 0.06em;
+  }
+
+  h3 {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 500;
+    font-size: 25px;
+    line-height: 140%;
+    letter-spacing: -0.04em;
+  }

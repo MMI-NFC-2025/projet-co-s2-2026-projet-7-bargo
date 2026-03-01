@@ -1,16 +1,15 @@
 ---
 import { Image } from "astro:assets";
 
-import logo from "../assets/icon/logo.svg";
+import logo from "../assets/icon/logo-light.svg";
 import facebook from "../assets/icon/facebook.svg";
 import insta from "../assets/icon/insta.svg";
 import discord from "../assets/icon/discord.svg";
 import footerBg from "../assets/img/footer.avif";
 ---
 
-<footer class="relative w-full overflow-hidden border-t border-white/10">
-
-  <!-- Background image -->
+<footer class="relative w-full overflow-hidden">
+  <!-- Background -->
   <Image
     src={footerBg}
     alt=""
@@ -20,101 +19,98 @@ import footerBg from "../assets/img/footer.avif";
     quality={90}
   />
 
-  <!-- Overlay sombre -->
-  <div class="absolute inset-0 bg-black/75"></div>
+  <!-- Overlay simple -->
+  <div class="absolute inset-0 bg-black/70"></div>
 
-  <div class="relative mx-auto w-full max-w-[1200px] px-10 pt-12 pb-6">
-
+  <!-- Container (80px depuis le bord) -->
+  <div class="relative mx-auto w-full max-w-[1440px] pl-[80px] pr-[80px] pt-14 pb-[64px]">
     <!-- Logo -->
-    <div class="flex items-start gap-3">
-      <Image src={logo} alt="BARGO" class="h-10 w-auto" />
-      <div class="leading-tight">
-        <div class="text-xl font-semibold tracking-wide text-white">BARGO</div>
-        <div class="text-xs text-white/70">Bar Groupe Organisé</div>
-      </div>
+    <div>
+      <Image
+        src={logo}
+        alt="BARGO"
+        width={219}
+        height={89}
+        class="h-[89px] w-[219px]"
+        priority
+      />
     </div>
 
     <!-- Grid -->
-    <div class="mt-10 grid grid-cols-4 gap-12">
-
-      <!-- NAVIGATION -->
-      <div>
-        <div class="text-sm font-semibold uppercase tracking-widest text-green-500">
-          Navigation
+    <div class="mt-20 grid grid-cols-12">
+      <!-- NAVIGATION (2 colonnes) : collé à la colonne -->
+      <section class="col-span-2">
+        <div class="text-primary-500">
+          <h3 class="uppercase">Navigation</h3>
         </div>
 
-        <div class="mt-6 space-y-4 text-sm text-white/80">
-          <a href="/bar" class="block hover:text-white transition">Voir tous les bars</a>
-          <a href="/session" class="block hover:text-white transition">Liste des jeux</a>
-          <a href="/boutique" class="block hover:text-white transition">Boutique</a>
+        <nav class="mt-6 space-y-4 text-base text-neutral-200">
+          <a href="/bar" class="block transition hover:opacity-80">Voir tous les bars</a>
+          <a href="/session" class="block transition hover:opacity-80">Liste des jeux</a>
+          <a href="/boutique" class="block transition hover:opacity-80">Boutique</a>
+        </nav>
+      </section>
+
+      <!-- INFORMATIONS (3 colonnes) -->
+      <section class="col-span-3 border-l border-neutral-200/30">
+        <!-- 80px entre la bordure et le texte -->
+        <div class="pl-[28px]">
+          <div class="text-primary-500">
+            <h3 class="uppercase">Informations</h3>
+          </div>
+
+          <nav class="mt-6 space-y-4 text-base text-neutral-200">
+            <a href="/partenaires" class="block transition hover:opacity-80">Partenaires</a>
+            <a href="/apropos" class="block transition hover:opacity-80">A propos</a>
+            <a href="/contact" class="block transition hover:opacity-80">Contact</a>
+          </nav>
         </div>
-      </div>
+      </section>
 
-      <!-- INFOS -->
-      <div class="relative">
-        <div class="absolute -left-6 top-0 h-[180px] w-px bg-white/20"></div>
+      <!-- PREVENTION (4 colonnes) -->
+      <section class="col-span-4 border-l border-neutral-200/30">
+        <div class="pl-[28px]">
+          <div class="text-primary-500">
+            <h3 class="uppercase">Prévention</h3>
+          </div>
 
-        <div class="text-sm font-semibold uppercase tracking-widest text-green-500">
-          Informations
+          <p class="mt-6 max-w-sm text-base text-neutral-200">
+            Votre sécurité avant tout<br />
+            L'abus d'alcool est dangereux pour la santé.<br />
+            BARGO vous accompagne pour des soirées responsables.
+          </p>
         </div>
+      </section>
 
-        <div class="mt-6 space-y-4 text-sm text-white/80">
-          <a href="/partenaires" class="block hover:text-white transition">Partenaires</a>
-          <a href="/apropos" class="block hover:text-white transition">À propos</a>
-          <a href="/contact" class="block hover:text-white transition">Contact</a>
+      <!-- SUIVEZ-NOUS (3 colonnes) -->
+      <section class="col-span-3 border-l border-neutral-200/30">
+        <div class="pl-[28px]">
+          <div class="text-primary-500">
+            <h3 class="uppercase">Suivez-nous</h3>
+          </div>
+
+          <div class="mt-8 flex items-center gap-6">
+            <a href="#" aria-label="Facebook" class="transition hover:opacity-80">
+              <Image src={facebook} alt="" width={26} height={26} />
+            </a>
+            <a href="#" aria-label="Instagram" class="transition hover:opacity-80">
+              <Image src={insta} alt="" width={26} height={26} />
+            </a>
+            <a href="#" aria-label="Discord" class="transition hover:opacity-80">
+              <Image src={discord} alt="" width={26} height={26} />
+            </a>
+          </div>
         </div>
-      </div>
-
-      <!-- PREVENTION -->
-      <div class="relative">
-        <div class="absolute -left-6 top-0 h-[180px] w-px bg-white/20"></div>
-
-        <div class="text-sm font-semibold uppercase tracking-widest text-green-500">
-          Prévention
-        </div>
-
-        <p class="mt-6 max-w-[320px] text-sm leading-relaxed text-white/80">
-          Votre sécurité avant tout.<br />
-          L'abus d'alcool est dangereux pour la santé.<br />
-          BARGO vous accompagne pour des soirées responsables.
-        </p>
-      </div>
-
-      <!-- SUIVEZ-NOUS -->
-      <div class="relative">
-        <div class="absolute -left-6 top-0 h-[180px] w-px bg-white/20"></div>
-
-        <div class="text-sm font-semibold uppercase tracking-widest text-green-500">
-          Suivez-nous
-        </div>
-
-        <div class="mt-8 flex items-center gap-6">
-          <a href="#" aria-label="Facebook" class="opacity-90 hover:opacity-100 transition">
-            <Image src={facebook} alt="" class="h-5 w-5" />
-          </a>
-
-          <a href="#" aria-label="Instagram" class="opacity-90 hover:opacity-100 transition">
-            <Image src={insta} alt="" class="h-5 w-5" />
-          </a>
-
-          <a href="#" aria-label="Discord" class="opacity-90 hover:opacity-100 transition">
-            <Image src={discord} alt="" class="h-5 w-5" />
-          </a>
-        </div>
-      </div>
-
+      </section>
     </div>
 
     <!-- Ligne horizontale -->
-    <div class="mt-12 h-px w-full bg-white/25"></div>
+    <div class="mt-20 h-px w-full bg-neutral-200/40"></div>
 
     <!-- Bas -->
-    <div class="mt-6 flex items-center justify-between text-xs text-white/70">
-      <a href="/mention_legal" class="hover:text-white transition">
-        Mentions légales
-      </a>
+    <div class="mt-6 flex items-center justify-between text-base text-neutral-200">
+      <a href="/mention_legal" class="transition hover:opacity-80">Mentions légales</a>
       <div>© 2026 BARGO</div>
     </div>
-
   </div>
 </footer>
