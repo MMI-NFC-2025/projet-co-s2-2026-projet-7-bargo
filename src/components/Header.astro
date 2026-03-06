@@ -1,0 +1,37 @@
+---
+// Header.astro — navigation principale desktop
+---
+
+<header class="fixed top-0 left-0 w-full z-50 bg-[#1e1e1e]/50 backdrop-blur-sm">
+  <div class="max-w-[1440px] mx-auto px-20 h-[70px] flex items-center justify-between">
+
+    <!-- Logo -->
+    <a href="/" class="shrink-0">
+      <img src="/assets/img/logo-bargo.png" alt="Bargo" width="173" height="70" class="h-[70px] w-auto block" />
+    </a>
+
+    <!-- Navigation -->
+    <nav class="flex gap-10">
+      <a href="#jeux" class="text-white font-medium text-sm leading-[1.1] hover:opacity-70 transition-opacity">Nos jeux</a>
+      <a href="#apropos" class="text-white font-medium text-sm leading-[1.1] hover:opacity-70 transition-opacity">A propos</a>
+      <a href="#bars" class="text-white font-medium text-sm leading-[1.1] hover:opacity-70 transition-opacity">Nos bars</a>
+    </nav>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-6">
+      <!-- Icône profil -->
+      <a href="/profil" class="text-white hover:opacity-70 transition-opacity" aria-label="Mon profil">
+        <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="15.5" cy="10" r="6" stroke="white" stroke-width="2"/>
+          <path d="M2 28c0-7.5 5.8-13 13.5-13S29 20.5 29 28" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </a>
+
+      <!-- CTA -->
+      <a href="/session" class="inline-flex items-center justify-center px-12 py-2 border-2 border-white text-white text-sm font-medium leading-[1.1] hover:bg-white hover:text-[#1e1e1e] transition-colors">
+        Crée un barathon
+      </a>
+    </div>
+
+  </div>
+</header>

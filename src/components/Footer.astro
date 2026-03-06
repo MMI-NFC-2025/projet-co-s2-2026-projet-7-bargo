@@ -1,116 +1,92 @@
 ---
-import { Image } from "astro:assets";
-
-import logo from "../assets/icon/logo-light.svg";
-import facebook from "../assets/icon/facebook.svg";
-import insta from "../assets/icon/insta.svg";
-import discord from "../assets/icon/discord.svg";
-import footerBg from "../assets/img/footer.avif";
+// Footer.astro — pied de page avec fond image, overlay, navigation, réseaux sociaux
 ---
 
-<footer class="relative w-full overflow-hidden">
-  <!-- Background -->
-  <Image
-    src={footerBg}
-    alt=""
-    role="presentation"
-    class="absolute inset-0 h-full w-full object-cover"
-    loading="eager"
-    quality={90}
-  />
+<footer class="relative w-full h-[684px] overflow-hidden">
 
-  <!-- Overlay simple -->
-  <div class="absolute inset-0 bg-black/70"></div>
+  <!-- Image de fond -->
+  <img src="/assets/img/footer-bg.jpg" alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
 
-  <!-- Container (80px depuis le bord) -->
-  <div class="relative mx-auto w-full max-w-[1440px] pl-[80px] pr-[80px] pt-14 pb-[64px]">
+  <!-- Overlay dégradé -->
+  <div class="absolute inset-0 footer-overlay"></div>
+
+  <!-- Contenu principal -->
+  <div class="relative z-10 max-w-[1440px] mx-auto px-20 pt-20 grid gap-10" style="grid-template-columns: 240px 200px 200px 1fr 200px;">
+
     <!-- Logo -->
     <div>
-      <Image
-        src={logo}
-        alt="BARGO"
-        width={219}
-        height={89}
-        class="h-[89px] w-[219px]"
-        priority
-      />
+      <img src="/assets/img/logo-bargo.png" alt="Bargo" class="h-[70px] w-auto block" />
     </div>
 
-    <!-- Grid -->
-    <div class="mt-20 grid grid-cols-12">
-      <!-- NAVIGATION (2 colonnes) : collé à la colonne -->
-      <section class="col-span-2">
-        <div class="text-primary-500">
-          <h3 class="uppercase">Navigation</h3>
-        </div>
+    <!-- Navigation -->
+    <nav class="flex flex-col gap-2">
+      <p class="font-['Manrope'] font-medium text-[25px] leading-[1.4] tracking-[-0.04em] text-[#72c073] mb-2 m-0">NAVIGATION</p>
+      <a href="/bars" class="font-medium text-base leading-[1.4] text-[#f7f1ed] hover:opacity-70 transition-opacity">Voir tous les bars</a>
+      <a href="/jeux" class="font-medium text-base leading-[1.4] text-[#f7f1ed] hover:opacity-70 transition-opacity">Liste des jeux</a>
+      <a href="/boutique" class="font-medium text-base leading-[1.4] text-[#f7f1ed] hover:opacity-70 transition-opacity">Boutique</a>
+      <a href="/apropos" class="font-medium text-base leading-[1.4] text-[#f7f1ed] hover:opacity-70 transition-opacity">A propos</a>
+    </nav>
 
-        <nav class="mt-6 space-y-4 text-base text-neutral-200">
-          <a href="/bar" class="block transition hover:opacity-80">Voir tous les bars</a>
-          <a href="/session" class="block transition hover:opacity-80">Liste des jeux</a>
-          <a href="/boutique" class="block transition hover:opacity-80">Boutique</a>
-        </nav>
-      </section>
+    <!-- Informations -->
+    <nav class="flex flex-col gap-2">
+      <p class="font-['Manrope'] font-medium text-[25px] leading-[1.4] tracking-[-0.04em] text-[#72c073] mb-2 m-0">INFORMATIONS</p>
+      <a href="/partenaires" class="font-medium text-base leading-[1.4] text-[#f7f1ed] hover:opacity-70 transition-opacity">Partenaires</a>
+      <a href="/contact" class="font-medium text-base leading-[1.4] text-[#f7f1ed] hover:opacity-70 transition-opacity">Contact</a>
+    </nav>
 
-      <!-- INFORMATIONS (3 colonnes) -->
-      <section class="col-span-3 border-l border-neutral-200/30">
-        <!-- 80px entre la bordure et le texte -->
-        <div class="pl-[28px]">
-          <div class="text-primary-500">
-            <h3 class="uppercase">Informations</h3>
-          </div>
-
-          <nav class="mt-6 space-y-4 text-base text-neutral-200">
-            <a href="/partenaires" class="block transition hover:opacity-80">Partenaires</a>
-            <a href="/apropos" class="block transition hover:opacity-80">A propos</a>
-            <a href="/contact" class="block transition hover:opacity-80">Contact</a>
-          </nav>
-        </div>
-      </section>
-
-      <!-- PREVENTION (4 colonnes) -->
-      <section class="col-span-4 border-l border-neutral-200/30">
-        <div class="pl-[28px]">
-          <div class="text-primary-500">
-            <h3 class="uppercase">Prévention</h3>
-          </div>
-
-          <p class="mt-6 max-w-sm text-base text-neutral-200">
-            Votre sécurité avant tout<br />
-            L'abus d'alcool est dangereux pour la santé.<br />
-            BARGO vous accompagne pour des soirées responsables.
-          </p>
-        </div>
-      </section>
-
-      <!-- SUIVEZ-NOUS (3 colonnes) -->
-      <section class="col-span-3 border-l border-neutral-200/30">
-        <div class="pl-[28px]">
-          <div class="text-primary-500">
-            <h3 class="uppercase">Suivez-nous</h3>
-          </div>
-
-          <div class="mt-8 flex items-center gap-6">
-            <a href="#" aria-label="Facebook" class="transition hover:opacity-80">
-              <Image src={facebook} alt="" width={26} height={26} />
-            </a>
-            <a href="#" aria-label="Instagram" class="transition hover:opacity-80">
-              <Image src={insta} alt="" width={26} height={26} />
-            </a>
-            <a href="#" aria-label="Discord" class="transition hover:opacity-80">
-              <Image src={discord} alt="" width={26} height={26} />
-            </a>
-          </div>
-        </div>
-      </section>
+    <!-- Prévention -->
+    <div>
+      <p class="font-['Manrope'] font-medium text-[25px] leading-[1.4] tracking-[-0.04em] text-[#72c073] mb-2 m-0">PRÉVENTION</p>
+      <p class="font-medium text-base leading-[1.4] text-[#f7f1ed] m-0">
+        Votre sécurité avant tout<br />
+        L'abus d'alcool est dangereux pour la santé. BARGO vous accompagne pour des soirées responsables.
+      </p>
     </div>
 
-    <!-- Ligne horizontale -->
-    <div class="mt-20 h-px w-full bg-neutral-200/40"></div>
-
-    <!-- Bas -->
-    <div class="mt-6 flex items-center justify-between text-base text-neutral-200">
-      <a href="/mention_legal" class="transition hover:opacity-80">Mentions légales</a>
-      <div>© 2026 BARGO</div>
+    <!-- Réseaux sociaux -->
+    <div>
+      <p class="font-['Manrope'] font-medium text-[25px] leading-[1.4] tracking-[-0.04em] text-[#72c073] mb-6 m-0">SUIVEZ-NOUS</p>
+      <div class="flex gap-3 items-center">
+        <!-- Facebook -->
+        <a href="#" class="opacity-90 hover:opacity-100 transition-opacity" aria-label="Facebook">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <!-- Instagram -->
+        <a href="#" class="opacity-90 hover:opacity-100 transition-opacity" aria-label="Instagram">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+            <rect x="2" y="2" width="20" height="20" rx="5" stroke="white" stroke-width="1.5"/>
+            <circle cx="12" cy="12" r="5" stroke="white" stroke-width="1.5"/>
+            <circle cx="17.5" cy="6.5" r="1" fill="white"/>
+          </svg>
+        </a>
+        <!-- Discord -->
+        <a href="#" class="opacity-90 hover:opacity-100 transition-opacity" aria-label="Discord">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.001.022.015.043.033.056a19.908 19.908 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z" fill="white"/>
+          </svg>
+        </a>
+      </div>
     </div>
+
   </div>
+
+  <!-- Ligne séparatrice -->
+  <div class="relative z-10 max-w-[1440px] mx-auto px-20 mt-10">
+    <div class="border-t border-[#f7f1ed]/30"></div>
+  </div>
+
+  <!-- Bas de page -->
+  <div class="relative z-10 max-w-[1440px] mx-auto px-20 py-5 flex justify-between items-center">
+    <p class="font-medium text-base leading-[1.4] text-[#f7f1ed] m-0">© 2026 BARGO</p>
+    <a href="/mentions-legales" class="font-medium text-base leading-[1.4] text-[#f7f1ed] hover:opacity-70 transition-opacity">Mentions légales</a>
+  </div>
+
 </footer>
+
+<style>
+  .footer-overlay {
+    background: linear-gradient(to bottom, rgba(30, 30, 30, 0.7), #1e1e1e);
+  }
+</style>
