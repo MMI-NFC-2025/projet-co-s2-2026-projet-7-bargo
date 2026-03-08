@@ -32,6 +32,9 @@ src/
 │   ├── img/      → images en .avif (jamais dans /public/)
 │   └── icon/     → icônes en .svg
 ├── components/   → composants réutilisables (.astro)
+│   └── PbImage.astro → composant image PocketBase (toujours utiliser pour les images PB)
+├── js/
+│   └── backend.js → fonctions d'accès PocketBase (getCollection, getRecord, getImageUrl)
 ├── layouts/      → Layout.astro (wrapping global)
 ├── pages/        → pages Astro
 │   ├── index.astro
@@ -52,9 +55,52 @@ src/
 
 ---
 
+## PocketBase (backend dynamique)
+
+URL de base : `https://pbbargo.pierre-mouilleseaux-lhuillier.fr`
+
+### Règles obligatoires
+
+1. **Toutes les fonctions d'accès PocketBase** → dans `src/js/backend.js`
+   - `getCollection(collection, params)` — récupère une liste d'enregistrements
+   - `getRecord(collection, id)` — récupère un seul enregistrement
+   - `getImageUrl(record, filename)` — construit l'URL d'une image PB
+2. **Toutes les images PocketBase** → utiliser le composant `<PbImage>` (jamais `<img>` ou `<Image>` directement)
+3. Le fetch se fait dans le **frontmatter** (SSR), jamais côté client
+
+### Pattern standard
+
+```astro
+---
+import { getCollection } from '../js/backend.js';
+import PbImage from '../components/PbImage.astro';
+
+const bars = await getCollection('bar', { sort: 'created' });
+---
+
+{bars.map(bar => (
+  <div>
+    <PbImage record={bar} recordImage={bar.img?.[0]} width={845} height={670} />
+    <p>{bar.nom}</p>
+  </div>
+))}
+```
+
+### Props de PbImage
+
+| Prop | Type | Description |
+|---|---|---|
+| `record` | Object | L'enregistrement PocketBase complet |
+| `recordImage` | string | Le nom du fichier (`bar.img[0]`, etc.) |
+| `width` | number | Largeur en px (défaut : 400) |
+| `height` | number | Hauteur en px (défaut : 300) |
+
+---
+
 ## Images et icônes
 
-- **Images** : format `.avif`, dans `src/assets/img/`, importées avec `import { Image } from 'astro:assets'`
+- **Images statiques** : format `.avif`, dans `src/assets/img/`, importées avec `import { Image } from 'astro:assets'`
+- **Images PocketBase** : utiliser `<PbImage>` (voir section PocketBase)
 - **Icônes SVG** : dans `src/assets/icon/`, référencées avec `<img src={icon.src} />` (pas `<Image>`)
 - **Jamais** de fichiers statiques dans `/public/assets/`
 - Pour rendre un SVG noir (`fill="#000"`) blanc sur fond sombre : `class="invert"` (Tailwind)
@@ -121,6 +167,22 @@ En Tailwind, utiliser les valeurs hex directement : `bg-[#094736]`, `text-[#72c0
 - `main` dans `Layout.astro` est `w-full` sans padding ni max-width
 - Design **desktop uniquement** pour l'instant (responsive mobile à prévoir plus tard)
 - Breakpoints Tailwind par défaut
+
+### Grille 12 colonnes
+
+La maquette Figma est construite sur une **grille de 12 colonnes** dans un conteneur de 1440px avec `px-20` (80px de padding de chaque côté). Largeur utile : **1280px**.
+
+| Colonnes | Calcul | Valeur Tailwind |
+|---|---|---|
+| 1 col | 1280 / 12 ≈ 106.67px | — |
+| 2 col | 1280 / 6 ≈ 213.33px | — |
+| 3 col | 1280 / 4 = 320px | `w-1/4` (dans le conteneur) |
+| 4 col | 1280 / 3 ≈ 426.67px | `w-1/3` |
+| 6 col | 1280 / 2 = 640px | `w-1/2` |
+| 8 col | 1280 × 2/3 ≈ 853.33px | `w-2/3` |
+| 12 col | 1280px | `w-full` |
+
+Les positions Figma exprimées en `calc(X%+Ypx)` correspondent aux colonnes de cette grille (ex: `calc(33.33%+38px)` = colonne 5 en partant de la gauche absolue).
 
 ---
 

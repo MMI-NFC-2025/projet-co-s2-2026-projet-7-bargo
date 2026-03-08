@@ -2,30 +2,45 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Manrope:wght@500;700&display=swap");
 
+/* Base — Inter Medium 16px */
 body {
   font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.4;
 }
 
- h1 {
-    font-family: 'Manrope', sans-serif;
-    font-weight: 700;
-    font-size: 90px;
-    line-height: 100%;
-    letter-spacing: 0.06em;
-  }
+/* H1 — Manrope Bold 90px */
+h1 {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 90px;
+  line-height: 1;
+  letter-spacing: 5.4px;
+}
 
-  h2 {
-    font-family: 'Manrope', sans-serif;
-    font-weight: 700;
-    font-size: 50px;
-    line-height: 100%;
-    letter-spacing: 0.06em;
-  }
+/* H2 — Manrope Bold 50px */
+h2 {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 50px;
+  line-height: 1;
+  letter-spacing: 3px;
+}
 
-  h3 {
-    font-family: 'Manrope', sans-serif;
-    font-weight: 500;
-    font-size: 25px;
-    line-height: 140%;
-    letter-spacing: -0.04em;
-  }
+/* H3 — Manrope Medium 25px */
+h3 {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 500;
+  font-size: 25px;
+  line-height: 1.4;
+  letter-spacing: -1px;
+}
+
+/* sm — Inter Medium 14px */
+.text-sm {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.1;
+}

@@ -2,12 +2,13 @@
 // index.astro — Page d'accueil BARGO
 import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
+import { getCollection } from '../js/backend.js';
+import PbImage from '../components/PbImage.astro';
 
 import arrowRight     from '../assets/icon/arrow-right.svg';
 import carouselGauche from '../assets/icon/carousel_gauche.svg';
 import carouselDroit  from '../assets/icon/carousel_droit.svg';
 import heroBg         from '../assets/img/hero_acceuil.avif';
-import barImg         from '../assets/img/golden_bar.avif';
 import jeux1          from '../assets/img/jeux-img-1.avif';
 import jeux2          from '../assets/img/jeux-img-2.avif';
 import jeux3          from '../assets/img/jeux-img-3.avif';
@@ -20,6 +21,8 @@ import part1          from '../assets/img/partenaires-1.avif';
 import part2          from '../assets/img/partenaires-2.avif';
 import part3          from '../assets/img/partenaires-3.avif';
 import part4          from '../assets/img/partenaires-4.avif';
+
+const bars = await getCollection('bar', { sort: 'created' });
 
 const faqItems = [
   {
@@ -58,128 +61,146 @@ const faqItems = [
   <!-- ==================== HERO ==================== -->
   <section class="relative w-full h-[700px] overflow-hidden">
     <Image src={heroBg} alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
-    <div class="absolute inset-0 bg-gradient-to-b from-[rgba(30,30,30,0.7)] to-[#1e1e1e]"></div>
-    <div class="absolute inset-0">
-      <!-- Titre principal — unique h1 de la page -->
-      <h1 class="absolute text-white left-[80px] top-[267px] uppercase w-[733px] m-0">
-        "Le barathon
-        <span class="block mt-[49px]">Autrement"</span>
-      </h1>
-      <!-- Description bas droite -->
-      <p class="absolute font-medium text-[16px] leading-[1.4] text-[#dfdfdf] right-[80px] top-[624px] w-[457px] text-right m-0">
-        Une soirée. Un groupe. Un parcours.
-      </p>
-    </div>
+    <!-- Titre principal — unique h1 de la page -->
+    <h1 class="absolute text-white left-[80px] top-[267px] uppercase m-0">
+      <span class="block whitespace-nowrap">"Le barathon</span>
+      <span class="block whitespace-nowrap mt-[49px]">Autrement"</span>
+    </h1>
+    <!-- Description bas droite -->
+    <p class="absolute text-[#dfdfdf] right-[80px] top-[624px] w-[457px] text-right m-0">
+      Une soirée. Un groupe. Un parcours.
+    </p>
   </section>
 
   <!-- ==================== A PROPOS ==================== -->
   <section class="bg-[#f7f1ed] w-full" id="apropos">
-    <div class="max-w-[1440px] mx-auto px-20 pt-[94px]">
+    <div class="max-w-[1440px] mx-auto px-20 pt-[94px] pb-[65px]">
 
-      <!-- Ligne intro -->
-      <div class="flex gap-[109px] items-start">
+      <!-- Ligne intro : h3 col 1-3, description col 5-12 -->
+      <div class="flex items-start">
         <h3 class="text-[#1e1e1e] m-0 w-[328px] shrink-0 mt-[61px]">
           Comment ça fonctionne ? C'est très simple.
         </h3>
-        <p class="font-medium text-[16px] leading-[1.4] text-[#646262] m-0 w-[662px]">
+        <p class="text-[#646262] m-0 w-[662px] ml-[219px]">
           BARGO est une plateforme web dédiée à l'organisation de barathons entre amis. Créez un groupe, sélectionnez vos établissements, attribuez un conducteur responsable et rythmez la soirée avec des défis intégrés.
         </p>
       </div>
 
-      <!-- Steps -->
-      <div class="pb-24">
-        <h2 class="text-[#1e1e1e] mt-[319px] mb-[24px] m-0">Prêts à démarrer votre parcours ?</h2>
-        <div class="flex gap-[109px]">
-          <div class="flex flex-col gap-3 w-[296px]">
-            <p class="font-['Manrope'] font-bold text-[90px] leading-none tracking-[5.4px] uppercase text-[#72c073] m-0">1</p>
-            <p class="font-medium text-[16px] leading-[1.4] text-[#1e1e1e] m-0">Créez votre profil</p>
-            <p class="font-medium text-[14px] leading-[1.1] text-[#646262] m-0">Inscrivez-vous en quelques secondes pour accéder à toutes les fonctionnalités. Personnalisez votre profil et préparez votre prochaine soirée entre amis.</p>
-          </div>
-          <div class="flex flex-col gap-3 w-[296px]">
-            <p class="font-['Manrope'] font-bold text-[90px] leading-none tracking-[5.4px] uppercase text-[#347645] m-0">2</p>
-            <p class="font-medium text-[16px] leading-[1.4] text-[#1e1e1e] m-0">Invitez vos amis</p>
-            <p class="font-medium text-[14px] leading-[1.1] text-[#646262] m-0">Ajoutez vos proches à votre groupe et formez votre équipe. Plus vous êtes nombreux, plus l'expérience devient conviviale et dynamique.</p>
-          </div>
-          <div class="flex flex-col gap-3 w-[296px]">
-            <p class="font-['Manrope'] font-bold text-[90px] leading-none tracking-[5.4px] uppercase text-[#094736] m-0">3</p>
-            <p class="font-medium text-[16px] leading-[1.4] text-[#1e1e1e] m-0">Organisez votre tournée</p>
-            <p class="font-medium text-[14px] leading-[1.1] text-[#646262] m-0">Sélectionnez les bars, définissez l'itinéraire et lancez votre session. Suivez la progression de la soirée et profitez d'un parcours structuré et ludique.</p>
+      <!-- Steps : 3 colonnes, chaque step = numéro gauche + texte droite -->
+      <div class="grid grid-cols-3 mt-[151px]">
+
+        <!-- Step 1 -->
+        <div class="flex">
+          <span class="font-['Manrope'] font-bold text-[90px] leading-none tracking-[5.4px] text-[#72c073] w-[109px] shrink-0">1</span>
+          <div class="flex flex-col pt-[15px]">
+            <p class="text-[#1e1e1e] leading-[1.4] m-0">Créez votre profil</p>
+            <p class="text-[#646262] text-[14px] leading-[1.1] mt-[24px] w-[296px] m-0">Inscrivez-vous en quelques secondes pour accéder à toutes les fonctionnalités. Personnalisez votre profil et préparez votre prochaine soirée entre amis.</p>
           </div>
         </div>
+
+        <!-- Step 2 -->
+        <div class="flex">
+          <span class="font-['Manrope'] font-bold text-[90px] leading-none tracking-[5.4px] text-[#347645] w-[109px] shrink-0">2</span>
+          <div class="flex flex-col pt-[15px]">
+            <p class="text-[#1e1e1e] leading-[1.4] m-0">Invitez vos amis</p>
+            <p class="text-[#646262] text-[14px] leading-[1.1] mt-[24px] w-[296px] m-0">Ajoutez vos proches à votre groupe et formez votre équipe. Plus vous êtes nombreux, plus l'expérience devient conviviale et dynamique.</p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="flex">
+          <span class="font-['Manrope'] font-bold text-[90px] leading-none tracking-[5.4px] text-[#094736] w-[109px] shrink-0">3</span>
+          <div class="flex flex-col pt-[15px]">
+            <p class="text-[#1e1e1e] leading-[1.4] m-0">Organisez votre tournée</p>
+            <p class="text-[#646262] text-[14px] leading-[1.1] mt-[24px] w-[296px] m-0">Sélectionnez les bars, définissez l'itinéraire et lancez votre session. Suivez la progression de la soirée et profitez d'un parcours structuré et ludique.</p>
+          </div>
+        </div>
+
       </div>
+
+      <!-- H2 en bas, après les steps -->
+      <h2 class="text-[#1e1e1e] mt-[196px] m-0">Prêts à démarrer votre parcours ?</h2>
 
     </div>
   </section>
 
   <!-- ==================== BAR ==================== -->
-  <section class="w-full h-[670px] flex overflow-hidden" id="bars">
-    <div class="w-[845px] shrink-0 overflow-hidden">
-      <Image src={barImg} alt="Devanture du Golden Bar" class="w-full h-full object-cover block" />
+  <section class="relative w-full h-[670px] overflow-hidden" id="bars">
+
+    <!-- Track : tous les slides côte à côte, déplacé par translateX -->
+    <div id="bar-track" class="flex h-full" style={`width: ${bars.length * 100}%`}>
+      {bars.map((bar) => (
+        <div class="flex h-full flex-none" style={`width: ${100 / bars.length}%`}>
+          <!-- Image -->
+          <div class="w-[845px] shrink-0 overflow-hidden">
+            <PbImage record={bar} recordImage={bar.img?.[0]} width={845} height={670} />
+          </div>
+          <!-- Infos -->
+          <div class="bg-[#1e1e1e] flex-1 flex flex-col pt-[76px] pl-[109px] pr-[80px]">
+            <h2 class="text-white m-0 mb-[35px]">{bar.nom}</h2>
+            <p class="text-[#f7f1ed] text-[14px] leading-[1.1] m-0 mb-[52px]">{bar.adresse}</p>
+            <p class="text-white w-[297px] m-0 mb-[103px]">{bar.description}</p>
+            <a href={`/bar/${bar.id}`} class="inline-flex items-center gap-4 px-12 py-2 border-2 border-white text-white leading-[1.4] w-fit hover:bg-white hover:text-[#1e1e1e] transition-colors">
+              Choisir mes bars
+              <img src={arrowRight.src} alt="" width="35" height="35" />
+            </a>
+          </div>
+        </div>
+      ))}
     </div>
-    <div class="bg-[#1e1e1e] flex-1 px-16 flex flex-col justify-center gap-0">
-      <h2 class="text-white mb-4 m-0">Le Golden Bar</h2>
-      <p class="font-medium text-[14px] leading-[1.1] text-[#f7f1ed] mb-[68px] m-0">4 Rue du Château, 25200 Montbéliard, France</p>
-      <p class="font-medium text-[16px] leading-[1.4] text-white w-[297px] mb-16 m-0">Ambiance chaleureuse et conviviale au cœur de Montbéliard. Idéal pour débuter un barathon autour d'un verre dans un cadre détendu.</p>
-      <a href="/bar" class="inline-flex items-center gap-4 px-12 py-2 border-2 border-white text-white font-medium text-[16px] leading-[1.4] w-fit hover:bg-white hover:text-[#1e1e1e] transition-colors">
-        Choisir mes bars
-        <img src={arrowRight.src} alt="" width="35" height="35" />
-      </a>
+
+    <!-- Flèches navigation -->
+    <div class="absolute bottom-[97px] right-[80px] flex gap-[17px] z-10">
+      <button id="bar-prev" class="w-[43px] h-[43px]" aria-label="Bar précédent">
+        <img src={carouselGauche.src} alt="" width="43" height="43" />
+      </button>
+      <button id="bar-next" class="w-[43px] h-[43px]" aria-label="Bar suivant">
+        <img src={carouselDroit.src} alt="" width="43" height="43" />
+      </button>
     </div>
+
   </section>
 
   <!-- ==================== JEUX ==================== -->
   <section class="bg-[#f7f1ed] pt-20 pb-0 relative w-full" id="jeux">
     <div class="max-w-[1440px] mx-auto px-20">
 
-      <!-- Ligne haute : texte + 2 colonnes d'images -->
-      <div class="flex gap-[109px] items-start">
+      <!-- 3 colonnes : texte+jeux4 / jeux1+jeux5 / jeux2+jeux3 -->
+      <div class="flex gap-8 items-start">
 
-        <!-- Texte -->
-        <div class="w-[328px] shrink-0 pt-[131px]">
-          <h3 class="text-[#1e1e1e] mb-6 m-0">Des jeux pour animer la soirée</h3>
-          <p class="font-medium text-[16px] leading-[1.4] text-[#646262] m-0">Parmi eux, des défis comme toucher son nez, tenir en équilibre quelques secondes, faire la planche sur une chaise ou répéter une phrase sans erreur, et bien d'autres jeux à relever en équipe.</p>
+        <!-- Col 1 : texte en haut, jeux4 en bas -->
+        <div class="w-[328px] shrink-0 flex flex-col mt-[43px] pt-[35px] h-[889px]">
+          <h3 class="text-[#1e1e1e] mb-[106px] m-0">Des jeux pour animer la soirée</h3>
+          <p class="text-[#646262] m-0">Parmi eux, des défis comme toucher son nez, tenir en équilibre quelques secondes, faire la planche sur une chaise ou répéter une phrase sans erreur, et bien d'autres jeux à relever en équipe.</p>
+          <div class="w-full h-[297px] rounded-[5px] overflow-hidden mt-auto">
+            <Image src={jeux4} alt="Soirée entre amis" class="w-full h-full object-cover block" />
+          </div>
         </div>
 
-        <!-- Images row 1 : grande + colonne droite empilée -->
-        <div class="flex gap-8 items-start shrink-0">
-          <div class="w-[515px] h-[444px] rounded-[5px] overflow-hidden shrink-0">
+        <!-- Col 2 : jeux1 (grande) + jeux5 (grande) -->
+        <div class="flex flex-col gap-6 shrink-0 mt-[43px]">
+          <div class="w-[515px] h-[444px] rounded-[5px] overflow-hidden">
             <Image src={jeux1} alt="Jeux en soirée" class="w-full h-full object-cover block" />
           </div>
-          <div class="flex flex-col gap-6 shrink-0">
-            <div class="w-[296px] h-[325px] rounded-[5px] overflow-hidden">
-              <Image src={jeux2} alt="Ambiance soirée" class="w-full h-full object-cover block" />
-            </div>
-            <div class="w-[296px] h-[220px] rounded-[5px] overflow-hidden">
-              <Image src={jeux3} alt="Fête jeux" class="w-full h-full object-cover block" />
-            </div>
+          <div class="w-[515px] h-[421px] rounded-[5px] overflow-hidden">
+            <Image src={jeux5} alt="Jeux de soirée" class="w-full h-full object-cover block" />
+          </div>
+        </div>
+
+        <!-- Col 3 : jeux2 + jeux3 empilés -->
+        <div class="flex flex-col gap-6 shrink-0 mt-[43px]">
+          <div class="w-[296px] h-[325px] rounded-[5px] overflow-hidden">
+            <Image src={jeux2} alt="Ambiance soirée" class="w-full h-full object-cover block" />
+          </div>
+          <div class="w-[296px] h-[220px] rounded-[5px] overflow-hidden">
+            <Image src={jeux3} alt="Fête jeux" class="w-full h-full object-cover block" />
           </div>
         </div>
 
       </div>
 
-      <!-- Images row 2 : alignées au bord gauche du contenu, bottom-aligned -->
-      <div class="flex gap-[27px] items-end mt-6 pb-0">
-        <div class="w-[410px] h-[297px] rounded-[5px] overflow-hidden shrink-0">
-          <Image src={jeux4} alt="Soirée entre amis" class="w-full h-full object-cover block" />
-        </div>
-        <div class="w-[515px] h-[421px] rounded-[5px] overflow-hidden shrink-0">
-          <Image src={jeux5} alt="Jeux de soirée" class="w-full h-full object-cover block" />
-        </div>
-      </div>
-
     </div>
 
-    <!-- Boutons carousel — positionnés à droite, niveau row 1 -->
-    <div class="absolute right-20 top-[200px] flex gap-2">
-      <button id="jeux-prev" class="relative w-[43px] h-[43px] flex items-center justify-center" aria-label="Précédent">
-        <span class="absolute inset-0 bg-[#72c073] rounded-full"></span>
-        <img src={carouselGauche.src} alt="" width="11" height="17" class="relative z-10" />
-      </button>
-      <button id="jeux-next" class="relative w-[43px] h-[43px] flex items-center justify-center" aria-label="Suivant">
-        <span class="absolute inset-0 bg-[#72c073] opacity-50 rounded-full"></span>
-        <img src={carouselDroit.src} alt="" width="11" height="17" class="relative z-10" />
-      </button>
-    </div>
   </section>
 
   <!-- ==================== VALEURS ==================== -->
@@ -303,6 +324,11 @@ const faqItems = [
 </Layout>
 
 <style>
+  /* Carousel — transition swipe */
+  #bar-track {
+    transition: transform 0.5s ease-in-out;
+  }
+
   /* FAQ : rotation du + quand ouvert */
   .faq-item[open] .faq-icon {
     transform: rotate(45deg);
@@ -310,13 +336,33 @@ const faqItems = [
 </style>
 
 <script>
+  // Carousel bars — swipe par translateX sur le track
+  const track = document.getElementById('bar-track');
+  if (track) {
+    const total = track.children.length;
+    let current = 0;
+
+    function showSlide(n) {
+      current = n;
+      track.style.transform = `translateX(-${n * (100 / total)}%)`;
+    }
+
+    document.getElementById('bar-prev').addEventListener('click', () => {
+      showSlide((current - 1 + total) % total);
+    });
+
+    document.getElementById('bar-next').addEventListener('click', () => {
+      showSlide((current + 1) % total);
+    });
+  }
+
   // FAQ — un seul item ouvert à la fois
   const faqItems = document.querySelectorAll('.faq-item');
   faqItems.forEach(item => {
     item.addEventListener('toggle', () => {
-      if ((item as HTMLDetailsElement).open) {
+      if (item.open) {
         faqItems.forEach(other => {
-          if (other !== item) (other as HTMLDetailsElement).open = false;
+          if (other !== item) other.open = false;
         });
       }
     });
