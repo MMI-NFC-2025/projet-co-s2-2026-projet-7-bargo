@@ -1,5 +1,8 @@
 ---
 // Header.astro — navigation principale desktop
+import { Image } from 'astro:assets';
+import logoLight from '../assets/icon/logo-light.svg';
+import userIcon  from '../assets/icon/user.svg';
 ---
 
 <header class="fixed top-0 left-0 w-full z-50 bg-[#1e1e1e]/50 backdrop-blur-sm">
@@ -7,7 +10,7 @@
 
     <!-- Logo -->
     <a href="/" class="shrink-0">
-      <img src="/assets/img/logo-bargo.png" alt="Bargo" width="173" height="70" class="h-[70px] w-auto block" />
+      <Image src={logoLight} alt="Bargo" width="173" height="70" class="h-[70px] w-auto block" />
     </a>
 
     <!-- Navigation -->
@@ -20,11 +23,8 @@
     <!-- Actions -->
     <div class="flex items-center gap-6">
       <!-- Icône profil -->
-      <a href="/profil" class="text-white hover:opacity-70 transition-opacity" aria-label="Mon profil">
-        <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="15.5" cy="10" r="6" stroke="white" stroke-width="2"/>
-          <path d="M2 28c0-7.5 5.8-13 13.5-13S29 20.5 29 28" stroke="white" stroke-width="2" stroke-linecap="round"/>
-        </svg>
+      <a href="/profil" class="hover:opacity-70 transition-opacity" aria-label="Mon profil">
+        <img src={userIcon.src} alt="" width="31" height="31" class="invert" />
       </a>
 
       <!-- CTA -->

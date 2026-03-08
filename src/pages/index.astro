@@ -1,35 +1,54 @@
 ---
 // index.astro — Page d'accueil BARGO
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+
+import arrowRight     from '../assets/icon/arrow-right.svg';
+import carouselGauche from '../assets/icon/carousel_gauche.svg';
+import carouselDroit  from '../assets/icon/carousel_droit.svg';
+import heroBg         from '../assets/img/hero_acceuil.avif';
+import barImg         from '../assets/img/golden_bar.avif';
+import jeux1          from '../assets/img/jeux-img-1.avif';
+import jeux2          from '../assets/img/jeux-img-2.avif';
+import jeux3          from '../assets/img/jeux-img-3.avif';
+import jeux4          from '../assets/img/jeux-img-4.avif';
+import jeux5          from '../assets/img/jeux-img-5.avif';
+import membre1        from '../assets/img/melvyn_philippon.avif';
+import membre2        from '../assets/img/pierre_mouilleseaux_lhuillier.avif';
+import membre3        from '../assets/img/alex_ringenbach.avif';
+import part1          from '../assets/img/partenaires-1.avif';
+import part2          from '../assets/img/partenaires-2.avif';
+import part3          from '../assets/img/partenaires-3.avif';
+import part4          from '../assets/img/partenaires-4.avif';
 
 const faqItems = [
   {
     question: "Qu'est-ce qu'un barathon ?",
-    answer: "Un barathon est une tournee organisee de bars entre amis, structuree avec un itineraire, des defis et un esprit d'equipe. BARGO vous permet de tout organiser simplement."
+    answer: "Un barathon est une tournée organisée de bars entre amis, structurée avec un itinéraire, des défis et un esprit d'équipe. BARGO vous permet de tout organiser simplement."
   },
   {
-    question: "Comment creer un barathon ?",
-    answer: "Creez votre compte, formez votre groupe, selectionnez les bars de votre itineraire et lancez la session. C'est tout !"
+    question: "Comment créer un barathon ?",
+    answer: "Créez votre compte, formez votre groupe, sélectionnez les bars de votre itinéraire et lancez la session. C'est tout !"
   },
   {
     question: "Faut-il payer pour utiliser BARGO ?",
-    answer: "Non, BARGO est gratuit pour les utilisateurs. Certaines fonctionnalites premium peuvent etre disponibles a l'avenir."
+    answer: "Non, BARGO est gratuit pour les utilisateurs. Certaines fonctionnalités premium peuvent être disponibles à l'avenir."
   },
   {
     question: "Comment inviter mes amis ?",
     answer: "Depuis votre espace, vous pouvez inviter vos amis par lien ou par email directement depuis l'interface."
   },
   {
-    question: "Peut-on modifier l'itineraire en cours de soiree ?",
-    answer: "Oui, l'organisateur peut ajuster l'itineraire en temps reel selon les envies du groupe."
+    question: "Peut-on modifier l'itinéraire en cours de soirée ?",
+    answer: "Oui, l'organisateur peut ajuster l'itinéraire en temps réel selon les envies du groupe."
   },
   {
-    question: "Comment fonctionne le systeme de jeux ?",
-    answer: "Des defis sont proposes automatiquement a chaque etape du barathon. Les joueurs peuvent les accepter ou les passer selon les regles choisies en debut de session."
+    question: "Comment fonctionne le système de jeux ?",
+    answer: "Des défis sont proposés automatiquement à chaque étape du barathon. Les joueurs peuvent les accepter ou les passer selon les règles choisies en début de session."
   },
   {
-    question: "Mes donnees sont-elles protegees ?",
-    answer: "Oui, vos donnees sont hebergees de maniere securisee et ne sont jamais revendues. Consultez nos mentions legales pour plus d'informations."
+    question: "Mes données sont-elles protégées ?",
+    answer: "Oui, vos données sont hébergées de manière sécurisée et ne sont jamais revendues. Consultez nos mentions légales pour plus d'informations."
   }
 ];
 ---
@@ -37,217 +56,242 @@ const faqItems = [
 <Layout>
 
   <!-- ==================== HERO ==================== -->
-  <section class="relative w-full h-[700px] overflow-hidden -mt-10 -mx-4">
-    <img src="/assets/img/hero-bg.jpg" alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
-    <div class="absolute inset-0 hero-overlay"></div>
-    <div class="absolute inset-0 max-w-[1440px] mx-auto px-20">
-      <h1 class="absolute left-20 top-[267px] w-[733px] text-white uppercase m-0">
-        "Le barathon<br />Autrement"
+  <section class="relative w-full h-[700px] overflow-hidden">
+    <Image src={heroBg} alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+    <div class="absolute inset-0 bg-gradient-to-b from-[rgba(30,30,30,0.7)] to-[#1e1e1e]"></div>
+    <div class="absolute inset-0">
+      <!-- Titre principal — unique h1 de la page -->
+      <h1 class="absolute text-white left-[80px] top-[267px] uppercase w-[733px] m-0">
+        "Le barathon
+        <span class="block mt-[49px]">Autrement"</span>
       </h1>
-      <p class="absolute top-[524px] left-[calc(58.33%+5px)] text-white font-['Manrope'] font-bold text-[90px] leading-none tracking-[0.06em] uppercase whitespace-nowrap m-0">
-        Une soiree. Un groupe. Un parcours.
-      </p>
-      <p class="absolute bottom-[76px] right-20 w-[457px] text-[#dfdfdf] font-medium text-base leading-[1.4] text-right m-0">
-        Une soiree. Un groupe. Un parcours.
+      <!-- Description bas droite -->
+      <p class="absolute font-medium text-[16px] leading-[1.4] text-[#dfdfdf] right-[80px] top-[624px] w-[457px] text-right m-0">
+        Une soirée. Un groupe. Un parcours.
       </p>
     </div>
   </section>
 
   <!-- ==================== A PROPOS ==================== -->
-  <section class="bg-[#f7f1ed] pt-24 -mx-4 px-4" id="apropos">
-    <div class="max-w-[1440px] mx-auto px-16">
-      <div class="grid grid-cols-2 gap-10 pt-[94px]">
-        <h3 class="text-black m-0">Comment ca fonctionne ? C'est tres simple.</h3>
-        <p class="text-[#646262] font-medium text-base leading-[1.4] m-0 self-center">
-          BARGO est une plateforme web dediee a l'organisation de barathons entre amis. Creez un groupe, selectionnez vos etablissements, attribuez un conducteur responsable et rythmez la soiree avec des defis integres.
+  <section class="bg-[#f7f1ed] w-full" id="apropos">
+    <div class="max-w-[1440px] mx-auto px-20 pt-[94px]">
+
+      <!-- Ligne intro -->
+      <div class="flex gap-[109px] items-start">
+        <h3 class="text-[#1e1e1e] m-0 w-[328px] shrink-0 mt-[61px]">
+          Comment ça fonctionne ? C'est très simple.
+        </h3>
+        <p class="font-medium text-[16px] leading-[1.4] text-[#646262] m-0 w-[662px]">
+          BARGO est une plateforme web dédiée à l'organisation de barathons entre amis. Créez un groupe, sélectionnez vos établissements, attribuez un conducteur responsable et rythmez la soirée avec des défis intégrés.
         </p>
       </div>
-      <div class="mt-20 pb-20">
-        <h2 class="text-[#1e1e1e] mb-14 m-0">Prets a demarrer votre parcours ?</h2>
-        <div class="grid grid-cols-3 gap-10">
-          <div class="flex flex-col gap-3">
-            <span class="font-['Manrope'] font-bold text-[90px] leading-none tracking-[0.06em] uppercase text-[#72c073]">1</span>
-            <p class="font-medium text-base leading-[1.4] text-[#1e1e1e] m-0">Creez votre profil</p>
-            <p class="font-medium text-sm leading-[1.1] text-[#646262] m-0">Inscrivez-vous en quelques secondes pour acceder a toutes les fonctionnalites. Personnalisez votre profil et preparez votre prochaine soiree entre amis.</p>
+
+      <!-- Steps -->
+      <div class="pb-24">
+        <h2 class="text-[#1e1e1e] mt-[319px] mb-[24px] m-0">Prêts à démarrer votre parcours ?</h2>
+        <div class="flex gap-[109px]">
+          <div class="flex flex-col gap-3 w-[296px]">
+            <p class="font-['Manrope'] font-bold text-[90px] leading-none tracking-[5.4px] uppercase text-[#72c073] m-0">1</p>
+            <p class="font-medium text-[16px] leading-[1.4] text-[#1e1e1e] m-0">Créez votre profil</p>
+            <p class="font-medium text-[14px] leading-[1.1] text-[#646262] m-0">Inscrivez-vous en quelques secondes pour accéder à toutes les fonctionnalités. Personnalisez votre profil et préparez votre prochaine soirée entre amis.</p>
           </div>
-          <div class="flex flex-col gap-3">
-            <span class="font-['Manrope'] font-bold text-[90px] leading-none tracking-[0.06em] uppercase text-[#347645]">2</span>
-            <p class="font-medium text-base leading-[1.4] text-[#1e1e1e] m-0">Invitez vos amis</p>
-            <p class="font-medium text-sm leading-[1.1] text-[#646262] m-0">Ajoutez vos proches a votre groupe et formez votre equipe. Plus vous etes nombreux, plus l'experience devient conviviale et dynamique.</p>
+          <div class="flex flex-col gap-3 w-[296px]">
+            <p class="font-['Manrope'] font-bold text-[90px] leading-none tracking-[5.4px] uppercase text-[#347645] m-0">2</p>
+            <p class="font-medium text-[16px] leading-[1.4] text-[#1e1e1e] m-0">Invitez vos amis</p>
+            <p class="font-medium text-[14px] leading-[1.1] text-[#646262] m-0">Ajoutez vos proches à votre groupe et formez votre équipe. Plus vous êtes nombreux, plus l'expérience devient conviviale et dynamique.</p>
           </div>
-          <div class="flex flex-col gap-3">
-            <span class="font-['Manrope'] font-bold text-[90px] leading-none tracking-[0.06em] uppercase text-[#094736]">3</span>
-            <p class="font-medium text-base leading-[1.4] text-[#1e1e1e] m-0">Organisez votre tournee</p>
-            <p class="font-medium text-sm leading-[1.1] text-[#646262] m-0">Selectionnez les bars, definissez l'itineraire et lancez votre session. Suivez la progression de la soiree et profitez d'un parcours structure et ludique.</p>
+          <div class="flex flex-col gap-3 w-[296px]">
+            <p class="font-['Manrope'] font-bold text-[90px] leading-none tracking-[5.4px] uppercase text-[#094736] m-0">3</p>
+            <p class="font-medium text-[16px] leading-[1.4] text-[#1e1e1e] m-0">Organisez votre tournée</p>
+            <p class="font-medium text-[14px] leading-[1.1] text-[#646262] m-0">Sélectionnez les bars, définissez l'itinéraire et lancez votre session. Suivez la progression de la soirée et profitez d'un parcours structuré et ludique.</p>
           </div>
         </div>
       </div>
+
     </div>
   </section>
 
   <!-- ==================== BAR ==================== -->
-  <section class="w-full h-[670px] flex -mx-4" id="bars">
-    <div class="grid w-full" style="grid-template-columns: 845px 1fr;">
-      <div class="overflow-hidden">
-        <img src="/assets/img/bar-placeholder.jpg" alt="Devanture du Golden Bar" class="w-full h-full object-cover block" />
-      </div>
-      <div class="bg-[#1e1e1e] px-16 flex flex-col justify-center">
-        <h2 class="text-white mb-4 m-0">Le Golden Bar</h2>
-        <p class="font-medium text-sm leading-[1.1] text-[#f7f1ed] mb-12 m-0">4 Rue du Chateau, 25200 Montbeliard, France</p>
-        <p class="font-medium text-base leading-[1.4] text-white max-w-[297px] mb-16 m-0">Ambiance chaleureuse et conviviale au coeur de Montbeliard. Ideal pour debuter un barathon autour d'un verre dans un cadre detendu.</p>
-        <a href="/bars" class="inline-flex items-center gap-4 px-12 py-2 border-2 border-white text-white font-medium text-base leading-[1.4] w-fit hover:bg-white hover:text-[#1e1e1e] transition-colors group">
-          Choisir mes bars
-          <svg class="shrink-0" width="35" height="35" viewBox="0 0 35 35" fill="none">
-            <path d="M7 17.5H28M28 17.5L19 8.5M28 17.5L19 26.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
-      </div>
+  <section class="w-full h-[670px] flex overflow-hidden" id="bars">
+    <div class="w-[845px] shrink-0 overflow-hidden">
+      <Image src={barImg} alt="Devanture du Golden Bar" class="w-full h-full object-cover block" />
+    </div>
+    <div class="bg-[#1e1e1e] flex-1 px-16 flex flex-col justify-center gap-0">
+      <h2 class="text-white mb-4 m-0">Le Golden Bar</h2>
+      <p class="font-medium text-[14px] leading-[1.1] text-[#f7f1ed] mb-[68px] m-0">4 Rue du Château, 25200 Montbéliard, France</p>
+      <p class="font-medium text-[16px] leading-[1.4] text-white w-[297px] mb-16 m-0">Ambiance chaleureuse et conviviale au cœur de Montbéliard. Idéal pour débuter un barathon autour d'un verre dans un cadre détendu.</p>
+      <a href="/bar" class="inline-flex items-center gap-4 px-12 py-2 border-2 border-white text-white font-medium text-[16px] leading-[1.4] w-fit hover:bg-white hover:text-[#1e1e1e] transition-colors">
+        Choisir mes bars
+        <img src={arrowRight.src} alt="" width="35" height="35" />
+      </a>
     </div>
   </section>
 
   <!-- ==================== JEUX ==================== -->
-  <section class="bg-[#f7f1ed] py-20 relative -mx-4 px-4" id="jeux">
-    <div class="max-w-[1440px] mx-auto px-16 grid gap-16" style="grid-template-columns: 328px 1fr;">
-      <div class="flex flex-col gap-6 pt-2">
-        <h3 class="text-black m-0">Des jeux pour animer la soiree</h3>
-        <p class="font-medium text-base leading-[1.4] text-[#646262] m-0">Parmi eux, des defis comme toucher son nez, tenir en equilibre quelques secondes, faire la planche sur une chaise ou repeter une phrase sans erreur, et bien d'autres jeux a relever en equipe.</p>
-      </div>
-      <div class="flex flex-col gap-4">
-        <div class="flex gap-4">
+  <section class="bg-[#f7f1ed] pt-20 pb-0 relative w-full" id="jeux">
+    <div class="max-w-[1440px] mx-auto px-20">
+
+      <!-- Ligne haute : texte + 2 colonnes d'images -->
+      <div class="flex gap-[109px] items-start">
+
+        <!-- Texte -->
+        <div class="w-[328px] shrink-0 pt-[131px]">
+          <h3 class="text-[#1e1e1e] mb-6 m-0">Des jeux pour animer la soirée</h3>
+          <p class="font-medium text-[16px] leading-[1.4] text-[#646262] m-0">Parmi eux, des défis comme toucher son nez, tenir en équilibre quelques secondes, faire la planche sur une chaise ou répéter une phrase sans erreur, et bien d'autres jeux à relever en équipe.</p>
+        </div>
+
+        <!-- Images row 1 : grande + colonne droite empilée -->
+        <div class="flex gap-8 items-start shrink-0">
           <div class="w-[515px] h-[444px] rounded-[5px] overflow-hidden shrink-0">
-            <img src="/assets/img/jeux-1.jpg" alt="Jeux en soiree" class="w-full h-full object-cover block rounded-[5px]" />
+            <Image src={jeux1} alt="Jeux en soirée" class="w-full h-full object-cover block" />
           </div>
-          <div class="w-[296px] h-[325px] rounded-[5px] overflow-hidden shrink-0 self-start">
-            <img src="/assets/img/jeux-2.jpg" alt="Ambiance soiree" class="w-full h-full object-cover block rounded-[5px]" />
+          <div class="flex flex-col gap-6 shrink-0">
+            <div class="w-[296px] h-[325px] rounded-[5px] overflow-hidden">
+              <Image src={jeux2} alt="Ambiance soirée" class="w-full h-full object-cover block" />
+            </div>
+            <div class="w-[296px] h-[220px] rounded-[5px] overflow-hidden">
+              <Image src={jeux3} alt="Fête jeux" class="w-full h-full object-cover block" />
+            </div>
           </div>
         </div>
-        <div class="flex gap-4">
-          <div class="w-[410px] h-[297px] rounded-[5px] overflow-hidden shrink-0">
-            <img src="/assets/img/jeux-3.jpg" alt="Soiree entre amis" class="w-full h-full object-cover block rounded-[5px]" />
-          </div>
-          <div class="w-[515px] h-[421px] rounded-[5px] overflow-hidden shrink-0">
-            <img src="/assets/img/jeux-4.jpg" alt="Jeux de soiree" class="w-full h-full object-cover block rounded-[5px]" />
-          </div>
+
+      </div>
+
+      <!-- Images row 2 : alignées au bord gauche du contenu, bottom-aligned -->
+      <div class="flex gap-[27px] items-end mt-6 pb-0">
+        <div class="w-[410px] h-[297px] rounded-[5px] overflow-hidden shrink-0">
+          <Image src={jeux4} alt="Soirée entre amis" class="w-full h-full object-cover block" />
+        </div>
+        <div class="w-[515px] h-[421px] rounded-[5px] overflow-hidden shrink-0">
+          <Image src={jeux5} alt="Jeux de soirée" class="w-full h-full object-cover block" />
         </div>
       </div>
+
     </div>
-    <div class="absolute right-20 top-[302px] flex gap-2">
-      <button class="relative w-[43px] h-[43px] flex items-center justify-center bg-transparent border-none cursor-pointer" aria-label="Precedent">
+
+    <!-- Boutons carousel — positionnés à droite, niveau row 1 -->
+    <div class="absolute right-20 top-[200px] flex gap-2">
+      <button id="jeux-prev" class="relative w-[43px] h-[43px] flex items-center justify-center" aria-label="Précédent">
         <span class="absolute inset-0 bg-[#72c073] rounded-full"></span>
-        <svg class="relative z-10" width="14" height="14" viewBox="0 0 14 14" fill="none">
-          <path d="M9 2L4 7L9 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        <img src={carouselGauche.src} alt="" width="11" height="17" class="relative z-10" />
       </button>
-      <button class="relative w-[43px] h-[43px] flex items-center justify-center bg-transparent border-none cursor-pointer" aria-label="Suivant">
+      <button id="jeux-next" class="relative w-[43px] h-[43px] flex items-center justify-center" aria-label="Suivant">
         <span class="absolute inset-0 bg-[#72c073] opacity-50 rounded-full"></span>
-        <svg class="relative z-10" width="14" height="14" viewBox="0 0 14 14" fill="none">
-          <path d="M5 2L10 7L5 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        <img src={carouselDroit.src} alt="" width="11" height="17" class="relative z-10" />
       </button>
     </div>
   </section>
 
   <!-- ==================== VALEURS ==================== -->
-  <section class="bg-[#f7f1ed] pt-20 -mx-4" >
-    <div class="max-w-[1440px] mx-auto px-20 mb-14">
+  <section class="bg-[#f7f1ed] w-full">
+    <div class="max-w-[1440px] mx-auto px-20 pt-20 pb-14">
       <h2 class="text-[#1e1e1e] m-0">Au rendez-vous</h2>
     </div>
-    <div class="grid grid-cols-3 w-full">
+    <div class="grid w-full" style="grid-template-columns: repeat(3, 1fr);">
       <div class="bg-[#72c073] h-[455px] px-20 pt-[90px] pb-16 flex flex-col gap-8">
-        <h3 class="text-white m-0">Convivialite</h3>
-        <p class="font-medium text-base leading-[1.4] text-[#dfdfdf] m-0">Nous placons l'experience collective au coeur de chaque barathon. BARGO favorise les moments partages, l'esprit d'equipe et la bonne ambiance afin que chaque sortie reste un souvenir positif entre amis.</p>
+        <h3 class="text-white m-0">Convivialité</h3>
+        <p class="font-medium text-[16px] leading-[1.4] text-[#dfdfdf] m-0">Nous plaçons l'expérience collective au cœur de chaque barathon. BARGO favorise les moments partagés, l'esprit d'équipe et la bonne ambiance afin que chaque sortie reste un souvenir positif entre amis.</p>
       </div>
       <div class="bg-[#347645] h-[455px] px-20 pt-[90px] pb-16 flex flex-col gap-8">
-        <h3 class="text-white m-0">Securite</h3>
-        <p class="font-medium text-base leading-[1.4] text-[#dfdfdf] m-0">La securite fait partie integrante de l'organisation. Attribution d'un conducteur pour la soiree, informations utiles et reperes clairs permettent de profiter pleinement tout en gardant le controle.</p>
+        <h3 class="text-white m-0">Sécurité</h3>
+        <p class="font-medium text-[16px] leading-[1.4] text-[#dfdfdf] m-0">La sécurité fait partie intégrante de l'organisation. Attribution d'un conducteur pour la soirée, informations utiles et repères clairs permettent de profiter pleinement tout en gardant le contrôle.</p>
       </div>
       <div class="bg-[#094736] h-[455px] px-20 pt-[90px] pb-16 flex flex-col gap-8">
-        <h3 class="text-white m-0">Responsabilite</h3>
-        <p class="font-medium text-base leading-[1.4] text-[#dfdfdf] m-0">Un barathon reussi est un barathon maitrise. BARGO encourage un comportement responsable et respectueux, pour soi, pour les autres et pour les etablissements visites.</p>
+        <h3 class="text-white m-0">Responsabilité</h3>
+        <p class="font-medium text-[16px] leading-[1.4] text-[#dfdfdf] m-0">Un barathon réussi est un barathon maîtrisé. BARGO encourage un comportement responsable et respectueux, pour soi, pour les autres et pour les établissements visités.</p>
       </div>
     </div>
   </section>
 
   <!-- ==================== EQUIPE ==================== -->
-  <section class="bg-[#f7f1ed] py-20 -mx-4 px-4" id="equipe">
-    <div class="max-w-[1440px] mx-auto px-16">
-      <div class="grid grid-cols-2 gap-16 mb-14 items-start">
-        <h2 class="text-[#1e1e1e] m-0">Notre equipe</h2>
-        <p class="font-medium text-base leading-[1.4] text-[#646262] m-0 pt-2">Derriere BARGO, une equipe passionnee par l'organisation d'experiences collectives. Nous avons imagine une plateforme simple, structuree et conviviale pour faciliter vos sorties entre amis.</p>
+  <section class="bg-[#f7f1ed] py-20 w-full" id="equipe">
+    <div class="max-w-[1440px] mx-auto px-20">
+
+      <!-- Header équipe -->
+      <div class="flex gap-[109px] items-start mb-14">
+        <h2 class="text-[#1e1e1e] m-0 shrink-0">Notre équipe</h2>
+        <p class="font-medium text-[16px] leading-[1.4] text-[#646262] m-0 pt-3">Derrière BARGO, une équipe passionnée par l'organisation d'expériences collectives. Nous avons imaginé une plateforme simple, structurée et conviviale pour faciliter vos sorties entre amis.</p>
       </div>
-      <div class="grid grid-cols-3 gap-7 mb-14">
+
+      <!-- Cards membres -->
+      <div class="grid gap-7 mb-14" style="grid-template-columns: repeat(3, 1fr);">
+
         <div class="flex flex-col">
           <div class="w-full h-[495px] rounded-[10px] overflow-hidden mb-5">
-            <img src="/assets/img/membre-1.jpg" alt="Melvyn Philippon" class="w-full h-full object-cover block rounded-[10px]" />
+            <Image src={membre1} alt="Melvyn Philippon" class="w-full h-full object-cover block" />
           </div>
           <p class="font-['Manrope'] font-medium text-[25px] leading-[1.4] tracking-[-0.04em] text-[#72c073] mb-1 m-0">Melvyn Philippon</p>
-          <p class="font-medium text-base leading-[1.4] text-[#1e1e1e] mb-3 m-0">Designer</p>
-          <p class="font-medium text-sm leading-[1.1] text-[#646262] m-0">Concoit l'identite visuelle et l'experience utilisateur. Il veille a la coherence graphique et a la simplicite d'utilisation de la plateforme.</p>
+          <p class="font-medium text-[16px] leading-[1.4] text-[#1e1e1e] mb-3 m-0">Designer</p>
+          <p class="font-medium text-[14px] leading-[1.1] text-[#646262] m-0">Conçoit l'identité visuelle et l'expérience utilisateur. Il veille à la cohérence graphique et à la simplicité d'utilisation de la plateforme.</p>
         </div>
+
         <div class="flex flex-col">
           <div class="w-full h-[495px] rounded-[10px] overflow-hidden mb-5">
-            <img src="/assets/img/membre-2.jpg" alt="Pierre Mouilleseaux-Lhuillier" class="w-full h-full object-cover block rounded-[10px]" />
+            <Image src={membre2} alt="Pierre Mouilleseaux-Lhuillier" class="w-full h-full object-cover block" />
           </div>
           <p class="font-['Manrope'] font-medium text-[25px] leading-[1.4] tracking-[-0.04em] text-[#72c073] mb-1 m-0">Pierre Mouilleseaux-Lhuillier</p>
-          <p class="font-medium text-base leading-[1.4] text-[#1e1e1e] mb-3 m-0">Developpeur</p>
-          <p class="font-medium text-sm leading-[1.1] text-[#646262] m-0">Developpe et structure la plateforme. Il transforme les idees en fonctionnalites concretes et assure le bon fonctionnement du site.</p>
+          <p class="font-medium text-[16px] leading-[1.4] text-[#1e1e1e] mb-3 m-0">Développeur</p>
+          <p class="font-medium text-[14px] leading-[1.1] text-[#646262] m-0">Développe et structure la plateforme. Il transforme les idées en fonctionnalités concrètes et assure le bon fonctionnement du site.</p>
         </div>
+
         <div class="flex flex-col">
           <div class="w-full h-[495px] rounded-[10px] overflow-hidden mb-5">
-            <img src="/assets/img/membre-3.jpg" alt="Alex Ringenbach" class="w-full h-full object-cover block rounded-[10px]" />
+            <Image src={membre3} alt="Alex Ringenbach" class="w-full h-full object-cover block" />
           </div>
           <p class="font-['Manrope'] font-medium text-[25px] leading-[1.4] tracking-[-0.04em] text-[#72c073] mb-1 m-0">Alex Ringenbach</p>
-          <p class="font-medium text-base leading-[1.4] text-[#1e1e1e] mb-3 m-0">Communication</p>
-          <p class="font-medium text-sm leading-[1.1] text-[#646262] m-0">Gere l'image et la visibilite du projet. Il s'occupe de la strategie de communication et du lien avec la communaute.</p>
+          <p class="font-medium text-[16px] leading-[1.4] text-[#1e1e1e] mb-3 m-0">Communication</p>
+          <p class="font-medium text-[14px] leading-[1.1] text-[#646262] m-0">Gère l'image et la visibilité du projet. Il s'occupe de la stratégie de communication et du lien avec la communauté.</p>
         </div>
+
       </div>
+
+      <!-- CTA -->
       <div class="flex justify-end">
-        <a href="/apropos" class="inline-flex items-center gap-4 px-12 py-2 bg-[#1e1e1e] text-white font-medium text-base leading-[1.4] hover:opacity-85 transition-opacity">
+        <a href="/Apropos" class="inline-flex items-center gap-4 px-12 py-2 bg-[#1e1e1e] text-white font-medium text-[16px] leading-[1.4] hover:opacity-80 transition-opacity">
           En savoir plus
-          <svg class="shrink-0" width="35" height="35" viewBox="0 0 35 35" fill="none">
-            <path d="M7 17.5H28M28 17.5L19 8.5M28 17.5L19 26.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <img src={arrowRight.src} alt="" width="35" height="35" />
         </a>
       </div>
+
     </div>
   </section>
 
   <!-- ==================== PARTENAIRES ==================== -->
-  <section class="bg-[#094736] min-h-[539px] flex items-center -mx-4 px-4" id="partenaires">
-    <div class="max-w-[1440px] mx-auto px-16 w-full">
+  <section class="bg-[#094736] min-h-[539px] flex items-center w-full" id="partenaires">
+    <div class="max-w-[1440px] mx-auto px-20 w-full py-16">
       <h2 class="text-white text-center mb-16 m-0">Nos partenaires</h2>
-      <div class="flex items-center justify-center gap-16 flex-wrap">
-        <div class="w-[250px] h-[250px] rounded-[5px] overflow-hidden bg-white/10">
-          <img src="/assets/img/partenaire-1.png" alt="Partenaire 1" class="w-full h-full object-cover block" />
+      <div class="flex items-center justify-between">
+        <div class="w-[250px] h-[250px] rounded-[5px] overflow-hidden">
+          <Image src={part1} alt="Partenaire 1" class="w-full h-full object-cover block" />
         </div>
-        <div class="w-[250px] h-[250px] rounded-[5px] overflow-hidden bg-white/10">
-          <img src="/assets/img/partenaire-2.png" alt="Partenaire 2" class="w-full h-full object-cover block" />
+        <div class="w-[250px] h-[250px] rounded-[5px] overflow-hidden">
+          <Image src={part2} alt="Partenaire 2" class="w-full h-full object-cover block" />
         </div>
-        <div class="w-[250px] h-[250px] rounded-[5px] overflow-hidden bg-white/10">
-          <img src="/assets/img/partenaire-3.png" alt="Partenaire 3" class="w-full h-full object-cover block" />
+        <div class="w-[250px] h-[250px] rounded-[5px] overflow-hidden">
+          <Image src={part3} alt="Partenaire 3" class="w-full h-full object-cover block" />
         </div>
-        <div class="w-[250px] h-[250px] rounded-[5px] overflow-hidden bg-white/10">
-          <img src="/assets/img/partenaire-4.png" alt="Partenaire 4" class="w-full h-full object-cover block" />
+        <div class="w-[250px] h-[250px] rounded-[5px] overflow-hidden">
+          <Image src={part4} alt="Partenaire 4" class="w-full h-full object-cover block" />
         </div>
-        <div class="w-[250px] h-[250px] rounded-[5px] overflow-hidden bg-white/10">
-          <img src="/assets/img/partenaire-5.png" alt="Partenaire 5" class="w-full h-full object-cover block" />
+        <div class="w-[250px] h-[250px] rounded-[5px] overflow-hidden">
+          <Image src={part1} alt="Partenaire 5" class="w-full h-full object-cover block" />
         </div>
       </div>
     </div>
   </section>
 
   <!-- ==================== FAQ ==================== -->
-  <section class="bg-[#1e1e1e] py-20 min-h-[1069px] -mx-4 px-4" id="faq">
-    <div class="max-w-[1440px] mx-auto px-16">
+  <section class="bg-[#1e1e1e] py-20 w-full" id="faq">
+    <div class="max-w-[1440px] mx-auto px-20">
       <h2 class="text-white mb-16 m-0">FAQ</h2>
-      <div class="ml-[calc(33.33%+37px)] flex flex-col">
-        {faqItems.map((item) => (
+      <div class="ml-[calc(33.33%+38px)]">
+        {faqItems.map((item, i) => (
           <details class="faq-item border-b border-[#dfdfdf]/30 first:border-t first:border-[#dfdfdf]/30">
-            <summary class="flex items-center justify-between py-5 font-medium text-base leading-[1.4] text-[#dfdfdf] cursor-pointer list-none gap-5 [&::-webkit-details-marker]:hidden">
+            <summary class="flex items-center justify-between py-5 font-medium text-[16px] leading-[1.4] text-[#dfdfdf] cursor-pointer list-none gap-5 select-none [&::-webkit-details-marker]:hidden">
               <span>{item.question}</span>
-              <span class="faq-icon text-xl text-[#dfdfdf] shrink-0 leading-none transition-transform duration-200">+</span>
+              <span class="faq-icon shrink-0 text-[#dfdfdf] text-xl leading-none transition-transform duration-200">+</span>
             </summary>
-            <p class="font-medium text-sm leading-[1.4] text-[#646262] m-0 pb-5 max-w-[700px]">
+            <p class="font-medium text-[14px] leading-[1.4] text-[#646262] m-0 pb-5 pr-10">
               {item.answer}
             </p>
           </details>
@@ -259,11 +303,22 @@ const faqItems = [
 </Layout>
 
 <style>
-  .hero-overlay {
-    background: linear-gradient(to bottom, rgba(30, 30, 30, 0.7), #1e1e1e);
-  }
-
+  /* FAQ : rotation du + quand ouvert */
   .faq-item[open] .faq-icon {
     transform: rotate(45deg);
   }
 </style>
+
+<script>
+  // FAQ — un seul item ouvert à la fois
+  const faqItems = document.querySelectorAll('.faq-item');
+  faqItems.forEach(item => {
+    item.addEventListener('toggle', () => {
+      if ((item as HTMLDetailsElement).open) {
+        faqItems.forEach(other => {
+          if (other !== item) (other as HTMLDetailsElement).open = false;
+        });
+      }
+    });
+  });
+</script>
