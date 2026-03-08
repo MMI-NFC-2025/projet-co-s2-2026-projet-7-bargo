@@ -4,6 +4,8 @@ import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import { getCollection } from '../js/backend.js';
 import PbImage from '../components/PbImage.astro';
+import Faq from '../components/Faq.astro';
+import Partenaires from '../components/Partenaires.astro';
 
 import arrowRight     from '../assets/icon/arrow-right.svg';
 import carouselGauche from '../assets/icon/carousel_gauche.svg';
@@ -17,10 +19,6 @@ import jeux5          from '../assets/img/jeux-img-5.avif';
 import membre1        from '../assets/img/melvyn_philippon.avif';
 import membre2        from '../assets/img/pierre_mouilleseaux_lhuillier.avif';
 import membre3        from '../assets/img/alex_ringenbach.avif';
-import part1          from '../assets/img/partenaires-1.avif';
-import part2          from '../assets/img/partenaires-2.avif';
-import part3          from '../assets/img/partenaires-3.avif';
-import part4          from '../assets/img/partenaires-4.avif';
 
 const bars = await getCollection('bar', { sort: 'created' });
 
@@ -205,19 +203,19 @@ const faqItems = [
 
   <!-- ==================== VALEURS ==================== -->
   <section class="bg-[#f7f1ed] w-full">
-    <div class="max-w-[1440px] mx-auto px-20 pt-20 pb-14">
+    <div class="max-w-[1440px] mx-auto px-20 pt-20 pb-[79px]">
       <h2 class="text-[#1e1e1e] m-0">Au rendez-vous</h2>
     </div>
     <div class="grid w-full" style="grid-template-columns: repeat(3, 1fr);">
-      <div class="bg-[#72c073] h-[455px] px-20 pt-[90px] pb-16 flex flex-col gap-8">
+      <div class="bg-[#72c073] h-[455px] px-20 pt-[90px] pb-16 flex flex-col gap-[61px]">
         <h3 class="text-white m-0">Convivialité</h3>
         <p class="font-medium text-[16px] leading-[1.4] text-[#dfdfdf] m-0">Nous plaçons l'expérience collective au cœur de chaque barathon. BARGO favorise les moments partagés, l'esprit d'équipe et la bonne ambiance afin que chaque sortie reste un souvenir positif entre amis.</p>
       </div>
-      <div class="bg-[#347645] h-[455px] px-20 pt-[90px] pb-16 flex flex-col gap-8">
+      <div class="bg-[#347645] h-[455px] px-20 pt-[90px] pb-16 flex flex-col gap-[61px]">
         <h3 class="text-white m-0">Sécurité</h3>
         <p class="font-medium text-[16px] leading-[1.4] text-[#dfdfdf] m-0">La sécurité fait partie intégrante de l'organisation. Attribution d'un conducteur pour la soirée, informations utiles et repères clairs permettent de profiter pleinement tout en gardant le contrôle.</p>
       </div>
-      <div class="bg-[#094736] h-[455px] px-20 pt-[90px] pb-16 flex flex-col gap-8">
+      <div class="bg-[#094736] h-[455px] px-20 pt-[90px] pb-16 flex flex-col gap-[61px]">
         <h3 class="text-white m-0">Responsabilité</h3>
         <p class="font-medium text-[16px] leading-[1.4] text-[#dfdfdf] m-0">Un barathon réussi est un barathon maîtrisé. BARGO encourage un comportement responsable et respectueux, pour soi, pour les autres et pour les établissements visités.</p>
       </div>
@@ -228,39 +226,41 @@ const faqItems = [
   <section class="bg-[#f7f1ed] py-20 w-full" id="equipe">
     <div class="max-w-[1440px] mx-auto px-20">
 
-      <!-- Header équipe -->
-      <div class="flex gap-[109px] items-start mb-14">
-        <h2 class="text-[#1e1e1e] m-0 shrink-0">Notre équipe</h2>
-        <p class="font-medium text-[16px] leading-[1.4] text-[#646262] m-0 pt-3">Derrière BARGO, une équipe passionnée par l'organisation d'expériences collectives. Nous avons imaginé une plateforme simple, structurée et conviviale pour faciliter vos sorties entre amis.</p>
+      <!-- Header équipe : h2 gauche, description à 765px du bord container -->
+      <div class="flex items-start mb-[134px]">
+        <div class="w-[765px] shrink-0">
+          <h2 class="text-[#1e1e1e] m-0">Notre équipe</h2>
+        </div>
+        <p class="font-medium text-[16px] leading-[1.4] text-[#646262] m-0 pt-[13px] w-[382px]">Derrière BARGO, une équipe passionnée par l'organisation d'expériences collectives. Nous avons imaginé une plateforme simple, structurée et conviviale pour faciliter vos sorties entre amis.</p>
       </div>
 
       <!-- Cards membres -->
       <div class="grid gap-7 mb-14" style="grid-template-columns: repeat(3, 1fr);">
 
         <div class="flex flex-col">
-          <div class="w-full h-[495px] rounded-[10px] overflow-hidden mb-5">
+          <div class="w-full h-[495px] rounded-[10px] overflow-hidden mb-[54px]">
             <Image src={membre1} alt="Melvyn Philippon" class="w-full h-full object-cover block" />
           </div>
-          <p class="font-['Manrope'] font-medium text-[25px] leading-[1.4] tracking-[-0.04em] text-[#72c073] mb-1 m-0">Melvyn Philippon</p>
-          <p class="font-medium text-[16px] leading-[1.4] text-[#1e1e1e] mb-3 m-0">Designer</p>
+          <h3 class="text-[#72c073] m-0 mb-[16px]">Melvyn Philippon</h3>
+          <p class="font-medium text-[16px] leading-[1.4] text-[#1e1e1e] m-0 mb-[43px]">Designer</p>
           <p class="font-medium text-[14px] leading-[1.1] text-[#646262] m-0">Conçoit l'identité visuelle et l'expérience utilisateur. Il veille à la cohérence graphique et à la simplicité d'utilisation de la plateforme.</p>
         </div>
 
         <div class="flex flex-col">
-          <div class="w-full h-[495px] rounded-[10px] overflow-hidden mb-5">
+          <div class="w-full h-[495px] rounded-[10px] overflow-hidden mb-[54px]">
             <Image src={membre2} alt="Pierre Mouilleseaux-Lhuillier" class="w-full h-full object-cover block" />
           </div>
-          <p class="font-['Manrope'] font-medium text-[25px] leading-[1.4] tracking-[-0.04em] text-[#72c073] mb-1 m-0">Pierre Mouilleseaux-Lhuillier</p>
-          <p class="font-medium text-[16px] leading-[1.4] text-[#1e1e1e] mb-3 m-0">Développeur</p>
+          <h3 class="text-[#72c073] m-0 mb-[16px]">Pierre Mouilleseaux-Lhuillier</h3>
+          <p class="font-medium text-[16px] leading-[1.4] text-[#1e1e1e] m-0 mb-[43px]">Développeur</p>
           <p class="font-medium text-[14px] leading-[1.1] text-[#646262] m-0">Développe et structure la plateforme. Il transforme les idées en fonctionnalités concrètes et assure le bon fonctionnement du site.</p>
         </div>
 
         <div class="flex flex-col">
-          <div class="w-full h-[495px] rounded-[10px] overflow-hidden mb-5">
+          <div class="w-full h-[495px] rounded-[10px] overflow-hidden mb-[54px]">
             <Image src={membre3} alt="Alex Ringenbach" class="w-full h-full object-cover block" />
           </div>
-          <p class="font-['Manrope'] font-medium text-[25px] leading-[1.4] tracking-[-0.04em] text-[#72c073] mb-1 m-0">Alex Ringenbach</p>
-          <p class="font-medium text-[16px] leading-[1.4] text-[#1e1e1e] mb-3 m-0">Communication</p>
+          <h3 class="text-[#72c073] m-0 mb-[16px]">Alex Ringenbach</h3>
+          <p class="font-medium text-[16px] leading-[1.4] text-[#1e1e1e] m-0 mb-[43px]">Communication</p>
           <p class="font-medium text-[14px] leading-[1.1] text-[#646262] m-0">Gère l'image et la visibilité du projet. Il s'occupe de la stratégie de communication et du lien avec la communauté.</p>
         </div>
 
@@ -278,48 +278,9 @@ const faqItems = [
   </section>
 
   <!-- ==================== PARTENAIRES ==================== -->
-  <section class="bg-[#094736] min-h-[539px] flex items-center w-full" id="partenaires">
-    <div class="max-w-[1440px] mx-auto px-20 w-full py-16">
-      <h2 class="text-white text-center mb-16 m-0">Nos partenaires</h2>
-      <div class="flex items-center justify-between">
-        <div class="w-[250px] h-[250px] rounded-[5px] overflow-hidden">
-          <Image src={part1} alt="Partenaire 1" class="w-full h-full object-cover block" />
-        </div>
-        <div class="w-[250px] h-[250px] rounded-[5px] overflow-hidden">
-          <Image src={part2} alt="Partenaire 2" class="w-full h-full object-cover block" />
-        </div>
-        <div class="w-[250px] h-[250px] rounded-[5px] overflow-hidden">
-          <Image src={part3} alt="Partenaire 3" class="w-full h-full object-cover block" />
-        </div>
-        <div class="w-[250px] h-[250px] rounded-[5px] overflow-hidden">
-          <Image src={part4} alt="Partenaire 4" class="w-full h-full object-cover block" />
-        </div>
-        <div class="w-[250px] h-[250px] rounded-[5px] overflow-hidden">
-          <Image src={part1} alt="Partenaire 5" class="w-full h-full object-cover block" />
-        </div>
-      </div>
-    </div>
-  </section>
+  <Partenaires />
 
-  <!-- ==================== FAQ ==================== -->
-  <section class="bg-[#1e1e1e] py-20 w-full" id="faq">
-    <div class="max-w-[1440px] mx-auto px-20">
-      <h2 class="text-white mb-16 m-0">FAQ</h2>
-      <div class="ml-[calc(33.33%+38px)]">
-        {faqItems.map((item, i) => (
-          <details class="faq-item border-b border-[#dfdfdf]/30 first:border-t first:border-[#dfdfdf]/30">
-            <summary class="flex items-center justify-between py-5 font-medium text-[16px] leading-[1.4] text-[#dfdfdf] cursor-pointer list-none gap-5 select-none [&::-webkit-details-marker]:hidden">
-              <span>{item.question}</span>
-              <span class="faq-icon shrink-0 text-[#dfdfdf] text-xl leading-none transition-transform duration-200">+</span>
-            </summary>
-            <p class="font-medium text-[14px] leading-[1.4] text-[#646262] m-0 pb-5 pr-10">
-              {item.answer}
-            </p>
-          </details>
-        ))}
-      </div>
-    </div>
-  </section>
+  <Faq items={faqItems} />
 
 </Layout>
 
@@ -356,15 +317,6 @@ const faqItems = [
     });
   }
 
-  // FAQ — un seul item ouvert à la fois
-  const faqItems = document.querySelectorAll('.faq-item');
-  faqItems.forEach(item => {
-    item.addEventListener('toggle', () => {
-      if (item.open) {
-        faqItems.forEach(other => {
-          if (other !== item) other.open = false;
-        });
-      }
-    });
-  });
 </script>
+
+<script src="../scripts/drag-scroll.js"></script>

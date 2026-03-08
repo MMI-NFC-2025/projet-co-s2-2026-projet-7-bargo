@@ -1,0 +1,42 @@
+---
+import { Image } from 'astro:assets';
+import part1 from '../assets/img/partenaires-1.avif';
+import part2 from '../assets/img/partenaires-2.avif';
+import part3 from '../assets/img/partenaires-3.avif';
+import part4 from '../assets/img/partenaires-4.avif';
+---
+
+<section class="bg-[#094736] min-h-[539px] flex flex-col justify-center w-full py-16" id="partenaires">
+  <div class="max-w-[1440px] mx-auto px-20 w-full mb-16">
+    <h2 class="text-white text-center m-0">Nos partenaires</h2>
+  </div>
+  <div id="partners-carousel" class="w-full overflow-x-scroll cursor-grab select-none" style="scrollbar-width:none; -ms-overflow-style:none;">
+    <div class="flex gap-[50px] px-20" style="width:max-content;">
+      <div class="w-[250px] h-[250px] rounded-[5px] overflow-hidden shrink-0">
+        <Image src={part1} alt="Partenaire 1" class="w-full h-full object-cover block pointer-events-none" />
+      </div>
+      <div class="w-[250px] h-[250px] rounded-[5px] overflow-hidden shrink-0">
+        <Image src={part2} alt="Partenaire 2" class="w-full h-full object-cover block pointer-events-none" />
+      </div>
+      <div class="w-[250px] h-[250px] rounded-[5px] overflow-hidden shrink-0">
+        <Image src={part3} alt="Partenaire 3" class="w-full h-full object-cover block pointer-events-none" />
+      </div>
+      <div class="w-[250px] h-[250px] rounded-[5px] overflow-hidden shrink-0">
+        <Image src={part4} alt="Partenaire 4" class="w-full h-full object-cover block pointer-events-none" />
+      </div>
+      <div class="w-[250px] h-[250px] rounded-[5px] overflow-hidden shrink-0">
+        <Image src={part1} alt="Partenaire 5" class="w-full h-full object-cover block pointer-events-none" />
+      </div>
+      <div class="w-[250px] h-[250px] rounded-[5px] overflow-hidden shrink-0">
+        <Image src={part2} alt="Partenaire 6" class="w-full h-full object-cover block pointer-events-none" />
+      </div>
+      <div class="w-[250px] h-[250px] rounded-[5px] overflow-hidden shrink-0">
+        <Image src={part3} alt="Partenaire 7" class="w-full h-full object-cover block pointer-events-none" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../js/drag-scroll.js';
+</script>

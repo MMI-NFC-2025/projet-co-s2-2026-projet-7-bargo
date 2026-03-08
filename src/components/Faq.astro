@@ -1,0 +1,32 @@
+---
+const { items = [], title = "FAQ" } = Astro.props;
+---
+
+<section class="bg-[#1e1e1e] py-20 w-full" id="faq">
+  <div class="max-w-[1440px] mx-auto px-20">
+    <h2 class="text-white mb-16 m-0">{title}</h2>
+    <div class="ml-[calc(33.33%+38px)]">
+      {items.map((item) => (
+        <details class="faq-item border-b border-[#dfdfdf]/30 first:border-t first:border-[#dfdfdf]/30">
+          <summary class="flex items-center justify-between py-5 font-medium text-[16px] leading-[1.4] text-[#dfdfdf] cursor-pointer list-none gap-5 select-none [&::-webkit-details-marker]:hidden">
+            <span>{item.question}</span>
+            <span class="faq-icon shrink-0 text-[#dfdfdf] text-xl leading-none transition-transform duration-200">+</span>
+          </summary>
+          <p class="font-medium text-[14px] leading-[1.4] text-[#646262] m-0 pb-5 pr-10">
+            {item.answer}
+          </p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-item[open] .faq-icon {
+    transform: rotate(45deg);
+  }
+</style>
+
+<script>
+  import '../js/faq.js';
+</script>
