@@ -1,0 +1,564 @@
+---
+// @ts-nocheck
+import { Image } from 'astro:assets';
+import { getCollection, getImageUrl } from '../js/backend.js';
+
+import logoDark      from '../assets/icon/logo-dark.svg';
+import logoLight     from '../assets/icon/logo-light.svg';
+import iconFb        from '../assets/icon/facebook.svg';
+import iconInsta     from '../assets/icon/insta.svg';
+import iconDiscord   from '../assets/icon/discord.svg';
+
+import heroImg     from '../assets/img/landing_page_hero.avif';
+import cotelImg    from '../assets/img/cotel.avif';
+import carouselImg from '../assets/img/img_carousle-1.avif';
+import footerBg    from '../assets/img/footer.avif';
+import membre1     from '../assets/img/melvyn_philippon.avif';
+import membre2     from '../assets/img/pierre_mouilleseaux_lhuillier.avif';
+import membre3     from '../assets/img/alex_ringenbach.avif';
+
+import '../styles/global.css';
+
+const token  = Astro.cookies.get('pb_token')?.value;
+const userId = Astro.cookies.get('pb_user_id')?.value;
+if (token && userId) return Astro.redirect('/');
+
+const bars = await getCollection('bar', { sort: 'created' });
+
+function truncate15(text) {
+  if (!text) return '';
+  const words = text.trim().split(/\s+/);
+  if (words.length <= 15) return text;
+  return words.slice(0, 15).join(' ') + '\u2026';
+}
+
+const barsData = bars.map(bar => ({
+  id:          bar.id,
+  nom:         bar.nom ?? '',
+  adresse:     bar.adresse ?? '',
+  description: truncate15(bar.description),
+  parallaxUrl: bar.galerie?.[0]
+    ? getImageUrl(bar, bar.galerie[0])
+    : (bar.img?.[0] ? getImageUrl(bar, bar.img[0]) : ''),
+  cardImgUrl: bar.img?.[0] ? getImageUrl(bar, bar.img[0]) : '',
+}));
+
+const valeurs = [
+  {
+    titre: 'Convivialité',
+    texte: "Bargo favorise les moments de partage entre amis. La plateforme est pensée pour rendre les sorties plus simples, agréables et collectives.",
+  },
+  {
+    titre: 'Sécurité',
+    texte: "La sécurité est au cœur du projet Bargo. La plateforme aide les utilisateurs à organiser leurs sorties tout en facilitant un retour plus serein après la soirée.",
+  },
+  {
+    titre: 'Responsabilité',
+    texte: "Le projet encourage une approche responsable des sorties. Bargo propose des outils qui aident les utilisateurs à mieux anticiper leurs déplacements et leurs décisions.",
+  },
+];
+const valeursImages = [cotelImg, heroImg, carouselImg];
+---
+
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bargo — Sortez organisés, rentrez en sécurité</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&family=Manrope:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="/favicon.svg" sizes="any" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 16px; line-height: 1.4; background: #f7f1ed; }
+    h1 { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 90px; line-height: 1; letter-spacing: 5.4px; }
+    h2 { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 50px; line-height: 1; letter-spacing: 3px; }
+    h3 { font-family: 'Manrope', sans-serif; font-weight: 500; font-size: 25px; line-height: 1.4; letter-spacing: -1px; }
+  </style>
+</head>
+<body>
+
+<!-- ========== HEADER ========== -->
+<header style="position:fixed;top:0;left:0;width:100%;z-index:50;background:#fff;height:92px;box-shadow:0px 4px 4px 0px rgba(0,0,0,0.25);">
+  <div style="max-width:1440px;margin:0 auto;padding:0 80px;height:92px;display:flex;align-items:center;">
+    <a href="/LandingPage" style="flex-shrink:0;">
+      <img src={logoDark.src} alt="Bargo" style="height:42px;width:auto;display:block;" />
+    </a>
+    <nav style="display:flex;align-items:center;margin-left:52px;">
+      <a href="#produit" style="padding:25px 35px;font-weight:500;font-size:14px;line-height:1.1;color:#000;text-decoration:none;white-space:nowrap;">Produit</a>
+      <a href="#bars"    style="padding:25px 35px;font-weight:500;font-size:14px;line-height:1.1;color:#000;text-decoration:none;white-space:nowrap;">Bars</a>
+      <a href="#vision"  style="padding:25px 35px;font-weight:500;font-size:14px;line-height:1.1;color:#000;text-decoration:none;white-space:nowrap;">Vision</a>
+      <a href="#equipe"  style="padding:25px 35px;font-weight:500;font-size:14px;line-height:1.1;color:#000;text-decoration:none;white-space:nowrap;">Équipe</a>
+    </nav>
+    <div style="flex:1;"></div>
+    <a href="/connexion" style="display:inline-flex;align-items:center;justify-content:center;padding:0 50px;height:45px;background:#000;color:#fff;font-weight:500;font-size:14px;line-height:1.1;text-decoration:none;white-space:nowrap;">
+      INSCRIPTION
+    </a>
+  </div>
+</header>
+
+<!-- ========== HERO (685px total, 92px behind header) ========== -->
+<section style="position:relative;width:100%;height:685px;overflow:hidden;">
+  <!-- Background image -->
+  <Image src={heroImg} alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" />
+  <!-- Overlay -->
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(30,30,30,0.7),#1e1e1e);"></div>
+
+  <!-- H1: center at top:309px (equiv to 309px from section top, 217px below header) -->
+  <h1 style="position:absolute;top:309px;transform:translateY(-50%);left:80px;width:1038px;color:#fff;text-transform:uppercase;">
+    Sortez organisés rentrez en sécurité
+  </h1>
+
+  <!-- Description: top:521px -->
+  <p style="position:absolute;top:521px;left:80px;width:515px;font-size:16px;font-weight:500;line-height:1.4;color:#fff;">
+    Bargo est la première plateforme qui simplifie l'organisation des soirées entre amis tout en garantissant un retour sécurisé à la maison.
+  </p>
+
+  <!-- CTA button: top:544px, left:calc(75%-16px)≈1064px -->
+  <a href="/connexion" style="position:absolute;top:544px;left:calc(75% - 16px);width:296px;height:60px;background:#347645;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;text-decoration:none;">
+    Découvrir Bargo
+  </a>
+</section>
+
+<!-- ========== CE QUE BARGO PERMET (h:1153px) ========== -->
+<section id="produit" style="position:relative;width:100%;height:1153px;background:#fff;overflow:hidden;">
+
+  <!-- H2: top:157px from section top -->
+  <h2 style="position:absolute;top:157px;left:80px;width:508px;color:#000;">Ce que Bargo permet de faire</h2>
+
+  <!-- Right image: top:157px, left:736px, w:704px, h:862px -->
+  <div style="position:absolute;top:157px;left:736px;width:704px;height:862px;border-radius:0 0 10px 10px;overflow:hidden;">
+    <Image src={cotelImg} alt="Soirée Bargo" style="width:100%;height:100%;object-fit:cover;display:block;" />
+  </div>
+
+  <!-- Features list: top:334px, left:80px, w:516px -->
+  <div style="position:absolute;top:334px;left:80px;width:516px;display:flex;flex-direction:column;gap:59px;">
+
+    <div style="display:flex;flex-direction:column;gap:26px;">
+      <h3 style="color:#000;">Planifiez votre soirée facilement</h3>
+      <p style="color:#646262;font-size:16px;font-weight:500;line-height:1.4;">Créez une sortie en quelques clics. Choisissez les bars, définissez l'ordre des étapes et préparez votre parcours pour la soirée.</p>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:26px;">
+      <h3 style="color:#000;">Invitez vos amis</h3>
+      <p style="color:#646262;font-size:16px;font-weight:500;line-height:1.4;">Invitez facilement vos amis à rejoindre votre sortie. Chacun peut consulter les informations de la soirée et suivre le parcours prévu.</p>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:26px;">
+      <h3 style="color:#000;">Découvrez les bars autour de vous</h3>
+      <p style="color:#646262;font-size:16px;font-weight:500;line-height:1.4;">Bargo intègre une sélection de bars disponibles. Consultez les informations essentielles et créez facilement votre parcours pour la soirée.</p>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:26px;">
+      <h3 style="color:#000;">Débloquez des récompenses</h3>
+      <p style="color:#646262;font-size:16px;font-weight:500;line-height:1.4;">Bargo propose un système de badges et de récompenses pour encourager les sorties responsables. Participez à des barathons et débloquez des récompenses au fil de vos soirées.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ========== NOS BARS BANNER (h:440px) ========== -->
+<section style="position:relative;width:100%;height:440px;background:#094736;" id="bars">
+  <!-- H1 NOS BARS: top:113px, left:80px -->
+  <h1 style="position:absolute;top:113px;left:80px;color:#fff;text-transform:uppercase;white-space:nowrap;">
+    NOS BARS
+  </h1>
+  <!-- Description: top:128px, left:736px, w:547px -->
+  <p style="position:absolute;top:128px;left:736px;width:547px;color:#f7f1ed;font-size:16px;font-weight:500;line-height:1.4;">
+    Explorez les bars de Montbéliard et choisissez les étapes de votre prochaine tournée. Créez un parcours sur mesure pour une soirée organisée et conviviale.
+  </p>
+</section>
+
+<!-- ========== BAR CAROUSEL (h:844px) — animation : bg monte, card part à gauche ========== -->
+{barsData.length > 0 && (
+  <section style="position:relative;width:100%;height:844px;overflow:hidden;background:#094736;">
+
+    <!-- ── Zone gauche : image de fond + nom du bar (595px, overflow:hidden pour l'animation) ── -->
+    <div id="lp-bg-wrap" style="position:absolute;left:0;top:0;width:595px;height:100%;overflow:hidden;border-radius:0 5px 0 0;">
+
+      <!-- Slide A (actif) -->
+      <div id="lp-bg-a" style="position:absolute;left:0;top:0;width:100%;height:100%;">
+        <div id="lp-prlx-a" style={`position:absolute;inset:0;background-image:url('${barsData[0].parallaxUrl}');background-size:cover;background-position:center 50%;`}></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(30,30,30,0.65) 0%,transparent 55%);pointer-events:none;"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(30,30,30,0.35) 0%,transparent 40%);pointer-events:none;"></div>
+        <h2 id="lp-nom-a" style="position:absolute;left:73px;top:378px;color:#fff;width:411px;margin:0;">{barsData[0].nom}</h2>
+      </div>
+
+      <!-- Slide B (prêt en dessous) -->
+      <div id="lp-bg-b" style="position:absolute;left:0;top:0;width:100%;height:100%;transform:translateY(100%);">
+        <div id="lp-prlx-b" style="position:absolute;inset:0;background-size:cover;background-position:center 50%;"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(30,30,30,0.65) 0%,transparent 55%);pointer-events:none;"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(30,30,30,0.35) 0%,transparent 40%);pointer-events:none;"></div>
+        <h2 id="lp-nom-b" style="position:absolute;left:73px;top:378px;color:#fff;width:411px;margin:0;"></h2>
+      </div>
+    </div>
+
+    <!-- ── Zone droite : carte blanche + photo extérieure (de left:517px, overflow:hidden) ── -->
+    <div id="lp-card-wrap" style="position:absolute;left:517px;top:0;right:0;height:100%;overflow:hidden;">
+
+      <!-- Card A (active) -->
+      <div id="lp-card-a" style="position:absolute;left:0;top:0;width:100%;height:100%;">
+        <!-- carte blanche : left:0 (= 517px section), top:156px, w:328px, h:505px -->
+        <div style="position:absolute;left:0;top:156px;width:328px;height:505px;background:#fff;border-radius:10px 0 0 10px;box-shadow:-15px 15px 30px 0px rgba(0,0,0,0.15);"></div>
+        <!-- adresse : left:78px (= 595-517), top:214px -->
+        <p id="lp-adr-a" style="position:absolute;left:78px;top:214px;width:218px;font-size:16px;font-weight:500;line-height:1.4;color:#000;">{barsData[0].adresse}</p>
+        <!-- description : top:343px -->
+        <p id="lp-desc-a" style="position:absolute;left:78px;top:343px;width:177px;font-size:14px;font-weight:500;line-height:1.1;color:#646262;">{barsData[0].description}</p>
+        <!-- bouton : top:526px, h:80px, w:218px -->
+        <a id="lp-link-a" href={`/bar/${barsData[0].id}`}
+          style="position:absolute;left:78px;top:526px;width:218px;height:80px;background:#1e1e1e;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:500;text-decoration:none;">
+          En savoir plus
+        </a>
+        <!-- photo extérieure : left:328px (= 845-517), top:156px, w:438px, h:505px -->
+        <div style="position:absolute;left:328px;top:156px;width:438px;height:505px;border-radius:0 10px 10px 0;overflow:hidden;box-shadow:-15px 15px 30px 0px rgba(0,0,0,0.25);">
+          <img id="lp-img-a" src={barsData[0].cardImgUrl} alt="" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
+      </div>
+
+      <!-- Card B (prête à droite) -->
+      <div id="lp-card-b" style="position:absolute;left:0;top:0;width:100%;height:100%;transform:translateX(-100%);">
+        <div style="position:absolute;left:0;top:156px;width:328px;height:505px;background:#fff;border-radius:10px 0 0 10px;box-shadow:-15px 15px 30px 0px rgba(0,0,0,0.15);"></div>
+        <p id="lp-adr-b" style="position:absolute;left:78px;top:214px;width:218px;font-size:16px;font-weight:500;line-height:1.4;color:#000;"></p>
+        <p id="lp-desc-b" style="position:absolute;left:78px;top:343px;width:177px;font-size:14px;font-weight:500;line-height:1.1;color:#646262;"></p>
+        <a id="lp-link-b" href="#"
+          style="position:absolute;left:78px;top:526px;width:218px;height:80px;background:#1e1e1e;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:500;text-decoration:none;">
+          En savoir plus
+        </a>
+        <div style="position:absolute;left:328px;top:156px;width:438px;height:505px;border-radius:0 10px 10px 0;overflow:hidden;box-shadow:-15px 15px 30px 0px rgba(0,0,0,0.25);">
+          <img id="lp-img-b" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Navigation (statique, au-dessus des wraps) ── -->
+    <button id="lp-bar-prev" aria-label="Bar précédent"
+      style="position:absolute;left:955px;top:708px;width:65px;height:65px;background:transparent;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;">
+      <div style="position:absolute;width:46px;height:46px;background:#f7f1ed;border-radius:100px;"></div>
+      <svg style="position:relative;z-index:1;" width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M11 14L6 9L11 4" stroke="#1e1e1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    <button id="lp-bar-next" aria-label="Bar suivant"
+      style="position:absolute;left:1064px;top:708px;width:65px;height:65px;background:transparent;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;">
+      <div style="position:absolute;width:46px;height:46px;background:#f7f1ed;opacity:0.5;border-radius:100px;"></div>
+      <svg style="position:relative;z-index:1;" width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M7 4L12 9L7 14" stroke="#1e1e1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    <p id="lp-bar-counter" style="position:absolute;left:1234px;top:725px;color:#f7f1ed;font-size:16px;font-weight:500;line-height:1.4;white-space:nowrap;z-index:10;">
+      1 / {barsData.length}
+    </p>
+
+    <!-- Lignes décoratives verticales -->
+    <div style="position:absolute;left:157px;top:0;width:1px;height:270px;background:rgba(247,241,237,0.35);z-index:10;"></div>
+    <div style="position:absolute;left:157px;top:527px;width:1px;bottom:0;background:rgba(247,241,237,0.35);z-index:10;"></div>
+
+  </section>
+)}
+
+<!-- ========== VALEURS CAROUSEL (h:761px) ========== -->
+<section id="vision" style="position:relative;width:100%;height:761px;overflow:hidden;background:#fff;">
+
+  <!-- H2: top:98px, left:71px -->
+  <h2 style="position:absolute;top:98px;left:71px;color:#000;width:1219px;">
+    Ce que vous trouverez en venant chez nous
+  </h2>
+
+  <!-- Slides track -->
+  <div id="lp-val-track" style="position:absolute;top:0;left:0;width:300%;height:100%;display:flex;transition:transform 0.5s ease-in-out;">
+    {valeurs.map((v, i) => (
+      <div style="width:1440px;height:100%;flex-shrink:0;position:relative;background:#fff;">
+        <!-- Text: left:80px, top:261px, w:296px -->
+        <div style="position:absolute;left:80px;top:261px;width:296px;display:flex;flex-direction:column;gap:49px;">
+          <h3 style="color:#000;">{v.titre}</h3>
+          <p style="font-size:16px;font-weight:500;line-height:1.4;color:#000;width:279px;">{v.texte}</p>
+        </div>
+        <!-- Image: left:517px, top:218px, w:843px, h:400px -->
+        <div style="position:absolute;left:517px;top:218px;width:843px;height:400px;border-radius:10px;overflow:hidden;">
+          <Image src={valeursImages[i]} alt={v.titre} style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <!-- Nav: left:80px, top:575px -->
+  <button id="lp-val-prev" aria-label="Précédent"
+    style="position:absolute;left:80px;top:575px;width:43px;height:43px;background:transparent;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+    <div style="position:absolute;inset:50% 50%;transform:translate(-50%,-50%);width:30px;height:30px;background:#000;border-radius:100px;"></div>
+    <svg style="position:relative;z-index:1;" width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M9 11L4 7L9 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <button id="lp-val-next" aria-label="Suivant"
+    style="position:absolute;left:142px;top:575px;width:43px;height:43px;background:transparent;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+    <div style="position:absolute;inset:50% 50%;transform:translate(-50%,-50%);width:30px;height:30px;background:#000;opacity:0.5;border-radius:100px;"></div>
+    <svg style="position:relative;z-index:1;" width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M5 3L10 7L5 11" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <!-- "En savoir plus" green button: left:calc(75%+43px)≈1123px, top:669px -->
+  <a href="/Apropos"
+    style="position:absolute;left:calc(75% + 43px);top:669px;width:237px;height:60px;background:#347645;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:500;text-decoration:none;padding:0 50px;">
+    En savoir plus
+  </a>
+
+</section>
+
+<!-- ========== ÉQUIPE ========== -->
+<section id="equipe" style="position:relative;width:100%;height:1375px;background:#fff;overflow:hidden;">
+
+  <!-- H2: top:0 (3989-3882=107px?), left:80px -->
+  <!-- Relative to section start (3882px from page = after valeurs carousel): -->
+  <!-- Team section starts at: 685+1153+440+844+761 = 3883px from page top -->
+  <!-- H2 at page:3989 → section:3989-3883=106px from section top -->
+  <h2 style="position:absolute;top:106px;left:80px;width:657px;color:#000;">L'équipe derrière Bargo</h2>
+
+  <!-- Description texts on left -->
+  <p style="position:absolute;top:185px;left:80px;width:515px;color:#646262;font-size:16px;font-weight:500;line-height:1.4;">
+    Bargo est un projet réalisé par une équipe d'étudiants passionnés par le design, le numérique et l'expérience utilisateur.
+  </p>
+  <p style="position:absolute;top:273px;left:80px;width:405px;color:#646262;font-size:16px;font-weight:500;line-height:1.4;">
+    Le projet a été conçu dans le cadre d'un travail de réflexion et de création autour d'une plateforme dédiée à l'organisation des sorties.
+  </p>
+  <p style="position:absolute;top:383px;left:80px;width:296px;color:#646262;font-size:16px;font-weight:500;line-height:1.4;">
+    Notre objectif était d'imaginer une solution simple, moderne et adaptée aux habitudes des étudiants et jeunes adultes.
+  </p>
+
+  <!-- Alex photo (right, starts highest): page:3989 → section:106px, left:calc(66.67%-5px)≈955px, w:405px, h:495px -->
+  <div style="position:absolute;top:106px;left:955px;width:405px;height:495px;border-radius:10px;overflow:hidden;">
+    <Image src={membre3} alt="Alex Ringenbach" style="width:100%;height:100%;object-fit:cover;display:block;" />
+  </div>
+  <h3 style="position:absolute;top:655px;left:955px;color:#72c073;width:328px;">Alex Ringenbach</h3>
+  <p style="position:absolute;top:707px;left:955px;color:#000;font-size:16px;font-weight:500;line-height:1.4;width:296px;">Communication</p>
+  <p style="position:absolute;top:771px;left:955px;color:#646262;font-size:14px;font-weight:500;line-height:1.1;width:328px;">Gère l'image et la visibilité du projet. Il s'occupe de la stratégie de communication et du lien avec la communauté.</p>
+
+  <!-- Pierre photo (center, 220px lower): page:4209 → section:326px, left:calc(33.33%+37px)≈517px, w:406px, h:495px -->
+  <div style="position:absolute;top:326px;left:517px;width:406px;height:495px;border-radius:10px;overflow:hidden;">
+    <Image src={membre2} alt="Pierre Mouilleseaux-Lhuillier" style="width:100%;height:100%;object-fit:cover;display:block;" />
+  </div>
+  <h3 style="position:absolute;top:875px;left:517px;color:#72c073;width:405px;">Pierre Mouilleseaux-Lhuillier</h3>
+  <p style="position:absolute;top:927px;left:517px;color:#000;font-size:16px;font-weight:500;line-height:1.4;width:219px;">Développeur</p>
+  <p style="position:absolute;top:991px;left:517px;color:#646262;font-size:14px;font-weight:500;line-height:1.1;width:345px;">Développe et structure la plateforme. Il transforme les idées en fonctionnalités concrètes et assure le bon fonctionnement du site.</p>
+
+  <!-- Melvyn photo (left, 440px lower): page:4429 → section:546px, left:80px, w:405px, h:495px -->
+  <div style="position:absolute;top:546px;left:80px;width:405px;height:495px;border-radius:10px;overflow:hidden;">
+    <Image src={membre1} alt="Melvyn Philippon" style="width:100%;height:100%;object-fit:cover;display:block;" />
+  </div>
+  <h3 style="position:absolute;top:1095px;left:80px;color:#72c073;width:328px;">Melvyn Philippon</h3>
+  <p style="position:absolute;top:1146px;left:80px;color:#000;font-size:16px;font-weight:500;line-height:1.4;width:187px;">Designer</p>
+  <p style="position:absolute;top:1211px;left:80px;color:#646262;font-size:14px;font-weight:500;line-height:1.1;width:346px;">Conçoit l'identité visuelle et l'expérience utilisateur. Il veille à la cohérence graphique et à la simplicité d'utilisation de la plateforme.</p>
+
+</section>
+
+<!-- ========== INTÉRESSÉ ? (h:901px) ========== -->
+<section style="position:relative;width:100%;height:901px;overflow:hidden;">
+  <!-- Dark left bg -->
+  <div style="position:absolute;left:0;top:0;width:813px;height:100%;background:#1e1e1e;"></div>
+  <!-- Mojito image (full section right) -->
+  <div style="position:absolute;left:calc(8.33% + 92px);top:0;width:1228px;height:100%;overflow:hidden;">
+    <Image src={carouselImg} alt="" style="width:100%;height:100%;object-fit:cover;display:block;" />
+  </div>
+  <!-- Dark overlay on image -->
+  <div style="position:absolute;left:0;top:0;width:813px;height:100%;background:rgba(30,30,30,0.85);"></div>
+
+  <!-- H1 INTÉRESSÉ ?: top:52px, left:80px -->
+  <h1 style="position:absolute;top:52px;left:80px;color:#fff;text-transform:uppercase;width:833px;">INTÉRESSÉ ?</h1>
+
+  <!-- Description: top:193px, left:80px -->
+  <p style="position:absolute;top:193px;left:80px;width:547px;color:#fff;font-size:16px;font-weight:500;line-height:1.4;">
+    Rejoignez Bargo et découvrez une nouvelle façon de préparer vos soirées entre amis. Planifiez votre parcours, invitez votre groupe et profitez pleinement de votre soirée.
+  </p>
+
+  <!-- Nom label: top:316px -->
+  <p style="position:absolute;top:316px;left:80px;color:#fff;font-size:16px;font-weight:500;line-height:1.4;white-space:nowrap;">Nom</p>
+  <!-- Nom input: top:356px, h:62px, w:624px -->
+  <div style="position:absolute;top:356px;left:80px;width:624px;height:62px;background:#f7f1ed;border-radius:3px;">
+    <input type="text" placeholder="Nom" style="width:100%;height:100%;background:transparent;border:0;padding:0 33px;font-size:14px;font-weight:500;color:#646262;outline:none;" />
+  </div>
+
+  <!-- Mail label: top:452px -->
+  <p style="position:absolute;top:452px;left:80px;color:#fff;font-size:16px;font-weight:500;line-height:1.4;white-space:nowrap;">Adresse E-mail</p>
+  <!-- Mail input: top:492px, h:62px, w:624px -->
+  <div style="position:absolute;top:492px;left:80px;width:624px;height:62px;background:#f7f1ed;border-radius:3px;">
+    <input type="email" placeholder="Mail" style="width:100%;height:100%;background:transparent;border:0;padding:0 33px;font-size:14px;font-weight:500;color:#646262;outline:none;" />
+  </div>
+
+  <!-- Checkbox: top:614px, left:80px -->
+  <div style="position:absolute;top:614px;left:80px;width:25px;height:25px;border:3px solid #fff;box-shadow:0px 4px 4px 0px rgba(0,0,0,0.25);"></div>
+  <p style="position:absolute;top:617px;left:127px;color:#fff;font-size:16px;font-weight:500;line-height:1.4;white-space:nowrap;">J'accepte les conditions d'utilisation</p>
+
+  <!-- Soumettre button: top:713px, left:calc(25%+107px)≈467px, w:237px, h:60px -->
+  <button type="submit"
+    style="position:absolute;top:713px;left:calc(25% + 107px);width:237px;height:60px;background:transparent;border:2px solid #fff;color:#fff;font-size:16px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:15px;padding:0 50px;">
+    Soumettre
+  </button>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer style="position:relative;width:100%;height:457px;overflow:hidden;">
+  <Image src={footerBg} alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" />
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(30,30,30,0.7),#1e1e1e);"></div>
+
+  <div style="position:absolute;top:35px;left:80px;z-index:10;">
+    <img src={logoLight.src} alt="Bargo" height="44" />
+  </div>
+
+  <div style="position:absolute;top:123px;z-index:10;width:100%;">
+    <div style="position:absolute;left:80px;display:flex;flex-direction:column;gap:35px;">
+      <p style="font-weight:700;font-size:16px;line-height:1.4;color:#fff;">NAVIGATION</p>
+      <div style="display:flex;flex-direction:column;gap:18px;">
+        <a href="/bar" style="font-weight:500;font-size:16px;line-height:1.4;color:#f7f1ed;text-decoration:none;">Voir tous les bars</a>
+        <a href="/jeux" style="font-weight:500;font-size:16px;line-height:1.4;color:#f7f1ed;text-decoration:none;">Liste des jeux</a>
+        <a href="/connexion" style="font-weight:500;font-size:16px;line-height:1.4;color:#f7f1ed;text-decoration:none;">Inscription</a>
+      </div>
+    </div>
+    <div style="position:absolute;left:calc(25% + 48px);display:flex;flex-direction:column;gap:35px;">
+      <p style="font-weight:700;font-size:16px;line-height:1.4;color:#fff;">INFORMATIONS</p>
+      <div style="display:flex;flex-direction:column;gap:18px;">
+        <a href="/Apropos" style="font-weight:500;font-size:16px;line-height:1.4;color:#f7f1ed;text-decoration:none;">À propos</a>
+        <a href="/contact" style="font-weight:500;font-size:16px;line-height:1.4;color:#f7f1ed;text-decoration:none;">Contact</a>
+        <a href="/mention_legal" style="font-weight:500;font-size:16px;line-height:1.4;color:#f7f1ed;text-decoration:none;">Mentions légales</a>
+      </div>
+    </div>
+    <div style="position:absolute;left:calc(50% + 16px);display:flex;flex-direction:column;gap:35px;width:261px;">
+      <p style="font-weight:700;font-size:16px;line-height:1.4;color:#fff;">PRÉVENTION</p>
+      <p style="font-weight:500;font-size:16px;line-height:1.4;color:#f7f1ed;">Votre sécurité avant tout<br/>L'abus d'alcool est dangereux pour la santé. BARGO vous accompagne pour des soirées responsables.</p>
+    </div>
+    <div style="position:absolute;left:calc(83.33% - 30px);display:flex;flex-direction:column;gap:35px;">
+      <p style="font-weight:700;font-size:16px;line-height:1.4;color:#fff;">SUIVEZ-NOUS</p>
+      <div style="display:flex;gap:29px;align-items:center;">
+        <a href="#" aria-label="Facebook"><img src={iconFb.src} alt="Facebook" width="24" height="24" style="filter:invert(1);" /></a>
+        <a href="#" aria-label="Instagram"><img src={iconInsta.src} alt="Instagram" width="24" height="24" style="filter:invert(1);" /></a>
+        <a href="#" aria-label="Discord"><img src={iconDiscord.src} alt="Discord" width="24" height="24" style="filter:invert(1);" /></a>
+      </div>
+    </div>
+  </div>
+
+  <div style="position:absolute;z-index:10;left:80px;right:80px;border-top:1px solid rgba(247,241,237,0.3);top:375px;"></div>
+  <div style="position:absolute;z-index:10;left:80px;right:80px;display:flex;justify-content:space-between;align-items:center;top:398px;">
+    <a href="/mention_legal" style="font-weight:500;font-size:14px;line-height:1.1;color:#f7f1ed;text-decoration:none;">Mentions légales</a>
+    <p style="font-weight:500;font-size:14px;line-height:1.1;color:#f7f1ed;">© 2026 BARGO</p>
+  </div>
+</footer>
+
+<!-- Bars data -->
+<script type="application/json" id="lp-bars-data" set:html={JSON.stringify(barsData)}></script>
+
+<script is:inline>
+(function () {
+  // ============================================================
+  // CAROUSEL BARS — bg monte vers le haut, card part à gauche
+  // ============================================================
+  var _bars    = JSON.parse(document.getElementById('lp-bars-data').textContent || '[]');
+  var _barIdx  = 0;
+  var _current = 'a';   // slot visible ('a' ou 'b')
+  var _busy    = false;
+  var DUR      = 600;   // durée ms
+
+  function _q(id) { return document.getElementById(id); }
+
+  function _goTo(newIdx) {
+    if (_busy || !_bars.length || newIdx === _barIdx) return;
+    _busy = true;
+
+    var next = _current === 'a' ? 'b' : 'a';
+    var b    = _bars[newIdx];
+
+    // Charger les données dans le prochain slot
+    var prlx = _q('lp-prlx-' + next);
+    if (prlx) prlx.style.backgroundImage = b.parallaxUrl ? "url('" + b.parallaxUrl + "')" : '';
+    var nom = _q('lp-nom-' + next);  if (nom)  nom.textContent  = b.nom;
+    var adr  = _q('lp-adr-'  + next); if (adr)  adr.textContent  = b.adresse;
+    var desc = _q('lp-desc-' + next); if (desc) desc.textContent = b.description;
+    var lnk  = _q('lp-link-' + next); if (lnk)  lnk.href = '/bar/' + b.id;
+    var img  = _q('lp-img-'  + next); if (img)  img.src  = b.cardImgUrl || '';
+
+    // Placer le prochain slot hors-écran (sans transition)
+    var bgNext   = _q('lp-bg-'   + next);
+    var cardNext = _q('lp-card-' + next);
+    bgNext.style.transition   = 'none';
+    bgNext.style.transform    = 'translateY(100%)';  // en dessous
+    cardNext.style.transition = 'none';
+    cardNext.style.transform  = 'translateX(-100%)';  // prêt à gauche (entrera depuis la gauche)
+
+    // Forcer le reflow
+    bgNext.offsetHeight;
+
+    // Lancer les transitions
+    var ease = 'transform ' + DUR + 'ms cubic-bezier(0.4, 0, 0.2, 1)';
+    var bgCur   = _q('lp-bg-'   + _current);
+    var cardCur = _q('lp-card-' + _current);
+
+    // Sortie : bg monte, card part à droite
+    bgCur.style.transition   = ease;
+    bgCur.style.transform    = 'translateY(-100%)';
+    cardCur.style.transition = ease;
+    cardCur.style.transform  = 'translateX(100%)';
+
+    // Entrée : bg depuis le bas, card depuis la gauche
+    bgNext.style.transition   = ease;
+    bgNext.style.transform    = 'translateY(0)';
+    cardNext.style.transition = ease;
+    cardNext.style.transform  = 'translateX(0)';
+
+    setTimeout(function () {
+      // Repositionner l'ancien slot pour le prochain cycle
+      bgCur.style.transition   = 'none';
+      bgCur.style.transform    = 'translateY(100%)';
+      cardCur.style.transition = 'none';
+      cardCur.style.transform  = 'translateX(-100%)';
+
+      _current = next;
+      _barIdx  = newIdx;
+      _busy    = false;
+
+      var ctr = _q('lp-bar-counter');
+      if (ctr) ctr.textContent = (_barIdx + 1) + ' / ' + _bars.length;
+    }, DUR + 50);
+  }
+
+  var prev = _q('lp-bar-prev');
+  var nxt  = _q('lp-bar-next');
+  if (prev) prev.addEventListener('click', function () { _goTo((_barIdx - 1 + _bars.length) % _bars.length); });
+  if (nxt)  nxt.addEventListener('click',  function () { _goTo((_barIdx + 1) % _bars.length); });
+
+  // Parallax scroll : décale le background-position-y du slot actif
+  window.addEventListener('scroll', function () {
+    var prlx = _q('lp-prlx-' + _current);
+    if (!prlx) return;
+    var wrap = _q('lp-bg-wrap');
+    if (!wrap) return;
+    var rect = wrap.getBoundingClientRect();
+    var pct  = 50 - (rect.top / window.innerHeight) * 15;
+    prlx.style.backgroundPositionY = pct + '%';
+  }, { passive: true });
+
+  // ============================================================
+  // CAROUSEL VALEURS
+  // ============================================================
+  var _valIdx   = 0;
+  var _valTotal = 3;
+  var _valTrack = _q('lp-val-track');
+
+  function _updateVal() {
+    if (_valTrack) {
+      _valTrack.style.transition = 'transform 0.5s ease-in-out';
+      _valTrack.style.transform  = 'translateX(-' + (_valIdx * (100 / _valTotal)) + '%)';
+    }
+  }
+
+  var vp = _q('lp-val-prev');
+  var vn = _q('lp-val-next');
+  if (vp) vp.addEventListener('click', function () { _valIdx = (_valIdx - 1 + _valTotal) % _valTotal; _updateVal(); });
+  if (vn) vn.addEventListener('click', function () { _valIdx = (_valIdx + 1) % _valTotal; _updateVal(); });
+})();
+</script>
+
+</body>
+</html>

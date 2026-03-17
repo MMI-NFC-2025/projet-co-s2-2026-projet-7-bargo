@@ -1,6 +1,10 @@
 ---
-// index.astro — Page d'accueil BARGO
+// index.astro — Page d'accueil BARGO (utilisateurs connectés)
 import Layout from '../layouts/Layout.astro';
+
+const token  = Astro.cookies.get('pb_token')?.value;
+const userId = Astro.cookies.get('pb_user_id')?.value;
+if (!token || !userId) return Astro.redirect('/LandingPage');
 import { Image } from 'astro:assets';
 import { getCollection } from '../js/backend.js';
 import PbImage from '../components/PbImage.astro';
