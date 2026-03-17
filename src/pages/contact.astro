@@ -1,0 +1,164 @@
+---
+import Layout from '../layouts/Layout.astro';
+import facebookIcon from '../assets/icon/facebook.svg';
+import instaIcon    from '../assets/icon/insta.svg';
+import discordIcon  from '../assets/icon/discord.svg';
+---
+
+<Layout title="Contact — Bargo">
+
+  <section class="flex min-h-[1024px]">
+
+    <!-- ===== COLONNE GAUCHE (sombre) ===== -->
+    <div class="w-[704px] shrink-0 bg-[#1e1e1e] relative">
+
+      <!-- Titre -->
+      <h2 class="absolute top-[223px] left-[195px] text-white m-0">
+        <span class="text-[#72c073]">Nous</span> Contacter
+      </h2>
+
+      <!-- Formulaire -->
+      <form
+        method="POST"
+        action="#"
+        class="absolute top-[351px] left-[195px] w-[430px] flex flex-col gap-[27px]"
+      >
+        <!-- Nom -->
+        <div class="border-b border-[#f7f1ed] pb-[10px]">
+          <input
+            type="text"
+            name="nom"
+            placeholder="Nom"
+            class="bg-transparent w-full text-[#f7f1ed] text-[16px] font-medium outline-none placeholder-[#f7f1ed] pl-2"
+          />
+        </div>
+
+        <!-- Email -->
+        <div class="border-b border-[#f7f1ed] pb-[10px]">
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            class="bg-transparent w-full text-[#f7f1ed] text-[16px] font-medium outline-none placeholder-[#f7f1ed] pl-2"
+          />
+        </div>
+
+        <!-- Message -->
+        <div class="border-b border-[#f7f1ed]">
+          <textarea
+            name="message"
+            placeholder="Message"
+            rows="5"
+            class="bg-transparent w-full text-[#f7f1ed] text-[16px] font-medium outline-none placeholder-[#f7f1ed] pl-2 resize-none"
+          ></textarea>
+        </div>
+
+        <!-- Newsletter -->
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" name="newsletter" class="size-[16px] rounded-[4px] border border-white accent-[#347645]" />
+          <span class="text-white text-[14px] font-medium leading-[1.1]">J'aimerais recevoir les News Letter</span>
+        </label>
+
+        <!-- Bouton Envoyer -->
+        <button
+          type="submit"
+          class="mt-[60px] bg-[#347645] h-[60px] w-[237px] flex items-center justify-center text-white text-[16px] font-medium hover:opacity-90 transition-opacity cursor-pointer border-0"
+        >
+          Envoyer
+        </button>
+      </form>
+
+    </div>
+
+    <!-- ===== COLONNE DROITE (beige) ===== -->
+    <div class="flex-1 bg-[#f7f1ed] relative">
+
+      <div class="absolute top-[334px] left-[141px] w-[407px] flex flex-col gap-[28px]">
+
+        <!-- Description -->
+        <p class="text-black text-[16px] font-medium leading-[1.4] m-0">
+          Si vous voulez nous contacter pour des demandes spécifiques, n'hésitez pas à nous
+          contacter via les informations ci-dessous&nbsp;!
+        </p>
+
+        <!-- Carte OpenStreetMap — IUT de Montbéliard -->
+        <div
+          id="contact-map"
+          data-lat="47.5072"
+          data-lon="6.7955"
+          data-name="IUT de Montbéliard"
+          class="w-full h-[174px] rounded-[10px] overflow-hidden z-0 bg-[#dfdfdf]"
+        ></div>
+
+        <!-- Informations de contact -->
+        <div class="flex flex-col gap-[14px]">
+          <div class="flex items-center gap-[16px]">
+            <svg width="22" height="18" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1H21V17H1V1Z" stroke="#1e1e1e" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M1 1L11 10L21 1" stroke="#1e1e1e" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <span class="text-black text-[16px] font-medium">BARGO@gmail.com</span>
+          </div>
+          <div class="flex items-center gap-[16px]">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6.62 10.79C8.06 13.62 10.38 15.93 13.21 17.38L15.41 15.18C15.68 14.91 16.08 14.82 16.43 14.94C17.55 15.31 18.76 15.51 20 15.51C20.55 15.51 21 15.96 21 16.51V20C21 20.55 20.55 21 20 21C10.61 21 3 13.39 3 4C3 3.45 3.45 3 4 3H7.5C8.05 3 8.5 3.45 8.5 4C8.5 5.25 8.7 6.45 9.07 7.57C9.18 7.92 9.1 8.31 8.82 8.59L6.62 10.79Z" fill="#1e1e1e"/>
+            </svg>
+            <span class="text-black text-[16px] font-medium">+33 3.84.12.34.98</span>
+          </div>
+          <div class="flex items-center gap-[16px]">
+            <svg width="22" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="#1e1e1e"/>
+            </svg>
+            <span class="text-black text-[16px] font-medium">IUT de Montbéliard — 4 Pl. Tharradin, 25200</span>
+          </div>
+        </div>
+
+        <!-- Réseaux sociaux -->
+        <div class="flex items-center gap-[20px] mt-[8px]">
+          <a href="#" class="hover:opacity-70 transition-opacity">
+            <img src={facebookIcon.src} alt="Facebook" width="24" height="24" />
+          </a>
+          <a href="#" class="hover:opacity-70 transition-opacity">
+            <img src={instaIcon.src} alt="Instagram" width="24" height="24" />
+          </a>
+          <a href="#" class="hover:opacity-70 transition-opacity">
+            <img src={discordIcon.src} alt="Discord" width="24" height="24" />
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+</Layout>
+
+<script is:inline>
+(function() {
+  var mapEl = document.getElementById('contact-map');
+  if (!mapEl) return;
+  var lat = parseFloat(mapEl.dataset.lat);
+  var lon = parseFloat(mapEl.dataset.lon);
+  var name = mapEl.dataset.name || 'BARGO';
+
+  var link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+  document.head.appendChild(link);
+
+  var script = document.createElement('script');
+  script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+  script.onload = function() {
+    mapEl.innerHTML = '';
+    var map = L.map('contact-map').setView([lat, lon], 16);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+    L.marker([lat, lon])
+      .addTo(map)
+      .bindPopup('<strong style="color:#347645">' + name + '</strong><br>4 Pl. Tharradin, 25200 Montbéliard')
+      .openPopup();
+  };
+  document.head.appendChild(script);
+})();
+</script>
