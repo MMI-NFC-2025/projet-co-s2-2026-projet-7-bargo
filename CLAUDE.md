@@ -189,9 +189,11 @@ Les positions Figma exprimées en `calc(X%+Ypx)` correspondent aux colonnes de c
 ## Règles de style
 
 1. **Tailwind avant tout** — n'écrire du CSS que si Tailwind est insuffisant
-2. **Pas d'inline styles** sauf pour `grid-template-columns` complexes que Tailwind ne supporte pas
-3. **Pas de `!important`**
-4. Les espacements suivent les valeurs Figma exactes (px arbitraires autorisés : `gap-[109px]`, etc.)
+2. **CSS global / partagé** → dans `src/styles/global.css` (préféré), pas dans des balises `<style>` dans les fichiers `.astro`
+3. **CSS spécifique à une seule page** → balise `<style>` dans le fichier `.astro` uniquement si le style est vraiment court et non réutilisable
+4. **Pas d'inline styles** sauf pour `grid-template-columns` complexes que Tailwind ne supporte pas
+5. **Pas de `!important`**
+6. Les espacements suivent les valeurs Figma exactes (px arbitraires autorisés : `gap-[109px]`, etc.)
 
 ---
 
@@ -199,8 +201,8 @@ Les positions Figma exprimées en `calc(X%+Ypx)` correspondent aux colonnes de c
 
 ### Où écrire le JS
 
-- **JS spécifique à une page** → balise `<script>` directement dans le fichier `.astro` de la page (en bas, après le HTML)
-- **JS partagé entre plusieurs pages** → fichier dans `src/scripts/` importé avec `<script src="/src/scripts/mon-script.js">` ou importé dans le frontmatter si nécessaire
+- **JS partagé entre plusieurs pages** → fichier dans `src/js/` (préféré) — importé avec `<script src="/src/js/mon-script.js">` ou importé dans le frontmatter si nécessaire
+- **JS spécifique à une seule page** → balise `<script>` dans le fichier `.astro` de la page uniquement si le script est vraiment court et non réutilisable
 
 ### Règles
 

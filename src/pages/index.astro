@@ -284,37 +284,6 @@ const faqItems = [
 
 </Layout>
 
-<style>
-  /* Carousel — transition swipe */
-  #bar-track {
-    transition: transform 0.5s ease-in-out;
-  }
-
-  /* FAQ : rotation du + quand ouvert */
-  .faq-item[open] .faq-icon {
-    transform: rotate(45deg);
-  }
-</style>
-
 <script>
-  // Carousel bars — swipe par translateX sur le track
-  const track = document.getElementById('bar-track');
-  if (track) {
-    const total = track.children.length;
-    let current = 0;
-
-    function showSlide(n) {
-      current = n;
-      track.style.transform = `translateX(-${n * (100 / total)}%)`;
-    }
-
-    document.getElementById('bar-prev').addEventListener('click', () => {
-      showSlide((current - 1 + total) % total);
-    });
-
-    document.getElementById('bar-next').addEventListener('click', () => {
-      showSlide((current + 1) % total);
-    });
-  }
-
+  import '../js/carousel.js';
 </script>

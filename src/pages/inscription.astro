@@ -4,25 +4,32 @@ import { Image } from 'astro:assets';
 import { registerUser, loginUser } from '../js/backend.js';
 import bgImg from '../assets/img/fond_connextion_inscription.avif';
 
-// Déjà connecté → profil
-if (Astro.cookies.get('pb_token')?.value) {
-  return Astro.redirect('/profil');
-}
+// Déjà connecté → profil (les deux cookies doivent exister)
+const _token  = Astro.cookies.get('pb_token')?.value;
+const _userId = Astro.cookies.get('pb_user_id')?.value;
+if (_token && _userId) return Astro.redirect('/profil');
 
 let error = '';
 
 if (Astro.request.method === 'POST') {
-  const body = await Astro.request.text();
+  const body   = await Astro.request.text();
   const params = new URLSearchParams(body);
-  const nom             = params.get('nom') ?? '';
-  const prenom          = params.get('prenom') ?? '';
-  const pseudo          = params.get('pseudo') ?? '';
-  const email           = params.get('email') ?? '';
-  const password        = params.get('password') ?? '';
-  const passwordConfirm = params.get('passwordConfirm') ?? '';
 
-  if (password !== passwordConfirm) {
+  const nom             = params.get('nom')             ?? '';
+  const prenom          = params.get('prenom')          ?? '';
+  const pseudo          = params.get('pseudo')          ?? '';
+  const email           = params.get('email')           ?? '';
+  const password        = params.get('password')        ?? '';
+  const passwordConfirm = params.get('passwordConfirm') ?? '';
+  const terms           = params.get('terms');
+
+  // Validation conditions d'utilisation
+  if (!terms) {
+    error = "Vous devez accepter les conditions d'utilisation.";
+  } else if (password !== passwordConfirm) {
     error = 'Les mots de passe ne correspondent pas.';
+  } else if (password.length < 8) {
+    error = 'Le mot de passe doit contenir au moins 8 caractères.';
   } else {
     const { record, error: pbError } = await registerUser({
       nom, prenom, pseudo, email, password, passwordConfirm
@@ -42,86 +49,117 @@ if (Astro.request.method === 'POST') {
 ---
 
 <Layout title="Inscription — Bargo">
-  <section class="relative h-[1024px] overflow-hidden">
+  <section class="relative min-h-[1200px] overflow-hidden">
 
-    <!-- Fond -->
-    <Image src={bgImg} alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
-    <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(30,30,30,0.7), #1e1e1e);"></div>
+    <!-- Fond sombre gauche -->
+    <div class="absolute inset-0 bg-[#1e1e1e]" style="width: 813px;"></div>
 
-    <!-- Erreur -->
+    <!-- Photo droite -->
+    <div class="absolute top-0 bottom-0 right-0 overflow-hidden" style="left: 813px;">
+      <Image src={bgImg} alt="" class="w-full h-full object-cover object-top" />
+    </div>
+
+    <!-- Erreur serveur -->
     {error && (
-      <p class="absolute top-[105px] left-[80px] text-red-400 text-sm m-0">{error}</p>
+      <p class="absolute top-[95px] left-[80px] text-red-400 text-[14px] font-medium m-0 z-10">{error}</p>
     )}
 
-    <!-- Titre -->
-    <h3 class="absolute top-[139px] left-[80px] text-white m-0">INSCRIVEZ-VOUS</h3>
-    <p class="absolute top-[199px] left-[80px] text-sm text-white m-0 w-[405px]">
+    <!-- H2 — top-[187px] Figma - 92px header -->
+    <h2 class="absolute top-[95px] left-[79px] text-white m-0 uppercase">
+      INSCRIVEZ-VOUS
+    </h2>
+
+    <!-- Sous-titre — top-[264px] - 92px -->
+    <p class="absolute top-[172px] left-[80px] text-[14px] font-medium leading-[1.1] text-white m-0 w-[547px]">
       Rejoignez BARGO et organisez votre prochain barathon en quelques minutes.
     </p>
 
-    <form method="POST" enctype="application/x-www-form-urlencoded">
+    <form method="POST" enctype="application/x-www-form-urlencoded" id="inscription-form" novalidate>
 
-      <!-- Nom -->
-      <label class="absolute top-[286px] left-[80px] text-white text-[16px] font-medium leading-[1.4]">Nom</label>
-      <div class="absolute top-[326px] left-[80px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[296px] flex items-center px-8">
+      <!-- ─── Nom ─── top-[346px]-92=254 label, top-[386px]-92=294 input -->
+      <label class="absolute top-[254px] left-[80px] text-white text-[16px] font-medium leading-[1.4]">Nom</label>
+      <div class="absolute top-[294px] left-[80px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[296px] flex items-center px-8">
         <input type="text" name="nom" placeholder="Nom" required
-          class="bg-transparent w-full text-sm text-[#1e1e1e] placeholder-[#9e9a97] outline-none font-medium" />
+          class="bg-transparent w-full text-[14px] font-medium text-[#646262] placeholder-[#646262] outline-none" />
       </div>
 
-      <!-- Prénom -->
-      <div class="absolute top-[286px] left-[408px] flex items-baseline gap-3">
+      <!-- ─── Prénom (facultatif) ─── -->
+      <div class="absolute top-[254px] flex items-baseline gap-2" style="left: calc(25% + 48px);">
         <label class="text-white text-[16px] font-medium leading-[1.4]">Prénom</label>
-        <span class="text-[#dfdfdf] text-sm font-semibold">( facultatif )</span>
+        <span class="text-[#dfdfdf] text-[14px] font-semibold">( facultatif )</span>
       </div>
-      <div class="absolute top-[326px] left-[408px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[296px] flex items-center px-8">
+      <div class="absolute top-[294px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[296px] flex items-center px-8" style="left: calc(25% + 48px);">
         <input type="text" name="prenom" placeholder="Prénom"
-          class="bg-transparent w-full text-sm text-[#1e1e1e] placeholder-[#9e9a97] outline-none font-medium" />
+          class="bg-transparent w-full text-[14px] font-medium text-[#646262] placeholder-[#646262] outline-none" />
       </div>
 
-      <!-- Pseudo -->
-      <label class="absolute top-[424px] left-[80px] text-white text-[16px] font-medium leading-[1.4]">Pseudo</label>
-      <div class="absolute top-[464px] left-[80px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[624px] flex items-center px-8">
+      <!-- ─── Pseudo ─── top-[484px]-92=392 label, top-[524px]-92=432 input -->
+      <label class="absolute top-[392px] left-[80px] text-white text-[16px] font-medium leading-[1.4]">Pseudo</label>
+      <div class="absolute top-[432px] left-[80px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[624px] flex items-center px-8">
         <input type="text" name="pseudo" placeholder="Pseudo" required
-          class="bg-transparent w-full text-sm text-[#1e1e1e] placeholder-[#9e9a97] outline-none font-medium" />
+          class="bg-transparent w-full text-[14px] font-medium text-[#646262] placeholder-[#646262] outline-none" />
       </div>
 
-      <!-- Email -->
-      <label class="absolute top-[542px] left-[80px] text-white text-[16px] font-medium leading-[1.4]">Adresse E-mail</label>
-      <div class="absolute top-[582px] left-[80px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[624px] flex items-center px-8">
+      <!-- ─── Email ─── top-[602px]-92=510 label, top-[642px]-92=550 input -->
+      <label class="absolute top-[510px] left-[80px] text-white text-[16px] font-medium leading-[1.4]">Adresse E-mail</label>
+      <div class="absolute top-[550px] left-[80px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[624px] flex items-center px-8">
         <input type="email" name="email" placeholder="Mail" required
-          class="bg-transparent w-full text-sm text-[#1e1e1e] placeholder-[#9e9a97] outline-none font-medium" />
+          class="bg-transparent w-full text-[14px] font-medium text-[#646262] placeholder-[#646262] outline-none" />
       </div>
 
-      <!-- Mot de passe -->
-      <label class="absolute top-[660px] left-[80px] text-white text-[16px] font-medium leading-[1.4]">Mots de passe</label>
-      <div class="absolute top-[700px] left-[80px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[624px] flex items-center px-8">
-        <input type="password" name="password" placeholder="Mots de passe" required
-          class="bg-transparent w-full text-sm text-[#1e1e1e] placeholder-[#9e9a97] outline-none font-medium" />
+      <!-- ─── Mot de passe ─── top-[720px]-92=628 label, top-[760px]-92=668 input -->
+      <label class="absolute top-[628px] left-[80px] text-white text-[16px] font-medium leading-[1.4]">Mots de passe</label>
+      <div class="absolute top-[668px] left-[80px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[624px] flex items-center px-8">
+        <input type="password" name="password" placeholder="Mots de passe" required minlength="8"
+          class="bg-transparent w-full text-[14px] font-medium text-[#646262] placeholder-[#646262] outline-none" />
       </div>
 
-      <!-- Confirmer mot de passe -->
-      <div class="absolute top-[778px] left-[80px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[624px] flex items-center px-8">
-        <input type="password" name="passwordConfirm" placeholder="Confirmer le mot de passe" required
-          class="bg-transparent w-full text-sm text-[#1e1e1e] placeholder-[#9e9a97] outline-none font-medium" />
+      <!-- ─── Confirmer mot de passe (ajout) ─── -->
+      <label class="absolute top-[750px] left-[80px] text-white text-[16px] font-medium leading-[1.4]">Confirmer le mot de passe</label>
+      <div class="absolute top-[790px] left-[80px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[624px] flex items-center px-8">
+        <input type="password" name="passwordConfirm" placeholder="Confirmer le mot de passe" required minlength="8"
+          class="bg-transparent w-full text-[14px] font-medium text-[#646262] placeholder-[#646262] outline-none" />
       </div>
 
-      <!-- Bouton -->
-      <button
-        type="submit"
-        class="absolute top-[858px] left-[80px] inline-flex items-center gap-4 bg-[#347645] text-white text-[16px] font-medium leading-[1.4] px-12 py-2 hover:opacity-90 transition-opacity cursor-pointer border-0"
-      >
-        CRÉER MON COMPTE
-        <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd" clip-rule="evenodd" d="M7.29167 17.5C7.29167 17.016 7.68401 16.6237 8.16667 16.6237H23.8905L18.3959 11.1291C18.0472 10.7803 18.0472 10.2155 18.3959 9.86675C18.7447 9.51797 19.3095 9.51797 19.6582 9.86675L25.7749 15.9834C26.5251 16.7336 26.5251 17.9581 25.7749 18.7083L19.6582 24.825C19.3095 25.1737 18.7447 25.1737 18.3959 24.825C18.0472 24.4762 18.0472 23.9114 18.3959 23.5626L23.8905 18.0763H8.16667C7.68401 18.0763 7.29167 17.6839 7.29167 17.5Z" fill="white"/>
-        </svg>
+      <!-- ─── Mot de passe oublié ─── -->
+      <p class="absolute top-[872px] left-[80px] text-[14px] font-medium leading-[1.1] text-[#dfdfdf] m-0">
+        Mot de passe oublié ?
+      </p>
+
+      <!-- ─── Checkbox conditions d'utilisation ─── -->
+      <!-- Checkbox custom : border blanche 3px, 25×25px, shadow -->
+      <label class="absolute top-[916px] left-[80px] flex items-center gap-[22px] cursor-pointer">
+        <div class="relative w-[25px] h-[25px] shrink-0">
+          <input type="checkbox" name="terms" id="terms-checkbox"
+            class="absolute inset-0 opacity-0 w-full h-full cursor-pointer peer" />
+          <!-- Case visuelle -->
+          <div class="w-[25px] h-[25px] border-[3px] border-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] peer-checked:bg-[#347645] peer-checked:border-[#347645] transition-colors">
+            <!-- Coche -->
+            <svg class="hidden peer-checked:block w-full h-full p-[2px]" viewBox="0 0 16 16" fill="none">
+              <path d="M2 8l4 4 8-8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <span class="text-white text-[16px] font-medium leading-[1.4]">J'accepte les conditions d'utilisation</span>
+      </label>
+
+      <!-- ─── Bouton Créer mon compte ─── left-[calc(25%+107px)] top-[924px]-92=832 → décalé à 956 -->
+      <button type="submit" id="submit-btn"
+        class="absolute top-[956px] bg-[#347645] h-[60px] w-[237px] flex items-center justify-center text-white text-[16px] font-medium leading-[1.4] hover:opacity-90 transition-opacity cursor-pointer border-0 disabled:opacity-40 disabled:cursor-not-allowed"
+        style="left: calc(25% + 107px);">
+        Créer mon compte
       </button>
 
-      <!-- Lien connexion -->
-      <p class="absolute top-[934px] left-[80px] text-sm text-white m-0">
-        Déjà un compte ?&nbsp;
-        <a href="/connexion" class="underline hover:opacity-70 transition-opacity">Se connecter</a>
+      <!-- ─── Lien connexion ─── -->
+      <p class="absolute top-[1040px] text-[14px] font-medium leading-[1.1] text-white m-0"
+        style="left: calc(25% + 344px); transform: translateX(-100%);">
+        Déjà un compte ?&nbsp;<a href="/connexion" class="underline hover:opacity-70 transition-opacity">Se connecter</a>
       </p>
 
     </form>
   </section>
+
+  <script>
+    import '../js/inscription.js';
+  </script>
 </Layout>

@@ -4,10 +4,15 @@ import { Image } from 'astro:assets';
 import { loginUser } from '../js/backend.js';
 import bgImg from '../assets/img/fond_connextion_inscription.avif';
 
-// Déjà connecté → profil
-if (Astro.cookies.get('pb_token')?.value) {
+// Déjà connecté → profil (les deux cookies doivent exister, sinon on nettoie)
+const _token  = Astro.cookies.get('pb_token')?.value;
+const _userId = Astro.cookies.get('pb_user_id')?.value;
+if (_token && _userId) {
   return Astro.redirect('/profil');
 }
+// Nettoyage d'un état incohérent (un cookie présent sans l'autre)
+if (_token  && !_userId) Astro.cookies.delete('pb_token',   { path: '/' });
+if (_userId && !_token)  Astro.cookies.delete('pb_user_id', { path: '/' });
 
 let error = '';
 
@@ -28,57 +33,66 @@ if (Astro.request.method === 'POST') {
 ---
 
 <Layout title="Connexion — Bargo">
-  <section class="relative h-[1024px] overflow-hidden">
+  <section class="relative min-h-[800px] overflow-hidden">
 
-    <!-- Fond -->
-    <Image src={bgImg} alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
-    <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(30,30,30,0.7), #1e1e1e);"></div>
+    <!-- Fond sombre gauche -->
+    <div class="absolute inset-0 bg-[#1e1e1e]" style="width: 813px;"></div>
 
-    <!-- Erreur -->
+    <!-- Photo droite -->
+    <div class="absolute top-0 bottom-0 right-0 overflow-hidden" style="left: 813px;">
+      <Image src={bgImg} alt="" class="w-full h-full object-cover object-top" />
+    </div>
+
+    <!-- Erreur serveur -->
     {error && (
-      <p class="absolute top-[105px] left-[80px] text-red-400 text-sm m-0">{error}</p>
+      <p class="absolute top-[95px] left-[80px] text-red-400 text-[14px] font-medium m-0 z-10">{error}</p>
     )}
 
-    <!-- Titre -->
-    <h3 class="absolute top-[139px] left-[80px] text-white m-0">CONNECTEZ-VOUS</h3>
-    <p class="absolute top-[199px] left-[80px] text-sm text-white m-0 w-[405px]">
+    <!-- H2 -->
+    <h2 class="absolute top-[95px] left-[79px] text-white m-0 uppercase">
+      CONNECTEZ-VOUS
+    </h2>
+
+    <!-- Sous-titre -->
+    <p class="absolute top-[172px] left-[80px] text-[14px] font-medium leading-[1.1] text-white m-0 w-[547px]">
       Accédez à votre espace BARGO et retrouvez vos barathons.
     </p>
 
     <form method="POST" enctype="application/x-www-form-urlencoded">
 
-      <!-- Email -->
-      <label class="absolute top-[286px] left-[80px] text-white text-[16px] font-medium leading-[1.4]">Adresse E-mail</label>
-      <div class="absolute top-[326px] left-[80px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[624px] flex items-center px-8">
+      <!-- ─── Adresse E-mail ─── -->
+      <label class="absolute top-[254px] left-[80px] text-white text-[16px] font-medium leading-[1.4]">Adresse E-mail</label>
+      <div class="absolute top-[294px] left-[80px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[624px] flex items-center px-8">
         <input type="email" name="email" placeholder="Mail" required
-          class="bg-transparent w-full text-sm text-[#1e1e1e] placeholder-[#9e9a97] outline-none font-medium" />
+          class="bg-transparent w-full text-[14px] font-medium text-[#646262] placeholder-[#646262] outline-none" />
       </div>
 
-      <!-- Mot de passe -->
-      <label class="absolute top-[424px] left-[80px] text-white text-[16px] font-medium leading-[1.4]">Mots de passe</label>
-      <div class="absolute top-[464px] left-[80px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[624px] flex items-center px-8">
+      <!-- ─── Mot de passe ─── -->
+      <label class="absolute top-[392px] left-[80px] text-white text-[16px] font-medium leading-[1.4]">Mots de passe</label>
+      <div class="absolute top-[432px] left-[80px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[624px] flex items-center px-8">
         <input type="password" name="password" placeholder="Mots de passe" required
-          class="bg-transparent w-full text-sm text-[#1e1e1e] placeholder-[#9e9a97] outline-none font-medium" />
+          class="bg-transparent w-full text-[14px] font-medium text-[#646262] placeholder-[#646262] outline-none" />
       </div>
 
-      <!-- Mot de passe oublié -->
-      <p class="absolute top-[546px] left-[80px] text-sm text-[#dfdfdf] m-0">Mot de passe oublié ?</p>
+      <!-- ─── Mot de passe oublié ─── -->
+      <p class="absolute top-[514px] left-[80px] text-[14px] font-medium leading-[1.1] text-[#dfdfdf] m-0">
+        Mot de passe oublié ?
+      </p>
 
-      <!-- Bouton -->
-      <button
-        type="submit"
-        class="absolute top-[626px] left-[80px] inline-flex items-center gap-4 bg-[#347645] text-white text-[16px] font-medium leading-[1.4] px-12 py-2 hover:opacity-90 transition-opacity cursor-pointer border-0"
-      >
+      <!-- ─── Bouton SE CONNECTER ─── -->
+      <button type="submit"
+        class="absolute top-[580px] bg-[#347645] h-[60px] inline-flex items-center justify-center gap-4 text-white text-[16px] font-medium leading-[1.4] px-12 hover:opacity-90 transition-opacity cursor-pointer border-0"
+        style="left: calc(25% + 107px);">
         SE CONNECTER
         <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" clip-rule="evenodd" d="M7.29167 17.5C7.29167 17.016 7.68401 16.6237 8.16667 16.6237H23.8905L18.3959 11.1291C18.0472 10.7803 18.0472 10.2155 18.3959 9.86675C18.7447 9.51797 19.3095 9.51797 19.6582 9.86675L25.7749 15.9834C26.5251 16.7336 26.5251 17.9581 25.7749 18.7083L19.6582 24.825C19.3095 25.1737 18.7447 25.1737 18.3959 24.825C18.0472 24.4762 18.0472 23.9114 18.3959 23.5626L23.8905 18.0763H8.16667C7.68401 18.0763 7.29167 17.6839 7.29167 17.5Z" fill="white"/>
         </svg>
       </button>
 
-      <!-- Lien inscription -->
-      <p class="absolute top-[744px] left-[80px] text-sm text-white m-0">
-        Pas encore de compte ?&nbsp;
-        <a href="/inscription" class="underline hover:opacity-70 transition-opacity">S'inscrire</a>
+      <!-- ─── Lien inscription ─── -->
+      <p class="absolute top-[680px] text-[14px] font-medium leading-[1.1] text-white m-0"
+        style="left: calc(25% + 344px); transform: translateX(-100%);">
+        Pas encore de compte ?&nbsp;<a href="/inscription" class="underline hover:opacity-70 transition-opacity">S'inscrire</a>
       </p>
 
     </form>

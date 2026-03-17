@@ -42,3 +42,22 @@ h3 {
   font-size: 14px;
   line-height: 1.1;
 }
+
+/* Carousel bars — transition swipe */
+#bar-track {
+  transition: transform 0.5s ease-in-out;
+}
+
+/* FAQ — rotation de l'icône + quand ouvert */
+.faq-item[open] .faq-icon {
+  transform: rotate(45deg);
+}
+
+/* Inscription — checkbox conditions d'utilisation */
+#terms-checkbox:checked + div svg {
+  display: block;
+}
+#terms-checkbox:checked + div {
+  background-color: #347645;
+  border-color: #347645;
+}
