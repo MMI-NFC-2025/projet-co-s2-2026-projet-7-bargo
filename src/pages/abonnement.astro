@@ -1,0 +1,146 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const plans = [
+  {
+    id: 'gratuit',
+    nom: 'Gratuit',
+    prix: '0€',
+    periode: '/ mois',
+    couleur: '#646262',
+    couleurBtn: '#1e1e1e',
+    badge: null,
+    description: 'L\'essentiel pour découvrir BARGO et organiser vos premières soirées.',
+    avantages: [
+      'Accès à l\'application BARGO',
+      'Création de sessions barathon',
+      'Points standards gagnés',
+      'Accès à la boutique',
+    ],
+    manques: [
+      'Sessions limitées à 2 par mois',
+      'Points bonus',
+    ],
+    cta: 'Commencer gratuitement',
+  },
+  {
+    id: 'vip',
+    nom: 'VIP',
+    prix: '4,99€',
+    periode: '/ mois',
+    couleur: '#347645',
+    couleurBtn: '#347645',
+    badge: 'Populaire',
+    description: 'Plus de sessions et plus de points pour profiter pleinement de vos soirées.',
+    avantages: [
+      'Tout du plan Gratuit',
+      '5 sessions barathon maximum',
+      'Points x2 sur chaque session',
+      'Badge VIP sur votre profil',
+      'Accès prioritaire aux nouveaux bars',
+    ],
+    manques: [
+      'Sessions illimitées',
+    ],
+    cta: 'Choisir VIP',
+  },
+  {
+    id: 'premium',
+    nom: 'Premium',
+    prix: '9,99€',
+    periode: '/ mois',
+    couleur: '#094736',
+    couleurBtn: '#094736',
+    badge: 'Meilleur choix',
+    description: 'L\'expérience BARGO complète, sans limites.',
+    avantages: [
+      'Tout du plan VIP',
+      'Sessions barathon illimitées',
+      'Points x5 sur chaque session',
+      'Badge Premium exclusif',
+      'Accès anticipé aux nouveautés',
+    ],
+    manques: [],
+    cta: 'Choisir Premium',
+  },
+];
+---
+
+<Layout title="Nos abonnements — Bargo">
+
+  <!-- ===== HERO ===== -->
+  <section class="bg-[#094736] h-[450px] relative">
+    <h1 class="absolute top-[141px] left-[80px] text-white m-0 uppercase">Nos abonnements</h1>
+    <p class="absolute top-[268px] left-[80px] text-[#f7f1ed] text-[14px] font-medium w-[547px] m-0 leading-[1.6]">
+      Ici vous pouvez prendre les abonnements qui permettront d'avoir un petit plus sur vos soirées&nbsp;!
+    </p>
+  </section>
+
+  <!-- ===== CARDS ===== -->
+  <div class="bg-[#f7f1ed] px-[80px] py-[80px]">
+    <div class="grid grid-cols-3 gap-[40px]">
+
+      {plans.map(plan => (
+        <div class="bg-white rounded-[5px] shadow-[0px_4px_10px_0px_rgba(0,0,0,0.15)] flex flex-col overflow-hidden">
+
+          <!-- En-tête coloré -->
+          <div class="px-[35px] py-[30px] relative" style={`background-color: ${plan.couleur};`}>
+            {plan.badge && (
+              <span class="absolute top-[20px] right-[20px] bg-[#72c073] text-[#094736] text-[12px] font-bold px-[10px] py-[4px] rounded-full uppercase tracking-[0.5px]">
+                {plan.badge}
+              </span>
+            )}
+            <h3 class="text-white m-0 mb-[16px] uppercase tracking-[2px]">{plan.nom}</h3>
+            <div class="flex items-baseline gap-[6px]">
+              <span class="text-white font-bold leading-none" style="font-size: 50px; font-family: Manrope, sans-serif;">{plan.prix}</span>
+              <span class="text-[#dfdfdf] text-[16px] font-medium">{plan.periode}</span>
+            </div>
+          </div>
+
+          <!-- Corps -->
+          <div class="px-[35px] py-[30px] flex flex-col flex-1">
+
+            <p class="text-[#646262] text-[14px] font-medium leading-[1.6] m-0 mb-[24px]">{plan.description}</p>
+
+            <!-- Avantages -->
+            <ul class="list-none m-0 p-0 flex flex-col gap-[12px] mb-[16px]">
+              {plan.avantages.map(item => (
+                <li class="flex items-start gap-[10px]">
+                  <svg class="shrink-0 mt-[2px]" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <circle cx="9" cy="9" r="9" fill="#72c073"/>
+                    <path d="M4.5 9L7.5 12L13.5 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <span class="text-black text-[16px] font-medium leading-[1.4]">{item}</span>
+                </li>
+              ))}
+              {plan.manques.map(item => (
+                <li class="flex items-start gap-[10px]">
+                  <svg class="shrink-0 mt-[2px]" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <circle cx="9" cy="9" r="9" fill="#dfdfdf"/>
+                    <path d="M5.5 9h7" stroke="#646262" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                  <span class="text-[#646262] text-[16px] font-medium leading-[1.4] line-through">{item}</span>
+                </li>
+              ))}
+            </ul>
+
+            <!-- Spacer -->
+            <div class="flex-1"></div>
+
+            <!-- Bouton -->
+            <button
+              type="button"
+              class="mt-[24px] w-full h-[52px] flex items-center justify-center text-white text-[16px] font-medium hover:opacity-90 transition-opacity cursor-pointer border-0 rounded-[3px]"
+              style={`background-color: ${plan.couleurBtn};`}
+            >
+              {plan.cta}
+            </button>
+
+          </div>
+        </div>
+      ))}
+
+    </div>
+  </div>
+
+</Layout>
