@@ -1,0 +1,176 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PbImage from '../components/PbImage.astro';
+import likeIcon from '../assets/icon/like.svg';
+import likeFillIcon from '../assets/icon/like_fill.svg';
+
+const PB_URL = 'https://pbbargo.pierre-mouilleseaux-lhuillier.fr';
+
+const page     = parseInt(Astro.url.searchParams.get('page') ?? '1');
+const activeTab = Astro.url.searchParams.get('tab') ?? 'avatar';
+const perPage  = 12;
+
+const filter = encodeURIComponent(`type="${activeTab}"`);
+const res  = await fetch(`${PB_URL}/api/collections/boutique/records?page=${page}&perPage=${perPage}&sort=created&filter=${filter}`);
+const data = await res.json();
+const produits    = data.items ?? [];
+const totalPages  = Math.ceil((data.totalItems ?? 0) / perPage);
+
+// Points utilisateur (si connecté)
+const userId = Astro.cookies.get('pb_user_id')?.value;
+const token  = Astro.cookies.get('pb_token')?.value;
+let userPoints = null;
+if (userId && token) {
+  const userRes = await fetch(`${PB_URL}/api/collections/users/records/${userId}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  if (userRes.ok) {
+    const user = await userRes.json();
+    userPoints = user.points ?? 0;
+  }
+}
+
+const tabs = [
+  { id: 'avatar', label: 'Avatar' },
+  { id: 'theme',  label: 'Thème du profil' },
+  { id: 'titre',  label: 'Titre' },
+];
+
+function tabUrl(id) {
+  const u = new URL(Astro.url.href);
+  u.searchParams.set('tab', id);
+  u.searchParams.set('page', '1');
+  return u.pathname + u.search;
+}
+function pageUrl(p) {
+  const u = new URL(Astro.url.href);
+  u.searchParams.set('page', String(p));
+  return u.pathname + u.search;
+}
+---
+
+<Layout title="Boutique — Bargo">
+
+  <!-- ===== HERO ===== -->
+  <section class="bg-[#094736] h-[450px] relative">
+    <h1 class="absolute top-[141px] left-[80px] text-white m-0 uppercase">Boutique</h1>
+    <p class="absolute top-[268px] left-[80px] text-[#f7f1ed] text-[14px] font-medium w-[547px] m-0 leading-[1.6]">
+      Personnalisez votre profil et affirmez votre style au sein du groupe. Débloquez des avatars,
+      des cadres et des thèmes exclusifs grâce à votre participation et à vos succès.
+      Plus vous prenez part aux barathons, plus votre profil évolue.
+    </p>
+  </section>
+
+  <!-- ===== CONTENU BEIGE ===== -->
+  <div class="bg-[#f7f1ed]">
+
+    <!-- Tab bar -->
+    <div class="pt-[23px]">
+      <div class="border-b-2 border-[#e7e5e5] shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25)]">
+        <div class="px-[80px] flex items-center justify-between h-[52px]">
+
+          <!-- Onglets -->
+          <div class="flex items-center h-full">
+            {tabs.map(tab => (
+              <a
+                href={tabUrl(tab.id)}
+                class={`flex items-center justify-center px-[25px] h-full text-[16px] font-medium text-black border-b-[7px] transition-colors no-underline ${activeTab === tab.id ? 'border-[#72c073]' : 'border-transparent'}`}
+              >
+                {tab.label}
+              </a>
+            ))}
+          </div>
+
+          <!-- Points utilisateur -->
+          {userPoints !== null && (
+            <div class="flex items-center gap-3">
+              <span class="text-black text-[16px] font-medium">Vos points :</span>
+              <h3 class="m-0 text-black">{userPoints} points</h3>
+            </div>
+          )}
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Grille de produits -->
+    <div class="px-[80px] pt-[92px] pb-[80px]">
+      {produits.length > 0 ? (
+        <div class="grid grid-cols-4 gap-[32px]">
+          {produits.map(produit => {
+            const imageFile = Array.isArray(produit.item) ? produit.item[0] : produit.item;
+            return (
+              <div class="h-[367px] rounded-[2px] shadow-[0px_4px_6px_0px_rgba(0,0,0,0.25)] relative overflow-hidden bg-[#646262]">
+
+                <!-- Zone blanche du bas -->
+                <div class="absolute bottom-0 left-0 right-0 h-[143px] bg-white rounded-bl-[2px] rounded-br-[2px]"></div>
+
+                <!-- Image avatar (cercle centré) -->
+                <div class="absolute top-[42px] left-1/2 -translate-x-1/2 size-[150px] rounded-full overflow-hidden">
+                  <PbImage record={produit} recordImage={imageFile} width={150} height={150} />
+                </div>
+
+                <!-- Ligne points + like -->
+                <div class="absolute top-[239px] left-[29px] right-[27px] flex items-center justify-between">
+                  <h3 class="m-0 text-black">{produit.prix} points</h3>
+                  <button class="like-btn" data-id={produit.id} type="button">
+                    <img src={likeIcon.src} alt="Ajouter aux favoris" class="like-empty size-[24px]" />
+                    <img src={likeFillIcon.src} alt="Retirer des favoris" class="like-filled size-[24px] hidden" />
+                  </button>
+                </div>
+
+                <!-- Bouton Acheter -->
+                <button type="button"
+                  class="absolute top-[295px] bottom-[12px] left-[29px] right-[30px] bg-[#1e1e1e] flex items-center justify-center hover:opacity-90 transition-opacity cursor-pointer border-0">
+                  <span class="text-white text-[16px] font-medium">Acheter</span>
+                </button>
+
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <p class="text-[#646262] text-[16px] font-medium">Aucun article disponible pour l'instant.</p>
+      )}
+    </div>
+
+    <!-- Pagination -->
+    {totalPages > 1 && (
+      <div class="bg-[#dfdfdf] h-[248px] flex items-center justify-center gap-[60px]">
+
+        {page > 1 ? (
+          <a href={pageUrl(page - 1)}
+            class="bg-[#1e1e1e] h-[60px] w-[187px] flex items-center justify-center text-white text-[16px] font-medium rounded-[5px] hover:opacity-90 transition-opacity no-underline">
+            Précédent
+          </a>
+        ) : (
+          <div class="h-[60px] w-[187px]"></div>
+        )}
+
+        <div class="flex items-center gap-2">
+          {page > 1 && <span class="text-[25px] font-medium text-[#646262]">&lt;</span>}
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+            <a href={pageUrl(p)} class={`text-[25px] font-medium no-underline ${p === page ? 'text-black font-extrabold' : 'text-[#646262]'}`}>{p}.</a>
+          ))}
+          {page < totalPages && <span class="text-[25px] font-medium text-[#646262]">&gt;</span>}
+        </div>
+
+        {page < totalPages ? (
+          <a href={pageUrl(page + 1)}
+            class="bg-[#347645] h-[60px] w-[187px] flex items-center justify-center text-white text-[16px] font-medium rounded-[5px] hover:opacity-90 transition-opacity no-underline">
+            Suivant
+          </a>
+        ) : (
+          <div class="h-[60px] w-[187px]"></div>
+        )}
+
+      </div>
+    )}
+
+  </div>
+
+  <script>
+    import '../js/boutique.js';
+  </script>
+
+</Layout>

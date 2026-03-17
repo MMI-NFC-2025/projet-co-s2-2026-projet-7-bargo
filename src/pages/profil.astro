@@ -1,9 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { Image } from 'astro:assets';
 import { getUserAuth, updateUser, deleteUser, getCollection, getImageUrl } from '../js/backend.js';
-import defaultBanner from '../assets/img/golden_bar.avif';
-import chevronIcon from '../assets/icon/chevron-bottom-normal.svg';
+import PbImage from '../components/PbImage.astro';
+import heartIcon from '../assets/icon/heart.svg';
 
 // Auth guard
 const token  = Astro.cookies.get('pb_token')?.value;
@@ -16,11 +15,17 @@ let pwdError      = '';
 let pwdSuccess    = false;
 let emailError    = '';
 let emailSuccess  = false;
-let activeTab     = Astro.url.searchParams.get('tab') ?? 'apropos';
+let activeTab     = Astro.url.searchParams.get('tab') ?? 'profil';
 
 if (Astro.request.method === 'POST') {
   const formData = await Astro.request.formData();
   const action   = formData.get('_action')?.toString();
+
+  if (action === 'logout') {
+    Astro.cookies.delete('pb_token',   { path: '/' });
+    Astro.cookies.delete('pb_user_id', { path: '/' });
+    return Astro.redirect('/');
+  }
 
   if (action === 'delete') {
     await deleteUser(userId, token);
@@ -29,25 +34,17 @@ if (Astro.request.method === 'POST') {
     return Astro.redirect('/');
   }
 
-  if (action === 'logout') {
-    Astro.cookies.delete('pb_token',   { path: '/' });
-    Astro.cookies.delete('pb_user_id', { path: '/' });
-    return Astro.redirect('/');
-  }
-
   if (action === 'edit') {
     const pbData = new FormData();
-    for (const field of ['prenom', 'nom', 'pseudo', 'age', 'ville', 'bar_favori', 'boisson_favori', 'preference_horaire_debut', 'preference_horaire_fin']) {
+    for (const field of ['prenom', 'nom', 'pseudo', 'age', 'ville', 'instagram', 'devise']) {
       const val = formData.get(field);
       if (val !== null && val.toString() !== '') pbData.append(field, val.toString());
     }
-    const avatarFile  = formData.get('avatar');
-    const baniereFile = formData.get('baniere');
-    if (avatarFile  instanceof File && avatarFile.size  > 0) pbData.append('avatar',  avatarFile,  avatarFile.name);
-    if (baniereFile instanceof File && baniereFile.size > 0) pbData.append('baniere', baniereFile, baniereFile.name);
+    const avatarFile = formData.get('avatar');
+    if (avatarFile instanceof File && avatarFile.size > 0) pbData.append('avatar', avatarFile, avatarFile.name);
     const result = await updateUser(userId, token, pbData);
     if (result) { updateSuccess = true; } else { updateError = 'Erreur lors de la mise à jour.'; }
-    activeTab = 'apropos';
+    activeTab = 'profil';
   }
 
   if (action === 'change_password') {
@@ -62,8 +59,8 @@ if (Astro.request.method === 'POST') {
       pwdError = 'Le mot de passe doit contenir au moins 8 caractères.';
     } else {
       const pbData = new FormData();
-      pbData.append('oldPassword',    oldPwd);
-      pbData.append('password',       newPwd);
+      pbData.append('oldPassword',     oldPwd);
+      pbData.append('password',        newPwd);
       pbData.append('passwordConfirm', confirmPwd);
       const result = await updateUser(userId, token, pbData);
       if (result) { pwdSuccess = true; } else { pwdError = 'Mot de passe actuel incorrect.'; }
@@ -93,11 +90,6 @@ if (!user || user.code === 404) {
   return Astro.redirect('/connexion');
 }
 
-// Dropdowns
-const bars     = await getCollection('bar',     { perPage: 200, sort: 'nom' });
-let   boissons = [];
-try { boissons = await getCollection('boisson', { perPage: 200, sort: 'nom' }); } catch {}
-
 // Notifications
 let notifications = [];
 try {
@@ -108,49 +100,23 @@ try {
   });
 } catch {}
 
-// Messages
-let messages = [];
+// Bar favori
+let barFavori = null;
 try {
-  messages = await getCollection('messages', {
-    filter:  `expediteur = "${userId}" || destinataire = "${userId}"`,
-    sort:    '-created',
-    perPage: 50,
-    expand:  'expediteur,destinataire'
-  });
+  const barFavoriId = Array.isArray(user.bar_favori) ? user.bar_favori[0] : user.bar_favori;
+  if (barFavoriId) {
+    const bars = await getCollection('bar', { filter: `id = "${barFavoriId}"`, perPage: 1 });
+    if (bars.length > 0) barFavori = bars[0];
+  }
 } catch {}
 
-// Images
-const avatarUrl  = user.avatar  ? getImageUrl(user, user.avatar)  : null;
-const baniereUrl = user.baniere ? getImageUrl(user, user.baniere) : null;
+const avatarUrl    = user.avatar ? getImageUrl(user, user.avatar) : null;
+const createdAt    = user.created
+  ? new Date(user.created).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })
+  : '—';
+const unreadNotifs = notifications.filter(n => !n.lu).length;
 
-// Relations favoris
-const barFavoriId     = Array.isArray(user.bar_favori)     ? user.bar_favori[0]     : user.bar_favori;
-const boissonFavoriId = Array.isArray(user.boisson_favori) ? user.boisson_favori[0] : user.boisson_favori;
-const barFavoriNom     = user.expand?.bar_favori?.nom     ?? bars.find(b => b.id === barFavoriId)?.nom     ?? '';
-const boissonFavoriNom = user.expand?.boisson_favori?.nom ?? boissons.find(b => b.id === boissonFavoriId)?.nom ?? '';
-
-// Préférence horaire
-const prefDebut = user.preference_horaire_debut ?? '';
-const prefFin   = user.preference_horaire_fin   ?? '';
-const jours     = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
-
-const createdAt = user.created ? new Date(user.created).toLocaleDateString('fr-FR') : '—';
-
-// Compteurs non lus
-const unreadNotifs   = notifications.filter(n => !n.lu).length;
-const unreadMessages = messages.filter(m => !m.lu && (m.destinataire === userId || m.to_user === userId)).length;
-
-// Positions underline par onglet
-const ulPos = {
-  apropos:       { left: 'calc(33.33% + 37px)', width: '126px' },
-  notifications: { left: 'calc(41.67% + 65px)', width: '170px' },
-  messages:      { left: 'calc(58.33% + 32px)', width: '139px' },
-  parametres:    { left: 'calc(75% - 56px)',     width: '140px' }
-};
-const ul = ulPos[activeTab as keyof typeof ulPos] ?? ulPos.apropos;
-
-// Helper date relative
-function timeAgo(dateStr: string) {
+function timeAgo(dateStr) {
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60000);
   if (mins < 1)  return "À l'instant";
@@ -159,602 +125,423 @@ function timeAgo(dateStr: string) {
   if (hrs < 24)  return `Il y a ${hrs}h`;
   return `Il y a ${Math.floor(hrs / 24)}j`;
 }
+
+const displayName = user.prenom
+  ? `${user.prenom} ${user.nom ?? ''}`.trim()
+  : (user.nom ?? user.pseudo ?? '');
 ---
 
 <Layout title="Mon profil — Bargo">
-<div class="relative w-full bg-[#f7f1ed] overflow-x-hidden" style="min-height: 1972px;">
+  <section class="relative bg-[#f7f1ed] overflow-x-hidden">
 
-  <!-- ===== BANNER ===== -->
-  <div class="absolute top-0 left-0 w-full h-[542px] overflow-hidden">
-    {baniereUrl
-      ? <img src={baniereUrl} alt="Bannière" class="w-full h-full object-cover" />
-      : <Image src={defaultBanner} alt="Bannière" class="w-full h-full object-cover" />
-    }
-  </div>
+    <!-- ===== PROFILE HEADER ===== -->
 
-  <!-- WHITE HEADER BAR -->
-  <div class="absolute top-0 left-0 w-full h-[125px] bg-white z-[1]"></div>
+    <!-- Photo de profil -->
+    <div class="absolute left-[80px] top-[119px] size-[187px] rounded-full overflow-hidden z-[2]"
+      style="border: 15px solid #dfdfdf;">
+      {avatarUrl
+        ? <img src={avatarUrl} alt="Avatar" class="w-full h-full object-cover" />
+        : <div class="w-full h-full bg-[#1e1e1e] flex items-center justify-center">
+            <span class="text-white font-bold" style="font-size: 60px;">
+              {(user.pseudo ?? user.email ?? '?')[0].toUpperCase()}
+            </span>
+          </div>
+      }
+    </div>
 
-  <!-- GREEN SIDEBAR -->
-  <div class="absolute top-[542px] left-0 w-[442px] h-[1430px] bg-[#72c073]"></div>
+    <!-- Nom -->
+    <h2 class="absolute m-0 text-black overflow-hidden text-ellipsis whitespace-nowrap w-[344px]"
+      style="left: calc(16.67% + 59px); top: 119px;">
+      {displayName}
+    </h2>
 
-  <!-- CERCLE BLANC -->
-  <div class="absolute top-[384px] left-[58px] w-[314px] h-[314px] rounded-full bg-white z-[2]"></div>
+    <!-- Pseudo -->
+    <h3 class="absolute m-0 text-[#72c073]"
+      style="left: calc(16.67% + 59px); top: 185px;">
+      {user.pseudo ?? ''}
+    </h3>
 
-  <!-- PHOTO DE PROFIL -->
-  <div class="absolute top-[414px] left-[87px] w-[255px] h-[255px] rounded-full overflow-hidden z-[3]">
-    {avatarUrl
-      ? <img src={avatarUrl} alt="Avatar" class="w-full h-full object-cover" />
-      : <div class="w-full h-full bg-[#1e1e1e] flex items-center justify-center">
-          <span class="text-white text-6xl font-bold">{(user.pseudo ?? user.email ?? '?')[0].toUpperCase()}</span>
+    <!-- Ami(e)s -->
+    <p class="absolute m-0 text-[#1e1e1e] text-[16px] font-medium leading-[1.4]"
+      style="left: calc(33.33% + 79px); top: 198px;">
+      {user.amis ?? 0} ami(e)s
+    </p>
+
+    <!-- Points badge -->
+    <div class="absolute h-[65px] w-[344px] bg-[#094736] rounded-[5px] shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25)] flex items-center pl-[16px] gap-4"
+      style="left: calc(16.67% + 59px); top: 241px;">
+      <h3 class="text-white m-0">Points :</h3>
+      <h3 class="text-white m-0">{user.points ?? 0}</h3>
+    </div>
+
+    <!-- DESCRIPTION label -->
+    <p class="absolute m-0 text-[16px] font-medium text-black uppercase leading-[1.4]"
+      style="left: calc(50% + 17px); top: 127px;">
+      DESCRIPTION
+    </p>
+
+    <!-- Description text -->
+    <p class="absolute m-0 text-[#646262] text-[16px] font-medium leading-[1.4] w-[623px]"
+      style="left: calc(50% + 16px); top: 174px;">
+      {user.devise ?? '—'}
+    </p>
+
+    <!-- Séparateur shadow -->
+    <div class="absolute left-0 w-full h-[18px] bg-[#f7f1ed] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] z-[3]"
+      style="top: 402px;"></div>
+
+    <!-- ===== DEUX COLONNES ===== -->
+    <div class="flex" style="margin-top: 420px;">
+
+      <!-- SIDEBAR SOMBRE -->
+      <div class="w-[376px] shrink-0 bg-[#1e1e1e]">
+        <div class="px-[69px] pt-[16px] flex flex-col gap-[109px]">
+
+          <!-- Boutique -->
+          <a href="/boutique"
+            class="flex items-center justify-center border-2 border-white text-white text-[16px] font-medium leading-[1.4] h-[60px] w-[237px] hover:bg-white hover:text-[#1e1e1e] transition-colors">
+            Boutique
+          </a>
+
+          <!-- Amis (affichés si données disponibles) -->
+          <div class="flex flex-col gap-[109px]">
+            <!-- Placeholder — sera peuplé quand la collection amis sera prête -->
+          </div>
         </div>
-    }
-  </div>
-
-  <!-- NOM -->
-  <h2 class="absolute top-[592px] left-[calc(33.33%+5px)] text-black m-0 z-[2] font-bold leading-none tracking-[3px]">
-    {user.prenom ? `${user.prenom} ${user.nom ?? ''}` : (user.nom ?? user.pseudo ?? '')}
-  </h2>
-
-  <!-- PSEUDO -->
-  <h3 class="absolute top-[662px] left-[calc(33.33%+5px)] text-[#72c073] m-0 z-[2]">
-    {user.pseudo ?? ''}
-  </h3>
-
-  <!-- AMI(E)S -->
-  <p class="absolute top-[631px] left-[calc(83.33%+32px)] text-[#646262] text-[16px] font-medium m-0 z-[2] leading-[1.4]">
-    {user.amis ?? 0} ami(e)s
-  </p>
-
-  <!-- BOUTON DÉCONNEXION -->
-  <form method="POST" enctype="application/x-www-form-urlencoded" class="absolute top-[761px] left-[80px] z-[2]">
-    <input type="hidden" name="_action" value="logout" />
-    <button type="submit"
-      class="flex items-center justify-center gap-[15px] border-2 border-white text-white text-[16px] font-medium leading-[1.4] px-[50px] py-[8px] hover:bg-white hover:text-[#72c073] transition-colors cursor-pointer bg-transparent w-[269px]">
-      Se déconnecter
-    </button>
-  </form>
-
-  <!-- LIGNE HAUTE TABS -->
-  <div class="absolute top-[762px] left-[calc(25%+82px)] w-[998px] h-[25px] border-b-2 border-[#e7e5e5] z-[2]"></div>
-
-  <!-- UNDERLINE TAB ACTIF -->
-  <div id="tab-underline"
-    class="absolute top-[793px] h-[80px] border-b-[10px] border-[#72c073] z-[2] transition-all duration-200"
-    style={`left: ${ul.left}; width: ${ul.width};`}></div>
-
-  <!-- TABS (cliquables) -->
-  <span id="tab-apropos" data-tab="apropos" onclick="switchTab('apropos')"
-    class="absolute top-[812px] left-[calc(33.33%+46px)] font-bold text-[24px] leading-[1.3] z-[2] cursor-pointer select-none transition-colors"
-    style={activeTab === 'apropos' ? 'color:#72c073' : ''}>
-    A propos
-  </span>
-  <span id="tab-notifications" data-tab="notifications" onclick="switchTab('notifications')"
-    class="absolute top-[812px] left-[calc(41.67%+74px)] font-bold text-[24px] leading-[1.3] z-[2] cursor-pointer select-none transition-colors"
-    style={activeTab === 'notifications' ? 'color:#72c073' : ''}>
-    Notifications
-  </span>
-  <span id="tab-messages" data-tab="messages" onclick="switchTab('messages')"
-    class="absolute top-[812px] left-[calc(58.33%+41px)] font-bold text-[24px] leading-[1.3] z-[2] cursor-pointer select-none transition-colors"
-    style={activeTab === 'messages' ? 'color:#72c073' : ''}>
-    Messages
-  </span>
-  <span id="tab-parametres" data-tab="parametres" onclick="switchTab('parametres')"
-    class="absolute top-[812px] left-[calc(75%-47px)] font-bold text-[24px] leading-[1.3] z-[2] cursor-pointer select-none transition-colors"
-    style={activeTab === 'parametres' ? 'color:#72c073' : ''}>
-    Paramètre
-  </span>
-
-  <!-- BADGE NOTIFICATIONS -->
-  {(unreadNotifs > 0 || notifications.length > 0) && (
-    <div class="absolute top-[800px] left-[calc(58.33%-14px)] w-[24px] h-[24px] rounded-full bg-red-500 flex items-center justify-center z-[3] pointer-events-none">
-      <span class="text-[11px] font-black text-white leading-none">{Math.min(unreadNotifs || notifications.length, 9)}</span>
-    </div>
-  )}
-
-  <!-- BADGE MESSAGES -->
-  {unreadMessages > 0 && (
-    <div class="absolute top-[800px] left-[calc(75%-76px)] w-[24px] h-[24px] rounded-full bg-red-500 flex items-center justify-center z-[3] pointer-events-none">
-      <span class="text-[11px] font-black text-white leading-none">{Math.min(unreadMessages, 9)}</span>
-    </div>
-  )}
-
-  <!-- BOUTIQUE -->
-  <a href="/boutique"
-    class="absolute top-[802px] left-[calc(83.33%+7px)] flex items-center justify-center gap-[15px] bg-[#1e1e1e] text-white text-[16px] font-medium leading-[1.4] px-[50px] py-[8px] hover:opacity-80 transition-opacity z-[2]">
-    Boutique
-  </a>
-
-  <!-- LIGNE BAS TABS -->
-  <div class="absolute top-[853px] left-[calc(25%+82px)] w-[998px] h-[20px] border-b-2 border-[#e7e5e5] z-[2]"
-    style="box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.25);"></div>
-
-  <!-- ================================================================ -->
-  <!-- PANEL : A PROPOS                                                  -->
-  <!-- ================================================================ -->
-  <div id="panel-apropos" data-panel class={activeTab !== 'apropos' ? 'hidden' : ''}>
-
-    {updateSuccess && (
-      <p class="absolute top-[870px] left-[calc(33.33%+37px)] text-[#347645] text-sm font-medium z-[2] m-0">
-        Profil mis à jour avec succès.
-      </p>
-    )}
-    {updateError && (
-      <p class="absolute top-[870px] left-[calc(33.33%+37px)] text-red-500 text-sm font-medium z-[2] m-0">
-        {updateError}
-      </p>
-    )}
-
-    <form method="POST" enctype="multipart/form-data" id="profile-form">
-      <input type="hidden" name="_action" value="edit" />
-
-      <!-- FOND CARTE INFOS -->
-      <div class="absolute top-[914px] left-[calc(33.33%+37px)] w-[515px] h-[254px] bg-[#f7f1ed] rounded-[5px] z-[2]"
-        style="box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.25);"></div>
-
-      <!-- Séparateurs -->
-      <div class="absolute top-[938px] left-[calc(33.33%+46px)] w-[488px] h-[37px] border-b-2 border-[#e7e5e5] z-[3]"></div>
-      <div class="absolute top-[984px] left-[calc(33.33%+46px)] w-[488px] h-[37px] border-b-2 border-[#e7e5e5] z-[3]"></div>
-      <div class="absolute top-[1030px] left-[calc(33.33%+46px)] w-[488px] h-[37px] border-b-2 border-[#e7e5e5] z-[3]"></div>
-      <div class="absolute top-[1076px] left-[calc(33.33%+46px)] w-[488px] h-[37px] border-b-2 border-[#e7e5e5] z-[3]"></div>
-
-      <!-- Labels -->
-      <p class="absolute top-[938px]  left-[calc(33.33%+46px)] text-[16px] font-medium text-black m-0 z-[4] leading-[1.4]">Prenom</p>
-      <p class="absolute top-[984px]  left-[calc(33.33%+46px)] text-[16px] font-medium text-black m-0 z-[4] leading-[1.4]">Nom</p>
-      <p class="absolute top-[1030px] left-[calc(33.33%+46px)] text-[16px] font-medium text-black m-0 z-[4] leading-[1.4]">ID utilisateur</p>
-      <p class="absolute top-[1076px] left-[calc(33.33%+46px)] text-[16px] font-medium text-black m-0 z-[4] leading-[1.4]">Age</p>
-      <p class="absolute top-[1122px] left-[calc(33.33%+46px)] text-[16px] font-medium text-black m-0 z-[4] leading-[1.4]">Ville</p>
-
-      <!-- Valeurs (mode vue) -->
-      <p class="view-field absolute top-[938px]  left-[calc(50%+294px)] -translate-x-full text-[16px] font-medium text-[#646262] m-0 z-[4] leading-[1.4] whitespace-nowrap">{user.prenom ?? '—'}</p>
-      <p class="view-field absolute top-[984px]  left-[calc(50%+294px)] -translate-x-full text-[16px] font-medium text-[#646262] m-0 z-[4] leading-[1.4] whitespace-nowrap">{user.nom ?? '—'}</p>
-      <p class="view-field absolute top-[1030px] left-[calc(50%+294px)] -translate-x-full text-[16px] font-medium text-[#646262] m-0 z-[4] leading-[1.4] whitespace-nowrap">{user.pseudo ?? '—'}</p>
-      <p class="view-field absolute top-[1076px] left-[calc(50%+294px)] -translate-x-full text-[16px] font-medium text-[#646262] m-0 z-[4] leading-[1.4] whitespace-nowrap">{user.age ? `${user.age} ans` : '—'}</p>
-      <p class="view-field absolute top-[1122px] left-[calc(50%+294px)] -translate-x-full text-[16px] font-medium text-[#646262] m-0 z-[4] leading-[1.4] whitespace-nowrap">{user.ville ?? '—'}</p>
-
-      <!-- Inputs (mode édition) -->
-      <input type="text"   name="prenom" value={user.prenom ?? ''} placeholder="Prénom"
-        class="edit-field hidden absolute top-[937px]  left-[calc(50%+294px)] -translate-x-full w-[280px] text-right text-[16px] font-medium text-[#646262] bg-transparent outline-none border-b border-[#72c073] z-[4] leading-[1.4]" />
-      <input type="text"   name="nom"    value={user.nom    ?? ''} placeholder="Nom"
-        class="edit-field hidden absolute top-[983px]  left-[calc(50%+294px)] -translate-x-full w-[280px] text-right text-[16px] font-medium text-[#646262] bg-transparent outline-none border-b border-[#72c073] z-[4] leading-[1.4]" />
-      <input type="text"   name="pseudo" value={user.pseudo ?? ''} placeholder="Pseudo"
-        class="edit-field hidden absolute top-[1029px] left-[calc(50%+294px)] -translate-x-full w-[280px] text-right text-[16px] font-medium text-[#646262] bg-transparent outline-none border-b border-[#72c073] z-[4] leading-[1.4]" />
-      <input type="number" name="age"    value={user.age    ?? ''} placeholder="Âge" min="13" max="120"
-        class="edit-field hidden absolute top-[1075px] left-[calc(50%+294px)] -translate-x-full w-[280px] text-right text-[16px] font-medium text-[#646262] bg-transparent outline-none border-b border-[#72c073] z-[4] leading-[1.4]" />
-      <input type="text"   name="ville"  value={user.ville  ?? ''} placeholder="Ville"
-        class="edit-field hidden absolute top-[1121px] left-[calc(50%+294px)] -translate-x-full w-[280px] text-right text-[16px] font-medium text-[#646262] bg-transparent outline-none border-b border-[#72c073] z-[4] leading-[1.4]" />
-
-      <!-- FOND CARTE DEVISE -->
-      <div class="absolute top-[914px] left-[calc(75%-16px)] w-[296px] h-[230px] bg-[#f7f1ed] rounded-[5px] z-[2]"
-        style="box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.25);"></div>
-      <p class="absolute top-[938px] left-[calc(75%-4px)] text-[16px] font-medium text-black m-0 z-[3] leading-[1.4]">Devise :</p>
-      <p class="absolute top-[989px] left-[calc(75%-4px)] text-sm text-[#646262] m-0 z-[3] leading-[1.6] w-[241px]">
-        {user.devise ?? '"Passionné par les sorties entre amis, toujours partant pour organiser une tournée bien pensée et relever quelques défis au passage."'}
-      </p>
-
-      <!-- FOND CARTE POINTS -->
-      <div class="absolute top-[1168px] left-[calc(75%-16px)] w-[296px] h-[82px] bg-[#094736] rounded-[5px] z-[2]"
-        style="box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.25);"></div>
-      <p class="absolute top-[1191px] left-[calc(75%-4px)] font-medium text-[25px] text-white m-0 z-[3] tracking-[-1px] leading-[1.4]">Points :</p>
-      <p class="absolute top-[1191px] left-[calc(83.33%+90px)] -translate-x-1/2 font-medium text-[25px] text-white m-0 z-[3] tracking-[-1px] leading-[1.4] text-center">{user.points ?? 0}</p>
-
-      <!-- BAR FAVORI -->
-      <p class="absolute top-[1211px] left-[calc(33.33%+37px)] text-[16px] font-medium text-black m-0 z-[2] leading-[1.4]">Bar favori</p>
-      <div class="absolute top-[1250px] left-[calc(33.33%+37px)] w-[515px] h-[57px] bg-[#f7f1ed] rounded-[5px] z-[2] cursor-pointer"
-        style="box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.25);" onclick="openSelect('bar_favori')"></div>
-      <div class="absolute top-[1250px] left-[calc(66.67%-3px)] w-[57px] h-[57px] flex items-center justify-center z-[4] pointer-events-none">
-        <img src={chevronIcon.src} alt="" width="24" height="24" />
-      </div>
-      <span class="view-field absolute top-[1263px] left-[calc(33.33%+65px)] text-[16px] font-medium text-[#1e1e1e] z-[3] leading-[1.4]">{barFavoriNom || '—'}</span>
-      <select name="bar_favori"
-        class="edit-field hidden absolute top-[1250px] left-[calc(33.33%+37px)] w-[515px] h-[57px] bg-transparent text-[16px] font-medium text-[#1e1e1e] px-6 outline-none cursor-pointer appearance-none z-[3]">
-        <option value="">— Choisir un bar —</option>
-        {bars.map(b => <option value={b.id} selected={b.id === barFavoriId}>{b.nom}</option>)}
-      </select>
-
-      <!-- BOISSON FAVORITE -->
-      <p class="absolute top-[1331px] left-[calc(33.33%+37px)] text-[16px] font-medium text-black m-0 z-[2] leading-[1.4]">Boisson favorite</p>
-      <div class="absolute top-[1370px] left-[calc(33.33%+37px)] w-[515px] h-[57px] bg-[#f7f1ed] rounded-[5px] z-[2] cursor-pointer"
-        style="box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.25);" onclick="openSelect('boisson_favori')"></div>
-      <div class="absolute top-[1370px] left-[calc(66.67%-3px)] w-[57px] h-[57px] flex items-center justify-center z-[4] pointer-events-none">
-        <img src={chevronIcon.src} alt="" width="24" height="24" />
-      </div>
-      <span class="view-field absolute top-[1383px] left-[calc(33.33%+61px)] text-[16px] font-medium text-[#1e1e1e] z-[3] leading-[1.4]">{boissonFavoriNom || '—'}</span>
-      <select name="boisson_favori"
-        class="edit-field hidden absolute top-[1370px] left-[calc(33.33%+37px)] w-[515px] h-[57px] bg-transparent text-[16px] font-medium text-[#1e1e1e] px-6 outline-none cursor-pointer appearance-none z-[3]">
-        <option value="">— Choisir une boisson —</option>
-        {boissons.map(b => <option value={b.id} selected={b.id === boissonFavoriId}>{b.nom}</option>)}
-      </select>
-
-      <!-- PRÉFÉRENCE HORAIRE -->
-      <p class="absolute top-[1448px] left-[calc(33.33%+37px)] text-[16px] font-medium text-black m-0 z-[2] leading-[1.4]">Préférence horaire</p>
-      <!-- Box début -->
-      <div class="absolute top-[1487px] left-[calc(33.33%+37px)] w-[219px] h-[57px] bg-[#f7f1ed] rounded-[5px] z-[2] cursor-pointer"
-        style="box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.25);" onclick="openSelect('preference_horaire_debut')"></div>
-      <div class="absolute top-[1487px] left-[calc(41.67%+63px)] w-[57px] h-[57px] flex items-center justify-center z-[4] pointer-events-none">
-        <img src={chevronIcon.src} alt="" width="24" height="24" />
-      </div>
-      <!-- Tiret -->
-      <div class="absolute top-[1516px] left-[calc(50%+34px)] w-[45px] border-t-2 border-[#1e1e1e] z-[2]"></div>
-      <!-- Box fin -->
-      <div class="absolute top-[1487px] left-[calc(58.33%-27px)] w-[219px] h-[57px] bg-[#f7f1ed] rounded-[5px] z-[2] cursor-pointer"
-        style="box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.25);" onclick="openSelect('preference_horaire_fin')"></div>
-      <div class="absolute top-[1487px] left-[calc(66.67%-1px)] w-[57px] h-[57px] flex items-center justify-center z-[4] pointer-events-none">
-        <img src={chevronIcon.src} alt="" width="24" height="24" />
-      </div>
-      <span class="view-field absolute top-[1500px] left-[calc(33.33%+61px)] text-[16px] font-medium text-[#1e1e1e] z-[3] leading-[1.4]">{prefDebut || 'Lundi'}</span>
-      <span class="view-field absolute top-[1500px] left-[calc(58.33%-3px)] text-[16px] font-medium text-[#1e1e1e] z-[3] leading-[1.4]">{prefFin || 'Vendredi'}</span>
-      <select name="preference_horaire_debut"
-        class="edit-field hidden absolute top-[1487px] left-[calc(33.33%+37px)] w-[219px] h-[57px] bg-transparent text-[16px] font-medium text-[#1e1e1e] px-4 outline-none cursor-pointer appearance-none z-[3]">
-        {jours.map(j => <option value={j} selected={j === prefDebut}>{j}</option>)}
-      </select>
-      <select name="preference_horaire_fin"
-        class="edit-field hidden absolute top-[1487px] left-[calc(58.33%-27px)] w-[219px] h-[57px] bg-transparent text-[16px] font-medium text-[#1e1e1e] px-4 outline-none cursor-pointer appearance-none z-[3]">
-        {jours.map(j => <option value={j} selected={j === prefFin}>{j}</option>)}
-      </select>
-
-      <!-- FOND CARTE STATS -->
-      <div class="absolute top-[1581px] left-[calc(33.33%+37px)] w-[515px] h-[162px] bg-[#f7f1ed] rounded-[5px] z-[2]"
-        style="box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.25);"></div>
-      <div class="absolute top-[1605px] left-[calc(33.33%+46px)] w-[488px] h-[37px] border-b-2 border-[#e7e5e5] z-[3]"></div>
-      <div class="absolute top-[1651px] left-[calc(33.33%+46px)] w-[488px] h-[37px] border-b-2 border-[#e7e5e5] z-[3]"></div>
-      <p class="absolute top-[1605px] left-[calc(33.33%+46px)] text-[16px] font-medium text-black m-0 z-[4] leading-[1.4]">Actif depuis</p>
-      <p class="absolute top-[1651px] left-[calc(33.33%+46px)] text-[16px] font-medium text-black m-0 z-[4] leading-[1.4]">barathons participés</p>
-      <p class="absolute top-[1697px] left-[calc(33.33%+46px)] text-[16px] font-medium text-black m-0 z-[4] leading-[1.4]">organisés</p>
-      <p class="absolute top-[1605px] left-[calc(50%+294px)] -translate-x-full text-[16px] font-medium text-[#646262] m-0 z-[4] leading-[1.4] whitespace-nowrap">{createdAt}</p>
-      <p class="absolute top-[1651px] left-[calc(50%+294px)] -translate-x-full text-[16px] font-medium text-[#646262] m-0 z-[4] leading-[1.4] whitespace-nowrap">{user.barathon_participer ?? 0}</p>
-      <p class="absolute top-[1697px] left-[calc(50%+294px)] -translate-x-full text-[16px] font-medium text-[#646262] m-0 z-[4] leading-[1.4] whitespace-nowrap">{user.barathon_organiser ?? 0}</p>
-
-      <!-- UPLOADS (mode édition) -->
-      <div class="edit-field hidden absolute top-[1760px] left-[calc(33.33%+37px)] z-[2]">
-        <p class="text-[16px] font-medium text-black m-0 mb-3">Photo de profil</p>
-        <input type="file" name="avatar"  accept="image/*"
-          class="text-sm text-[#646262] file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-[#347645] file:text-white file:cursor-pointer cursor-pointer mb-4 block" />
-        <p class="text-[16px] font-medium text-black m-0 mb-3 mt-4">Bannière</p>
-        <input type="file" name="baniere" accept="image/*"
-          class="text-sm text-[#646262] file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-[#347645] file:text-white file:cursor-pointer cursor-pointer block" />
       </div>
 
-      <!-- BOUTON SAUVEGARDER (mode édition) -->
-      <div class="edit-field hidden absolute top-[1819px] left-[calc(33.33%+37px)] z-[2]">
-        <button type="submit"
-          class="inline-flex items-center gap-4 bg-[#094736] text-white text-[16px] font-medium leading-[1.4] px-[50px] py-[8px] hover:opacity-90 transition-opacity cursor-pointer border-0">
-          Sauvegarder les modifications
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
-    </form>
+      <!-- CONTENU PRINCIPAL -->
+      <div class="flex-1 bg-[#f7f1ed]">
 
-    <!-- BOUTON ÉDITER (mode vue) -->
-    <button id="edit-btn" onclick="toggleEdit()"
-      class="absolute top-[1819px] left-[calc(33.33%+37px)] inline-flex items-center gap-4 bg-[#347645] text-white text-[16px] font-medium leading-[1.4] px-[50px] py-[8px] hover:opacity-90 transition-opacity cursor-pointer border-0 z-[2]">
-      Editer le profil
-      <svg width="35" height="35" viewBox="0 0 35 35" fill="none">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.29167 17.5C7.29167 17.016 7.68401 16.6237 8.16667 16.6237H23.8905L18.3959 11.1291C18.0472 10.7803 18.0472 10.2155 18.3959 9.86675C18.7447 9.51797 19.3095 9.51797 19.6582 9.86675L25.7749 15.9834C26.5251 16.7336 26.5251 17.9581 25.7749 18.7083L19.6582 24.825C19.3095 25.1737 18.7447 25.1737 18.3959 24.825C18.0472 24.4762 18.0472 23.9114 18.3959 23.5626L23.8905 18.0763H8.16667C7.68401 18.0763 7.29167 17.6839 7.29167 17.5Z" fill="white"/>
-      </svg>
-    </button>
-
-    <!-- BOUTON ANNULER (mode édition) -->
-    <button id="cancel-btn" onclick="toggleEdit()"
-      class="hidden absolute top-[1819px] left-[calc(33.33%+37px)] items-center gap-4 border-2 border-[#347645] text-[#347645] text-[16px] font-medium leading-[1.4] px-[50px] py-[8px] hover:bg-[#347645] hover:text-white transition-colors cursor-pointer bg-transparent z-[2]">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      Annuler les modifications
-    </button>
-
-  </div><!-- /panel-apropos -->
-
-  <!-- ================================================================ -->
-  <!-- PANEL : NOTIFICATIONS                                             -->
-  <!-- ================================================================ -->
-  <div id="panel-notifications" data-panel class={activeTab !== 'notifications' ? 'hidden' : ''}>
-    <div class="absolute top-[914px] left-[calc(33.33%+37px)] w-[843px] z-[2]">
-
-      <!-- En-tête -->
-      <div class="flex items-center justify-between mb-6">
-        <h3 class="text-black m-0">Notifications</h3>
-        {unreadNotifs > 0 && (
-          <span class="text-sm text-[#646262] font-medium">{unreadNotifs} non lue{unreadNotifs > 1 ? 's' : ''}</span>
-        )}
-      </div>
-
-      {notifications.length > 0 ? (
-        <div class="flex flex-col gap-3">
-          {notifications.map(notif => (
-            <div class={`relative flex items-start gap-4 p-5 rounded-[5px] bg-[#f7f1ed] ${!notif.lu ? 'border-l-[5px] border-[#72c073]' : ''}`}
-              style="box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.25);">
-              <!-- Icône -->
-              <div class={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${notif.type === 'success' ? 'bg-[#72c073]' : notif.type === 'warning' ? 'bg-amber-400' : 'bg-[#347645]'}`}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
-              <!-- Contenu -->
-              <div class="flex-1 min-w-0">
-                <p class={`text-[16px] m-0 leading-[1.4] ${!notif.lu ? 'font-bold text-black' : 'font-medium text-black'}`}>
-                  {notif.message ?? notif.texte ?? notif.contenu ?? 'Notification'}
-                </p>
-                <p class="text-sm text-[#646262] m-0 mt-1">{timeAgo(notif.created)}</p>
-              </div>
-              <!-- Point non lu -->
-              {!notif.lu && (
-                <div class="absolute top-4 right-4 w-2 h-2 rounded-full bg-[#72c073]"></div>
+        <!-- BARRE D'ONGLETS BLANCHE -->
+        <div class="bg-white h-[100px] flex items-stretch px-[80px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
+          <div class="flex items-stretch">
+            <button data-tab="profil"
+              class="tab-btn px-[25px] text-[16px] font-medium text-black border-b-[7px] border-transparent hover:border-[#dfdfdf] transition-colors cursor-pointer bg-transparent"
+              style={activeTab === 'profil' ? 'border-bottom-color: #72c073;' : ''}>
+              Mon profil
+            </button>
+            <button data-tab="notifications"
+              class="tab-btn px-[25px] text-[16px] font-medium text-black border-b-[7px] border-transparent hover:border-[#dfdfdf] transition-colors cursor-pointer bg-transparent inline-flex items-center gap-2"
+              style={activeTab === 'notifications' ? 'border-bottom-color: #72c073;' : ''}>
+              Notifications
+              {unreadNotifs > 0 && (
+                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white text-[11px] font-bold">{unreadNotifs}</span>
               )}
-            </div>
-          ))}
-        </div>
-      ) : (
-        <!-- État vide -->
-        <div class="flex flex-col items-center justify-center py-24">
-          <div class="w-20 h-20 rounded-full bg-[#dfdfdf] flex items-center justify-center mb-6">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="#646262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="#646262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            </button>
+            <button data-tab="parametres"
+              class="tab-btn px-[25px] text-[16px] font-medium text-black border-b-[7px] border-transparent hover:border-[#dfdfdf] transition-colors cursor-pointer bg-transparent"
+              style={activeTab === 'parametres' ? 'border-bottom-color: #72c073;' : ''}>
+              Paramètres
+            </button>
           </div>
-          <p class="text-[#646262] text-[16px] font-medium m-0">Aucune notification</p>
-          <p class="text-sm text-[#9e9a97] m-0 mt-2">Vous êtes à jour !</p>
+
+          <!-- Editer / Annuler -->
+          <button id="edit-btn"
+            class="ml-auto bg-[#347645] h-[51px] w-[257px] flex items-center justify-center text-white text-[16px] font-medium hover:opacity-90 transition-opacity cursor-pointer border-0 self-center">
+            Editer le profil
+          </button>
+          <button id="cancel-btn" style="display: none;"
+            class="ml-auto border-2 border-[#347645] text-[#347645] h-[51px] w-[257px] flex items-center justify-center text-[16px] font-medium hover:bg-[#347645] hover:text-white transition-colors cursor-pointer bg-transparent self-center">
+            Annuler
+          </button>
         </div>
-      )}
-    </div>
-  </div><!-- /panel-notifications -->
 
-  <!-- ================================================================ -->
-  <!-- PANEL : MESSAGES                                                  -->
-  <!-- ================================================================ -->
-  <div id="panel-messages" data-panel class={activeTab !== 'messages' ? 'hidden' : ''}>
-    <div class="absolute top-[914px] left-[calc(33.33%+37px)] w-[843px] z-[2]">
+        <!-- ============================= -->
+        <!-- PANEL : MON PROFIL           -->
+        <!-- ============================= -->
+        <div id="panel-profil" data-panel class={activeTab !== 'profil' ? 'hidden' : ''}>
+          <div class="px-[80px] pt-[45px] pb-[120px]">
 
-      <!-- En-tête -->
-      <div class="flex items-center justify-between mb-6">
-        <h3 class="text-black m-0">Messages</h3>
-        {unreadMessages > 0 && (
-          <span class="text-sm text-[#646262] font-medium">{unreadMessages} non lu{unreadMessages > 1 ? 's' : ''}</span>
-        )}
-      </div>
+            {updateSuccess && <p class="text-[#347645] text-sm font-medium mb-6 m-0">Profil mis à jour avec succès.</p>}
+            {updateError   && <p class="text-red-500 text-sm font-medium mb-6 m-0">{updateError}</p>}
 
-      {messages.length > 0 ? (
-        <div class="flex flex-col gap-3">
-          {messages.map(msg => {
-            const isExpedie  = msg.expediteur === userId || msg.from_user === userId;
-            const otherUser  = isExpedie
-              ? (msg.expand?.destinataire ?? msg.expand?.to_user   ?? null)
-              : (msg.expand?.expediteur   ?? msg.expand?.from_user ?? null);
-            const otherName  = otherUser?.pseudo ?? otherUser?.prenom ?? otherUser?.email ?? 'Utilisateur';
-            const initiale   = otherName[0]?.toUpperCase() ?? '?';
-            const isUnread   = !msg.lu && !isExpedie;
-            const otherAvatar = otherUser?.avatar ? getImageUrl(otherUser, otherUser.avatar) : null;
-            return (
-              <div class={`relative flex items-center gap-4 p-5 rounded-[5px] bg-[#f7f1ed] cursor-pointer hover:opacity-90 transition-opacity ${isUnread ? 'border-l-[5px] border-[#72c073]' : ''}`}
-                style="box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.25);">
-                <!-- Avatar -->
-                <div class="w-12 h-12 rounded-full overflow-hidden shrink-0 bg-[#1e1e1e] flex items-center justify-center">
-                  {otherAvatar
-                    ? <img src={otherAvatar} alt={otherName} class="w-full h-full object-cover" />
-                    : <span class="text-white text-xl font-bold">{initiale}</span>
-                  }
-                </div>
-                <!-- Contenu -->
-                <div class="flex-1 min-w-0">
-                  <p class={`text-[16px] m-0 leading-[1.4] ${isUnread ? 'font-bold text-black' : 'font-medium text-black'}`}>
-                    {otherName}
-                  </p>
-                  <p class="text-sm text-[#646262] m-0 mt-1 truncate">
-                    {isExpedie ? 'Vous : ' : ''}{msg.contenu ?? msg.texte ?? msg.message ?? msg.content ?? ''}
-                  </p>
-                </div>
-                <!-- Heure + point non lu -->
-                <div class="flex flex-col items-end gap-2 shrink-0">
-                  <span class="text-sm text-[#646262]">{timeAgo(msg.created)}</span>
-                  {isUnread && <div class="w-2 h-2 rounded-full bg-[#72c073]"></div>}
+            <!-- H2 Données du compte + ligne décorative -->
+            <div class="flex items-center gap-[30px] mb-[45px]">
+              <h2 class="text-black m-0 shrink-0">Données du compte</h2>
+              <div class="flex-1 h-[2px] bg-[#dfdfdf]"></div>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data" id="profile-form">
+              <input type="hidden" name="_action" value="edit" />
+
+              <!-- Box 1 : Informations personnelles -->
+              <div class="bg-white border-[3px] border-[#dfdfdf] rounded-[10px] px-[30px] py-[22px] mb-[18px]">
+                <h3 class="text-black m-0 mb-[35px]">Informations personnel</h3>
+                <div class="flex gap-[100px]">
+                  <div class="flex flex-col gap-1">
+                    <span class="text-[#646262] text-[16px] font-medium leading-[1.4]">Ville</span>
+                    <span class="view-field text-black text-[16px] font-medium leading-[1.4]">{user.ville ?? '—'}</span>
+                    <input type="text" name="ville" value={user.ville ?? ''} placeholder="Ville"
+                      class="edit-field hidden text-[16px] font-medium text-[#1e1e1e] bg-[#f7f1ed] border border-[#dfdfdf] rounded px-3 py-1 outline-none w-[140px]" />
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <span class="text-[#646262] text-[16px] font-medium leading-[1.4]">Âge</span>
+                    <span class="view-field text-black text-[16px] font-medium leading-[1.4]">{user.age ? `${user.age} ans` : '—'}</span>
+                    <input type="number" name="age" value={user.age ?? ''} placeholder="Âge" min="13" max="120"
+                      class="edit-field hidden text-[16px] font-medium text-[#1e1e1e] bg-[#f7f1ed] border border-[#dfdfdf] rounded px-3 py-1 outline-none w-[100px]" />
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <span class="text-[#646262] text-[16px] font-medium leading-[1.4]">Membre depuis</span>
+                    <span class="text-black text-[16px] font-medium leading-[1.4]">{createdAt}</span>
+                  </div>
                 </div>
               </div>
-            );
-          })}
-        </div>
-      ) : (
-        <!-- État vide -->
-        <div class="flex flex-col items-center justify-center py-24">
-          <div class="w-20 h-20 rounded-full bg-[#dfdfdf] flex items-center justify-center mb-6">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="#646262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <p class="text-[#646262] text-[16px] font-medium m-0">Aucun message</p>
-          <p class="text-sm text-[#9e9a97] m-0 mt-2">Vos conversations apparaîtront ici</p>
-        </div>
-      )}
-    </div>
-  </div><!-- /panel-messages -->
 
-  <!-- ================================================================ -->
-  <!-- PANEL : PARAMÈTRES                                                -->
-  <!-- ================================================================ -->
-  <div id="panel-parametres" data-panel class={activeTab !== 'parametres' ? 'hidden' : ''}>
-    <div class="absolute top-[914px] left-[calc(33.33%+37px)] w-[843px] z-[2]">
+              <!-- Box 2 : Activité sur Bargo -->
+              <div class="bg-white border-[3px] border-[#dfdfdf] rounded-[10px] px-[30px] py-[22px] mb-[18px]">
+                <h3 class="text-black m-0 mb-[35px]">Activité sur Bargo</h3>
+                <div class="flex gap-[100px]">
+                  <div class="flex flex-col gap-1">
+                    <span class="text-[#646262] text-[16px] font-medium leading-[1.4]">Sorties organisées</span>
+                    <span class="text-black text-[16px] font-medium leading-[1.4]">
+                      {user.barathon_organiser ? `${user.barathon_organiser} sorties` : '—'}
+                    </span>
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <span class="text-[#646262] text-[16px] font-medium leading-[1.4]">Barathons réalisés</span>
+                    <span class="text-black text-[16px] font-medium leading-[1.4]">
+                      {user.barathon_participer ? `${user.barathon_participer} parcours` : '—'}
+                    </span>
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <span class="text-[#646262] text-[16px] font-medium leading-[1.4]">Bars découverts</span>
+                    <span class="text-black text-[16px] font-medium leading-[1.4]">—</span>
+                  </div>
+                </div>
+              </div>
 
-      <!-- Section : Informations du compte -->
-      <h3 class="text-black m-0 mb-5">Informations du compte</h3>
-      <div class="bg-[#f7f1ed] rounded-[5px] p-6 mb-8" style="box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.25);">
-        <!-- Email actuel -->
-        <div class="flex items-center border-b-2 border-[#e7e5e5] pb-4 mb-5">
-          <span class="text-[16px] font-medium text-black w-[160px] shrink-0">Email actuel</span>
-          <span class="text-[16px] font-medium text-[#646262]">{user.email ?? '—'}</span>
-        </div>
-        {emailSuccess && (
-          <p class="text-[#347645] text-sm font-medium mb-4 m-0">Email mis à jour avec succès.</p>
-        )}
-        {emailError && (
-          <p class="text-red-500 text-sm font-medium mb-4 m-0">{emailError}</p>
-        )}
-        <form method="POST" enctype="application/x-www-form-urlencoded" class="flex items-end gap-4">
-          <input type="hidden" name="_action" value="change_email" />
-          <div class="flex-1">
-            <label class="block text-[16px] font-medium text-black mb-2">Nouvel email</label>
-            <input type="email" name="new_email" placeholder="nouveau@email.com"
-              class="w-full text-[16px] font-medium text-[#1e1e1e] bg-white border-2 border-[#dfdfdf] rounded-[5px] px-4 py-2 outline-none focus:border-[#72c073] transition-colors placeholder-[#9e9a97]" />
-          </div>
-          <button type="submit"
-            class="inline-flex items-center gap-2 bg-[#347645] text-white text-[16px] font-medium px-8 py-[9px] hover:opacity-90 transition-opacity cursor-pointer border-0 rounded-[5px] shrink-0">
-            Modifier
-          </button>
-        </form>
-      </div>
+              <!-- Box 3 : Réseaux sociaux -->
+              <div class="bg-white border-[3px] border-[#dfdfdf] rounded-[10px] px-[30px] py-[22px]">
+                <h3 class="text-black m-0 mb-[35px]">Réseaux sociaux</h3>
+                <div class="flex gap-[100px]">
+                  <div class="flex flex-col gap-1">
+                    <span class="text-[#646262] text-[16px] font-medium leading-[1.4]">Instagram</span>
+                    <span class="view-field text-black text-[16px] font-medium leading-[1.4]">{user.instagram ?? '—'}</span>
+                    <input type="text" name="instagram" value={user.instagram ?? ''} placeholder="@pseudo"
+                      class="edit-field hidden text-[16px] font-medium text-[#1e1e1e] bg-[#f7f1ed] border border-[#dfdfdf] rounded px-3 py-1 outline-none w-[160px]" />
+                  </div>
+                </div>
+              </div>
 
-      <!-- Section : Sécurité -->
-      <h3 class="text-black m-0 mb-5">Sécurité</h3>
-      <div class="bg-[#f7f1ed] rounded-[5px] p-6 mb-8" style="box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.25);">
-        {pwdSuccess && (
-          <p class="text-[#347645] text-sm font-medium mb-4 m-0">Mot de passe modifié avec succès.</p>
-        )}
-        {pwdError && (
-          <p class="text-red-500 text-sm font-medium mb-4 m-0">{pwdError}</p>
-        )}
-        <form method="POST" enctype="application/x-www-form-urlencoded" class="flex flex-col gap-5">
-          <input type="hidden" name="_action" value="change_password" />
-          <div>
-            <label class="block text-[16px] font-medium text-black mb-2">Mot de passe actuel</label>
-            <input type="password" name="old_password" placeholder="••••••••"
-              class="w-full max-w-[500px] text-[16px] font-medium text-[#1e1e1e] bg-white border-2 border-[#dfdfdf] rounded-[5px] px-4 py-2 outline-none focus:border-[#72c073] transition-colors" />
-          </div>
-          <div class="flex gap-4">
-            <div class="flex-1">
-              <label class="block text-[16px] font-medium text-black mb-2">Nouveau mot de passe</label>
-              <input type="password" name="new_password" placeholder="••••••••"
-                class="w-full text-[16px] font-medium text-[#1e1e1e] bg-white border-2 border-[#dfdfdf] rounded-[5px] px-4 py-2 outline-none focus:border-[#72c073] transition-colors" />
+              <!-- Champs édition étendus (nom, prénom, pseudo, description, avatar) -->
+              <div class="edit-field hidden mt-[30px]"><div class="flex flex-col gap-5">
+                <div class="flex gap-6 flex-wrap">
+                  <div class="flex flex-col gap-1">
+                    <label class="text-[16px] font-medium text-black">Prénom</label>
+                    <input type="text" name="prenom" value={user.prenom ?? ''} placeholder="Prénom"
+                      class="text-[16px] font-medium text-[#1e1e1e] bg-[#f7f1ed] border border-[#dfdfdf] rounded px-3 py-2 outline-none w-[200px]" />
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <label class="text-[16px] font-medium text-black">Nom</label>
+                    <input type="text" name="nom" value={user.nom ?? ''} placeholder="Nom"
+                      class="text-[16px] font-medium text-[#1e1e1e] bg-[#f7f1ed] border border-[#dfdfdf] rounded px-3 py-2 outline-none w-[200px]" />
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <label class="text-[16px] font-medium text-black">Pseudo</label>
+                    <input type="text" name="pseudo" value={user.pseudo ?? ''} placeholder="Pseudo"
+                      class="text-[16px] font-medium text-[#1e1e1e] bg-[#f7f1ed] border border-[#dfdfdf] rounded px-3 py-2 outline-none w-[200px]" />
+                  </div>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <label class="text-[16px] font-medium text-black">Description</label>
+                  <textarea name="devise" placeholder="Votre description..."
+                    class="text-[16px] font-medium text-[#1e1e1e] bg-[#f7f1ed] border border-[#dfdfdf] rounded px-3 py-2 outline-none resize-none w-full max-w-[600px] h-[100px]">{user.devise ?? ''}</textarea>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <label class="text-[16px] font-medium text-black">Photo de profil</label>
+                  <input type="file" name="avatar" accept="image/*"
+                    class="text-sm text-[#646262] file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-[#347645] file:text-white file:cursor-pointer cursor-pointer" />
+                </div>
+                <button type="submit"
+                  class="inline-flex items-center gap-4 bg-[#094736] text-white text-[16px] font-medium leading-[1.4] px-[50px] py-[8px] hover:opacity-90 transition-opacity cursor-pointer border-0 w-fit">
+                  Sauvegarder
+                </button>
+              </div></div>
+            </form>
+
+            <!-- H2 Favoris + ligne décorative -->
+            <div class="flex items-center gap-[30px] mt-[80px] mb-[56px]">
+              <h2 class="text-black m-0 shrink-0">Favoris</h2>
+              <div class="flex-1 h-[2px] bg-[#dfdfdf]"></div>
             </div>
-            <div class="flex-1">
-              <label class="block text-[16px] font-medium text-black mb-2">Confirmer</label>
-              <input type="password" name="confirm_password" placeholder="••••••••"
-                class="w-full text-[16px] font-medium text-[#1e1e1e] bg-white border-2 border-[#dfdfdf] rounded-[5px] px-4 py-2 outline-none focus:border-[#72c073] transition-colors" />
-            </div>
-          </div>
-          <div>
-            <button type="submit"
-              class="inline-flex items-center gap-3 bg-[#094736] text-white text-[16px] font-medium px-8 py-[9px] hover:opacity-90 transition-opacity cursor-pointer border-0 rounded-[5px]">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <rect x="3" y="11" width="18" height="11" rx="2" stroke="white" stroke-width="2"/>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="white" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              Changer le mot de passe
-            </button>
-          </div>
-        </form>
-      </div>
 
-      <!-- Zone dangereuse -->
-      <h3 class="text-black m-0 mb-5">Zone dangereuse</h3>
-      <div class="bg-[#f7f1ed] rounded-[5px] p-6" style="box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.25); border: 1px solid #fecaca;">
-        <div class="flex items-center justify-between gap-8">
-          <div>
-            <p class="text-[16px] font-medium text-black m-0">Supprimer mon compte</p>
-            <p class="text-sm text-[#646262] m-0 mt-1">
-              Cette action est irréversible. Toutes vos données seront supprimées définitivement.
-            </p>
+            <!-- Grille favoris -->
+            {barFavori ? (
+              <div class="grid grid-cols-3 gap-[33px]">
+                <div class="relative bg-white rounded-[2px] h-[351px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
+                  <div class="absolute top-0 left-0 right-0 h-[200px] overflow-hidden rounded-tl-[2px] rounded-tr-[2px]">
+                    <PbImage record={barFavori} recordImage={barFavori.img?.[0]} width={280} height={200} class="w-full h-full object-cover" />
+                  </div>
+                  <h3 class="absolute top-[210px] left-[19px] right-[19px] m-0 text-black">{barFavori.nom}</h3>
+                  <div class="absolute bottom-[21px] right-[21px] w-[24px] h-[24px] flex items-center justify-center">
+                    <img src={heartIcon.src} alt="" width="24" height="24" />
+                  </div>
+                  <a href={`/bar/${barFavori.id}`}
+                    class="absolute bottom-[21px] left-[19px] w-[150px] h-[44px] bg-[#1e1e1e] flex items-center justify-center text-white text-[16px] font-medium hover:opacity-80 transition-opacity">
+                    En savoir plus
+                  </a>
+                </div>
+              </div>
+            ) : (
+              <p class="text-[#646262] text-[16px] font-medium m-0">Aucun favori pour l'instant.</p>
+            )}
+
           </div>
-          <form method="POST" enctype="application/x-www-form-urlencoded" id="delete-form" class="shrink-0">
-            <input type="hidden" name="_action" value="delete" />
-            <button type="button" onclick="confirmDelete()"
-              class="inline-flex items-center gap-2 border-2 border-red-500 text-red-500 text-[16px] font-medium px-6 py-[9px] hover:bg-red-500 hover:text-white transition-colors cursor-pointer bg-transparent rounded-[5px]">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              Supprimer
-            </button>
-          </form>
         </div>
+
+        <!-- ============================= -->
+        <!-- PANEL : NOTIFICATIONS        -->
+        <!-- ============================= -->
+        <div id="panel-notifications" data-panel class={activeTab !== 'notifications' ? 'hidden' : ''}>
+          <div class="px-[80px] pt-[45px] pb-[120px]">
+
+            <div class="flex items-center gap-[30px] mb-[45px]">
+              <h2 class="text-black m-0 shrink-0">Notifications</h2>
+              <div class="flex-1 h-[2px] bg-[#dfdfdf]"></div>
+            </div>
+
+            {notifications.length > 0 ? (
+              <div class="flex flex-col gap-3">
+                {notifications.map(notif => (
+                  <div class={`flex items-start gap-4 p-5 bg-white rounded-[10px] border-[3px] ${!notif.lu ? 'border-[#72c073]' : 'border-[#dfdfdf]'}`}>
+                    <div class={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${notif.type === 'success' ? 'bg-[#72c073]' : 'bg-[#347645]'}`}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                    <div class="flex-1">
+                      <p class={`text-[16px] m-0 leading-[1.4] ${!notif.lu ? 'font-bold' : 'font-medium'} text-black`}>
+                        {notif.message ?? notif.texte ?? notif.contenu ?? 'Notification'}
+                      </p>
+                      <p class="text-sm text-[#646262] m-0 mt-1">{timeAgo(notif.created)}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div class="flex flex-col items-center justify-center py-24">
+                <div class="w-20 h-20 rounded-full bg-[#dfdfdf] flex items-center justify-center mb-6">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="#646262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="#646262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <p class="text-[#646262] text-[16px] font-medium m-0">Aucune notification</p>
+                <p class="text-sm text-[#646262] m-0 mt-2">Vous êtes à jour !</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <!-- ============================= -->
+        <!-- PANEL : PARAMÈTRES           -->
+        <!-- ============================= -->
+        <div id="panel-parametres" data-panel class={activeTab !== 'parametres' ? 'hidden' : ''}>
+          <div class="px-[80px] pt-[45px] pb-[120px]">
+
+            <div class="flex items-center gap-[30px] mb-[45px]">
+              <h2 class="text-black m-0 shrink-0">Paramètres</h2>
+              <div class="flex-1 h-[2px] bg-[#dfdfdf]"></div>
+            </div>
+
+            <!-- Email -->
+            <h3 class="text-black m-0 mb-5">Email</h3>
+            <div class="bg-white border-[3px] border-[#dfdfdf] rounded-[10px] px-[30px] py-[22px] mb-8">
+              <div class="flex items-center border-b-2 border-[#dfdfdf] pb-4 mb-5">
+                <span class="text-[16px] font-medium text-black w-[160px] shrink-0">Email actuel</span>
+                <span class="text-[16px] font-medium text-[#646262]">{user.email ?? '—'}</span>
+              </div>
+              {emailSuccess && <p class="text-[#347645] text-sm font-medium mb-4 m-0">Email mis à jour.</p>}
+              {emailError   && <p class="text-red-500 text-sm font-medium mb-4 m-0">{emailError}</p>}
+              <form method="POST" enctype="application/x-www-form-urlencoded" class="flex items-end gap-4">
+                <input type="hidden" name="_action" value="change_email" />
+                <div class="flex-1">
+                  <label class="block text-[16px] font-medium text-black mb-2">Nouvel email</label>
+                  <input type="email" name="new_email" placeholder="nouveau@email.com"
+                    class="w-full text-[16px] font-medium bg-[#f7f1ed] border-2 border-[#dfdfdf] rounded px-4 py-2 outline-none" />
+                </div>
+                <button type="submit"
+                  class="bg-[#347645] text-white text-[16px] font-medium px-8 py-[9px] hover:opacity-90 transition-opacity cursor-pointer border-0 rounded shrink-0">
+                  Modifier
+                </button>
+              </form>
+            </div>
+
+            <!-- Mot de passe -->
+            <h3 class="text-black m-0 mb-5">Sécurité</h3>
+            <div class="bg-white border-[3px] border-[#dfdfdf] rounded-[10px] px-[30px] py-[22px] mb-8">
+              {pwdSuccess && <p class="text-[#347645] text-sm font-medium mb-4 m-0">Mot de passe modifié.</p>}
+              {pwdError   && <p class="text-red-500 text-sm font-medium mb-4 m-0">{pwdError}</p>}
+              <form method="POST" enctype="application/x-www-form-urlencoded" class="flex flex-col gap-5">
+                <input type="hidden" name="_action" value="change_password" />
+                <div>
+                  <label class="block text-[16px] font-medium text-black mb-2">Mot de passe actuel</label>
+                  <input type="password" name="old_password" placeholder="••••••••"
+                    class="w-full max-w-[400px] text-[16px] font-medium bg-[#f7f1ed] border-2 border-[#dfdfdf] rounded px-4 py-2 outline-none" />
+                </div>
+                <div class="flex gap-4">
+                  <div class="flex-1">
+                    <label class="block text-[16px] font-medium text-black mb-2">Nouveau mot de passe</label>
+                    <input type="password" name="new_password" placeholder="••••••••"
+                      class="w-full text-[16px] font-medium bg-[#f7f1ed] border-2 border-[#dfdfdf] rounded px-4 py-2 outline-none" />
+                  </div>
+                  <div class="flex-1">
+                    <label class="block text-[16px] font-medium text-black mb-2">Confirmer</label>
+                    <input type="password" name="confirm_password" placeholder="••••••••"
+                      class="w-full text-[16px] font-medium bg-[#f7f1ed] border-2 border-[#dfdfdf] rounded px-4 py-2 outline-none" />
+                  </div>
+                </div>
+                <button type="submit"
+                  class="inline-flex items-center gap-3 bg-[#094736] text-white text-[16px] font-medium px-8 py-[9px] hover:opacity-90 transition-opacity cursor-pointer border-0 rounded w-fit">
+                  Changer le mot de passe
+                </button>
+              </form>
+            </div>
+
+            <!-- Session -->
+            <h3 class="text-black m-0 mb-5">Session</h3>
+            <div class="bg-white border-[3px] border-[#dfdfdf] rounded-[10px] px-[30px] py-[22px] mb-8">
+              <p class="text-[16px] font-medium text-black m-0 mb-4">
+                Connecté en tant que <span class="text-[#72c073]">{user.pseudo ?? user.email}</span>
+              </p>
+              <form method="POST" enctype="application/x-www-form-urlencoded">
+                <input type="hidden" name="_action" value="logout" />
+                <button type="submit"
+                  class="inline-flex items-center gap-3 border-2 border-[#1e1e1e] text-[#1e1e1e] text-[16px] font-medium px-8 py-[9px] hover:bg-[#1e1e1e] hover:text-white transition-colors cursor-pointer bg-transparent rounded">
+                  Se déconnecter
+                </button>
+              </form>
+            </div>
+
+            <!-- Zone dangereuse -->
+            <h3 class="text-black m-0 mb-5">Zone dangereuse</h3>
+            <div class="bg-white rounded-[10px] px-[30px] py-[22px]" style="border: 3px solid #fecaca;">
+              <div class="flex items-center justify-between gap-8">
+                <div>
+                  <p class="text-[16px] font-medium text-black m-0">Supprimer mon compte</p>
+                  <p class="text-sm text-[#646262] m-0 mt-1">Action irréversible. Toutes vos données seront supprimées définitivement.</p>
+                </div>
+                <form method="POST" enctype="application/x-www-form-urlencoded" id="delete-form" class="shrink-0">
+                  <input type="hidden" name="_action" value="delete" />
+                  <button type="button" id="delete-btn"
+                    class="inline-flex items-center gap-2 border-2 border-red-500 text-red-500 text-[16px] font-medium px-6 py-[9px] hover:bg-red-500 hover:text-white transition-colors cursor-pointer bg-transparent rounded">
+                    Supprimer
+                  </button>
+                </form>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
       </div>
-
     </div>
-  </div><!-- /panel-parametres -->
 
-</div>
+  </section>
+
+  <script>
+    import '../js/profil.js';
+  </script>
 </Layout>
-
-<script is:inline>
-// ───── Configuration des onglets ─────
-const tabConfig = {
-  apropos:       { left: 'calc(33.33% + 37px)', width: '126px' },
-  notifications: { left: 'calc(41.67% + 65px)', width: '170px' },
-  messages:      { left: 'calc(58.33% + 32px)', width: '139px' },
-  parametres:    { left: 'calc(75% - 56px)',     width: '140px' }
-};
-
-function switchTab(name) {
-  document.querySelectorAll('[data-panel]').forEach(p => p.classList.add('hidden'));
-  document.getElementById('panel-' + name)?.classList.remove('hidden');
-
-  document.querySelectorAll('[data-tab]').forEach(t => { t.style.color = ''; });
-  const activeEl = document.querySelector('[data-tab="' + name + '"]');
-  if (activeEl) activeEl.style.color = '#72c073';
-
-  const underline = document.getElementById('tab-underline');
-  const cfg = tabConfig[name];
-  if (underline && cfg) {
-    underline.style.left  = cfg.left;
-    underline.style.width = cfg.width;
-  }
-
-  // Si on quitte A propos en mode édition → reset
-  if (name !== 'apropos') {
-    const editBtn   = document.getElementById('edit-btn');
-    const cancelBtn = document.getElementById('cancel-btn');
-    if (cancelBtn && !cancelBtn.classList.contains('hidden')) {
-      document.querySelectorAll('.view-field').forEach(el => el.classList.remove('hidden'));
-      document.querySelectorAll('.edit-field').forEach(el => el.classList.add('hidden'));
-      if (editBtn) editBtn.classList.remove('hidden');
-      cancelBtn.classList.add('hidden');
-      cancelBtn.style.display = '';
-    }
-  }
-}
-
-// ───── Toggle édition profil ─────
-function toggleEdit() {
-  const viewFields = document.querySelectorAll('.view-field');
-  const editFields = document.querySelectorAll('.edit-field');
-  const editBtn    = document.getElementById('edit-btn');
-  const cancelBtn  = document.getElementById('cancel-btn');
-  if (!editBtn || !cancelBtn) return;
-
-  const isViewMode = !editBtn.classList.contains('hidden');
-
-  if (isViewMode) {
-    viewFields.forEach(el => el.classList.add('hidden'));
-    editFields.forEach(el => el.classList.remove('hidden'));
-    editBtn.classList.add('hidden');
-    cancelBtn.classList.remove('hidden');
-    cancelBtn.style.display = 'inline-flex';
-  } else {
-    viewFields.forEach(el => el.classList.remove('hidden'));
-    editFields.forEach(el => el.classList.add('hidden'));
-    editBtn.classList.remove('hidden');
-    cancelBtn.classList.add('hidden');
-    cancelBtn.style.display = '';
-  }
-}
-
-// ───── Ouvre un select (entre en mode édition si nécessaire) ─────
-function openSelect(name) {
-  const editBtn = document.getElementById('edit-btn');
-  if (editBtn && !editBtn.classList.contains('hidden')) {
-    toggleEdit();
-  }
-  setTimeout(function() {
-    var sel = document.querySelector('select[name="' + name + '"]');
-    if (sel) {
-      sel.focus();
-      if (sel.showPicker) sel.showPicker();
-    }
-  }, 50);
-}
-
-// ───── Suppression de compte ─────
-function confirmDelete() {
-  if (confirm('Supprimer définitivement votre compte ? Cette action est irréversible.')) {
-    const form = document.getElementById('delete-form');
-    if (form instanceof HTMLFormElement) form.submit();
-  }
-}
-</script>
