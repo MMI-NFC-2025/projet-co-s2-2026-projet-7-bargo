@@ -1,0 +1,269 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PbImage from '../../components/PbImage.astro';
+import { getRecord, getImageUrl } from '../../js/backend.js';
+import heartIcon    from '../../assets/icon/heart.svg';
+import partageIcon  from '../../assets/icon/partage.svg';
+import notifIcon    from '../../assets/icon/notifcation.svg';
+import instaIcon    from '../../assets/icon/insta.svg';
+import linkedinIcon from '../../assets/icon/linkedin.svg';
+import discordIcon  from '../../assets/icon/discord.svg';
+import fbIcon       from '../../assets/icon/facebook.svg';
+
+const { id } = Astro.params;
+if (!id) return Astro.redirect('/bar');
+
+const bar = await getRecord('bar', id);
+if (!bar || bar.code === 404) return Astro.redirect('/bar');
+
+const jours = [
+  { label: 'Lundi',    value: bar.horaires_lundi    ?? '' },
+  { label: 'Mardi',    value: bar.horaires_mardi    ?? '' },
+  { label: 'Mercredi', value: bar.horaires_mercredi ?? '' },
+  { label: 'Jeudi',    value: bar.horaires_jeudi    ?? '' },
+  { label: 'Vendredi', value: bar.horaires_vendredi ?? '' },
+  { label: 'Samedi',   value: bar.horaires_samedi   ?? '' },
+  { label: 'Dimanche', value: bar.horaires_dimanche ?? '' },
+];
+
+const galerie = bar.galerie ?? [];
+const landscapePhotos = galerie.slice(0, 3);
+const portraitPhotos  = galerie.slice(3, 7);
+
+const lat = bar.localisation?.lat ?? 0;
+const lon = bar.localisation?.lon ?? 0;
+const hasMap = lat !== 0 && lon !== 0;
+---
+
+<Layout title={`${bar.nom ?? 'Bar'} — Bargo`}>
+
+<!-- ===================================================== -->
+<!-- HERO                                                   -->
+<!-- ===================================================== -->
+<div class="relative bg-[#f7f1ed] overflow-x-hidden" style="height: 3312px;">
+
+  <!-- Photo pleine largeur -->
+  <div class="absolute top-0 left-0 w-full h-[530px] overflow-hidden">
+    <PbImage record={bar} recordImage={bar.img?.[0]} width={1440} height={530} />
+  </div>
+
+  <!-- Gradient overlay (depuis sous la navbar) -->
+  <div class="absolute top-[70px] left-0 w-full h-[460px] pointer-events-none"
+    style="background: linear-gradient(to bottom, rgba(30,30,30,0) 0%, rgba(30,30,30,0.9) 100%);"></div>
+
+  <!-- Nom du bar -->
+  <h1 class="absolute top-[382px] left-[80px] text-white uppercase m-0 z-[2]">
+    {bar.nom}
+  </h1>
+
+  <!-- Icônes réseaux sociaux (top droite, sur la photo) -->
+  <div class="absolute top-[449px] z-[2]" style="left: calc(83.33% - 17px)">
+    <img src={instaIcon.src}   alt="Instagram" width="24" height="24" class="invert" />
+  </div>
+  <div class="absolute top-[449px] z-[2]" style="left: calc(83.33% + 32px)">
+    <img src={linkedinIcon.src} alt="LinkedIn" width="24" height="24" class="invert" />
+  </div>
+  <div class="absolute top-[449px] z-[2]" style="left: calc(91.67% - 39px)">
+    <img src={discordIcon.src}  alt="Discord"   width="24" height="24" class="invert" />
+  </div>
+  <div class="absolute top-[449px] z-[2]" style="left: calc(91.67% + 10px)">
+    <img src={fbIcon.src}       alt="Facebook"  width="24" height="24" class="invert" />
+  </div>
+
+  <!-- Actions (cœur, partage, notif, chat) -->
+  <div class="absolute top-[602px] z-[2]" style="left: calc(83.33% - 17px)">
+    <img src={notifIcon.src}   alt="Notifier" width="24" height="24" />
+  </div>
+  <div class="absolute top-[602px] z-[2]" style="left: calc(83.33% + 32px)">
+    <img src={partageIcon.src} alt="Partager" width="24" height="24" />
+  </div>
+  <div class="absolute top-[602px] z-[2]" style="left: calc(91.67% - 39px)">
+    <!-- Chat icon (inline) -->
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+        stroke="#1e1e1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div class="absolute top-[602px] z-[2]" style="left: calc(91.67% + 10px)">
+    <img src={heartIcon.src} alt="Favori" width="24" height="24" />
+  </div>
+
+  <!-- Description -->
+  <p class="absolute top-[609px] left-[80px] w-[733px] text-[#646262] text-[16px] font-medium leading-[1.4] m-0 z-[2]">
+    {bar.description ?? ''}
+  </p>
+
+<!-- ===================================================== -->
+<!-- PANNEAUX INFO (dark gauche + vert droite)             -->
+<!-- ===================================================== -->
+
+  <!-- Fond sombre (gauche) -->
+  <div class="absolute top-[794px] left-0 w-[704px] h-[670px] bg-[#1e1e1e]"></div>
+  <!-- Fond vert (droite) -->
+  <div class="absolute top-[794px] w-[736px] h-[670px] bg-[#094736]" style="left: calc(50% - 16px)"></div>
+
+  <!-- INFOS GAUCHE -->
+
+  <!-- Adresse -->
+  <h3 class="absolute top-[852px] left-[80px] text-white m-0 z-[2]">Adresse</h3>
+  <p class="absolute top-[909px] left-[80px] text-[#dfdfdf] text-[16px] font-medium leading-[1.4] m-0 z-[2]">
+    {bar.adresse ?? '—'}
+  </p>
+
+  <!-- Spécialités -->
+  <h3 class="absolute top-[990px] left-[80px] text-white m-0 z-[2]">Spécialités</h3>
+  <p class="absolute top-[1047px] left-[80px] text-[#dfdfdf] text-[16px] font-medium leading-[1.4] m-0 z-[2] w-[540px]">
+    {bar.specialites ?? '—'}
+  </p>
+
+  <!-- Disponibilité -->
+  <h3 class="absolute top-[1128px] left-[80px] text-white m-0 z-[2]">Disponibilité</h3>
+  <p class="absolute top-[1185px] left-[80px] text-[#dfdfdf] text-[16px] font-medium leading-[1.4] m-0 z-[2] w-[540px]">
+    {bar.disponibilite ?? '—'}
+  </p>
+
+  <!-- Contact / Liens -->
+  <h3 class="absolute top-[1266px] left-[80px] text-white m-0 z-[2]">Contact</h3>
+  <p class="absolute top-[1323px] left-[80px] text-[#dfdfdf] text-[16px] font-medium leading-[1.4] m-0 z-[2]">
+    {bar.liens
+      ? <a href={bar.liens} target="_blank" rel="noopener" class="text-[#72c073] hover:underline">{bar.liens}</a>
+      : '—'
+    }
+  </p>
+
+  <!-- HORAIRES (droite) -->
+  <h3 class="absolute top-[844px] text-white m-0 z-[2]" style="left: calc(50% + 16px)">Horaires</h3>
+
+  {jours.map((jour, i) => {
+    const top = 909 + i * 64;
+    const isFerme = !jour.value || jour.value.toLowerCase().includes('ferm');
+    return (
+      <div class="absolute w-[624px] h-[47px] rounded-[5px] overflow-hidden z-[2]"
+        style={`top: ${top}px; left: calc(50% + 16px); box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.25);`}>
+        <!-- Étiquette jour -->
+        <div class="absolute top-0 left-0 h-full bg-[#347645] rounded-l-[5px] flex items-center justify-center"
+          style="width: 21.63%;">
+          <span class="text-[#f7f1ed] text-[16px] font-medium leading-[1.4] text-center px-2">
+            {jour.label}
+          </span>
+        </div>
+        <!-- Horaire -->
+        <div class="absolute top-0 right-0 h-full bg-[#f7f1ed] rounded-r-[5px] flex items-center"
+          style="left: 21.63%; padding-left: 35px;">
+          <span class={`text-[16px] font-medium leading-[1.4] ${isFerme ? 'text-[#646262]' : 'text-black'}`}>
+            {jour.value || 'Fermé'}
+          </span>
+        </div>
+      </div>
+    );
+  })}
+
+<!-- ===================================================== -->
+<!-- CARTE                                                 -->
+<!-- ===================================================== -->
+
+  <div id="bar-map"
+    data-lat={lat}
+    data-lon={lon}
+    data-name={bar.nom}
+    class="absolute left-0 w-full z-[1] bg-[#dfdfdf] flex items-center justify-center"
+    style="top: 1464px; height: 541px;">
+    {!hasMap && (
+      <p class="text-[#646262] text-[16px] font-medium m-0">Localisation non disponible</p>
+    )}
+  </div>
+
+<!-- ===================================================== -->
+<!-- GALERIE                                               -->
+<!-- ===================================================== -->
+
+  <h2 class="absolute left-[80px] text-black m-0 z-[2]" style="top: 2136px;">Galerie</h2>
+  <p class="absolute left-[80px] w-[405px] text-[#646262] text-[16px] font-medium leading-[1.4] m-0 z-[2]" style="top: 2223px;">
+    Explorez une sélection variée de cocktails et de bières, idéale pour partager un moment entre amis.
+  </p>
+
+  <!-- 3 photos paysage -->
+  {landscapePhotos.length > 0 ? (
+    <>
+      {landscapePhotos[0] && (
+        <div class="absolute overflow-hidden rounded-tr-[5px] rounded-br-[5px] z-[2]"
+          style="top: 2363px; left: 0; width: 465px; height: 400px;">
+          <img src={getImageUrl(bar, landscapePhotos[0])} alt={bar.nom}
+            class="w-full h-full object-cover" loading="lazy" />
+        </div>
+      )}
+      {landscapePhotos[1] && (
+        <div class="absolute overflow-hidden rounded-[5px] z-[2]"
+          style="top: 2363px; left: calc(33.33% + 7px); width: 465px; height: 400px;">
+          <img src={getImageUrl(bar, landscapePhotos[1])} alt={bar.nom}
+            class="w-full h-full object-cover" loading="lazy" />
+        </div>
+      )}
+      {landscapePhotos[2] && (
+        <div class="absolute overflow-hidden rounded-tl-[5px] rounded-bl-[5px] z-[2]"
+          style="top: 2363px; left: calc(66.67% + 15px); width: 465px; height: 400px;">
+          <img src={getImageUrl(bar, landscapePhotos[2])} alt={bar.nom}
+            class="w-full h-full object-cover" loading="lazy" />
+        </div>
+      )}
+    </>
+  ) : (
+    <p class="absolute left-[80px] text-[#646262] text-[16px] font-medium m-0 z-[2]" style="top: 2363px;">
+      Aucune photo disponible.
+    </p>
+  )}
+
+  <!-- 4 photos portrait -->
+  {portraitPhotos.map((img, i) => {
+    const positions = [
+      'left: 80px',
+      'left: calc(25% + 48px)',
+      'left: calc(50% + 16px)',
+      'left: calc(75% - 16px)',
+    ];
+    return (
+      <div class="absolute overflow-hidden rounded-[5px] z-[2]"
+        style={`top: 2854px; ${positions[i]}; width: 296px; height: 310px;`}>
+        <img src={getImageUrl(bar, img)} alt={bar.nom}
+          class="w-full h-full object-cover" loading="lazy" />
+      </div>
+    );
+  })}
+
+</div><!-- /wrapper -->
+</Layout>
+
+<!-- ===================================================== -->
+<!-- CARTE LEAFLET                                         -->
+<!-- ===================================================== -->
+<script is:inline>
+(function() {
+  var mapEl = document.getElementById('bar-map');
+  if (!mapEl) return;
+  var lat = parseFloat(mapEl.dataset.lat);
+  var lon = parseFloat(mapEl.dataset.lon);
+  if (!lat || !lon) return;
+
+  // Charger Leaflet CSS
+  var link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+  document.head.appendChild(link);
+
+  // Charger Leaflet JS puis initialiser
+  var script = document.createElement('script');
+  script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+  script.onload = function() {
+    mapEl.innerHTML = '';
+    var map = L.map('bar-map').setView([lat, lon], 16);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+    L.marker([lat, lon])
+      .addTo(map)
+      .bindPopup('<strong>' + (mapEl.dataset.name || 'Bar') + '</strong>')
+      .openPopup();
+  };
+  document.head.appendChild(script);
+})();
+</script>

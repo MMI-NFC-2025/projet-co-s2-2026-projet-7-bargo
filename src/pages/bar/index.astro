@@ -1,0 +1,76 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PbImage from '../../components/PbImage.astro';
+import { getCollection } from '../../js/backend.js';
+import heartIcon from '../../assets/icon/heart.svg';
+
+const bars = await getCollection('bar', { sort: 'nom', perPage: 200 });
+---
+
+<Layout title="Nos bars — Bargo">
+
+  <!-- ===== HERO ===== -->
+  <section class="relative w-full h-[542px] bg-[#094736] overflow-hidden">
+    <h1 class="absolute top-[233px] left-[74px] text-white uppercase m-0">
+      Nos bars
+    </h1>
+    <p class="absolute top-[247px] left-[calc(50%+16px)] w-[547px] text-[#f7f1ed] text-[16px] font-medium leading-[1.4] m-0">
+      Explorez les bars de Montbéliard et choisissez les étapes de votre prochaine tournée.
+      Créez un parcours sur mesure pour une soirée organisée et conviviale.
+    </p>
+  </section>
+
+  <!-- ===== GRILLE DES BARS ===== -->
+  <section class="w-full bg-[#f7f1ed] pt-[54px] pb-[120px]">
+    <div class="max-w-[1440px] mx-auto px-20">
+
+      {bars.length === 0 && (
+        <p class="text-[#646262] text-[16px] font-medium text-center py-20">
+          Aucun bar disponible pour le moment.
+        </p>
+      )}
+
+      <div class="grid grid-cols-2 gap-x-8 gap-y-[154px]">
+        {bars.map(bar => (
+          <div class="relative bg-white rounded-[5px] h-[673px] overflow-hidden"
+            style="box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.1);">
+
+            <!-- Photo -->
+            <div class="absolute top-0 left-0 right-0 h-[291px] rounded-t-[5px] overflow-hidden">
+              <PbImage record={bar} recordImage={bar.img?.[0]} width={624} height={291} />
+            </div>
+
+            <!-- Nom du bar -->
+            <h2 class="absolute top-[324px] left-[30px] right-[62px] text-[#347645] m-0 font-bold leading-none tracking-[3px] truncate">
+              {bar.nom}
+            </h2>
+
+            <!-- Adresse -->
+            <p class="absolute top-[436px] left-[30px] right-[182px] text-[#646262] text-[16px] font-medium leading-[1.4] m-0">
+              {bar.adresse ?? ''}
+            </p>
+
+            <!-- Bouton "En savoir plus" -->
+            <a href={`/bar/${bar.id}`}
+              class="absolute top-[calc(50%+262.5px)] -translate-y-1/2 left-[30px] inline-flex items-center gap-[15px] bg-[#347645] text-white text-[16px] font-medium leading-[1.4] px-[50px] py-[8px] hover:opacity-90 transition-opacity">
+              En savoir plus
+              <svg width="35" height="35" viewBox="0 0 35 35" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M7.29167 17.5C7.29167 17.016 7.68401 16.6237 8.16667 16.6237H23.8905L18.3959 11.1291C18.0472 10.7803 18.0472 10.2155 18.3959 9.86675C18.7447 9.51797 19.3095 9.51797 19.6582 9.86675L25.7749 15.9834C26.5251 16.7336 26.5251 17.9581 25.7749 18.7083L19.6582 24.825C19.3095 25.1737 18.7447 25.1737 18.3959 24.825C18.0472 24.4762 18.0472 23.9114 18.3959 23.5626L23.8905 18.0763H8.16667C7.68401 18.0763 7.29167 17.6839 7.29167 17.5Z"
+                  fill="white"/>
+              </svg>
+            </a>
+
+            <!-- Icône cœur -->
+            <div class="absolute bottom-[73px] right-[98px]">
+              <img src={heartIcon.src} alt="" width="24" height="24" />
+            </div>
+
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </section>
+
+</Layout>

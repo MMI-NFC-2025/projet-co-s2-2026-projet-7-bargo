@@ -1,0 +1,127 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import { registerUser, loginUser } from '../js/backend.js';
+import bgImg from '../assets/img/fond_connextion_inscription.avif';
+
+// Déjà connecté → profil
+if (Astro.cookies.get('pb_token')?.value) {
+  return Astro.redirect('/profil');
+}
+
+let error = '';
+
+if (Astro.request.method === 'POST') {
+  const body = await Astro.request.text();
+  const params = new URLSearchParams(body);
+  const nom             = params.get('nom') ?? '';
+  const prenom          = params.get('prenom') ?? '';
+  const pseudo          = params.get('pseudo') ?? '';
+  const email           = params.get('email') ?? '';
+  const password        = params.get('password') ?? '';
+  const passwordConfirm = params.get('passwordConfirm') ?? '';
+
+  if (password !== passwordConfirm) {
+    error = 'Les mots de passe ne correspondent pas.';
+  } else {
+    const { record, error: pbError } = await registerUser({
+      nom, prenom, pseudo, email, password, passwordConfirm
+    });
+
+    if (record) {
+      const loginResult = await loginUser(email, password);
+      if (loginResult?.token) {
+        Astro.cookies.set('pb_token',   loginResult.token,     { httpOnly: true, path: '/', maxAge: 60 * 60 * 24 * 7, sameSite: 'lax' });
+        Astro.cookies.set('pb_user_id', loginResult.record.id, { httpOnly: true, path: '/', maxAge: 60 * 60 * 24 * 7, sameSite: 'lax' });
+        return Astro.redirect('/profil');
+      }
+    }
+    error = pbError?.message ?? 'Une erreur est survenue lors de la création du compte.';
+  }
+}
+---
+
+<Layout title="Inscription — Bargo">
+  <section class="relative h-[1024px] overflow-hidden">
+
+    <!-- Fond -->
+    <Image src={bgImg} alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+    <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(30,30,30,0.7), #1e1e1e);"></div>
+
+    <!-- Erreur -->
+    {error && (
+      <p class="absolute top-[105px] left-[80px] text-red-400 text-sm m-0">{error}</p>
+    )}
+
+    <!-- Titre -->
+    <h3 class="absolute top-[139px] left-[80px] text-white m-0">INSCRIVEZ-VOUS</h3>
+    <p class="absolute top-[199px] left-[80px] text-sm text-white m-0 w-[405px]">
+      Rejoignez BARGO et organisez votre prochain barathon en quelques minutes.
+    </p>
+
+    <form method="POST" enctype="application/x-www-form-urlencoded">
+
+      <!-- Nom -->
+      <label class="absolute top-[286px] left-[80px] text-white text-[16px] font-medium leading-[1.4]">Nom</label>
+      <div class="absolute top-[326px] left-[80px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[296px] flex items-center px-8">
+        <input type="text" name="nom" placeholder="Nom" required
+          class="bg-transparent w-full text-sm text-[#1e1e1e] placeholder-[#9e9a97] outline-none font-medium" />
+      </div>
+
+      <!-- Prénom -->
+      <div class="absolute top-[286px] left-[408px] flex items-baseline gap-3">
+        <label class="text-white text-[16px] font-medium leading-[1.4]">Prénom</label>
+        <span class="text-[#dfdfdf] text-sm font-semibold">( facultatif )</span>
+      </div>
+      <div class="absolute top-[326px] left-[408px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[296px] flex items-center px-8">
+        <input type="text" name="prenom" placeholder="Prénom"
+          class="bg-transparent w-full text-sm text-[#1e1e1e] placeholder-[#9e9a97] outline-none font-medium" />
+      </div>
+
+      <!-- Pseudo -->
+      <label class="absolute top-[424px] left-[80px] text-white text-[16px] font-medium leading-[1.4]">Pseudo</label>
+      <div class="absolute top-[464px] left-[80px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[624px] flex items-center px-8">
+        <input type="text" name="pseudo" placeholder="Pseudo" required
+          class="bg-transparent w-full text-sm text-[#1e1e1e] placeholder-[#9e9a97] outline-none font-medium" />
+      </div>
+
+      <!-- Email -->
+      <label class="absolute top-[542px] left-[80px] text-white text-[16px] font-medium leading-[1.4]">Adresse E-mail</label>
+      <div class="absolute top-[582px] left-[80px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[624px] flex items-center px-8">
+        <input type="email" name="email" placeholder="Mail" required
+          class="bg-transparent w-full text-sm text-[#1e1e1e] placeholder-[#9e9a97] outline-none font-medium" />
+      </div>
+
+      <!-- Mot de passe -->
+      <label class="absolute top-[660px] left-[80px] text-white text-[16px] font-medium leading-[1.4]">Mots de passe</label>
+      <div class="absolute top-[700px] left-[80px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[624px] flex items-center px-8">
+        <input type="password" name="password" placeholder="Mots de passe" required
+          class="bg-transparent w-full text-sm text-[#1e1e1e] placeholder-[#9e9a97] outline-none font-medium" />
+      </div>
+
+      <!-- Confirmer mot de passe -->
+      <div class="absolute top-[778px] left-[80px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[624px] flex items-center px-8">
+        <input type="password" name="passwordConfirm" placeholder="Confirmer le mot de passe" required
+          class="bg-transparent w-full text-sm text-[#1e1e1e] placeholder-[#9e9a97] outline-none font-medium" />
+      </div>
+
+      <!-- Bouton -->
+      <button
+        type="submit"
+        class="absolute top-[858px] left-[80px] inline-flex items-center gap-4 bg-[#347645] text-white text-[16px] font-medium leading-[1.4] px-12 py-2 hover:opacity-90 transition-opacity cursor-pointer border-0"
+      >
+        CRÉER MON COMPTE
+        <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M7.29167 17.5C7.29167 17.016 7.68401 16.6237 8.16667 16.6237H23.8905L18.3959 11.1291C18.0472 10.7803 18.0472 10.2155 18.3959 9.86675C18.7447 9.51797 19.3095 9.51797 19.6582 9.86675L25.7749 15.9834C26.5251 16.7336 26.5251 17.9581 25.7749 18.7083L19.6582 24.825C19.3095 25.1737 18.7447 25.1737 18.3959 24.825C18.0472 24.4762 18.0472 23.9114 18.3959 23.5626L23.8905 18.0763H8.16667C7.68401 18.0763 7.29167 17.6839 7.29167 17.5Z" fill="white"/>
+        </svg>
+      </button>
+
+      <!-- Lien connexion -->
+      <p class="absolute top-[934px] left-[80px] text-sm text-white m-0">
+        Déjà un compte ?&nbsp;
+        <a href="/connexion" class="underline hover:opacity-70 transition-opacity">Se connecter</a>
+      </p>
+
+    </form>
+  </section>
+</Layout>

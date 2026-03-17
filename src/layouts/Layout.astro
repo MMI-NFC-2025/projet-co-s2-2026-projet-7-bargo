@@ -1,8 +1,19 @@
 ---
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import CookieBanner from "../components/CookieBanner.astro";
 
 import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Bargo — Organisez votre barathon',
+  description = 'Bargo vous aide à organiser et vivre des barathons inoubliables. Découvrez nos bars partenaires, nos jeux et créez votre parcours.',
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -10,9 +21,17 @@ import "../styles/global.css";
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#1e1e1e" />
 
-    <title>Bargo</title>
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+
+    <title>{title}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -31,5 +50,6 @@ import "../styles/global.css";
     </main>
 
     <Footer />
+    <CookieBanner />
   </body>
 </html>

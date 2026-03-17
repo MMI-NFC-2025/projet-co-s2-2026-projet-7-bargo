@@ -1,0 +1,50 @@
+---
+// CookieBanner.astro — bandeau de consentement cookies
+---
+
+<div
+  id="cookie-banner"
+  class="fixed bottom-0 left-0 right-0 z-[9999] hidden"
+  style="background: rgba(20,20,20,0.97); backdrop-filter: blur(8px); border-top: 1px solid rgba(255,255,255,0.08);"
+>
+  <div class="max-w-[1440px] mx-auto px-20 py-5 flex items-center justify-between gap-8">
+    <p class="text-sm text-[#dfdfdf] m-0 max-w-[700px] leading-[1.6]">
+      Nous utilisons des cookies essentiels pour le bon fonctionnement du site (connexion, session).
+      En continuant à naviguer, vous acceptez leur utilisation conformément à notre
+      <a href="/mention_legal" class="underline text-[#72c073] hover:opacity-80 transition-opacity">politique de confidentialité</a>.
+    </p>
+    <div class="flex items-center gap-4 shrink-0">
+      <button
+        id="cookie-refuse"
+        class="text-sm text-[#dfdfdf] font-medium px-6 py-2 border border-[#646262] hover:border-white hover:text-white transition-colors cursor-pointer bg-transparent"
+      >
+        Refuser
+      </button>
+      <button
+        id="cookie-accept"
+        class="text-sm text-white font-medium px-6 py-2 bg-[#347645] hover:opacity-90 transition-opacity cursor-pointer border-0"
+      >
+        Accepter
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const banner = document.getElementById('cookie-banner');
+  const consent = localStorage.getItem('cookie_consent');
+
+  if (!consent) {
+    banner.style.display = 'block';
+  }
+
+  document.getElementById('cookie-accept').addEventListener('click', () => {
+    localStorage.setItem('cookie_consent', 'accepted');
+    banner.style.display = 'none';
+  });
+
+  document.getElementById('cookie-refuse').addEventListener('click', () => {
+    localStorage.setItem('cookie_consent', 'refused');
+    banner.style.display = 'none';
+  });
+</script>

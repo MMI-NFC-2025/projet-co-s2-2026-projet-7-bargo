@@ -3,6 +3,9 @@
 import { Image } from 'astro:assets';
 import logoLight from '../assets/icon/logo-light.svg';
 import userIcon  from '../assets/icon/user.svg';
+
+const isLoggedIn = !!Astro.cookies.get('pb_token')?.value;
+const profileHref = isLoggedIn ? '/profil' : '/connexion';
 ---
 
 <header class="fixed top-0 left-0 w-full z-50 bg-[#1e1e1e]/50 backdrop-blur-sm">
@@ -23,7 +26,7 @@ import userIcon  from '../assets/icon/user.svg';
     <!-- Actions -->
     <div class="flex items-center gap-6">
       <!-- Icône profil -->
-      <a href="/profil" class="hover:opacity-70 transition-opacity" aria-label="Mon profil">
+      <a href={profileHref} class="hover:opacity-70 transition-opacity" aria-label="Mon profil">
         <img src={userIcon.src} alt="" width="31" height="31" class="invert" />
       </a>
 
