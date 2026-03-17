@@ -1,0 +1,472 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, PB_URL } from '../../js/backend.js';
+
+const token  = Astro.cookies.get('pb_token')?.value;
+const userId = Astro.cookies.get('pb_user_id')?.value;
+if (!token || !userId) return Astro.redirect('/connexion');
+
+// Rediriger vers la session existante si l'utilisateur est hôte ou invité
+const filter = encodeURIComponent(`id_hote='${userId}'||id_inviter~'${userId}'`);
+const existingRes = await fetch(
+  `${PB_URL}/api/collections/session_barathon/records?filter=${filter}&sort=-created&perPage=1`,
+  { headers: { Authorization: `Bearer ${token}` } }
+);
+if (existingRes.ok) {
+  const existingData = await existingRes.json();
+  if (existingData.items?.length > 0) {
+    return Astro.redirect(`/session/${existingData.items[0].id}`);
+  }
+}
+
+const [barsRaw, jeuxRaw, usersRaw] = await Promise.all([
+  getCollection('bar',   { sort: 'nom',    perPage: 200 }),
+  getCollection('jeux',  { sort: 'nom',    perPage: 200 }),
+  getCollection('users', { sort: 'pseudo', perPage: 200 }),
+]);
+
+const bars = barsRaw.map(b => ({
+  id: b.id, collectionName: b.collectionName,
+  nom: b.nom ?? '', adresse: b.adresse ?? '',
+  img: b.img?.[0] ?? null,
+  lat: b.localisation?.lat ?? null, lon: b.localisation?.lon ?? null,
+}));
+
+const jeux = jeuxRaw.map(j => ({
+  id: j.id, collectionName: j.collectionName,
+  nom: j.nom ?? '', description: j.description ?? '',
+  img: Array.isArray(j.img) ? (j.img[0] ?? null) : (j.img ?? null),
+}));
+
+const users = usersRaw
+  .filter(u => u.id !== userId)
+  .map(u => ({
+    id: u.id, collectionName: u.collectionName,
+    pseudo: u.pseudo ?? '', prenom: u.prenom ?? '', nom: u.nom ?? '',
+    avatar: u.avatar ?? null,
+  }));
+
+const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
+---
+
+<Layout title="Créer un barathon — Bargo">
+
+<!-- ====================================================== -->
+<!-- MAIN LAYOUT                                            -->
+<!-- ====================================================== -->
+<div class="flex" style="min-height: calc(100vh - 92px);">
+
+  <!-- ===== LEFT PANEL ===== -->
+  <div id="left-panel" class="w-[657px] shrink-0 bg-[#094736] flex flex-col" style="height: calc(100vh - 92px); position: sticky; top: 92px;">
+
+    <div class="px-[70px] pt-[80px]">
+      <p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:3px; color:#72c073; margin:0 0 14px 0;">Créer un barathon</p>
+      <h2 id="left-title" class="text-white m-0 uppercase">Informations</h2>
+      <p id="left-desc" class="m-0 mt-[16px] leading-[1.6]" style="font-size:14px; font-weight:500; color:rgba(247,241,237,0.7);">
+        Donnez un nom à votre barathon et choisissez la date et l'heure.
+      </p>
+    </div>
+
+    <!-- Step indicators -->
+    <div class="px-[70px] mt-[60px]">
+      <div class="flex items-center">
+        <div class="step-circle flex items-center justify-center w-[46px] h-[46px] rounded-full border-2 shrink-0" data-step="1"
+          style="background:white; border-color:white;">
+          <span class="step-num font-bold" style="font-size:16px; color:#094736;">1</span>
+          <svg class="step-check" style="display:none; width:18px; height:18px;" viewBox="0 0 18 18" fill="none">
+            <path d="M3.5 9L7.5 13L14.5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="flex-1 h-[2px] mx-[10px]" style="background:rgba(255,255,255,0.25);"></div>
+        <div class="step-circle flex items-center justify-center w-[46px] h-[46px] rounded-full border-2 shrink-0" data-step="2"
+          style="background:transparent; border-color:rgba(255,255,255,0.3);">
+          <span class="step-num font-bold" style="font-size:16px; color:rgba(255,255,255,0.3);">2</span>
+          <svg class="step-check" style="display:none; width:18px; height:18px;" viewBox="0 0 18 18" fill="none">
+            <path d="M3.5 9L7.5 13L14.5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="flex-1 h-[2px] mx-[10px]" style="background:rgba(255,255,255,0.25);"></div>
+        <div class="step-circle flex items-center justify-center w-[46px] h-[46px] rounded-full border-2 shrink-0" data-step="3"
+          style="background:transparent; border-color:rgba(255,255,255,0.3);">
+          <span class="step-num font-bold" style="font-size:16px; color:rgba(255,255,255,0.3);">3</span>
+          <svg class="step-check" style="display:none; width:18px; height:18px;" viewBox="0 0 18 18" fill="none">
+            <path d="M3.5 9L7.5 13L14.5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="flex-1 h-[2px] mx-[10px]" style="background:rgba(255,255,255,0.25);"></div>
+        <div class="step-circle flex items-center justify-center w-[46px] h-[46px] rounded-full border-2 shrink-0" data-step="4"
+          style="background:transparent; border-color:rgba(255,255,255,0.3);">
+          <span class="step-num font-bold" style="font-size:16px; color:rgba(255,255,255,0.3);">4</span>
+          <svg class="step-check" style="display:none; width:18px; height:18px;" viewBox="0 0 18 18" fill="none">
+            <path d="M3.5 9L7.5 13L14.5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="flex mt-[10px]">
+        <div class="w-[46px] text-center" style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:500;">Infos</div>
+        <div class="flex-1 mx-[10px]"></div>
+        <div class="w-[46px] text-center" style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:500;">Bars</div>
+        <div class="flex-1 mx-[10px]"></div>
+        <div class="w-[46px] text-center" style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:500;">Jeux</div>
+        <div class="flex-1 mx-[10px]"></div>
+        <div class="w-[46px] text-center" style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:500;">Amis</div>
+      </div>
+    </div>
+
+    <!-- Selection summary -->
+    <div id="left-summary" class="px-[70px] mt-[40px] flex flex-col gap-[10px]" style="display:none;"></div>
+
+    <div class="flex-1"></div>
+
+    <!-- Progress bar -->
+    <div class="mx-[70px] mb-[60px]">
+      <div class="h-[6px] rounded-full overflow-hidden" style="background:rgba(255,255,255,0.2);">
+        <div id="progress-bar" class="h-full rounded-full transition-all duration-500" style="width:0%; background:#72c073;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RIGHT PANEL ===== -->
+  <div id="step-view" class="flex-1 bg-[#1e1e1e] overflow-y-auto" style="max-height: calc(100vh - 92px);">
+
+    <!-- ─── STEP 1: Informations ─── -->
+    <div id="panel-1" class="flex flex-col px-[70px] py-[80px]" style="min-height: calc(100vh - 92px);">
+      <h2 class="text-white m-0 mb-[50px] uppercase">Informations de la soirée</h2>
+      <div class="flex flex-col gap-[36px] flex-1">
+        <div class="pb-[12px]" style="border-bottom:1px solid rgba(247,241,237,0.25);">
+          <label style="display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:rgba(247,241,237,0.5); margin-bottom:8px;">Nom du barathon *</label>
+          <input id="s1-nom" type="text" placeholder="Mon barathon de folie"
+            style="background:transparent; width:100%; font-size:16px; font-weight:500; outline:none; border:none; color:#f7f1ed;"
+            class="placeholder-[#f7f1ed]/30" />
+        </div>
+        <div class="pb-[12px]" style="border-bottom:1px solid rgba(247,241,237,0.25);">
+          <label style="display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:rgba(247,241,237,0.5); margin-bottom:8px;">Date</label>
+          <input id="s1-date" type="date"
+            style="background:transparent; width:100%; font-size:16px; font-weight:500; outline:none; border:none; color:#f7f1ed; color-scheme:dark;" />
+        </div>
+        <div class="pb-[12px]" style="border-bottom:1px solid rgba(247,241,237,0.25);">
+          <label style="display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:rgba(247,241,237,0.5); margin-bottom:8px;">Heure de départ</label>
+          <input id="s1-heure-debut" type="time"
+            style="background:transparent; width:100%; font-size:16px; font-weight:500; outline:none; border:none; color:#f7f1ed; color-scheme:dark;" />
+        </div>
+        <div style="border-bottom:1px solid rgba(247,241,237,0.25);">
+          <label style="display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:rgba(247,241,237,0.5); margin-bottom:8px;">Description</label>
+          <textarea id="s1-desc" placeholder="Décrivez votre soirée..." rows="4"
+            style="background:transparent; width:100%; font-size:16px; font-weight:500; outline:none; border:none; color:#f7f1ed; resize:none;"
+            class="placeholder-[#f7f1ed]/30"></textarea>
+        </div>
+      </div>
+      <div class="flex justify-end mt-[50px]">
+        <button id="btn-next-1" style="background:#347645; height:52px; padding:0 50px; color:white; font-size:16px; font-weight:500; border:none; cursor:pointer; border-radius:3px;">Continuer →</button>
+      </div>
+    </div>
+
+    <!-- ─── STEP 2: Bars ─── -->
+    <div id="panel-2" class="flex flex-col px-[70px] py-[80px]" style="display:none; min-height: calc(100vh - 92px);">
+      <h2 class="text-white m-0 mb-[28px] uppercase">Choisir mes bars</h2>
+      <div class="flex items-center gap-[12px] rounded-[5px] px-[16px] mb-[20px]" style="background:#2c2c2c; height:48px;">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5"/><path d="M12 12L16 16" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <input id="search-bars" type="text" placeholder="Rechercher un bar…"
+          style="background:transparent; flex:1; font-size:14px; font-weight:500; outline:none; border:none; color:#f7f1ed;"
+          class="placeholder-[#f7f1ed]/40" />
+      </div>
+      <div id="bars-list" class="flex flex-col gap-[10px] overflow-y-auto flex-1"></div>
+      <div class="flex items-center justify-between mt-[28px] pt-[20px]" style="border-top:1px solid rgba(255,255,255,0.1);">
+        <p id="bars-count" style="color:rgba(247,241,237,0.5); font-size:14px; font-weight:500; margin:0;">0 bar sélectionné</p>
+        <div class="flex gap-[16px]">
+          <button onclick="goToStep(1)" style="height:52px; padding:0 30px; color:rgba(247,241,237,0.6); font-size:16px; font-weight:500; border:none; background:transparent; cursor:pointer;">← Retour</button>
+          <button onclick="goToStep(3)" style="background:#347645; height:52px; padding:0 50px; color:white; font-size:16px; font-weight:500; border:none; cursor:pointer; border-radius:3px;">Continuer →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── STEP 3: Jeux ─── -->
+    <div id="panel-3" class="flex flex-col px-[70px] py-[80px]" style="display:none; min-height: calc(100vh - 92px);">
+      <h2 class="text-white m-0 mb-[4px] uppercase">Choisir mon jeu</h2>
+      <p style="color:rgba(247,241,237,0.4); font-size:13px; font-weight:500; margin:0 0 24px;">Un seul jeu par session.</p>
+      <div class="flex items-center gap-[12px] rounded-[5px] px-[16px] mb-[20px]" style="background:#2c2c2c; height:48px;">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5"/><path d="M12 12L16 16" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <input id="search-jeux" type="text" placeholder="Rechercher un jeu…"
+          style="background:transparent; flex:1; font-size:14px; font-weight:500; outline:none; border:none; color:#f7f1ed;"
+          class="placeholder-[#f7f1ed]/40" />
+      </div>
+      <div id="jeux-list" class="flex flex-col gap-[10px] overflow-y-auto flex-1"></div>
+      <div class="flex items-center justify-between mt-[28px] pt-[20px]" style="border-top:1px solid rgba(255,255,255,0.1);">
+        <p id="jeux-count" style="color:rgba(247,241,237,0.5); font-size:14px; font-weight:500; margin:0;">0 jeu sélectionné</p>
+        <div class="flex gap-[16px]">
+          <button onclick="goToStep(2)" style="height:52px; padding:0 30px; color:rgba(247,241,237,0.6); font-size:16px; font-weight:500; border:none; background:transparent; cursor:pointer;">← Retour</button>
+          <button onclick="goToStep(4)" style="background:#347645; height:52px; padding:0 50px; color:white; font-size:16px; font-weight:500; border:none; cursor:pointer; border-radius:3px;">Continuer →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── STEP 4: Amis ─── -->
+    <div id="panel-4" class="flex flex-col px-[70px] py-[80px]" style="display:none; min-height: calc(100vh - 92px);">
+      <h2 class="text-white m-0 mb-[28px] uppercase">Inviter mes amis</h2>
+      <div class="flex items-center gap-[12px] rounded-[5px] px-[16px] mb-[20px]" style="background:#2c2c2c; height:48px;">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5"/><path d="M12 12L16 16" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <input id="search-users" type="text" placeholder="Rechercher un ami…"
+          style="background:transparent; flex:1; font-size:14px; font-weight:500; outline:none; border:none; color:#f7f1ed;"
+          class="placeholder-[#f7f1ed]/40" />
+      </div>
+      <div id="users-list" class="flex flex-col gap-[10px] overflow-y-auto flex-1"></div>
+      <div class="flex items-center justify-between mt-[28px] pt-[20px]" style="border-top:1px solid rgba(255,255,255,0.1);">
+        <p id="users-count" style="color:rgba(247,241,237,0.5); font-size:14px; font-weight:500; margin:0;">0 ami invité</p>
+        <div class="flex gap-[16px]">
+          <button onclick="goToStep(3)" style="height:52px; padding:0 30px; color:rgba(247,241,237,0.6); font-size:16px; font-weight:500; border:none; background:transparent; cursor:pointer;">← Retour</button>
+          <button id="btn-lancer" style="background:#72c073; height:52px; padding:0 50px; color:#094736; font-size:16px; font-weight:700; border:none; cursor:pointer; border-radius:3px;">Lancer 🚀</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Error toast -->
+<div id="error-toast" style="display:none; position:fixed; bottom:32px; left:50%; transform:translateX(-50%); background:#c0392b; color:white; font-size:14px; font-weight:500; padding:14px 28px; border-radius:5px; z-index:100;"></div>
+
+<!-- JSON data -->
+<script id="app-data" type="application/json" set:html={appData}></script>
+
+<script is:inline>
+(function () {
+  var d        = JSON.parse(document.getElementById('app-data').textContent);
+  var allBars  = d.bars;
+  var allJeux  = d.jeux;
+  var allUsers = d.users;
+  var PB_URL   = d.PB_URL;
+  var TOKEN    = d.token;
+  var USER_ID  = d.userId;
+
+  var currentStep  = 1;
+  var selectedBars = [];
+  var selectedJeux = [];
+  var selectedAmis = [];
+
+  var stepMeta = {
+    1: { title: 'Informations',     desc: 'Donnez un nom à votre barathon et choisissez la date et l\'heure.', progress: 0 },
+    2: { title: 'Choisir mes bars', desc: 'Sélectionnez les bars que vous souhaitez visiter ce soir.',         progress: 35 },
+    3: { title: 'Choisir mes jeux', desc: 'Choisissez les jeux pour animer votre soirée.',                     progress: 65 },
+    4: { title: 'Inviter mes amis', desc: 'Invitez vos amis et désignez un Sam parmi eux.',                    progress: 95 },
+  };
+
+  // ── Helpers ───────────────────────────────────────────────────────
+  function esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function imgUrl(rec, file) {
+    return file ? PB_URL + '/api/files/' + rec.collectionName + '/' + rec.id + '/' + file : null;
+  }
+  function thumb(url, alt) {
+    if (!url) return '<div style="width:100%;height:100%;background:#3a3a3a;border-radius:3px;"></div>';
+    return '<img src="' + url + '" alt="' + esc(alt) + '" style="width:100%;height:100%;object-fit:cover;" />';
+  }
+  function avatarHtml(user) {
+    var url = imgUrl(user, user.avatar);
+    if (url) return '<img src="' + url + '" alt="' + esc(user.pseudo) + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />';
+    var l = (user.pseudo || user.prenom || '?').charAt(0).toUpperCase();
+    return '<div style="width:100%;height:100%;background:#347645;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:17px;">' + esc(l) + '</div>';
+  }
+  function updateCount(elId, n, sing, plur) {
+    var el = document.getElementById(elId);
+    if (el) el.textContent = n + ' ' + (n <= 1 ? sing : plur);
+  }
+  function showError(msg) {
+    var t = document.getElementById('error-toast');
+    t.textContent    = msg;
+    t.style.display  = 'block';
+    setTimeout(function () { t.style.display = 'none'; }, 4000);
+  }
+
+  // ── Navigation ────────────────────────────────────────────────────
+  window.goToStep = function (step) {
+    document.getElementById('panel-' + currentStep).style.display = 'none';
+    currentStep = step;
+    document.getElementById('panel-' + step).style.display = 'flex';
+    var m = stepMeta[step];
+    document.getElementById('left-title').textContent   = m.title;
+    document.getElementById('left-desc').textContent    = m.desc;
+    document.getElementById('progress-bar').style.width = m.progress + '%';
+    refreshCircles();
+    refreshSummary();
+    if (step === 2) renderBars();
+    if (step === 3) renderJeux();
+    if (step === 4) renderUsers();
+  };
+
+  function refreshCircles() {
+    document.querySelectorAll('.step-circle').forEach(function (el) {
+      var s   = parseInt(el.dataset.step);
+      var num = el.querySelector('.step-num');
+      var chk = el.querySelector('.step-check');
+      if (s < currentStep) {
+        el.style.background  = '#72c073'; el.style.borderColor = '#72c073';
+        num.style.display = 'none';  chk.style.display = 'block'; chk.style.color = 'white';
+      } else if (s === currentStep) {
+        el.style.background  = 'white'; el.style.borderColor = 'white';
+        num.style.display = 'block'; num.style.color = '#094736'; chk.style.display = 'none';
+      } else {
+        el.style.background  = 'transparent'; el.style.borderColor = 'rgba(255,255,255,0.3)';
+        num.style.display = 'block'; num.style.color = 'rgba(255,255,255,0.3)'; chk.style.display = 'none';
+      }
+    });
+  }
+
+  function refreshSummary() {
+    var el = document.getElementById('left-summary');
+    var items = [];
+    if (selectedBars.length) items.push('<span style="color:#72c073;font-size:13px;font-weight:500;">🍺 ' + selectedBars.length + ' bar' + (selectedBars.length > 1 ? 's' : '') + '</span>');
+    if (selectedJeux.length) items.push('<span style="color:#72c073;font-size:13px;font-weight:500;">🎮 ' + selectedJeux.length + ' jeu' + (selectedJeux.length > 1 ? 'x' : '') + '</span>');
+    if (selectedAmis.length) items.push('<span style="color:#72c073;font-size:13px;font-weight:500;">👥 ' + selectedAmis.length + ' ami' + (selectedAmis.length > 1 ? 's' : '') + '</span>');
+    if (items.length) { el.innerHTML = items.join(''); el.style.display = 'flex'; }
+    else { el.style.display = 'none'; }
+  }
+
+  // ── Bars ──────────────────────────────────────────────────────────
+  function renderBars(q) {
+    q = (q || '').toLowerCase();
+    var list = document.getElementById('bars-list');
+    var filtered = allBars.filter(function (b) { return !q || b.nom.toLowerCase().includes(q) || b.adresse.toLowerCase().includes(q); });
+    list.innerHTML = filtered.map(function (bar) {
+      var sel = selectedBars.some(function (b) { return b.id === bar.id; });
+      return '<div style="display:flex;align-items:center;gap:16px;background:#2c2c2c;border-radius:5px;padding:14px;">' +
+        '<div style="width:60px;height:60px;flex-shrink:0;border-radius:3px;overflow:hidden;">' + thumb(imgUrl(bar, bar.img), bar.nom) + '</div>' +
+        '<div style="flex:1;min-width:0;"><p style="color:white;font-size:15px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(bar.nom) + '</p><p style="color:rgba(247,241,237,0.5);font-size:13px;margin:2px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(bar.adresse) + '</p></div>' +
+        '<button data-action="toggle-bar" data-id="' + bar.id + '" style="flex-shrink:0;height:36px;padding:0 18px;font-size:13px;font-weight:500;border:none;cursor:pointer;border-radius:3px;background:' + (sel ? '#72c073' : '#347645') + ';color:' + (sel ? '#094736' : 'white') + ';">' + (sel ? '✓ Ajouté' : 'Ajouter') + '</button>' +
+      '</div>';
+    }).join('');
+    list.querySelectorAll('[data-action="toggle-bar"]').forEach(function (btn) {
+      btn.addEventListener('click', function () { toggleBar(btn.dataset.id); renderBars(document.getElementById('search-bars').value); });
+    });
+    updateCount('bars-count', selectedBars.length, 'bar sélectionné', 'bars sélectionnés');
+  }
+  function toggleBar(id) {
+    var idx = selectedBars.findIndex(function (b) { return b.id === id; });
+    if (idx >= 0) selectedBars.splice(idx, 1);
+    else { var b = allBars.find(function (b) { return b.id === id; }); if (b) selectedBars.push(b); }
+    updateCount('bars-count', selectedBars.length, 'bar sélectionné', 'bars sélectionnés');
+    refreshSummary();
+  }
+
+  // ── Jeux ──────────────────────────────────────────────────────────
+  // id_jeux est Single dans PocketBase → un seul jeu à la fois
+  function renderJeux(q) {
+    q = (q || '').toLowerCase();
+    var list = document.getElementById('jeux-list');
+    var filtered = allJeux.filter(function (j) { return !q || j.nom.toLowerCase().includes(q); });
+    list.innerHTML = filtered.map(function (jeu) {
+      var sel = selectedJeux.length > 0 && selectedJeux[0].id === jeu.id;
+      return '<div style="display:flex;align-items:center;gap:16px;background:#2c2c2c;border-radius:5px;padding:14px;">' +
+        '<div style="width:60px;height:60px;flex-shrink:0;border-radius:3px;overflow:hidden;">' + thumb(imgUrl(jeu, jeu.img), jeu.nom) + '</div>' +
+        '<div style="flex:1;min-width:0;"><p style="color:white;font-size:15px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(jeu.nom) + '</p><p style="color:rgba(247,241,237,0.5);font-size:13px;margin:2px 0 0;overflow:hidden;text-overflow:ellipsis;">' + esc(jeu.description) + '</p></div>' +
+        '<button data-action="toggle-jeu" data-id="' + jeu.id + '" style="flex-shrink:0;height:36px;padding:0 18px;font-size:13px;font-weight:500;border:none;cursor:pointer;border-radius:3px;background:' + (sel ? '#72c073' : '#347645') + ';color:' + (sel ? '#094736' : 'white') + ';">' + (sel ? '✓ Choisi' : 'Choisir') + '</button>' +
+      '</div>';
+    }).join('');
+    list.querySelectorAll('[data-action="toggle-jeu"]').forEach(function (btn) {
+      btn.addEventListener('click', function () { toggleJeu(btn.dataset.id); renderJeux(document.getElementById('search-jeux').value); });
+    });
+    var el = document.getElementById('jeux-count');
+    if (el) el.textContent = selectedJeux.length > 0 ? '1 jeu sélectionné : ' + esc(selectedJeux[0].nom) : 'Aucun jeu sélectionné';
+  }
+  function toggleJeu(id) {
+    // Single → désélectionner si déjà choisi, sinon remplacer
+    if (selectedJeux.length > 0 && selectedJeux[0].id === id) {
+      selectedJeux = [];
+    } else {
+      var j = allJeux.find(function (j) { return j.id === id; });
+      selectedJeux = j ? [j] : [];
+    }
+    var el = document.getElementById('jeux-count');
+    if (el) el.textContent = selectedJeux.length > 0 ? '1 jeu sélectionné : ' + esc(selectedJeux[0].nom) : 'Aucun jeu sélectionné';
+    refreshSummary();
+  }
+
+  // ── Users ─────────────────────────────────────────────────────────
+  function renderUsers(q) {
+    q = (q || '').toLowerCase();
+    var list = document.getElementById('users-list');
+    var filtered = allUsers.filter(function (u) { return !q || (u.pseudo + ' ' + u.prenom + ' ' + u.nom).toLowerCase().includes(q); });
+    list.innerHTML = filtered.map(function (user) {
+      var ami  = selectedAmis.find(function (a) { return a.id === user.id; });
+      var sel  = !!ami; var isSam = ami && ami.sam;
+      var name = esc(user.pseudo || (user.prenom + ' ' + user.nom).trim() || 'Utilisateur');
+      return '<div style="display:flex;align-items:center;gap:14px;background:#2c2c2c;border-radius:5px;padding:14px;">' +
+        '<div style="width:48px;height:48px;flex-shrink:0;border-radius:50%;overflow:hidden;">' + avatarHtml(user) + '</div>' +
+        '<div style="flex:1;min-width:0;"><p style="color:white;font-size:15px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + name + '</p>' +
+        (user.pseudo && (user.prenom || user.nom) ? '<p style="color:rgba(247,241,237,0.5);font-size:13px;margin:2px 0 0;">' + esc((user.prenom + ' ' + user.nom).trim()) + '</p>' : '') + '</div>' +
+        '<div style="display:flex;gap:8px;flex-shrink:0;">' +
+          '<button data-action="toggle-ami" data-id="' + user.id + '" style="height:36px;padding:0 16px;font-size:13px;font-weight:500;border:none;cursor:pointer;border-radius:3px;background:' + (sel ? '#72c073' : '#347645') + ';color:' + (sel ? '#094736' : 'white') + ';">' + (sel ? '✓' : 'Ajouter') + '</button>' +
+          '<button data-action="toggle-sam" data-id="' + user.id + '" style="height:36px;padding:0 14px;font-size:13px;font-weight:700;cursor:pointer;border-radius:3px;background:' + (isSam ? '#f7f1ed' : 'transparent') + ';color:' + (isSam ? '#094736' : 'rgba(247,241,237,0.5)') + ';border:1px solid ' + (isSam ? '#f7f1ed' : 'rgba(255,255,255,0.25)') + ';">SAM</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+    list.querySelectorAll('[data-action="toggle-ami"]').forEach(function (btn) {
+      btn.addEventListener('click', function () { toggleAmi(btn.dataset.id); renderUsers(document.getElementById('search-users').value); });
+    });
+    list.querySelectorAll('[data-action="toggle-sam"]').forEach(function (btn) {
+      btn.addEventListener('click', function () { toggleSam(btn.dataset.id); renderUsers(document.getElementById('search-users').value); });
+    });
+    updateCount('users-count', selectedAmis.length, 'ami invité', 'amis invités');
+  }
+  function toggleAmi(id) {
+    var idx = selectedAmis.findIndex(function (a) { return a.id === id; });
+    if (idx >= 0) selectedAmis.splice(idx, 1);
+    else { var u = allUsers.find(function (u) { return u.id === id; }); if (u) selectedAmis.push(Object.assign({}, u, { sam: false })); }
+    updateCount('users-count', selectedAmis.length, 'ami invité', 'amis invités');
+    refreshSummary();
+  }
+  function toggleSam(id) {
+    var ami = selectedAmis.find(function (a) { return a.id === id; });
+    if (ami) { ami.sam = !ami.sam; }
+    else { var u = allUsers.find(function (u) { return u.id === id; }); if (u) { selectedAmis.push(Object.assign({}, u, { sam: true })); updateCount('users-count', selectedAmis.length, 'ami invité', 'amis invités'); refreshSummary(); } }
+  }
+
+  // ── Save & launch ─────────────────────────────────────────────────
+  async function saveSession() {
+    var nom = document.getElementById('s1-nom').value.trim();
+    if (!nom) { showError('Veuillez donner un nom au barathon.'); goToStep(1); return; }
+
+    var btn = document.getElementById('btn-lancer');
+    btn.disabled    = true;
+    btn.textContent = 'Création…';
+
+    var payload = {
+      nom:          nom,
+      date_session: document.getElementById('s1-date').value        || null,
+      heur_depart:  document.getElementById('s1-heure-debut').value || null,
+      description:  document.getElementById('s1-desc').value        || null,
+      id_hote:      USER_ID,
+      id_bar:       selectedBars.map(function (b) { return b.id; }),
+      id_jeux:      selectedJeux.length > 0 ? selectedJeux[0].id : null,
+      id_inviter:   selectedAmis.map(function (a) { return a.id; }),
+      id_sam:       selectedAmis.filter(function (a) { return a.sam; }).map(function (a) { return a.id; }),
+    };
+
+    try {
+      var res = await fetch(PB_URL + '/api/collections/session_barathon/records', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
+        body:    JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error('Erreur ' + res.status);
+      var session = await res.json();
+      window.location.href = '/session/' + session.id;
+    } catch (err) {
+      showError('Impossible de créer la session. Vérifiez votre connexion.');
+      btn.disabled    = false;
+      btn.textContent = 'Lancer 🚀';
+    }
+  }
+
+  // ── Events ────────────────────────────────────────────────────────
+  document.getElementById('btn-next-1').addEventListener('click', function () { goToStep(2); });
+  document.getElementById('btn-lancer').addEventListener('click', saveSession);
+  document.getElementById('search-bars').addEventListener('input',  function () { renderBars(this.value); });
+  document.getElementById('search-jeux').addEventListener('input',  function () { renderJeux(this.value); });
+  document.getElementById('search-users').addEventListener('input', function () { renderUsers(this.value); });
+
+  refreshCircles();
+})();
+</script>
+
+</Layout>

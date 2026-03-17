@@ -1,0 +1,424 @@
+---
+// @ts-nocheck
+import Layout from '../../layouts/Layout.astro';
+import { PB_URL } from '../../js/backend.js';
+
+const token  = Astro.cookies.get('pb_token')?.value;
+const userId = Astro.cookies.get('pb_user_id')?.value;
+if (!token || !userId) return Astro.redirect('/connexion');
+
+const { id } = Astro.params;
+if (!id) return Astro.redirect('/session');
+
+// Fetch session with expanded relations
+const res = await fetch(
+  `${PB_URL}/api/collections/session_barathon/records/${id}?expand=id_bar,id_jeux,id_inviter,id_sam`,
+  { headers: { Authorization: `Bearer ${token}` } }
+);
+if (!res.ok) return Astro.redirect('/session');
+const session = await res.json();
+if (!session || session.code === 404) return Astro.redirect('/session');
+
+// Prepare expanded data
+const bars  = (session.expand?.id_bar  ?? []).map(b => ({
+  id: b.id, collectionName: b.collectionName,
+  nom: b.nom ?? '', adresse: b.adresse ?? '',
+  img: b.img?.[0] ?? null,
+  lat: b.localisation?.lat ?? null, lon: b.localisation?.lon ?? null,
+}));
+
+// id_jeux est Single — peut être un objet ou null
+const jeuxRaw = session.expand?.id_jeux;
+const jeux = jeuxRaw
+  ? [{ id: jeuxRaw.id, collectionName: jeuxRaw.collectionName, nom: jeuxRaw.nom ?? '', description: jeuxRaw.description ?? '', img: Array.isArray(jeuxRaw.img) ? (jeuxRaw.img[0] ?? null) : (jeuxRaw.img ?? null) }]
+  : [];
+
+const amis  = (session.expand?.id_inviter ?? []).map(u => ({
+  id: u.id, collectionName: u.collectionName,
+  pseudo: u.pseudo ?? '', prenom: u.prenom ?? '', nom: u.nom ?? '',
+  avatar: u.avatar ?? null,
+}));
+
+const samIds = new Set((session.expand?.id_sam ?? []).map(u => u.id));
+
+// All users for "Ajouter" modal (re-fetch a light list)
+const usersRes  = await fetch(`${PB_URL}/api/collections/users/records?perPage=200&sort=pseudo`);
+const usersData = await usersRes.json();
+const allUsers  = (usersData.items ?? [])
+  .filter(u => u.id !== userId)
+  .map(u => ({
+    id: u.id, collectionName: u.collectionName,
+    pseudo: u.pseudo ?? '', prenom: u.prenom ?? '', nom: u.nom ?? '',
+    avatar: u.avatar ?? null,
+  }));
+
+// All bars & jeux for "Ajouter" modal
+const barsRes  = await fetch(`${PB_URL}/api/collections/bar/records?perPage=200&sort=nom`);
+const barsData = await barsRes.json();
+const allBars  = (barsData.items ?? []).map(b => ({
+  id: b.id, collectionName: b.collectionName,
+  nom: b.nom ?? '', adresse: b.adresse ?? '',
+  img: b.img?.[0] ?? null,
+  lat: b.localisation?.lat ?? null, lon: b.localisation?.lon ?? null,
+}));
+
+const jeuxRes  = await fetch(`${PB_URL}/api/collections/jeux/records?perPage=200&sort=nom`);
+const jeuxData = await jeuxRes.json();
+const allJeux  = (jeuxData.items ?? []).map(j => ({
+  id: j.id, collectionName: j.collectionName,
+  nom: j.nom ?? '', description: j.description ?? '',
+  img: Array.isArray(j.img) ? (j.img[0] ?? null) : (j.img ?? null),
+}));
+
+const isHote = session.id_hote === userId;
+
+const pageData = JSON.stringify({
+  session: { id: session.id, nom: session.nom, date: session.date_session, heure_debut: session.heur_depart, description: session.description },
+  bars, jeux, amis, samIds: [...samIds],
+  allBars, allJeux, allUsers,
+  PB_URL, token, isHote,
+});
+---
+
+<Layout title={`${session.nom ?? 'Session'} — Bargo`}>
+
+<!-- ====================================================== -->
+<!-- FULL-SCREEN LAYOUT (sous le header)                   -->
+<!-- ====================================================== -->
+<div class="flex" style="height: calc(100vh - 92px);">
+
+  <!-- ===== MAP ===== -->
+  <div id="session-map" class="flex-1" style="background:#dfdfdf; height:100%;"></div>
+
+  <!-- ===== RIGHT PANEL ===== -->
+  <div style="width:460px; flex-shrink:0; background:#1e1e1e; display:flex; flex-direction:column; height:100%; overflow:hidden;">
+
+    <!-- Session info -->
+    <div class="px-[28px] pt-[24px] pb-[18px]" style="border-bottom:1px solid rgba(255,255,255,0.1); flex-shrink:0;">
+      <p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:#72c073; margin:0 0 6px 0;">Barathon</p>
+      <h3 class="text-white m-0">{session.nom}</h3>
+      {(session.date || session.heure_debut) && (
+        <p style="font-size:13px; font-weight:500; color:rgba(247,241,237,0.5); margin:6px 0 0 0;">
+          {session.date ?? ''}{session.date && session.heure_debut ? ' · ' : ''}{session.heure_debut ?? ''}{session.heure_debut && session.heure_fin ? ' → ' + session.heure_fin : ''}
+        </p>
+      )}
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex" style="border-bottom:1px solid rgba(255,255,255,0.1); flex-shrink:0;">
+      <button class="final-tab flex-1 h-[48px] font-medium border-0 bg-transparent cursor-pointer" data-tab="bars"
+        style="font-size:13px; color:#72c073; border-bottom:2px solid #72c073;">Bars</button>
+      <button class="final-tab flex-1 h-[48px] font-medium border-0 bg-transparent cursor-pointer" data-tab="jeux"
+        style="font-size:13px; color:rgba(247,241,237,0.5); border-bottom:2px solid transparent;">Jeux</button>
+      <button class="final-tab flex-1 h-[48px] font-medium border-0 bg-transparent cursor-pointer" data-tab="amis"
+        style="font-size:13px; color:rgba(247,241,237,0.5); border-bottom:2px solid transparent;">Amis</button>
+      <button class="final-tab flex-1 h-[48px] font-medium border-0 bg-transparent cursor-pointer" data-tab="params"
+        style="font-size:13px; color:rgba(247,241,237,0.5); border-bottom:2px solid transparent;">Paramètres</button>
+    </div>
+
+    <!-- Tab content -->
+    <div id="tab-content" class="overflow-y-auto flex-1 px-[24px] py-[20px]"></div>
+
+    <!-- Add more -->
+    <div class="px-[24px] py-[18px]" style="border-top:1px solid rgba(255,255,255,0.1); flex-shrink:0;">
+      <button id="btn-add-more" style="width:100%; height:42px; background:transparent; border:1px solid rgba(255,255,255,0.25); color:white; font-size:14px; font-weight:500; cursor:pointer; border-radius:3px;">+ Ajouter</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====================================================== -->
+<!-- ADD MORE MODAL                                        -->
+<!-- ====================================================== -->
+<div id="add-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:50; align-items:center; justify-content:center;">
+  <div style="background:#1e1e1e; width:600px; max-height:80vh; display:flex; flex-direction:column; border-radius:5px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+    <div class="flex justify-between items-center px-[28px] py-[20px]" style="border-bottom:1px solid rgba(255,255,255,0.1);">
+      <h3 id="modal-title" class="text-white m-0"></h3>
+      <button id="modal-close" style="background:transparent; border:none; color:white; font-size:26px; line-height:1; cursor:pointer; opacity:0.6;">×</button>
+    </div>
+    <div class="px-[28px] py-[14px]" style="border-bottom:1px solid rgba(255,255,255,0.1);">
+      <div class="flex items-center gap-[12px] rounded-[5px] px-[14px]" style="background:#2c2c2c; height:42px;">
+        <svg width="14" height="14" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5"/><path d="M12 12L16 16" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <input id="modal-search" type="text" placeholder="Rechercher…"
+          style="background:transparent; flex:1; font-size:14px; font-weight:500; outline:none; border:none; color:#f7f1ed;"
+          class="placeholder-[#f7f1ed]/40" />
+      </div>
+    </div>
+    <div id="modal-list" class="overflow-y-auto flex-1 px-[28px] py-[20px]"></div>
+    <div class="px-[28px] py-[18px] flex justify-end" style="border-top:1px solid rgba(255,255,255,0.1);">
+      <button id="modal-confirm" style="background:#347645; height:42px; padding:0 36px; color:white; font-size:14px; font-weight:500; border:none; cursor:pointer; border-radius:3px;">Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<!-- JSON data -->
+<script id="page-data" type="application/json" set:html={pageData}></script>
+
+<script is:inline>
+(function () {
+  var d        = JSON.parse(document.getElementById('page-data').textContent);
+  var session  = d.session;
+  var PB_URL   = d.PB_URL;
+  var TOKEN    = d.token;
+
+  // Mutable selections (start from what's in the DB)
+  var bars     = d.bars.slice();
+  var jeux     = d.jeux.slice();
+  var amis     = d.amis.map(function (u) { return Object.assign({}, u, { sam: d.samIds.includes(u.id) }); });
+
+  var allBars  = d.allBars;
+  var allJeux  = d.allJeux;
+  var allUsers = d.allUsers;
+
+  var activeTab = 'bars';
+  var modalMode = null;
+  var isHote    = d.isHote;
+
+  // ── Helpers ──────────────────────────────────────────────────────
+  function esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function imgUrl(rec, file) {
+    return file ? PB_URL + '/api/files/' + rec.collectionName + '/' + rec.id + '/' + file : null;
+  }
+  function thumb(url, alt) {
+    if (!url) return '<div style="width:100%;height:100%;background:#3a3a3a;border-radius:3px;"></div>';
+    return '<img src="' + url + '" alt="' + esc(alt) + '" style="width:100%;height:100%;object-fit:cover;" />';
+  }
+  function avatarHtml(user, size) {
+    size = size || 44;
+    var url = imgUrl(user, user.avatar);
+    if (url) return '<img src="' + url + '" alt="' + esc(user.pseudo) + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />';
+    var l = (user.pseudo || user.prenom || '?').charAt(0).toUpperCase();
+    return '<div style="width:100%;height:100%;background:#347645;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:' + Math.round(size * 0.38) + 'px;">' + esc(l) + '</div>';
+  }
+
+  // ── Tab render ───────────────────────────────────────────────────
+  function switchTab(tab) {
+    activeTab = tab;
+    document.querySelectorAll('.final-tab').forEach(function (btn) {
+      var active = btn.dataset.tab === tab;
+      btn.style.color             = active ? '#72c073' : 'rgba(247,241,237,0.5)';
+      btn.style.borderBottomColor = active ? '#72c073' : 'transparent';
+    });
+    // Griser le bouton "+ Ajouter" si non-hôte sur l'onglet Jeux
+    var addBtn = document.getElementById('btn-add-more');
+    if (addBtn) {
+      var blocked = tab === 'jeux' && !isHote;
+      addBtn.style.opacity = blocked ? '0.3' : '1';
+      addBtn.style.cursor  = blocked ? 'not-allowed' : 'pointer';
+      addBtn.title         = blocked ? 'Seul l\'hôte peut modifier le jeu' : '';
+    }
+    renderTab();
+  }
+
+  function renderTab() {
+    var el = document.getElementById('tab-content');
+    if (activeTab === 'bars') {
+      if (!bars.length) { el.innerHTML = empty('Aucun bar sélectionné.'); return; }
+      el.innerHTML = bars.map(function (bar) {
+        return card(imgUrl(bar, bar.img), bar.nom, bar.adresse, null);
+      }).join('');
+    } else if (activeTab === 'jeux') {
+      if (!jeux.length) { el.innerHTML = empty('Aucun jeu sélectionné.'); return; }
+      el.innerHTML = jeux.map(function (jeu) {
+        return card(imgUrl(jeu, jeu.img), jeu.nom, jeu.description, null);
+      }).join('');
+    } else if (activeTab === 'amis') {
+      if (!amis.length) { el.innerHTML = empty('Aucun ami invité.'); return; }
+      el.innerHTML = amis.map(function (ami) {
+        var size = 44;
+        var avUrl = imgUrl(ami, ami.avatar);
+        var avHtml = avUrl
+          ? '<img src="' + avUrl + '" alt="' + esc(ami.pseudo) + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />'
+          : '<div style="width:100%;height:100%;background:#347645;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:' + Math.round(size * 0.38) + 'px;">' + esc((ami.pseudo || ami.prenom || '?').charAt(0).toUpperCase()) + '</div>';
+        return '<div style="display:flex;align-items:center;gap:12px;background:#2c2c2c;border-radius:5px;padding:12px;margin-bottom:10px;">' +
+          '<div style="width:44px;height:44px;flex-shrink:0;border-radius:50%;overflow:hidden;">' + avHtml + '</div>' +
+          '<div style="flex:1;min-width:0;"><p style="color:white;font-size:14px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(ami.pseudo || (ami.prenom + ' ' + ami.nom).trim() || 'Utilisateur') + '</p>' +
+            (ami.sam ? '<span style="display:inline-block;background:#f7f1ed;color:#094736;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:4px;">SAM</span>' : '') +
+          '</div>' +
+        '</div>';
+      }).join('');
+    } else {
+      el.innerHTML = '<div style="display:flex;flex-direction:column;gap:16px;">' +
+        param('Nom',         session.nom || '—') +
+        param('Date',        session.date || '—') +
+        param('Heure de départ', session.heure_debut || '—') +
+        (session.description ? param('Description', session.description) : '') +
+      '</div>';
+    }
+  }
+
+  function card(url, title, sub) {
+    return '<div style="display:flex;align-items:center;gap:14px;background:#2c2c2c;border-radius:5px;padding:12px;margin-bottom:10px;">' +
+      '<div style="width:50px;height:50px;flex-shrink:0;border-radius:3px;overflow:hidden;">' + thumb(url, title) + '</div>' +
+      '<div style="flex:1;min-width:0;"><p style="color:white;font-size:14px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(title) + '</p>' +
+        (sub ? '<p style="color:rgba(247,241,237,0.5);font-size:12px;margin:2px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(sub) + '</p>' : '') +
+      '</div></div>';
+  }
+  function empty(msg) {
+    return '<p style="color:rgba(247,241,237,0.5);font-size:14px;font-weight:500;margin:0;">' + esc(msg) + '</p>';
+  }
+  function param(label, value) {
+    return '<div><p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(247,241,237,0.5);margin:0 0 4px;">' + esc(label) + '</p><p style="color:white;font-size:15px;font-weight:500;margin:0;">' + esc(value) + '</p></div>';
+  }
+
+  // ── Modal ────────────────────────────────────────────────────────
+  function openModal(mode) {
+    modalMode = mode;
+    var titles = { bars: 'Ajouter des bars', jeux: 'Ajouter des jeux', amis: 'Ajouter des amis' };
+    document.getElementById('modal-title').textContent   = titles[mode] || 'Ajouter';
+    document.getElementById('modal-search').value        = '';
+    document.getElementById('add-modal').style.display   = 'flex';
+    renderModal('');
+  }
+
+  function closeModal() {
+    document.getElementById('add-modal').style.display = 'none';
+    renderTab();
+  }
+
+  function renderModal(q) {
+    q = (q || '').toLowerCase();
+    var list = document.getElementById('modal-list');
+    var src  = modalMode === 'bars' ? allBars : modalMode === 'jeux' ? allJeux : allUsers;
+    var selFn = function (id) {
+      if (modalMode === 'bars')  return bars.some(function (b) { return b.id === id; });
+      if (modalMode === 'jeux')  return jeux.some(function (j) { return j.id === id; });
+      return amis.some(function (a) { return a.id === id; });
+    };
+    var filtered = src.filter(function (item) {
+      var txt = (item.nom || item.pseudo || '') + ' ' + (item.adresse || item.description || item.prenom || '');
+      return !q || txt.toLowerCase().includes(q);
+    });
+    list.innerHTML = filtered.map(function (item) {
+      var s    = selFn(item.id);
+      var name = esc(item.nom || item.pseudo || (item.prenom + ' ' + (item.nom || '')).trim() || 'Item');
+      var sub  = esc(item.adresse || item.description || '');
+      var file = item.img || item.avatar || null;
+      var isUser = modalMode === 'amis';
+      var thumbEl = isUser
+        ? '<div style="width:44px;height:44px;flex-shrink:0;border-radius:50%;overflow:hidden;">' + avatarHtml(item, 44) + '</div>'
+        : '<div style="width:50px;height:50px;flex-shrink:0;border-radius:3px;overflow:hidden;">' + thumb(imgUrl(item, file), name) + '</div>';
+      return '<div style="display:flex;align-items:center;gap:14px;background:#2c2c2c;border-radius:5px;padding:12px;margin-bottom:8px;">' +
+        thumbEl +
+        '<div style="flex:1;min-width:0;"><p style="color:white;font-size:14px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + name + '</p>' +
+          (sub ? '<p style="color:rgba(247,241,237,0.5);font-size:12px;margin:2px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + sub + '</p>' : '') +
+        '</div>' +
+        '<button data-action="modal-toggle" data-id="' + item.id + '" style="flex-shrink:0;height:32px;padding:0 14px;font-size:13px;font-weight:500;border:none;cursor:pointer;border-radius:3px;background:' + (s ? '#72c073' : '#347645') + ';color:' + (s ? '#094736' : 'white') + ';">' + (s ? '✓' : '+') + '</button>' +
+      '</div>';
+    }).join('') || empty('Aucun résultat.');
+
+    list.querySelectorAll('[data-action="modal-toggle"]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        modalToggle(btn.dataset.id);
+        renderModal(document.getElementById('modal-search').value);
+      });
+    });
+  }
+
+  function modalToggle(id) {
+    if (modalMode === 'bars') {
+      var idx = bars.findIndex(function (b) { return b.id === id; });
+      if (idx >= 0) bars.splice(idx, 1);
+      else { var b = allBars.find(function (b) { return b.id === id; }); if (b) bars.push(b); }
+    } else if (modalMode === 'jeux') {
+      var idx = jeux.findIndex(function (j) { return j.id === id; });
+      if (idx >= 0) jeux.splice(idx, 1);
+      else { var j = allJeux.find(function (j) { return j.id === id; }); if (j) jeux.push(j); }
+    } else {
+      var idx = amis.findIndex(function (a) { return a.id === id; });
+      if (idx >= 0) amis.splice(idx, 1);
+      else { var u = allUsers.find(function (u) { return u.id === id; }); if (u) amis.push(Object.assign({}, u, { sam: false })); }
+    }
+    // Persist to PocketBase (fire-and-forget)
+    patchSession();
+    // Refresh map if bars changed
+    if (modalMode === 'bars') refreshMapMarkers();
+  }
+
+  async function patchSession() {
+    var payload = {
+      id_bar:     bars.map(function (b) { return b.id; }),
+      id_jeux:    jeux.length > 0 ? jeux[0].id : null,
+      id_inviter: amis.map(function (a) { return a.id; }),
+      id_sam:     amis.filter(function (a) { return a.sam; }).map(function (a) { return a.id; }),
+    };
+    try {
+      await fetch(PB_URL + '/api/collections/session_barathon/records/' + session.id, {
+        method:  'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
+        body:    JSON.stringify(payload),
+      });
+    } catch (_) {}
+  }
+
+  // ── Map ──────────────────────────────────────────────────────────
+  var leafletMarkers = [];
+
+  function initMap() {
+    var mapEl = document.getElementById('session-map');
+    mapEl.innerHTML = '';
+
+    function setup() {
+      var center = [47.5072, 6.7955];
+      window._sessionMap = L.map('session-map').setView(center, 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      }).addTo(window._sessionMap);
+      addMarkers();
+    }
+
+    if (window.L) { setup(); return; }
+    var link = document.createElement('link');
+    link.rel  = 'stylesheet';
+    link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    document.head.appendChild(link);
+    var s = document.createElement('script');
+    s.src    = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    s.onload = setup;
+    document.head.appendChild(s);
+  }
+
+  function addMarkers() {
+    var map = window._sessionMap;
+    if (!map) return;
+    leafletMarkers.forEach(function (m) { m.remove(); });
+    leafletMarkers = [];
+    var withCoords = bars.filter(function (b) { return b.lat && b.lon; });
+    withCoords.forEach(function (bar) {
+      var m = L.marker([bar.lat, bar.lon]).addTo(map)
+        .bindPopup('<strong style="color:#347645">' + esc(bar.nom) + '</strong><br>' + esc(bar.adresse));
+      leafletMarkers.push(m);
+    });
+    if (withCoords.length > 0) {
+      var group = L.featureGroup(leafletMarkers);
+      map.fitBounds(group.getBounds().pad(0.3));
+    }
+  }
+
+  function refreshMapMarkers() {
+    if (window._sessionMap) addMarkers();
+  }
+
+  // ── Events ───────────────────────────────────────────────────────
+  document.querySelectorAll('.final-tab').forEach(function (btn) {
+    btn.addEventListener('click', function () { switchTab(btn.dataset.tab); });
+  });
+
+  document.getElementById('btn-add-more').addEventListener('click', function () {
+    var mode = activeTab === 'params' ? 'bars' : activeTab;
+    if (mode === 'jeux' && !isHote) return; // seul l'hôte peut modifier le jeu
+    openModal(mode);
+  });
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('modal-confirm').addEventListener('click', closeModal);
+  document.getElementById('add-modal').addEventListener('click', function (e) { if (e.target === this) closeModal(); });
+  document.getElementById('modal-search').addEventListener('input', function () { renderModal(this.value); });
+
+  // ── Init ─────────────────────────────────────────────────────────
+  renderTab();
+  initMap();
+})();
+</script>
+
+</Layout>
