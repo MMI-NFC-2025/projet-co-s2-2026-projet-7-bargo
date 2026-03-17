@@ -1,0 +1,117 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PbImage from '../components/PbImage.astro';
+import likeIcon     from '../assets/icon/like.svg';
+import likeFillIcon from '../assets/icon/like_fill.svg';
+
+const PB_URL  = 'https://pbbargo.pierre-mouilleseaux-lhuillier.fr';
+const page    = parseInt(Astro.url.searchParams.get('page') ?? '1');
+const perPage = 9; // 3 colonnes × 3 lignes
+
+const res  = await fetch(`${PB_URL}/api/collections/jeux/records?page=${page}&perPage=${perPage}&sort=created`);
+const data = await res.json();
+const jeux       = data.items ?? [];
+const totalPages = Math.ceil((data.totalItems ?? 0) / perPage);
+
+function pageUrl(p) {
+  const u = new URL(Astro.url.href);
+  u.searchParams.set('page', String(p));
+  return u.pathname + u.search;
+}
+---
+
+<Layout title="Nos jeux — Bargo">
+
+  <!-- ===== HERO ===== -->
+  <section class="bg-[#094736] h-[450px] relative">
+    <h1 class="absolute top-[141px] left-[80px] text-white m-0 uppercase">Nos jeux</h1>
+    <p class="absolute top-[268px] left-[80px] text-[#f7f1ed] text-[14px] font-medium w-[547px] m-0 leading-[1.6]">
+      Ici vous pourrez tester des jeux à faire tout au long de votre soirée. Si vous voulez donner
+      votre avis sur les jeux ou si vous avez d'autres idées, n'hésitez pas à nous en parler via
+      mail ou via le <a href="/contact" class="underline hover:opacity-70 transition-opacity">formulaire de contact</a>.
+    </p>
+  </section>
+
+  <!-- ===== GRILLE ===== -->
+  <div class="bg-[#f7f1ed] px-[80px] pt-[58px] pb-[80px]">
+
+    {jeux.length > 0 ? (
+      <div class="grid grid-cols-3 gap-[32px]">
+        {jeux.map(jeu => {
+          const imageFile = Array.isArray(jeu.img) ? jeu.img[0] : jeu.img;
+          return (
+            <div class="h-[532px] bg-white rounded-[2px] shadow-[0px_7px_4px_0px_rgba(0,0,0,0.25)] relative overflow-hidden">
+
+              <!-- Image -->
+              <div class="absolute top-0 left-0 right-0 h-[300px] overflow-hidden rounded-tl-[2px] rounded-tr-[2px]">
+                <PbImage record={jeu} recordImage={imageFile} width={405} height={300} />
+              </div>
+
+              <!-- Nom -->
+              <h3 class="absolute top-[320px] left-[19px] right-[40px] m-0 text-black truncate">{jeu.nom}</h3>
+
+              <!-- Description -->
+              <p class="absolute top-[373px] left-[19px] w-[220px] text-[#646262] text-[16px] font-medium leading-[1.4] m-0 line-clamp-2">
+                {jeu.description}
+              </p>
+
+              <!-- Like -->
+              <button class="like-btn absolute top-[451px] right-[21px] bg-transparent border-0 cursor-pointer p-0" data-id={jeu.id} type="button" aria-label="Ajouter aux favoris">
+                <img src={likeIcon.src} alt="" class="like-empty size-[24px]" />
+                <img src={likeFillIcon.src} alt="" class="like-filled size-[24px] hidden" />
+              </button>
+
+              <!-- Bouton Jouer -->
+              <button type="button"
+                class="absolute top-[442px] bottom-[30px] left-[19px] w-[237px] bg-[#1e1e1e] flex items-center justify-center text-white text-[16px] font-medium hover:opacity-90 transition-opacity cursor-pointer border-0">
+                Jouer
+              </button>
+
+            </div>
+          );
+        })}
+      </div>
+    ) : (
+      <p class="text-[#646262] text-[16px] font-medium">Aucun jeu disponible pour l'instant.</p>
+    )}
+
+  </div>
+
+  <!-- ===== PAGINATION ===== -->
+  {totalPages > 1 && (
+    <div class="bg-[#dfdfdf] h-[248px] flex items-center justify-center gap-[60px]">
+
+      {page > 1 ? (
+        <a href={pageUrl(page - 1)}
+          class="bg-[#1e1e1e] h-[60px] w-[187px] flex items-center justify-center text-white text-[16px] font-medium rounded-[5px] hover:opacity-90 transition-opacity no-underline">
+          Précédent
+        </a>
+      ) : (
+        <div class="h-[60px] w-[187px]"></div>
+      )}
+
+      <div class="flex items-center gap-2">
+        {page > 1 && <span class="text-[25px] font-medium text-[#646262]">&lt;</span>}
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+          <a href={pageUrl(p)} class={`text-[25px] font-medium no-underline ${p === page ? 'text-black font-extrabold' : 'text-[#646262]'}`}>{p}.</a>
+        ))}
+        {page < totalPages && <span class="text-[25px] font-medium text-[#646262]">&gt;</span>}
+      </div>
+
+      {page < totalPages ? (
+        <a href={pageUrl(page + 1)}
+          class="bg-[#347645] h-[60px] w-[187px] flex items-center justify-center text-white text-[16px] font-medium rounded-[5px] hover:opacity-90 transition-opacity no-underline">
+          Suivant
+        </a>
+      ) : (
+        <div class="h-[60px] w-[187px]"></div>
+      )}
+
+    </div>
+  )}
+
+  <script>
+    import '../js/jeux.js';
+  </script>
+
+</Layout>
