@@ -4,107 +4,109 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="Mentions légales — Bargo">
 
-<div class="relative bg-[#f7f1ed] overflow-x-hidden" style="height: 4674px;">
+  <section class="w-full bg-[#f7f1ed]">
+    <div class="max-w-[1440px] mx-auto">
 
-  <!-- H1 -->
-  <h1 class="absolute top-[301px] left-[80px] text-black uppercase m-0 z-[2]">
-    Mentions légales
-  </h1>
+      <!-- H1 — pt-[209px] = 301px (Figma) - 92px (header) -->
+      <div class="px-20 pt-[209px] pb-[162px]">
+        <h1 class="text-black uppercase m-0">Mentions légales</h1>
+      </div>
 
-  <!-- Colonne décorative verte -->
-  <div class="absolute bg-[#094736] z-[1]"
-    style="top: 553px; left: calc(66.67% - 5px); width: 485px; height: 3437px;"></div>
+      <!-- Deux colonnes : contenu gauche (955px) + bloc vert décoratif (485px) -->
+      <!-- Le flex stretch fait que le bloc vert prend exactement la hauteur du contenu -->
+      <div class="flex">
 
-  <!-- ===== Section 1 : Éditeur du site ===== -->
-  <h3 class="absolute left-[80px] text-[#347645] m-0 z-[2]" style="top: 568px;">
-    Éditeur du site
-  </h3>
-  <p class="absolute left-[80px] text-[#646262] text-[16px] font-medium leading-[1.4] m-0 z-[2] w-[760px]" style="top: 670px;">
-    Le site Bargo est édité par l'association étudiante Bargo, dont le siège social est situé à Montbéliard, France.<br /><br />
-    Adresse e-mail : <a href="mailto:contact@bargo.fr" class="text-[#72c073] hover:underline">contact@bargo.fr</a><br />
-    Directeur de la publication : Pierre Mouilleseaux-Lhuillier
-  </p>
+        <!-- Colonne gauche : 955px, pl-20, contenu limité à w-[624px] -->
+        <div class="shrink-0 pl-20 pt-[15px] pb-[120px]" style="width: 955px;">
+          <div class="w-[624px]">
 
-  <!-- ===== Section 2 : Directeur de la publication ===== -->
-  <h3 class="absolute left-[80px] text-[#347645] m-0 z-[2]" style="top: 999px;">
-    Directeur de la publication
-  </h3>
-  <p class="absolute left-[80px] text-[#646262] text-[16px] font-medium leading-[1.4] m-0 z-[2] w-[760px]" style="top: 1101px;">
-    Le directeur de la publication du site Bargo est Pierre Mouilleseaux-Lhuillier, représentant légal de l'association.<br /><br />
-    Adresse e-mail : <a href="mailto:contact@bargo.fr" class="text-[#72c073] hover:underline">contact@bargo.fr</a>
-  </p>
+            <!-- Section 1 : Éditeur du site -->
+            <div>
+              <h3 class="text-[#347645] m-0 mb-[67px]">Éditeur du site</h3>
+              <div class="text-[#646262] text-[16px] font-medium leading-[1.4]">
+                <p class="m-0">le site BARGO est édité par un groupe d'étudiants du BUT Métiers du Multimédia et de l'Internet (MMI) dans le cadre d'un projet de fin de semestre.</p>
+                <p class="m-0 mt-[22px]">Ce projet académique est réalisé à des fins pédagogiques et ne constitue pas une activité commerciale ; il ne forme pas d'entité juridique.</p>
+                <p class="m-0 mt-[22px]">Pour toute question ou remarque concernant le site, vous pouvez contacter l'équipe d'étudiants à l'adresse <a href="mailto:contact@bargo.fr" class="text-[#72c073] hover:underline">contact@bargo.fr</a>.</p>
+              </div>
+            </div>
 
-  <!-- ===== Section 3 : Hébergeur ===== -->
-  <h3 class="absolute left-[80px] text-[#347645] m-0 z-[2]" style="top: 1267px;">
-    Hébergeur
-  </h3>
-  <p class="absolute left-[80px] text-[#646262] text-[16px] font-medium leading-[1.4] m-0 z-[2] w-[760px]" style="top: 1369px;">
-    Le site est hébergé par <span class="text-[#72c073]">Infomaniak Network SA</span>, dont le siège social est situé :<br /><br />
-    Rue Eugène-Marziano 25<br />
-    1227 Les Acacias (Genève)<br />
-    Suisse<br /><br />
-    Site web : <a href="https://www.infomaniak.com" target="_blank" rel="noopener" class="text-[#72c073] hover:underline">www.infomaniak.com</a>
-  </p>
+            <!-- Section 2 : Directeur de la publication -->
+            <div class="mt-[100px]">
+              <h3 class="text-[#347645] m-0 mb-[67px]">Directeur de la publication</h3>
+              <p class="text-[#646262] text-[16px] font-medium leading-[1.4] m-0">
+                la direction de la publication est assurée collectivement par l'équipe de projet, qui veille à la cohérence et à la qualité des contenus publiés dans le cadre de ce travail universitaire.
+              </p>
+            </div>
 
-  <!-- ===== Section 4 : Propriété intellectuelle ===== -->
-  <h3 class="absolute left-[80px] text-[#347645] m-0 z-[2]" style="top: 1601px;">
-    Propriété intellectuelle
-  </h3>
-  <p class="absolute left-[80px] text-[#646262] text-[16px] font-medium leading-[1.4] m-0 z-[2] w-[760px]" style="top: 1703px;">
-    L'ensemble du contenu du site Bargo (textes, images, logos, icônes, sons, logiciels, etc.) est protégé par les lois françaises et internationales relatives à la propriété intellectuelle.<br /><br />
-    Toute reproduction, représentation, modification, publication ou adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite sauf autorisation écrite préalable de l'association Bargo.<br /><br />
-    Toute exploitation non autorisée du site ou de l'un quelconque des éléments qu'il contient est considérée comme constitutive d'une contrefaçon et poursuivie conformément aux dispositions des articles L.335-2 et suivants du Code de la Propriété Intellectuelle.
-  </p>
+            <!-- Section 3 : Hébergeur -->
+            <div class="mt-[100px]">
+              <h3 class="text-[#347645] m-0 mb-[67px]">Hébergeur</h3>
+              <div class="text-[#646262] text-[16px] font-medium leading-[1.4]">
+                <p class="m-0">le site est hébergé par <span class="text-[#72c073]">Infomaniak Network SA</span>, société de droit suisse au capital de 102 000 CHF, dont le siège social est situé Avenue de la Praille 26, 1227 Carouge, Suisse.</p>
+                <p class="m-0 mt-[22px]">Pour toute question relative à l'hébergement, Infomaniak peut être contacté à l'adresse <a href="mailto:support@infomaniak.com" class="text-[#72c073] hover:underline">support@infomaniak.com</a> ou par téléphone au +41 22 820 35 40.</p>
+              </div>
+            </div>
 
-  <!-- ===== Section 5 : Utilisation des images ===== -->
-  <h3 class="absolute left-[80px] text-[#347645] m-0 z-[2]" style="top: 1935px;">
-    Utilisation des images et créations graphiques
-  </h3>
-  <p class="absolute left-[80px] text-[#646262] text-[16px] font-medium leading-[1.4] m-0 z-[2] w-[760px]" style="top: 2037px;">
-    Les images, photographies et créations graphiques présentes sur le site Bargo sont soit la propriété exclusive de l'association, soit utilisées avec l'accord de leurs auteurs respectifs.<br /><br />
-    Toute utilisation, reproduction ou diffusion de ces éléments sans autorisation préalable est strictement interdite.<br /><br />
-    Les bars partenaires ont expressément autorisé l'utilisation de leurs visuels dans le cadre de la promotion de leurs établissements sur la plateforme Bargo.
-  </p>
+            <!-- Section 4 : Propriété intellectuelle -->
+            <div class="mt-[100px]">
+              <h3 class="text-[#347645] m-0 mb-[67px]">Propriété intellectuelle</h3>
+              <div class="text-[#646262] text-[16px] font-medium leading-[1.4]">
+                <p class="m-0">L'ensemble du contenu du site (textes, images, graphismes, logos, vidéos, etc.) est la propriété exclusive de Bargo ou de ses partenaires, sauf mention contraire.</p>
+                <p class="m-0 mt-[22px]">Toute reproduction, représentation ou utilisation, même partielle, des contenus du site sans autorisation préalable est interdite et constitue une contrefaçon susceptible d'entraîner la responsabilité civile et pénale de l'auteur.</p>
+              </div>
+            </div>
 
-  <!-- ===== Section 6 : Responsabilité ===== -->
-  <h3 class="absolute left-[80px] text-[#347645] m-0 z-[2]" style="top: 2335px;">
-    Responsabilité
-  </h3>
-  <p class="absolute left-[80px] text-[#646262] text-[16px] font-medium leading-[1.4] m-0 z-[2] w-[760px]" style="top: 2437px;">
-    L'association Bargo s'efforce d'assurer l'exactitude et la mise à jour des informations diffusées sur ce site. Toutefois, elle ne peut garantir l'exactitude, la précision ou l'exhaustivité des informations mises à disposition.<br /><br />
-    En conséquence, l'association Bargo décline toute responsabilité pour toute imprécision, inexactitude ou omission portant sur des informations disponibles sur ce site, ainsi que pour tout dommage direct ou indirect résultant d'une information erronée ou de l'utilisation du site.<br /><br />
-    L'association Bargo ne pourra être tenue responsable de dommages indirects résultant de l'utilisation du site.
-  </p>
+            <!-- Section 5 : Utilisation des images -->
+            <div class="mt-[100px]">
+              <h3 class="text-[#347645] m-0 mb-[67px]">Utilisation des images et créations graphiques</h3>
+              <div class="text-[#646262] text-[16px] font-medium leading-[1.4]">
+                <p class="m-0">les images illustrant le site sont des visuels libres de droits sélectionnés pour leur adéquation avec l'univers de Bargo.</p>
+                <p class="m-0 mt-[22px]">Pour certains éléments graphiques, tels que les logos ou pictogrammes, nous avons utilisé l'outil d'assistance Copilot afin de produire un rendu plus professionnel.</p>
+                <p class="m-0 mt-[22px]">L'idée et la conception originale de ces éléments restent celles de notre équipe, qui a supervisé et validé chaque création.</p>
+              </div>
+            </div>
 
-  <!-- ===== Section 7 : RGPD ===== -->
-  <h3 class="absolute left-[80px] text-[#347645] m-0 z-[2]" style="top: 2713px;">
-    Protection des données personnelles (RGPD)
-  </h3>
-  <p class="absolute left-[80px] text-[#646262] text-[16px] font-medium leading-[1.4] m-0 z-[2] w-[760px]" style="top: 2815px;">
-    Conformément au Règlement Général sur la Protection des Données (RGPD) du 27 avril 2016 et à la loi Informatique et Libertés du 6 janvier 1978 modifiée, vous disposez des droits suivants concernant vos données personnelles :<br /><br />
-    — Droit d'accès, de rectification et d'effacement de vos données<br />
-    — Droit à la portabilité de vos données<br />
-    — Droit d'opposition et de limitation du traitement<br />
-    — Droit de définir des directives relatives au sort de vos données après votre décès<br /><br />
-    Pour exercer ces droits ou pour toute question relative au traitement de vos données, vous pouvez contacter le responsable de traitement à l'adresse suivante : <a href="mailto:contact@bargo.fr" class="text-[#72c073] hover:underline">contact@bargo.fr</a><br /><br />
-    Vous disposez également du droit d'introduire une réclamation auprès de la Commission Nationale de l'Informatique et des Libertés (CNIL) : <a href="https://www.cnil.fr" target="_blank" rel="noopener" class="text-[#72c073] hover:underline">www.cnil.fr</a><br /><br />
-    Les données collectées sur le site Bargo (adresse e-mail, prénom, etc.) sont utilisées uniquement dans le cadre du service proposé et ne sont jamais cédées à des tiers sans votre consentement explicite.
-  </p>
+            <!-- Section 6 : Responsabilité -->
+            <div class="mt-[100px]">
+              <h3 class="text-[#347645] m-0 mb-[67px]">Responsabilité</h3>
+              <div class="text-[#646262] text-[16px] font-medium leading-[1.4]">
+                <p class="m-0">Bargo s'efforce d'assurer l'exactitude et la mise à jour des informations diffusées sur son site, mais ne peut garantir que les informations sont exactes, complètes ou à jour. L'utilisateur reconnaît utiliser ces informations sous sa responsabilité exclusive.</p>
+                <p class="m-0 mt-[22px]">les mentions légales sont soumises au droit français et toute contestation relative à leur interprétation ou leur exécution relève de la compétence des tribunaux français.</p>
+              </div>
+            </div>
 
-  <!-- ===== Section 8 : Cookies ===== -->
-  <h3 class="absolute left-[80px] text-[#347645] m-0 z-[2]" style="top: 3377px;">
-    Cookies
-  </h3>
-  <p class="absolute left-[80px] text-[#646262] text-[16px] font-medium leading-[1.4] m-0 z-[2] w-[760px]" style="top: 3479px;">
-    Le site Bargo utilise des cookies afin d'améliorer votre expérience de navigation et de mémoriser vos préférences.<br /><br />
-    Un cookie est un petit fichier texte déposé sur votre terminal lors de votre visite. Il permet notamment de :<br /><br />
-    — Maintenir votre session de connexion active<br />
-    — Mémoriser vos préférences de navigation<br />
-    — Mesurer l'audience du site de manière anonyme<br /><br />
-    Vous pouvez à tout moment configurer votre navigateur pour refuser les cookies ou être averti lorsqu'un cookie est déposé. Cependant, certaines fonctionnalités du site pourraient ne plus être disponibles.<br /><br />
-    Pour en savoir plus sur la gestion des cookies, consultez le site de la CNIL : <a href="https://www.cnil.fr" target="_blank" rel="noopener" class="text-[#72c073] hover:underline">www.cnil.fr</a>
-  </p>
+            <!-- Section 7 : RGPD -->
+            <div class="mt-[100px]">
+              <h3 class="text-[#347645] m-0 mb-[67px]">Protection des données personnelles (RGPD)</h3>
+              <div class="text-[#646262] text-[16px] font-medium leading-[1.4]">
+                <p class="m-0">Dans le cadre du projet pédagogique Bargo, certaines données personnelles peuvent être collectées via les formulaires présents sur le site (formulaire de contact, questionnaire, formulaire d'avis).</p>
+                <p class="m-0 mt-[22px]">Les données susceptibles d'être collectées sont notamment : adresse e-mail, nom ou pseudonyme, réponses aux questionnaires.</p>
+                <p class="m-0 mt-[22px]">Ces données sont collectées uniquement à des fins pédagogiques, dans le cadre du projet universitaire, et ne font l'objet d'aucune exploitation commerciale.</p>
+                <p class="m-0 mt-[22px]">Les données sont conservées pour la durée nécessaire au projet, puis supprimées.</p>
+                <p class="m-0 mt-[22px]">Conformément au Règlement Général sur la Protection des Données (RGPD – UE 2016/679), tout utilisateur dispose d'un droit d'accès, de rectification, d'effacement et d'opposition concernant ses données personnelles.</p>
+                <p class="m-0 mt-[22px]">Toute demande peut être adressée à l'adresse suivante : <a href="mailto:contact@bargo.fr" class="text-[#72c073] hover:underline">contact@bargo.fr</a></p>
+                <p class="m-0 mt-[22px]">En cas de réclamation, l'utilisateur peut saisir la CNIL (<a href="https://www.cnil.fr" target="_blank" rel="noopener" class="text-[#72c073] hover:underline">www.cnil.fr</a>).</p>
+              </div>
+            </div>
 
-</div>
+            <!-- Section 8 : Cookies -->
+            <div class="mt-[100px]">
+              <h3 class="text-[#347645] m-0 mb-[67px]">Cookies</h3>
+              <div class="text-[#646262] text-[16px] font-medium leading-[1.4]">
+                <p class="m-0">Le site peut utiliser des cookies strictement nécessaires à son bon fonctionnement technique (navigation, affichage, sécurité).</p>
+                <p class="m-0 mt-[22px]">Aucun cookie publicitaire ou à des fins commerciales n'est utilisé dans le cadre de ce projet pédagogique.</p>
+                <p class="m-0 mt-[22px]">L'utilisateur peut configurer son navigateur afin de refuser tout ou partie des cookies.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Bloc vert décoratif — flex-1 se cale sur la hauteur du contenu gauche -->
+        <div class="flex-1 bg-[#094736]"></div>
+
+      </div>
+    </div>
+  </section>
 
 </Layout>

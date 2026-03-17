@@ -1,0 +1,68 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="404 — Page introuvable · Bargo">
+
+  <section class="w-full min-h-[calc(100vh-92px)] bg-[#f7f1ed] flex flex-col">
+
+    <!-- Header interne -->
+    <div class="border-t-[2px] border-[#094736] py-[28px]">
+      <div class="max-w-[1440px] mx-auto px-20 flex justify-between items-center">
+        <span class="text-[#094736] text-[14px] font-medium leading-[1.1] uppercase tracking-[4px]">
+          BARGO
+        </span>
+        <span class="text-[#646262] text-[14px] font-medium leading-[1.1]">
+          Erreur / Page introuvable
+        </span>
+      </div>
+    </div>
+
+    <!-- Zone 404 — flex-1 pour occuper l'espace -->
+    <div class="flex-1 flex items-center border-b-[2px] border-[#094736] overflow-hidden">
+      <div class="max-w-[1440px] mx-auto px-20 w-full py-[40px]">
+
+        <!-- Gros 404 -->
+        <h1 class="m-0 text-[#094736] leading-none" style="font-size: clamp(160px, 22vw, 340px); letter-spacing: -0.02em;">
+          404
+        </h1>
+
+        <!-- Ligne verte sous le 404 -->
+        <div class="w-full h-[6px] bg-[#72c073]"></div>
+
+      </div>
+    </div>
+
+    <!-- Bas : message + CTAs -->
+    <div class="py-[60px]">
+      <div class="max-w-[1440px] mx-auto px-20 flex justify-between items-center gap-20">
+
+        <!-- Texte -->
+        <div class="flex flex-col gap-4">
+          <h3 class="text-[#1e1e1e] m-0">
+            Cette page a fermé ses portes.
+          </h3>
+          <p class="text-[#646262] text-[16px] font-medium leading-[1.4] m-0">
+            L'adresse que vous cherchez n'existe pas ou a été déplacée.<br />
+            La tournée continue ailleurs.
+          </p>
+        </div>
+
+        <!-- CTAs -->
+        <div class="flex items-center gap-6 shrink-0">
+          <a href="/"
+            class="inline-flex items-center justify-center px-[50px] h-[60px] bg-[#094736] text-white text-[16px] font-medium leading-[1.4] whitespace-nowrap hover:opacity-90 transition-opacity">
+            Retour à l'accueil
+          </a>
+          <a href="/bar"
+            class="inline-flex items-center justify-center px-[50px] h-[60px] border-[2px] border-[#094736] text-[#094736] text-[16px] font-medium leading-[1.4] whitespace-nowrap hover:bg-[#094736] hover:text-white transition-colors">
+            Voir nos bars
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+</Layout>

@@ -1,37 +1,53 @@
 ---
-// Header.astro — navigation principale desktop
-import { Image } from 'astro:assets';
-import logoLight from '../assets/icon/logo-light.svg';
+import logoDark from '../assets/icon/logo-dark.svg';
 import userIcon  from '../assets/icon/user.svg';
 
 const isLoggedIn = !!Astro.cookies.get('pb_token')?.value;
 const profileHref = isLoggedIn ? '/profil' : '/connexion';
+const path = Astro.url.pathname;
 ---
 
-<header class="fixed top-0 left-0 w-full z-50 bg-[#1e1e1e]/50 backdrop-blur-sm">
-  <div class="max-w-[1440px] mx-auto px-20 h-[70px] flex items-center justify-between">
+<header class="fixed top-0 left-0 w-full z-50 bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
+  <div class="max-w-[1440px] mx-auto px-20 h-[92px] flex items-center">
 
     <!-- Logo -->
     <a href="/" class="shrink-0">
-      <Image src={logoLight} alt="Bargo" width="173" height="70" class="h-[70px] w-auto block" />
+      <img src={logoDark.src} alt="Bargo" class="h-[42px] w-auto block" />
     </a>
 
     <!-- Navigation -->
-    <nav class="flex gap-10">
-      <a href="#jeux" class="text-white font-medium text-sm leading-[1.1] hover:opacity-70 transition-opacity">Nos jeux</a>
-      <a href="#apropos" class="text-white font-medium text-sm leading-[1.1] hover:opacity-70 transition-opacity">A propos</a>
-      <a href="#bars" class="text-white font-medium text-sm leading-[1.1] hover:opacity-70 transition-opacity">Nos bars</a>
+    <nav class="flex items-center ml-[52px]">
+      <a href="/bar"
+        class={`px-[35px] py-[25px] font-medium text-[14px] leading-[1.1] text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-[7px] ${path.startsWith('/bar') ? 'border-[#72c073]' : 'border-transparent'}`}>
+        Nos bars
+      </a>
+      <a href="/Apropos"
+        class={`px-[35px] py-[25px] font-medium text-[14px] leading-[1.1] text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-[7px] ${path.startsWith('/Apropos') ? 'border-[#72c073]' : 'border-transparent'}`}>
+        A propos
+      </a>
+      <a href="#jeux"
+        class="px-[35px] py-[25px] font-medium text-[14px] leading-[1.1] text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-[7px] border-transparent">
+        Nos jeux
+      </a>
+      <a href="/boutique"
+        class={`px-[35px] py-[25px] font-medium text-[14px] leading-[1.1] text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-[7px] ${path.startsWith('/boutique') ? 'border-[#72c073]' : 'border-transparent'}`}>
+        Boutique
+      </a>
+      <a href="#abonnement"
+        class="px-[35px] py-[25px] font-medium text-[14px] leading-[1.1] text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-[7px] border-transparent">
+        Abonnement
+      </a>
     </nav>
 
-    <!-- Actions -->
-    <div class="flex items-center gap-6">
-      <!-- Icône profil -->
-      <a href={profileHref} class="hover:opacity-70 transition-opacity" aria-label="Mon profil">
-        <img src={userIcon.src} alt="" width="31" height="31" class="invert" />
-      </a>
+    <!-- Spacer -->
+    <div class="flex-1"></div>
 
-      <!-- CTA -->
-      <a href="/session" class="inline-flex items-center justify-center px-12 py-2 border-2 border-white text-white text-sm font-medium leading-[1.1] hover:bg-white hover:text-[#1e1e1e] transition-colors">
+    <!-- Actions -->
+    <div class="flex items-center gap-[26px]">
+      <a href={profileHref} aria-label="Mon profil" class="hover:opacity-70 transition-opacity">
+        <img src={userIcon.src} alt="" width="31" height="31" />
+      </a>
+      <a href="/session" class="inline-flex items-center justify-center px-[50px] h-[45px] bg-black text-white font-medium text-[14px] leading-[1.1] whitespace-nowrap hover:opacity-80 transition-opacity">
         Crée un barathon
       </a>
     </div>

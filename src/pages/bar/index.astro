@@ -10,18 +10,22 @@ const bars = await getCollection('bar', { sort: 'nom', perPage: 200 });
 <Layout title="Nos bars — Bargo">
 
   <!-- ===== HERO ===== -->
-  <section class="relative w-full h-[542px] bg-[#094736] overflow-hidden">
-    <h1 class="absolute top-[233px] left-[74px] text-white uppercase m-0">
+  <!-- Hauteur 450px = 542px (Figma) - 92px (header fixe) -->
+  <section class="relative w-full h-[450px] bg-[#094736]">
+    <!-- H1 à top-[141px] = 233px (Figma) - 92px (header) -->
+    <h1 class="absolute top-[141px] left-[74px] text-white uppercase m-0">
       Nos bars
     </h1>
-    <p class="absolute top-[247px] left-[calc(50%+16px)] w-[547px] text-[#f7f1ed] text-[16px] font-medium leading-[1.4] m-0">
+    <!-- Description à top-[155px] = 247px (Figma) - 92px (header) -->
+    <p class="absolute top-[155px] left-[calc(50%+16px)] w-[547px] text-[#f7f1ed] text-[16px] font-medium leading-[1.4] m-0">
       Explorez les bars de Montbéliard et choisissez les étapes de votre prochaine tournée.
       Créez un parcours sur mesure pour une soirée organisée et conviviale.
     </p>
   </section>
 
   <!-- ===== GRILLE DES BARS ===== -->
-  <section class="w-full bg-[#f7f1ed] pt-[54px] pb-[120px]">
+  <!-- pt-[53px] = 503px (début cartes Figma - 92px header) - 450px (hero) -->
+  <section class="w-full bg-[#f7f1ed] pt-[53px] pb-[120px]">
     <div class="max-w-[1440px] mx-auto px-20">
 
       {bars.length === 0 && (
@@ -30,41 +34,36 @@ const bars = await getCollection('bar', { sort: 'nom', perPage: 200 });
         </p>
       )}
 
-      <div class="grid grid-cols-2 gap-x-8 gap-y-[154px]">
+      <!-- Grille 3 colonnes — gap-x-[33px] d'après Figma, gap-y-[82px] entre rangées -->
+      <div class="grid grid-cols-3 gap-x-[33px] gap-y-[82px]">
         {bars.map(bar => (
-          <div class="relative bg-white rounded-[5px] h-[673px] overflow-hidden"
-            style="box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.1);">
+          <div class="relative bg-white rounded-[2px] h-[532px] shadow-[0px_7px_4px_0px_rgba(0,0,0,0.25)]">
 
-            <!-- Photo -->
-            <div class="absolute top-0 left-0 right-0 h-[291px] rounded-t-[5px] overflow-hidden">
-              <PbImage record={bar} recordImage={bar.img?.[0]} width={624} height={291} />
+            <!-- Image : 300px tall = inset-[0_0_43.61%_0] × 532 -->
+            <div class="absolute top-0 left-0 right-0 h-[300px] overflow-hidden rounded-tl-[2px] rounded-tr-[2px]">
+              <PbImage record={bar} recordImage={bar.img?.[0]} width={405} height={300} class="w-full h-full object-cover" />
             </div>
 
-            <!-- Nom du bar -->
-            <h2 class="absolute top-[324px] left-[30px] right-[62px] text-[#347645] m-0 font-bold leading-none tracking-[3px] truncate">
+            <!-- Nom du bar : top-[320px] = 60.15% × 532, left-[19px] = 4.69% × 405 -->
+            <h3 class="absolute top-[320px] left-[19px] right-[41px] m-0 text-black">
               {bar.nom}
-            </h2>
+            </h3>
 
-            <!-- Adresse -->
-            <p class="absolute top-[436px] left-[30px] right-[182px] text-[#646262] text-[16px] font-medium leading-[1.4] m-0">
+            <!-- Adresse : top-[373px] = 70.11% × 532 -->
+            <p class="absolute top-[373px] left-[19px] right-[167px] text-[#646262] text-[16px] font-medium leading-[1.4] m-0">
               {bar.adresse ?? ''}
             </p>
 
-            <!-- Bouton "En savoir plus" -->
-            <a href={`/bar/${bar.id}`}
-              class="absolute top-[calc(50%+262.5px)] -translate-y-1/2 left-[30px] inline-flex items-center gap-[15px] bg-[#347645] text-white text-[16px] font-medium leading-[1.4] px-[50px] py-[8px] hover:opacity-90 transition-opacity">
-              En savoir plus
-              <svg width="35" height="35" viewBox="0 0 35 35" fill="none">
-                <path fill-rule="evenodd" clip-rule="evenodd"
-                  d="M7.29167 17.5C7.29167 17.016 7.68401 16.6237 8.16667 16.6237H23.8905L18.3959 11.1291C18.0472 10.7803 18.0472 10.2155 18.3959 9.86675C18.7447 9.51797 19.3095 9.51797 19.6582 9.86675L25.7749 15.9834C26.5251 16.7336 26.5251 17.9581 25.7749 18.7083L19.6582 24.825C19.3095 25.1737 18.7447 25.1737 18.3959 24.825C18.0472 24.4762 18.0472 23.9114 18.3959 23.5626L23.8905 18.0763H8.16667C7.68401 18.0763 7.29167 17.6839 7.29167 17.5Z"
-                  fill="white"/>
-              </svg>
-            </a>
-
-            <!-- Icône cœur -->
-            <div class="absolute bottom-[73px] right-[98px]">
+            <!-- Icône cœur : top-[451px] = 84.77% × 532, right-[21px] = 5.19% × 405 -->
+            <div class="absolute top-[451px] right-[21px] w-[41px] h-[41px] flex items-center justify-center">
               <img src={heartIcon.src} alt="" width="24" height="24" />
             </div>
+
+            <!-- Bouton : top-[442px] = 83.08% × 532, left-[19px], w-[237px] h-[60px] -->
+            <a href={`/bar/${bar.id}`}
+              class="absolute top-[442px] left-[19px] w-[237px] h-[60px] bg-[#1e1e1e] flex items-center justify-center text-white text-[16px] font-medium leading-[1.4] whitespace-nowrap hover:opacity-80 transition-opacity">
+              Choisir mes bars
+            </a>
 
           </div>
         ))}
