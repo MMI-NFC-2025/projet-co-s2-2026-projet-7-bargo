@@ -10,46 +10,46 @@ const bars = await getCollection('bar', { sort: 'nom', perPage: 200 });
 <Layout title="Nos bars — Bargo">
 
   <!-- ===== HERO ===== -->
-  <section class="relative w-full bg-[#094736] h-[280px] lg:h-[450px]">
-    <h1 class="absolute top-[60px] left-[20px] lg:top-[141px] lg:left-[74px] text-white uppercase m-0 text-[40px] lg:text-[90px]">
+  <section class="relative w-full bg-[#094736] h-70 lg:h-112.5">
+    <h1 class="absolute top-15 left-5 lg:top-35.25 lg:left-18.5 text-white uppercase m-0 text-10 lg:text-22.5">
       Nos bars
     </h1>
-    <p class="hidden lg:block absolute top-[155px] left-[calc(50%+16px)] w-[547px] text-[#f7f1ed] text-[16px] font-medium leading-[1.4] m-0">
+    <p class="hidden lg:block absolute top-38.75 left-[calc(50%+16px)] w-136.75 text-[#f7f1ed] text-4 font-medium leading-[1.4] m-0">
       Explorez les bars de Montbéliard et choisissez les étapes de votre prochaine tournée.
       Créez un parcours sur mesure pour une soirée organisée et conviviale.
     </p>
   </section>
 
   <!-- ===== GRILLE DES BARS ===== -->
-  <section class="w-full bg-[#f7f1ed] pt-8 lg:pt-[53px] pb-12 lg:pb-[120px]">
-    <div class="max-w-[1440px] mx-auto px-4 lg:px-20">
+  <section class="w-full bg-[#f7f1ed] pt-8 lg:pt-13.25 pb-12 lg:pb-30">
+    <div class="max-w-360 mx-auto px-4 lg:px-20">
 
       {bars.length === 0 && (
-        <p class="text-[#646262] text-[16px] font-medium text-center py-20">
+        <p class="text-[#646262] text-4 font-medium text-center py-20">
           Aucun bar disponible pour le moment.
         </p>
       )}
 
       <!-- Mobile: 1 col, Desktop: 3 cols -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-x-[33px] lg:gap-y-[82px]">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-x-8.25 lg:gap-y-20.5">
         {bars.map(bar => (
-          <div class="relative bg-white rounded-[2px] shadow-[0px_7px_4px_0px_rgba(0,0,0,0.25)] overflow-hidden">
+          <div class="relative bg-white rounded-0.5 shadow-[0px_7px_4px_0px_rgba(0,0,0,0.25)] overflow-hidden">
 
             <!-- Image -->
-            <div class="w-full h-[200px] lg:h-[300px] overflow-hidden">
+            <div class="w-full h-50 lg:h-75 overflow-hidden">
               <PbImage record={bar} recordImage={bar.img?.[0]} width={405} height={300} class="w-full h-full object-cover" />
             </div>
 
             <!-- Contenu -->
-            <div class="relative p-4 lg:p-0 lg:h-[232px]">
+            <div class="relative p-4 lg:p-0 lg:h-58">
 
               <!-- Nom du bar -->
-              <h3 class="m-0 text-black truncate lg:absolute lg:top-[20px] lg:left-[19px] lg:right-[41px]">
+              <h3 class="m-0 text-black truncate lg:absolute lg:top-5 lg:left-4.75 lg:right-10.25">
                 {bar.nom}
               </h3>
 
               <!-- Adresse -->
-              <p class="mt-2 lg:mt-0 text-[#646262] text-[16px] font-medium leading-[1.4] m-0 lg:absolute lg:top-[73px] lg:left-[19px] lg:right-[167px]">
+              <p class="mt-2 lg:mt-0 text-[#646262] text-4 font-medium leading-[1.4] m-0 lg:absolute lg:top-18.25 lg:left-4.75 lg:right-41.75">
                 {bar.adresse ?? ''}
               </p>
 
@@ -57,11 +57,11 @@ const bars = await getCollection('bar', { sort: 'nom', perPage: 200 });
               <div class="mt-4 lg:mt-0 flex items-center gap-3 lg:block">
                 <!-- Bouton -->
                 <a href={`/bar/${bar.id}`}
-                  class="flex-1 lg:flex-none lg:absolute lg:top-[142px] lg:left-[19px] lg:w-[237px] lg:h-[60px] h-[48px] bg-[#1e1e1e] flex items-center justify-center text-white text-[16px] font-medium whitespace-nowrap hover:opacity-80 transition-opacity">
+                  class="flex-1 lg:flex-none lg:absolute lg:top-35.5 lg:left-4.75 lg:w-59.25 lg:h-15 h-12 bg-[#1e1e1e] flex items-center justify-center text-white text-4 font-medium whitespace-nowrap hover:opacity-80 transition-opacity">
                   Choisir mes bars
                 </a>
                 <!-- Cœur -->
-                <div class="lg:absolute lg:top-[151px] lg:right-[21px] w-[41px] h-[41px] flex items-center justify-center shrink-0">
+                <div class="lg:absolute lg:top-37.75 lg:right-5.25 w-10.25 h-10.25 flex items-center justify-center shrink-0">
                   <img src={heartIcon.src} alt="" width="24" height="24" />
                 </div>
               </div>

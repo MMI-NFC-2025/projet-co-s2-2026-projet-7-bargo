@@ -48,89 +48,89 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
 <Layout title="Bargo — Sortez organisés, rentrez en sécurité">
 
 <!-- ========== HERO ========== -->
-<section class="relative w-full h-[630px] lg:h-[685px] overflow-hidden">
+<section class="relative w-full h-157.5 lg:h-171.25 overflow-hidden">
   <Image src={heroImg} alt="" class="absolute inset-0 w-full h-full object-cover" />
   <div class="absolute inset-0 bg-gradient-to-b from-[rgba(30,30,30,0.7)] to-[#1e1e1e]"></div>
 
-  <h1 class="absolute top-[150px] left-[13px] w-[360px] text-[35px] leading-[1.2] tracking-[2.1px]
-             lg:top-[309px] lg:-translate-y-1/2 lg:left-[80px] lg:w-[1038px] lg:text-[90px] lg:leading-none lg:tracking-[5.4px]
+  <h1 class="absolute top-37.5 left-3.25 w-90 text-8.75 leading-[1.2] tracking-0.525
+             lg:top-77.25 lg:-translate-y-1/2 lg:left-20 lg:w-259.5 lg:text-22.5 lg:leading-none lg:tracking-1.35
              text-white uppercase">
     Sortez organisés rentrez en sécurité
   </h1>
 
-  <p class="absolute top-[375px] left-[13px] w-[265px] text-[14px] leading-[1.1]
-            lg:top-[521px] lg:left-[80px] lg:w-[515px] lg:text-base lg:leading-[1.4]
+  <p class="absolute top-93.75 left-3.25 w-66.25 text-3.5 leading-[1.1]
+            lg:top-130.25 lg:left-20 lg:w-128.75 lg:text-base lg:leading-[1.4]
             text-white font-medium">
     Bargo est la première plateforme qui simplifie l'organisation des soirées entre amis tout en garantissant un retour sécurisé à la maison.
   </p>
 
   <a href="/connexion"
-     class="absolute top-[537px] left-[13px] w-[200px] h-[40px] text-[14px] font-medium
-            lg:top-[544px] lg:left-[calc(75%-16px)] lg:w-[296px] lg:h-[60px] lg:text-base lg:font-bold
+     class="absolute top-134.25 left-3.25 w-50 h-10 text-3.5 font-medium
+            lg:top-136 lg:left-[calc(75%-16px)] lg:w-74 lg:h-15 lg:text-base lg:font-bold
             bg-[#347645] inline-flex items-center justify-center text-white no-underline">
     Découvrir Bargo
   </a>
 </section>
 
 <!-- ========== CE QUE BARGO ========== -->
-<section id="produit" class="relative w-full bg-[#f7f1ed] lg:bg-white overflow-hidden lg:h-[1153px]">
+<section id="produit" class="relative w-full bg-[#f7f1ed] lg:bg-white overflow-hidden lg:h-288.25">
 
   <!-- Desktop image (droite, cachée mobile) -->
-  <div class="hidden lg:block absolute top-[157px] left-[736px] w-[704px] h-[862px] rounded-b-[10px] overflow-hidden">
+  <div class="hidden lg:block absolute top-39.25 left-184 w-176 h-215.5 rounded-b-2.5 overflow-hidden">
     <Image src={cotelImg} alt="Soirée Bargo" class="w-full h-full object-cover block" />
   </div>
 
   <!-- Titre -->
-  <h2 class="px-[19px] pt-[48px] pb-6 text-[25px] font-medium tracking-[-1px] leading-[1.4]
-             lg:absolute lg:top-[157px] lg:left-[80px] lg:px-0 lg:pt-0 lg:pb-0 lg:w-[508px] lg:text-[50px] lg:font-bold lg:tracking-[3px] lg:leading-none
+  <h2 class="px-4.75 pt-12 pb-6 text-6.25 font-medium tracking-[-1px] leading-[1.4]
+             lg:absolute lg:top-39.25 lg:left-20 lg:px-0 lg:pt-0 lg:pb-0 lg:w-127 lg:text-12.5 lg:font-bold lg:tracking-0.75 lg:leading-none
              text-black">
     Ce que Bargo permet de faire
   </h2>
 
   <!-- Feat 1 & 2 (mobile) -->
-  <div class="flex flex-col gap-6 px-[28px] lg:hidden pb-6">
-    <div class="flex flex-col gap-[10px]">
-      <h3 class="text-black text-[16px] font-bold tracking-normal leading-[1.4]">Planifiez votre soirée facilement</h3>
-      <p class="text-[#646262] text-[14px] font-medium leading-[1.1]">Créez une sortie en quelques clics. Choisissez les bars, définissez l'ordre des étapes et préparez votre parcours pour la soirée.</p>
+  <div class="flex flex-col gap-6 px-7 lg:hidden pb-6">
+    <div class="flex flex-col gap-2.5">
+      <h3 class="text-black text-4 font-bold tracking-normal leading-[1.4]">Planifiez votre soirée facilement</h3>
+      <p class="text-[#646262] text-3.5 font-medium leading-[1.1]">Créez une sortie en quelques clics. Choisissez les bars, définissez l'ordre des étapes et préparez votre parcours pour la soirée.</p>
     </div>
-    <div class="flex flex-col gap-[10px]">
-      <h3 class="text-black text-[16px] font-bold tracking-normal leading-[1.4]">Invitez vos amis</h3>
-      <p class="text-[#646262] text-[14px] font-medium leading-[1.1]">Invitez facilement vos amis à rejoindre votre sortie. Chacun peut consulter les informations de la soirée et suivre le parcours prévu.</p>
+    <div class="flex flex-col gap-2.5">
+      <h3 class="text-black text-4 font-bold tracking-normal leading-[1.4]">Invitez vos amis</h3>
+      <p class="text-[#646262] text-3.5 font-medium leading-[1.1]">Invitez facilement vos amis à rejoindre votre sortie. Chacun peut consulter les informations de la soirée et suivre le parcours prévu.</p>
     </div>
   </div>
 
   <!-- Image mobile (entre feat 2 et 3) -->
-  <div class="block lg:hidden w-full h-[306px] overflow-hidden">
+  <div class="block lg:hidden w-full h-76.5 overflow-hidden">
     <Image src={cotelImg} alt="Soirée Bargo" class="w-full h-full object-cover block" />
   </div>
 
   <!-- Feat 3 & 4 (mobile) -->
-  <div class="flex flex-col gap-6 px-[28px] lg:hidden py-6">
-    <div class="flex flex-col gap-[10px]">
-      <h3 class="text-black text-[16px] font-bold tracking-normal leading-[1.4]">Découvrez les bars autour de vous</h3>
-      <p class="text-[#646262] text-[14px] font-medium leading-[1.1]">Bargo intègre une sélection de bars disponibles. Consultez les informations essentielles et créez facilement votre parcours pour la soirée.</p>
+  <div class="flex flex-col gap-6 px-7 lg:hidden py-6">
+    <div class="flex flex-col gap-2.5">
+      <h3 class="text-black text-4 font-bold tracking-normal leading-[1.4]">Découvrez les bars autour de vous</h3>
+      <p class="text-[#646262] text-3.5 font-medium leading-[1.1]">Bargo intègre une sélection de bars disponibles. Consultez les informations essentielles et créez facilement votre parcours pour la soirée.</p>
     </div>
-    <div class="flex flex-col gap-[10px] pb-10">
-      <h3 class="text-black text-[16px] font-bold tracking-normal leading-[1.4]">Débloquez des récompenses</h3>
-      <p class="text-[#646262] text-[14px] font-medium leading-[1.1]">Bargo propose un système de badges et de récompenses pour encourager les sorties responsables. Participez à des barathons et débloquez des récompenses au fil de vos soirées.</p>
+    <div class="flex flex-col gap-2.5 pb-10">
+      <h3 class="text-black text-4 font-bold tracking-normal leading-[1.4]">Débloquez des récompenses</h3>
+      <p class="text-[#646262] text-3.5 font-medium leading-[1.1]">Bargo propose un système de badges et de récompenses pour encourager les sorties responsables. Participez à des barathons et débloquez des récompenses au fil de vos soirées.</p>
     </div>
   </div>
 
   <!-- Feat 1-4 desktop (toutes les 4, absolues) -->
-  <div class="hidden lg:flex absolute top-[334px] left-[80px] w-[516px] flex-col gap-[59px]">
-    <div class="flex flex-col gap-[26px]">
+  <div class="hidden lg:flex absolute top-83.5 left-20 w-129 flex-col gap-14.75">
+    <div class="flex flex-col gap-6.5">
       <h3 class="text-black">Planifiez votre soirée facilement</h3>
       <p class="text-[#646262] text-base font-medium leading-[1.4]">Créez une sortie en quelques clics. Choisissez les bars, définissez l'ordre des étapes et préparez votre parcours pour la soirée.</p>
     </div>
-    <div class="flex flex-col gap-[26px]">
+    <div class="flex flex-col gap-6.5">
       <h3 class="text-black">Invitez vos amis</h3>
       <p class="text-[#646262] text-base font-medium leading-[1.4]">Invitez facilement vos amis à rejoindre votre sortie. Chacun peut consulter les informations de la soirée et suivre le parcours prévu.</p>
     </div>
-    <div class="flex flex-col gap-[26px]">
+    <div class="flex flex-col gap-6.5">
       <h3 class="text-black">Découvrez les bars autour de vous</h3>
       <p class="text-[#646262] text-base font-medium leading-[1.4]">Bargo intègre une sélection de bars disponibles. Consultez les informations essentielles et créez facilement votre parcours pour la soirée.</p>
     </div>
-    <div class="flex flex-col gap-[26px]">
+    <div class="flex flex-col gap-6.5">
       <h3 class="text-black">Débloquez des récompenses</h3>
       <p class="text-[#646262] text-base font-medium leading-[1.4]">Bargo propose un système de badges et de récompenses pour encourager les sorties responsables. Participez à des barathons et débloquez des récompenses au fil de vos soirées.</p>
     </div>
@@ -138,14 +138,14 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
 </section>
 
 <!-- ========== NOS BARS BANNER ========== -->
-<section id="bars" class="relative w-full h-[200px] lg:h-[440px] bg-[#094736]">
-  <h1 class="absolute top-[44px] left-[19px] text-[25px] font-bold tracking-[-1px] leading-[1.4]
-             lg:top-[113px] lg:left-[80px] lg:text-[90px] lg:tracking-[5.4px] lg:leading-none
+<section id="bars" class="relative w-full h-50 lg:h-110 bg-[#094736]">
+  <h1 class="absolute top-11 left-4.75 text-6.25 font-bold tracking-[-1px] leading-[1.4]
+             lg:top-28.25 lg:left-20 lg:text-22.5 lg:tracking-1.35 lg:leading-none
              text-white uppercase whitespace-nowrap">
     NOS BARS
   </h1>
-  <p class="absolute top-[100px] left-[25px] w-[332px] text-[14px] leading-[1.1]
-            lg:top-[128px] lg:left-[736px] lg:w-[547px] lg:text-base lg:leading-[1.4]
+  <p class="absolute top-25 left-6.25 w-83 text-3.5 leading-[1.1]
+            lg:top-32 lg:left-184 lg:w-136.75 lg:text-base lg:leading-[1.4]
             text-[#f7f1ed] font-medium">
     Explorez les bars de Montbéliard et choisissez les étapes de votre prochaine tournée. Créez un parcours sur mesure pour une soirée organisée et conviviale.
   </p>
@@ -153,96 +153,96 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
 
 <!-- ========== BAR CAROUSEL ========== -->
 {barsData.length > 0 && (
-  <section id="lp-bar-carousel" class="relative w-full h-[802px] lg:h-[844px] overflow-hidden bg-[#094736]">
+  <section id="lp-bar-carousel" class="relative w-full h-200.5 lg:h-211 overflow-hidden bg-[#094736]">
 
     <!-- Desktop: parallax panel gauche -->
-    <div id="lp-bg-wrap" class="hidden lg:block absolute left-0 top-0 w-[595px] h-full overflow-hidden rounded-tr-[5px]">
+    <div id="lp-bg-wrap" class="hidden lg:block absolute left-0 top-0 w-148.75 h-full overflow-hidden rounded-tr-1.25">
       <div id="lp-bg-a" class="absolute left-0 top-0 w-full h-full">
         <div id="lp-prlx-a" class="absolute inset-0 bg-cover bg-center" style={`background-image:url('${barsData[0].parallaxUrl}');`}></div>
         <div class="absolute inset-0 bg-gradient-to-t from-[rgba(30,30,30,0.65)] to-transparent pointer-events-none"></div>
         <div class="absolute inset-0 bg-gradient-to-b from-[rgba(30,30,30,0.35)] to-transparent pointer-events-none"></div>
-        <h2 id="lp-nom-a" class="absolute left-[73px] top-[378px] text-white w-[411px] m-0">{barsData[0].nom}</h2>
+        <h2 id="lp-nom-a" class="absolute left-18.25 top-94.5 text-white w-102.75 m-0">{barsData[0].nom}</h2>
       </div>
       <div id="lp-bg-b" class="absolute left-0 top-0 w-full h-full" style="transform:translateY(100%)">
         <div id="lp-prlx-b" class="absolute inset-0 bg-cover bg-center"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-[rgba(30,30,30,0.65)] to-transparent pointer-events-none"></div>
         <div class="absolute inset-0 bg-gradient-to-b from-[rgba(30,30,30,0.35)] to-transparent pointer-events-none"></div>
-        <h2 id="lp-nom-b" class="absolute left-[73px] top-[378px] text-white w-[411px] m-0"></h2>
+        <h2 id="lp-nom-b" class="absolute left-18.25 top-94.5 text-white w-102.75 m-0"></h2>
       </div>
     </div>
 
     <!-- Desktop: card droite -->
-    <div id="lp-card-wrap" class="hidden lg:block absolute left-[517px] top-0 right-0 h-full overflow-hidden">
+    <div id="lp-card-wrap" class="hidden lg:block absolute left-129.25 top-0 right-0 h-full overflow-hidden">
       <div id="lp-card-a" class="absolute left-0 top-0 w-full h-full">
-        <div class="absolute left-0 top-[156px] w-[328px] h-[505px] bg-white rounded-l-[10px] shadow-[-15px_15px_30px_0px_rgba(0,0,0,0.15)]"></div>
-        <p id="lp-adr-a"  class="absolute left-[78px] top-[214px] w-[218px] text-base font-medium leading-[1.4] text-black">{barsData[0].adresse}</p>
-        <p id="lp-desc-a" class="absolute left-[78px] top-[343px] w-[177px] text-sm font-medium leading-[1.1] text-[#646262]">{barsData[0].description}</p>
-        <a id="lp-link-a" href={`/bar/${barsData[0].id}`} class="absolute left-[78px] top-[526px] w-[218px] h-[80px] bg-[#1e1e1e] inline-flex items-center justify-center text-white text-base font-medium no-underline">En savoir plus</a>
-        <div class="absolute left-[328px] top-[156px] w-[438px] h-[505px] rounded-r-[10px] overflow-hidden shadow-[-15px_15px_30px_0px_rgba(0,0,0,0.25)]">
+        <div class="absolute left-0 top-39 w-82 h-126.25 bg-white rounded-l-2.5 shadow-[-15px_15px_30px_0px_rgba(0,0,0,0.15)]"></div>
+        <p id="lp-adr-a"  class="absolute left-19.5 top-53.5 w-54.5 text-base font-medium leading-[1.4] text-black">{barsData[0].adresse}</p>
+        <p id="lp-desc-a" class="absolute left-19.5 top-85.75 w-44.25 text-sm font-medium leading-[1.1] text-[#646262]">{barsData[0].description}</p>
+        <a id="lp-link-a" href={`/bar/${barsData[0].id}`} class="absolute left-19.5 top-131.5 w-54.5 h-20 bg-[#1e1e1e] inline-flex items-center justify-center text-white text-base font-medium no-underline">En savoir plus</a>
+        <div class="absolute left-82 top-39 w-109.5 h-126.25 rounded-r-2.5 overflow-hidden shadow-[-15px_15px_30px_0px_rgba(0,0,0,0.25)]">
           <img id="lp-img-a" src={barsData[0].cardImgUrl || undefined} alt="" class="w-full h-full object-cover block" />
         </div>
       </div>
       <div id="lp-card-b" class="absolute left-0 top-0 w-full h-full" style="transform:translateX(-100%)">
-        <div class="absolute left-0 top-[156px] w-[328px] h-[505px] bg-white rounded-l-[10px] shadow-[-15px_15px_30px_0px_rgba(0,0,0,0.15)]"></div>
-        <p id="lp-adr-b"  class="absolute left-[78px] top-[214px] w-[218px] text-base font-medium leading-[1.4] text-black"></p>
-        <p id="lp-desc-b" class="absolute left-[78px] top-[343px] w-[177px] text-sm font-medium leading-[1.1] text-[#646262]"></p>
-        <a id="lp-link-b" href="#" class="absolute left-[78px] top-[526px] w-[218px] h-[80px] bg-[#1e1e1e] inline-flex items-center justify-center text-white text-base font-medium no-underline">En savoir plus</a>
-        <div class="absolute left-[328px] top-[156px] w-[438px] h-[505px] rounded-r-[10px] overflow-hidden shadow-[-15px_15px_30px_0px_rgba(0,0,0,0.25)]">
+        <div class="absolute left-0 top-39 w-82 h-126.25 bg-white rounded-l-2.5 shadow-[-15px_15px_30px_0px_rgba(0,0,0,0.15)]"></div>
+        <p id="lp-adr-b"  class="absolute left-19.5 top-53.5 w-54.5 text-base font-medium leading-[1.4] text-black"></p>
+        <p id="lp-desc-b" class="absolute left-19.5 top-85.75 w-44.25 text-sm font-medium leading-[1.1] text-[#646262]"></p>
+        <a id="lp-link-b" href="#" class="absolute left-19.5 top-131.5 w-54.5 h-20 bg-[#1e1e1e] inline-flex items-center justify-center text-white text-base font-medium no-underline">En savoir plus</a>
+        <div class="absolute left-82 top-39 w-109.5 h-126.25 rounded-r-2.5 overflow-hidden shadow-[-15px_15px_30px_0px_rgba(0,0,0,0.25)]">
           <img id="lp-img-b" alt="" class="w-full h-full object-cover block" />
         </div>
       </div>
     </div>
 
     <!-- Desktop: navigation -->
-    <button id="lp-bar-prev" aria-label="Bar précédent" class="hidden lg:flex absolute left-[955px] top-[708px] w-[65px] h-[65px] bg-transparent border-0 cursor-pointer items-center justify-center z-10">
-      <div class="absolute w-[46px] h-[46px] bg-[#f7f1ed] rounded-[100px]"></div>
+    <button id="lp-bar-prev" aria-label="Bar précédent" class="hidden lg:flex absolute left-238.75 top-177 w-16.25 h-16.25 bg-transparent border-0 cursor-pointer items-center justify-center z-10">
+      <div class="absolute w-11.5 h-11.5 bg-[#f7f1ed] rounded-25"></div>
       <svg class="relative z-[1]" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 14L6 9L11 4" stroke="#1e1e1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
-    <button id="lp-bar-next" aria-label="Bar suivant" class="hidden lg:flex absolute left-[1064px] top-[708px] w-[65px] h-[65px] bg-transparent border-0 cursor-pointer items-center justify-center z-10">
-      <div class="absolute w-[46px] h-[46px] bg-[#f7f1ed] opacity-50 rounded-[100px]"></div>
+    <button id="lp-bar-next" aria-label="Bar suivant" class="hidden lg:flex absolute left-266 top-177 w-16.25 h-16.25 bg-transparent border-0 cursor-pointer items-center justify-center z-10">
+      <div class="absolute w-11.5 h-11.5 bg-[#f7f1ed] opacity-50 rounded-25"></div>
       <svg class="relative z-[1]" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 4L12 9L7 14" stroke="#1e1e1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
-    <p id="lp-bar-counter" class="hidden lg:block absolute left-[1234px] top-[725px] text-[#f7f1ed] text-base font-medium leading-[1.4] whitespace-nowrap z-10">1 / {barsData.length}</p>
-    <div class="hidden lg:block absolute left-[157px] top-0 w-px h-[270px] bg-[rgba(247,241,237,0.35)] z-10"></div>
-    <div class="hidden lg:block absolute left-[157px] top-[527px] w-px bottom-0 bg-[rgba(247,241,237,0.35)] z-10"></div>
+    <p id="lp-bar-counter" class="hidden lg:block absolute left-308.5 top-181.25 text-[#f7f1ed] text-base font-medium leading-[1.4] whitespace-nowrap z-10">1 / {barsData.length}</p>
+    <div class="hidden lg:block absolute left-39.25 top-0 w-px h-67.5 bg-[rgba(247,241,237,0.35)] z-10"></div>
+    <div class="hidden lg:block absolute left-39.25 top-131.75 w-px bottom-0 bg-[rgba(247,241,237,0.35)] z-10"></div>
 
     <!-- Mobile: carte bar -->
     <div class="block lg:hidden absolute inset-0">
       <!-- Image de fond (moitié basse) -->
-      <div class="absolute left-0 top-[324px] w-full h-[478px] overflow-hidden">
+      <div class="absolute left-0 top-81 w-full h-119.5 overflow-hidden">
         <img id="lp-mob-bg-src" src={barsData[0].parallaxUrl || undefined} alt="" class="w-full h-full object-cover block" />
         <div class="absolute inset-0 bg-gradient-to-b from-[rgba(30,30,30,0)] to-[rgba(30,30,30,0.45)]"></div>
       </div>
 
       <!-- Carte blanche -->
-      <div class="absolute top-[27px] left-[25px] w-[344px] h-[416px] bg-white rounded-[5px] shadow-[-7px_7px_15px_0px_rgba(0,0,0,0.25)] overflow-hidden">
-        <div class="w-full h-[217px] overflow-hidden rounded-t-[5px] shrink-0">
+      <div class="absolute top-6.75 left-6.25 w-86 h-104 bg-white rounded-1.25 shadow-[-7px_7px_15px_0px_rgba(0,0,0,0.25)] overflow-hidden">
+        <div class="w-full h-54.25 overflow-hidden rounded-t-1.25 shrink-0">
           <img id="lp-mob-img" src={barsData[0].cardImgUrl || undefined} alt="" class="w-full h-full object-cover block" />
         </div>
-        <p id="lp-mob-adr"  class="absolute left-[18px] top-[240px] w-[270px] text-base font-medium leading-[1.4] text-[#1e1e1e]">{barsData[0].adresse}</p>
-        <p id="lp-mob-desc" class="absolute left-[18px] top-[287px] w-[200px] text-sm font-medium leading-[1.1] text-[#646262]">{barsData[0].description}</p>
-        <button id="lp-mob-prev" aria-label="Précédent" class="absolute left-[18px] top-[357px] w-[31px] h-[31px] bg-black border-0 rounded-[100px] cursor-pointer flex items-center justify-center">
+        <p id="lp-mob-adr"  class="absolute left-4.5 top-60 w-67.5 text-base font-medium leading-[1.4] text-[#1e1e1e]">{barsData[0].adresse}</p>
+        <p id="lp-mob-desc" class="absolute left-4.5 top-71.75 w-50 text-sm font-medium leading-[1.1] text-[#646262]">{barsData[0].description}</p>
+        <button id="lp-mob-prev" aria-label="Précédent" class="absolute left-4.5 top-89.25 w-7.75 h-7.75 bg-black border-0 rounded-25 cursor-pointer flex items-center justify-center">
           <svg width="10" height="10" viewBox="0 0 14 14" fill="none"><path d="M9 11L4 7L9 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
-        <button id="lp-mob-next" aria-label="Suivant" class="absolute left-[64px] top-[357px] w-[31px] h-[31px] bg-[#646262] border-0 rounded-[100px] cursor-pointer flex items-center justify-center">
+        <button id="lp-mob-next" aria-label="Suivant" class="absolute left-16 top-89.25 w-7.75 h-7.75 bg-[#646262] border-0 rounded-25 cursor-pointer flex items-center justify-center">
           <svg width="10" height="10" viewBox="0 0 14 14" fill="none"><path d="M5 3L10 7L5 11" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
-        <a id="lp-mob-link" href={`/bar/${barsData[0].id}`} class="absolute right-0 top-[353px] w-[162px] h-[40px] bg-[#1e1e1e] inline-flex items-center justify-center text-white text-sm font-medium no-underline">En savoir plus</a>
+        <a id="lp-mob-link" href={`/bar/${barsData[0].id}`} class="absolute right-0 top-88.25 w-40.5 h-10 bg-[#1e1e1e] inline-flex items-center justify-center text-white text-sm font-medium no-underline">En savoir plus</a>
       </div>
 
       <!-- Nom du bar -->
-      <h2 id="lp-mob-nom" class="absolute top-[500px] left-[60px] text-white text-[50px] tracking-[3px] leading-none w-[276px]">{barsData[0].nom}</h2>
+      <h2 id="lp-mob-nom" class="absolute top-125 left-15 text-white text-12.5 tracking-0.75 leading-none w-69">{barsData[0].nom}</h2>
     </div>
 
   </section>
 )}
 
 <!-- ========== VALEURS CAROUSEL ========== -->
-<section id="vision" class="relative w-full h-[736px] lg:h-[761px] overflow-hidden bg-white">
+<section id="vision" class="relative w-full h-184 lg:h-190.25 overflow-hidden bg-white">
 
   <h2 id="lp-values-h2"
-      class="absolute top-[72px] left-[34px] w-[299px] text-[25px] font-medium tracking-[-1px] leading-[1.4]
-             lg:top-[98px] lg:left-[71px] lg:w-[1219px] lg:text-[50px] lg:font-bold lg:tracking-[3px] lg:leading-none
+      class="absolute top-18 left-8.5 w-74.75 text-6.25 font-medium tracking-[-1px] leading-[1.4]
+             lg:top-24.5 lg:left-17.75 lg:w-304.75 lg:text-12.5 lg:font-bold lg:tracking-0.75 lg:leading-none
              text-black z-[5]">
     Ce que vous trouverez en venant chez nous
   </h2>
@@ -252,15 +252,15 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
     {valeurs.map((v, i) => (
       <div class="flex-shrink-0 w-1/3 h-full relative bg-transparent lg:bg-white">
         <!-- Image -->
-        <div class="absolute top-[150px] left-[34px] w-[325px] h-[255px] rounded-[5px] overflow-hidden
-                    lg:top-[218px] lg:left-[517px] lg:w-[843px] lg:h-[400px] lg:rounded-[10px]">
+        <div class="absolute top-37.5 left-8.5 w-81.25 h-63.75 rounded-1.25 overflow-hidden
+                    lg:top-54.5 lg:left-129.25 lg:w-210.75 lg:h-100 lg:rounded-2.5">
           <Image src={valeursImages[i]} alt={v.titre} class="w-full h-full object-cover block" />
         </div>
         <!-- Texte -->
-        <div class="absolute top-[440px] left-[34px] w-[265px] flex flex-col gap-4
-                    lg:top-[261px] lg:left-[80px] lg:w-[296px] lg:gap-[49px]">
-          <h3 class="text-black text-[16px] font-medium tracking-normal leading-[1.4] lg:text-[25px] lg:tracking-[-1px]">{v.titre}</h3>
-          <p class="text-black text-sm font-medium leading-[1.1] lg:text-base lg:leading-[1.4] lg:w-[279px]">{v.texte}</p>
+        <div class="absolute top-110 left-8.5 w-66.25 flex flex-col gap-4
+                    lg:top-65.25 lg:left-20 lg:w-74 lg:gap-12.25">
+          <h3 class="text-black text-4 font-medium tracking-normal leading-[1.4] lg:text-6.25 lg:tracking-[-1px]">{v.titre}</h3>
+          <p class="text-black text-sm font-medium leading-[1.1] lg:text-base lg:leading-[1.4] lg:w-69.75">{v.texte}</p>
         </div>
       </div>
     ))}
@@ -268,83 +268,83 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
 
   <!-- Boutons nav -->
   <button id="lp-val-prev" aria-label="Précédent"
-          class="absolute top-[598px] left-[284px] w-[31px] h-[31px]
-                 lg:top-[575px] lg:left-[80px] lg:w-[43px] lg:h-[43px]
+          class="absolute top-149.5 left-71 w-7.75 h-7.75
+                 lg:top-143.75 lg:left-20 lg:w-10.75 lg:h-10.75
                  bg-transparent border-0 cursor-pointer flex items-center justify-center">
-    <div class="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 w-[22px] h-[22px] lg:w-[30px] lg:h-[30px] bg-black rounded-[100px]"></div>
+    <div class="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 w-5.5 h-5.5 lg:w-7.5 lg:h-7.5 bg-black rounded-25"></div>
     <svg class="relative z-[1]" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 11L4 7L9 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
   <button id="lp-val-next" aria-label="Suivant"
-          class="absolute top-[598px] left-[328px] w-[31px] h-[31px]
-                 lg:top-[575px] lg:left-[142px] lg:w-[43px] lg:h-[43px]
+          class="absolute top-149.5 left-82 w-7.75 h-7.75
+                 lg:top-143.75 lg:left-35.5 lg:w-10.75 lg:h-10.75
                  bg-transparent border-0 cursor-pointer flex items-center justify-center">
-    <div class="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 w-[22px] h-[22px] lg:w-[30px] lg:h-[30px] bg-black opacity-50 rounded-[100px]"></div>
+    <div class="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 w-5.5 h-5.5 lg:w-7.5 lg:h-7.5 bg-black opacity-50 rounded-25"></div>
     <svg class="relative z-[1]" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3L10 7L5 11" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
 
   <!-- En savoir plus -->
   <a href="/Apropos"
-     class="absolute top-[593px] left-[34px] w-[162px] h-[40px] text-sm
-            lg:top-[669px] lg:left-[calc(75%+43px)] lg:w-[237px] lg:h-[60px] lg:text-base lg:font-medium
+     class="absolute top-148.25 left-8.5 w-40.5 h-10 text-sm
+            lg:top-167.25 lg:left-[calc(75%+43px)] lg:w-59.25 lg:h-15 lg:text-base lg:font-medium
             bg-[#347645] inline-flex items-center justify-center text-white no-underline">
     En savoir plus
   </a>
 </section>
 
 <!-- ========== ÉQUIPE ========== -->
-<section id="equipe" class="relative w-full bg-white overflow-hidden lg:h-[1375px]">
+<section id="equipe" class="relative w-full bg-white overflow-hidden lg:h-343.75">
 
   <!-- Titre & descriptions -->
-  <h2 class="px-[34px] pt-0 lg:px-0 lg:absolute lg:top-[106px] lg:left-[80px] lg:w-[657px] text-[25px] font-medium tracking-[-1px] leading-[1.4] lg:text-[50px] lg:font-bold lg:tracking-[3px] lg:leading-none text-black">
+  <h2 class="px-8.5 pt-0 lg:px-0 lg:absolute lg:top-26.5 lg:left-20 lg:w-164.25 text-6.25 font-medium tracking-[-1px] leading-[1.4] lg:text-12.5 lg:font-bold lg:tracking-0.75 lg:leading-none text-black">
     L'équipe derrière Bargo
   </h2>
-  <p class="px-[34px] mt-4 lg:px-0 lg:mt-0 lg:absolute lg:top-[185px] lg:left-[80px] lg:w-[515px] text-[#646262] text-base font-medium leading-[1.4]">
+  <p class="px-8.5 mt-4 lg:px-0 lg:mt-0 lg:absolute lg:top-46.25 lg:left-20 lg:w-128.75 text-[#646262] text-base font-medium leading-[1.4]">
     Bargo est un projet réalisé par une équipe d'étudiants passionnés par le design, le numérique et l'expérience utilisateur.
   </p>
-  <p class="px-[34px] mt-4 lg:px-0 lg:mt-0 lg:absolute lg:top-[273px] lg:left-[80px] lg:w-[405px] text-[#646262] text-base font-medium leading-[1.4]">
+  <p class="px-8.5 mt-4 lg:px-0 lg:mt-0 lg:absolute lg:top-68.25 lg:left-20 lg:w-101.25 text-[#646262] text-base font-medium leading-[1.4]">
     Le projet a été conçu dans le cadre d'un travail de réflexion et de création autour d'une plateforme dédiée à l'organisation des sorties.
   </p>
-  <p class="px-[34px] mt-4 lg:px-0 lg:mt-0 lg:absolute lg:top-[383px] lg:left-[80px] lg:w-[296px] text-[#646262] text-base font-medium leading-[1.4]">
+  <p class="px-8.5 mt-4 lg:px-0 lg:mt-0 lg:absolute lg:top-95.75 lg:left-20 lg:w-74 text-[#646262] text-base font-medium leading-[1.4]">
     Notre objectif était d'imaginer une solution simple, moderne et adaptée aux habitudes des étudiants et jeunes adultes.
   </p>
 
   <!-- Desktop: photos -->
-  <div class="hidden lg:block absolute top-[106px] left-[955px] w-[405px] h-[495px] rounded-[10px] overflow-hidden">
+  <div class="hidden lg:block absolute top-26.5 left-238.75 w-101.25 h-123.75 rounded-2.5 overflow-hidden">
     <Image src={membre3} alt="Alex Ringenbach" class="w-full h-full object-cover block" />
   </div>
-  <h3 class="hidden lg:block absolute top-[655px] left-[955px] text-[#72c073] w-[328px]">Alex Ringenbach</h3>
-  <p class="hidden lg:block absolute top-[707px] left-[955px] text-black text-base font-medium leading-[1.4] w-[296px]">Communication</p>
-  <p class="hidden lg:block absolute top-[771px] left-[955px] text-[#646262] text-sm font-medium leading-[1.1] w-[328px]">Gère l'image et la visibilité du projet. Il s'occupe de la stratégie de communication et du lien avec la communauté.</p>
+  <h3 class="hidden lg:block absolute top-163.75 left-238.75 text-[#72c073] w-82">Alex Ringenbach</h3>
+  <p class="hidden lg:block absolute top-176.75 left-238.75 text-black text-base font-medium leading-[1.4] w-74">Communication</p>
+  <p class="hidden lg:block absolute top-192.75 left-238.75 text-[#646262] text-sm font-medium leading-[1.1] w-82">Gère l'image et la visibilité du projet. Il s'occupe de la stratégie de communication et du lien avec la communauté.</p>
 
-  <div class="hidden lg:block absolute top-[326px] left-[517px] w-[406px] h-[495px] rounded-[10px] overflow-hidden">
+  <div class="hidden lg:block absolute top-81.5 left-129.25 w-101.5 h-123.75 rounded-2.5 overflow-hidden">
     <Image src={membre2} alt="Pierre Mouilleseaux-Lhuillier" class="w-full h-full object-cover block" />
   </div>
-  <h3 class="hidden lg:block absolute top-[875px] left-[517px] text-[#72c073] w-[405px]">Pierre Mouilleseaux-Lhuillier</h3>
-  <p class="hidden lg:block absolute top-[927px] left-[517px] text-black text-base font-medium leading-[1.4] w-[219px]">Développeur</p>
-  <p class="hidden lg:block absolute top-[991px] left-[517px] text-[#646262] text-sm font-medium leading-[1.1] w-[345px]">Développe et structure la plateforme. Il transforme les idées en fonctionnalités concrètes et assure le bon fonctionnement du site.</p>
+  <h3 class="hidden lg:block absolute top-218.75 left-129.25 text-[#72c073] w-101.25">Pierre Mouilleseaux-Lhuillier</h3>
+  <p class="hidden lg:block absolute top-231.75 left-129.25 text-black text-base font-medium leading-[1.4] w-54.75">Développeur</p>
+  <p class="hidden lg:block absolute top-247.75 left-129.25 text-[#646262] text-sm font-medium leading-[1.1] w-86.25">Développe et structure la plateforme. Il transforme les idées en fonctionnalités concrètes et assure le bon fonctionnement du site.</p>
 
-  <div class="hidden lg:block absolute top-[546px] left-[80px] w-[405px] h-[495px] rounded-[10px] overflow-hidden">
+  <div class="hidden lg:block absolute top-136.5 left-20 w-101.25 h-123.75 rounded-2.5 overflow-hidden">
     <Image src={membre1} alt="Melvyn Philippon" class="w-full h-full object-cover block" />
   </div>
-  <h3 class="hidden lg:block absolute top-[1095px] left-[80px] text-[#72c073] w-[328px]">Melvyn Philippon</h3>
-  <p class="hidden lg:block absolute top-[1146px] left-[80px] text-black text-base font-medium leading-[1.4] w-[187px]">Designer</p>
-  <p class="hidden lg:block absolute top-[1211px] left-[80px] text-[#646262] text-sm font-medium leading-[1.1] w-[346px]">Conçoit l'identité visuelle et l'expérience utilisateur. Il veille à la cohérence graphique et à la simplicité d'utilisation de la plateforme.</p>
+  <h3 class="hidden lg:block absolute top-273.75 left-20 text-[#72c073] w-82">Melvyn Philippon</h3>
+  <p class="hidden lg:block absolute top-286.5 left-20 text-black text-base font-medium leading-[1.4] w-46.75">Designer</p>
+  <p class="hidden lg:block absolute top-302.75 left-20 text-[#646262] text-sm font-medium leading-[1.1] w-86.5">Conçoit l'identité visuelle et l'expérience utilisateur. Il veille à la cohérence graphique et à la simplicité d'utilisation de la plateforme.</p>
 
   <!-- Mobile: membres empilés -->
-  <div class="flex lg:hidden flex-col gap-8 px-[24px] pt-8 pb-12">
+  <div class="flex lg:hidden flex-col gap-8 px-6 pt-8 pb-12">
     {[
-      { img: membre1, alt: 'Melvyn Philippon', nom: 'Melvyn Philippon', role: 'Designer', bio: "Conçoit l'identité visuelle et l'expérience utilisateur. Il veille à la cohérence graphique et à la simplicité d'utilisation de la plateforme.", pl: 'pl-[29px]' },
-      { img: membre2, alt: 'Pierre Mouilleseaux-Lhuillier', nom: 'Pierre Mouilleseaux-Lhuillier', role: 'Développeur', bio: "Développe et structure la plateforme. Il transforme les idées en fonctionnalités concrètes et assure le bon fonctionnement du site.", pl: 'pl-[17px]' },
-      { img: membre3, alt: 'Alex Ringenbach', nom: 'Alex Ringenbach', role: 'Communication', bio: "Gère l'image et la visibilité du projet. Il s'occupe de la stratégie de communication et du lien avec la communauté.", pl: 'pl-[33px]' },
+      { img: membre1, alt: 'Melvyn Philippon', nom: 'Melvyn Philippon', role: 'Designer', bio: "Conçoit l'identité visuelle et l'expérience utilisateur. Il veille à la cohérence graphique et à la simplicité d'utilisation de la plateforme.", pl: 'pl-7.25' },
+      { img: membre2, alt: 'Pierre Mouilleseaux-Lhuillier', nom: 'Pierre Mouilleseaux-Lhuillier', role: 'Développeur', bio: "Développe et structure la plateforme. Il transforme les idées en fonctionnalités concrètes et assure le bon fonctionnement du site.", pl: 'pl-4.25' },
+      { img: membre3, alt: 'Alex Ringenbach', nom: 'Alex Ringenbach', role: 'Communication', bio: "Gère l'image et la visibilité du projet. Il s'occupe de la stratégie de communication et du lien avec la communauté.", pl: 'pl-8.25' },
     ].map(m => (
       <div class="flex items-start">
-        <div class="shrink-0 w-[95px] h-[161px] rounded-[100px] overflow-hidden">
+        <div class="shrink-0 w-23.75 h-40.25 rounded-25 overflow-hidden">
           <Image src={m.img} alt={m.alt} class="w-full h-full object-cover block" />
         </div>
         <div class={m.pl}>
-          <p class="text-[#72c073] text-base font-medium leading-[1.4] mb-[2px]">{m.nom}</p>
+          <p class="text-[#72c073] text-base font-medium leading-[1.4] mb-0.5">{m.nom}</p>
           <p class="text-sm font-medium leading-[1.1] text-black mb-2">{m.role}</p>
-          <p class="text-sm font-medium leading-[1.1] text-[#646262] w-[204px]">{m.bio}</p>
+          <p class="text-sm font-medium leading-[1.1] text-[#646262] w-51">{m.bio}</p>
         </div>
       </div>
     ))}
@@ -352,64 +352,64 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
 </section>
 
 <!-- ========== INTÉRESSÉ ? ========== -->
-<section id="lp-interested" class="relative w-full h-[870px] lg:h-[1160px] overflow-hidden">
-  <div class="absolute left-0 top-0 w-full lg:w-[813px] h-full bg-[#1e1e1e]"></div>
-  <div class="hidden lg:block absolute left-[calc(8.33%+92px)] top-0 w-[1228px] h-full overflow-hidden">
+<section id="lp-interested" class="relative w-full h-217.5 lg:h-290 overflow-hidden">
+  <div class="absolute left-0 top-0 w-full lg:w-203.25 h-full bg-[#1e1e1e]"></div>
+  <div class="hidden lg:block absolute left-[calc(8.33%+92px)] top-0 w-307 h-full overflow-hidden">
     <Image src={carouselImg} alt="" class="w-full h-full object-cover block" />
   </div>
-  <div class="absolute left-0 top-0 w-full lg:w-[813px] h-full bg-[rgba(30,30,30,0.85)]"></div>
+  <div class="absolute left-0 top-0 w-full lg:w-203.25 h-full bg-[rgba(30,30,30,0.85)]"></div>
 
-  <h1 class="absolute top-[44px] left-[28px] text-[25px] font-bold tracking-[-1px] leading-[1.4] whitespace-nowrap
-             lg:top-[52px] lg:left-[80px] lg:text-[90px] lg:tracking-[5.4px] lg:leading-none lg:w-[833px]
+  <h1 class="absolute top-11 left-7 text-6.25 font-bold tracking-[-1px] leading-[1.4] whitespace-nowrap
+             lg:top-13 lg:left-20 lg:text-22.5 lg:tracking-1.35 lg:leading-none lg:w-208.25
              text-white uppercase">
     INTÉRESSÉ ?
   </h1>
-  <p class="absolute top-[101px] left-[28px] w-[332px]
-            lg:top-[193px] lg:left-[80px] lg:w-[547px]
+  <p class="absolute top-25.25 left-7 w-83
+            lg:top-48.25 lg:left-20 lg:w-136.75
             text-white text-base font-medium leading-[1.4]">
     Rejoignez Bargo et découvrez une nouvelle façon de préparer vos soirées entre amis. Planifiez votre parcours, invitez votre groupe et profitez pleinement de votre soirée.
   </p>
 
   <!-- Pseudo -->
-  <p class="absolute top-[257px] left-[28px] lg:top-[316px] lg:left-[80px] text-white text-base font-medium leading-[1.4] whitespace-nowrap">Pseudo</p>
-  <div class="absolute top-[293px] left-[28px] w-[334px] h-[35px] lg:top-[356px] lg:left-[80px] lg:w-[624px] lg:h-[62px] bg-[#f7f1ed] rounded-[3px]">
-    <input id="lp-reg-pseudo" type="text" placeholder="VotreNom" class="w-full h-full bg-transparent border-0 px-[33px] text-sm font-medium text-[#646262] outline-none" />
+  <p class="absolute top-64.25 left-7 lg:top-79 lg:left-20 text-white text-base font-medium leading-[1.4] whitespace-nowrap">Pseudo</p>
+  <div class="absolute top-73.25 left-7 w-83.5 h-8.75 lg:top-89 lg:left-20 lg:w-156 lg:h-15.5 bg-[#f7f1ed] rounded-0.75">
+    <input id="lp-reg-pseudo" type="text" placeholder="VotreNom" class="w-full h-full bg-transparent border-0 px-8.25 text-sm font-medium text-[#646262] outline-none" />
   </div>
 
   <!-- E-mail -->
-  <p class="absolute top-[350px] left-[28px] lg:top-[452px] lg:left-[80px] text-white text-base font-medium leading-[1.4] whitespace-nowrap">Adresse E-mail</p>
-  <div class="absolute top-[386px] left-[28px] w-[334px] h-[35px] lg:top-[492px] lg:left-[80px] lg:w-[624px] lg:h-[62px] bg-[#f7f1ed] rounded-[3px]">
-    <input id="lp-reg-email" type="email" placeholder="exemple@mail.com" class="w-full h-full bg-transparent border-0 px-[33px] text-sm font-medium text-[#646262] outline-none" />
+  <p class="absolute top-87.5 left-7 lg:top-113 lg:left-20 text-white text-base font-medium leading-[1.4] whitespace-nowrap">Adresse E-mail</p>
+  <div class="absolute top-96.5 left-7 w-83.5 h-8.75 lg:top-123 lg:left-20 lg:w-156 lg:h-15.5 bg-[#f7f1ed] rounded-0.75">
+    <input id="lp-reg-email" type="email" placeholder="exemple@mail.com" class="w-full h-full bg-transparent border-0 px-8.25 text-sm font-medium text-[#646262] outline-none" />
   </div>
 
   <!-- Mot de passe -->
-  <p class="absolute top-[443px] left-[28px] lg:top-[588px] lg:left-[80px] text-white text-base font-medium leading-[1.4] whitespace-nowrap">Mot de passe</p>
-  <div class="absolute top-[479px] left-[28px] w-[334px] h-[35px] lg:top-[628px] lg:left-[80px] lg:w-[624px] lg:h-[62px] bg-[#f7f1ed] rounded-[3px]">
-    <input id="lp-reg-password" type="password" placeholder="••••••••" class="w-full h-full bg-transparent border-0 px-[33px] text-sm font-medium text-[#646262] outline-none" />
+  <p class="absolute top-110.75 left-7 lg:top-147 lg:left-20 text-white text-base font-medium leading-[1.4] whitespace-nowrap">Mot de passe</p>
+  <div class="absolute top-119.75 left-7 w-83.5 h-8.75 lg:top-157 lg:left-20 lg:w-156 lg:h-15.5 bg-[#f7f1ed] rounded-0.75">
+    <input id="lp-reg-password" type="password" placeholder="••••••••" class="w-full h-full bg-transparent border-0 px-8.25 text-sm font-medium text-[#646262] outline-none" />
   </div>
 
   <!-- Confirmation mot de passe -->
-  <p class="absolute top-[536px] left-[28px] lg:top-[724px] lg:left-[80px] text-white text-base font-medium leading-[1.4] whitespace-nowrap">Confirmation mot de passe</p>
-  <div class="absolute top-[572px] left-[28px] w-[334px] h-[35px] lg:top-[764px] lg:left-[80px] lg:w-[624px] lg:h-[62px] bg-[#f7f1ed] rounded-[3px]">
-    <input id="lp-reg-confirm" type="password" placeholder="••••••••" class="w-full h-full bg-transparent border-0 px-[33px] text-sm font-medium text-[#646262] outline-none" />
+  <p class="absolute top-134 left-7 lg:top-181 lg:left-20 text-white text-base font-medium leading-[1.4] whitespace-nowrap">Confirmation mot de passe</p>
+  <div class="absolute top-143 left-7 w-83.5 h-8.75 lg:top-191 lg:left-20 lg:w-156 lg:h-15.5 bg-[#f7f1ed] rounded-0.75">
+    <input id="lp-reg-confirm" type="password" placeholder="••••••••" class="w-full h-full bg-transparent border-0 px-8.25 text-sm font-medium text-[#646262] outline-none" />
   </div>
 
-  <label for="lp-reg-cgu" class="absolute top-[630px] left-[28px] lg:top-[848px] lg:left-[80px] flex items-center gap-[22px] cursor-pointer">
-    <div class="relative w-[25px] h-[25px] flex-shrink-0 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
+  <label for="lp-reg-cgu" class="absolute top-157.5 left-7 lg:top-212 lg:left-20 flex items-center gap-5.5 cursor-pointer">
+    <div class="relative w-6.25 h-6.25 flex-shrink-0 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
       <input id="lp-reg-cgu" type="checkbox" class="peer absolute inset-0 w-full h-full opacity-0 cursor-pointer m-0" />
-      <div class="absolute inset-0 border-[3px] border-white peer-checked:bg-[#72C073] peer-checked:border-[#72C073] pointer-events-none"></div>
-      <svg class="absolute inset-0 m-auto w-[13px] h-[13px] opacity-0 peer-checked:opacity-100 pointer-events-none" viewBox="0 0 13 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <div class="absolute inset-0 border-0.75 border-white peer-checked:bg-[#72C073] peer-checked:border-[#72C073] pointer-events-none"></div>
+      <svg class="absolute inset-0 m-auto w-3.25 h-3.25 opacity-0 peer-checked:opacity-100 pointer-events-none" viewBox="0 0 13 10" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M1 4.5L5 8.5L12 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
-    <span class="text-white text-sm lg:text-base font-medium leading-[1.4] w-[250px] lg:whitespace-nowrap">J'accepte les conditions d'utilisation</span>
+    <span class="text-white text-sm lg:text-base font-medium leading-[1.4] w-62.5 lg:whitespace-nowrap">J'accepte les conditions d'utilisation</span>
   </label>
 
-  <p id="lp-reg-msg" class="absolute top-[678px] left-[28px] lg:top-[910px] lg:left-[80px] text-sm font-medium leading-[1.4] hidden"></p>
+  <p id="lp-reg-msg" class="absolute top-169.5 left-7 lg:top-227.5 lg:left-20 text-sm font-medium leading-[1.4] hidden"></p>
 
   <button id="lp-reg-btn" type="button"
-          class="absolute top-[714px] left-[200px] w-[162px] h-[40px] text-sm
-                 lg:top-[960px] lg:left-[calc(25%+107px)] lg:w-[237px] lg:h-[60px] lg:text-base
+          class="absolute top-178.5 left-50 w-40.5 h-10 text-sm
+                 lg:top-240 lg:left-[calc(25%+107px)] lg:w-59.25 lg:h-15 lg:text-base
                  bg-transparent border-2 border-white text-white font-medium cursor-pointer inline-flex items-center justify-center">
     S'inscrire
   </button>

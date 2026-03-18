@@ -43,11 +43,11 @@ const hasMap = lat !== 0 && lon !== 0;
 <div class="block lg:hidden bg-[#f7f1ed]">
 
   <!-- Photo hero -->
-  <div class="relative w-full h-[260px] overflow-hidden">
+  <div class="relative w-full h-65 overflow-hidden">
     <PbImage record={bar} recordImage={bar.img?.[0]} width={800} height={400} />
     <div class="absolute inset-0 pointer-events-none"
       style="background: linear-gradient(to bottom, rgba(30,30,30,0) 30%, rgba(30,30,30,0.85) 100%);"></div>
-    <h1 class="absolute bottom-[16px] left-[16px] text-white uppercase m-0 text-[32px] leading-tight">{bar.nom}</h1>
+    <h1 class="absolute bottom-4 left-4 text-white uppercase m-0 text-8 leading-tight">{bar.nom}</h1>
   </div>
 
   <!-- Icônes réseaux + actions -->
@@ -67,26 +67,26 @@ const hasMap = lat !== 0 && lon !== 0;
 
   <!-- Description -->
   <div class="px-5 py-6 bg-white">
-    <p class="text-[#646262] text-[16px] font-medium leading-[1.4] m-0">{bar.description ?? ''}</p>
+    <p class="text-[#646262] text-4 font-medium leading-[1.4] m-0">{bar.description ?? ''}</p>
   </div>
 
   <!-- Infos : Adresse, Spécialités, Disponibilité, Contact -->
   <div class="bg-[#1e1e1e] px-5 py-6 flex flex-col gap-6">
     <div>
       <h3 class="text-white m-0 mb-2">Adresse</h3>
-      <p class="text-[#dfdfdf] text-[16px] font-medium leading-[1.4] m-0">{bar.adresse ?? '—'}</p>
+      <p class="text-[#dfdfdf] text-4 font-medium leading-[1.4] m-0">{bar.adresse ?? '—'}</p>
     </div>
     <div>
       <h3 class="text-white m-0 mb-2">Spécialités</h3>
-      <p class="text-[#dfdfdf] text-[16px] font-medium leading-[1.4] m-0">{bar.specialites ?? '—'}</p>
+      <p class="text-[#dfdfdf] text-4 font-medium leading-[1.4] m-0">{bar.specialites ?? '—'}</p>
     </div>
     <div>
       <h3 class="text-white m-0 mb-2">Disponibilité</h3>
-      <p class="text-[#dfdfdf] text-[16px] font-medium leading-[1.4] m-0">{bar.disponibilite ?? '—'}</p>
+      <p class="text-[#dfdfdf] text-4 font-medium leading-[1.4] m-0">{bar.disponibilite ?? '—'}</p>
     </div>
     <div>
       <h3 class="text-white m-0 mb-2">Contact</h3>
-      <p class="text-[#dfdfdf] text-[16px] font-medium leading-[1.4] m-0">
+      <p class="text-[#dfdfdf] text-4 font-medium leading-[1.4] m-0">
         {bar.liens
           ? <a href={bar.liens} target="_blank" rel="noopener" class="text-[#72c073] hover:underline">{bar.liens}</a>
           : '—'
@@ -102,12 +102,12 @@ const hasMap = lat !== 0 && lon !== 0;
       {jours.map((jour) => {
         const isFerme = !jour.value || jour.value.toLowerCase().includes('ferm');
         return (
-          <div class="h-[47px] rounded-[5px] overflow-hidden flex shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25)]">
-            <div class="w-[110px] shrink-0 bg-[#347645] flex items-center justify-center">
-              <span class="text-[#f7f1ed] text-[14px] font-medium">{jour.label}</span>
+          <div class="h-11.75 rounded-1.25 overflow-hidden flex shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25)]">
+            <div class="w-27.5 shrink-0 bg-[#347645] flex items-center justify-center">
+              <span class="text-[#f7f1ed] text-3.5 font-medium">{jour.label}</span>
             </div>
             <div class="flex-1 bg-[#f7f1ed] flex items-center px-4">
-              <span class={`text-[14px] font-medium ${isFerme ? 'text-[#646262]' : 'text-black'}`}>
+              <span class={`text-3.5 font-medium ${isFerme ? 'text-[#646262]' : 'text-black'}`}>
                 {jour.value || 'Fermé'}
               </span>
             </div>
@@ -122,22 +122,22 @@ const hasMap = lat !== 0 && lon !== 0;
     data-lat={lat}
     data-lon={lon}
     data-name={bar.nom}
-    class="w-full h-[280px] bg-[#dfdfdf] flex items-center justify-center">
+    class="w-full h-70 bg-[#dfdfdf] flex items-center justify-center">
     {!hasMap && (
-      <p class="text-[#646262] text-[16px] font-medium m-0">Localisation non disponible</p>
+      <p class="text-[#646262] text-4 font-medium m-0">Localisation non disponible</p>
     )}
   </div>
 
   <!-- Galerie -->
   {galerie.length > 0 && (
     <div class="px-5 py-6 bg-[#f7f1ed]">
-      <h2 class="text-black m-0 mb-4 text-[28px]">Galerie</h2>
-      <p class="text-[#646262] text-[14px] font-medium leading-[1.4] m-0 mb-5">
+      <h2 class="text-black m-0 mb-4 text-7">Galerie</h2>
+      <p class="text-[#646262] text-3.5 font-medium leading-[1.4] m-0 mb-5">
         Explorez une sélection variée de cocktails et de bières, idéale pour partager un moment entre amis.
       </p>
       <div class="grid grid-cols-2 gap-3">
         {galerie.slice(0, 6).map((img) => (
-          <div class="h-[140px] rounded-[5px] overflow-hidden">
+          <div class="h-35 rounded-1.25 overflow-hidden">
             <img src={getImageUrl(bar, img)} alt={bar.nom}
               class="w-full h-full object-cover" loading="lazy" />
           </div>
@@ -154,75 +154,75 @@ const hasMap = lat !== 0 && lon !== 0;
 <div class="hidden lg:block relative bg-[#f7f1ed] overflow-x-hidden" style="height: 3312px;">
 
   <!-- Photo pleine largeur -->
-  <div class="absolute top-0 left-0 w-full h-[530px] overflow-hidden">
+  <div class="absolute top-0 left-0 w-full h-132.5 overflow-hidden">
     <PbImage record={bar} recordImage={bar.img?.[0]} width={1440} height={530} />
   </div>
 
   <!-- Gradient overlay -->
-  <div class="absolute top-[70px] left-0 w-full h-[460px] pointer-events-none"
+  <div class="absolute top-17.5 left-0 w-full h-115 pointer-events-none"
     style="background: linear-gradient(to bottom, rgba(30,30,30,0) 0%, rgba(30,30,30,0.9) 100%);"></div>
 
   <!-- Nom du bar -->
-  <h1 class="absolute top-[382px] left-[80px] text-white uppercase m-0 z-[2]">
+  <h1 class="absolute top-95.5 left-20 text-white uppercase m-0 z-[2]">
     {bar.nom}
   </h1>
 
   <!-- Icônes réseaux sociaux -->
-  <div class="absolute top-[449px] z-[2]" style="left: calc(83.33% - 17px)">
+  <div class="absolute top-112.25 z-[2]" style="left: calc(83.33% - 17px)">
     <img src={instaIcon.src}   alt="Instagram" width="24" height="24" class="invert" />
   </div>
-  <div class="absolute top-[449px] z-[2]" style="left: calc(83.33% + 32px)">
+  <div class="absolute top-112.25 z-[2]" style="left: calc(83.33% + 32px)">
     <img src={linkedinIcon.src} alt="LinkedIn" width="24" height="24" class="invert" />
   </div>
-  <div class="absolute top-[449px] z-[2]" style="left: calc(91.67% - 39px)">
+  <div class="absolute top-112.25 z-[2]" style="left: calc(91.67% - 39px)">
     <img src={discordIcon.src}  alt="Discord"   width="24" height="24" class="invert" />
   </div>
-  <div class="absolute top-[449px] z-[2]" style="left: calc(91.67% + 10px)">
+  <div class="absolute top-112.25 z-[2]" style="left: calc(91.67% + 10px)">
     <img src={fbIcon.src}       alt="Facebook"  width="24" height="24" class="invert" />
   </div>
 
   <!-- Actions -->
-  <div class="absolute top-[602px] z-[2]" style="left: calc(83.33% - 17px)">
+  <div class="absolute top-150.5 z-[2]" style="left: calc(83.33% - 17px)">
     <img src={notifIcon.src}   alt="Notifier" width="24" height="24" />
   </div>
-  <div class="absolute top-[602px] z-[2]" style="left: calc(83.33% + 32px)">
+  <div class="absolute top-150.5 z-[2]" style="left: calc(83.33% + 32px)">
     <img src={partageIcon.src} alt="Partager" width="24" height="24" />
   </div>
-  <div class="absolute top-[602px] z-[2]" style="left: calc(91.67% - 39px)">
+  <div class="absolute top-150.5 z-[2]" style="left: calc(91.67% - 39px)">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
         stroke="#1e1e1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </div>
-  <div class="absolute top-[602px] z-[2]" style="left: calc(91.67% + 10px)">
+  <div class="absolute top-150.5 z-[2]" style="left: calc(91.67% + 10px)">
     <img src={heartIcon.src} alt="Favori" width="24" height="24" />
   </div>
 
   <!-- Description -->
-  <p class="absolute top-[609px] left-[80px] w-[733px] text-[#646262] text-[16px] font-medium leading-[1.4] m-0 z-[2]">
+  <p class="absolute top-152.25 left-20 w-183.25 text-[#646262] text-4 font-medium leading-[1.4] m-0 z-[2]">
     {bar.description ?? ''}
   </p>
 
   <!-- Fond sombre (gauche) -->
-  <div class="absolute top-[794px] left-0 w-[704px] h-[670px] bg-[#1e1e1e]"></div>
+  <div class="absolute top-198.5 left-0 w-176 h-167.5 bg-[#1e1e1e]"></div>
   <!-- Fond vert (droite) -->
-  <div class="absolute top-[794px] w-[736px] h-[670px] bg-[#094736]" style="left: calc(50% - 16px)"></div>
+  <div class="absolute top-198.5 w-184 h-167.5 bg-[#094736]" style="left: calc(50% - 16px)"></div>
 
   <!-- INFOS GAUCHE -->
-  <h3 class="absolute top-[852px] left-[80px] text-white m-0 z-[2]">Adresse</h3>
-  <p class="absolute top-[909px] left-[80px] text-[#dfdfdf] text-[16px] font-medium leading-[1.4] m-0 z-[2]">
+  <h3 class="absolute top-213 left-20 text-white m-0 z-[2]">Adresse</h3>
+  <p class="absolute top-227.25 left-20 text-[#dfdfdf] text-4 font-medium leading-[1.4] m-0 z-[2]">
     {bar.adresse ?? '—'}
   </p>
-  <h3 class="absolute top-[990px] left-[80px] text-white m-0 z-[2]">Spécialités</h3>
-  <p class="absolute top-[1047px] left-[80px] text-[#dfdfdf] text-[16px] font-medium leading-[1.4] m-0 z-[2] w-[540px]">
+  <h3 class="absolute top-247.5 left-20 text-white m-0 z-[2]">Spécialités</h3>
+  <p class="absolute top-261.75 left-20 text-[#dfdfdf] text-4 font-medium leading-[1.4] m-0 z-[2] w-135">
     {bar.specialites ?? '—'}
   </p>
-  <h3 class="absolute top-[1128px] left-[80px] text-white m-0 z-[2]">Disponibilité</h3>
-  <p class="absolute top-[1185px] left-[80px] text-[#dfdfdf] text-[16px] font-medium leading-[1.4] m-0 z-[2] w-[540px]">
+  <h3 class="absolute top-282 left-20 text-white m-0 z-[2]">Disponibilité</h3>
+  <p class="absolute top-296.25 left-20 text-[#dfdfdf] text-4 font-medium leading-[1.4] m-0 z-[2] w-135">
     {bar.disponibilite ?? '—'}
   </p>
-  <h3 class="absolute top-[1266px] left-[80px] text-white m-0 z-[2]">Contact</h3>
-  <p class="absolute top-[1323px] left-[80px] text-[#dfdfdf] text-[16px] font-medium leading-[1.4] m-0 z-[2]">
+  <h3 class="absolute top-316.5 left-20 text-white m-0 z-[2]">Contact</h3>
+  <p class="absolute top-330.75 left-20 text-[#dfdfdf] text-4 font-medium leading-[1.4] m-0 z-[2]">
     {bar.liens
       ? <a href={bar.liens} target="_blank" rel="noopener" class="text-[#72c073] hover:underline">{bar.liens}</a>
       : '—'
@@ -230,23 +230,23 @@ const hasMap = lat !== 0 && lon !== 0;
   </p>
 
   <!-- HORAIRES (droite) -->
-  <h3 class="absolute top-[844px] text-white m-0 z-[2]" style="left: calc(50% + 16px)">Horaires</h3>
+  <h3 class="absolute top-211 text-white m-0 z-[2]" style="left: calc(50% + 16px)">Horaires</h3>
 
   {jours.map((jour, i) => {
     const top = 909 + i * 64;
     const isFerme = !jour.value || jour.value.toLowerCase().includes('ferm');
     return (
-      <div class="absolute w-[624px] h-[47px] rounded-[5px] overflow-hidden z-[2]"
+      <div class="absolute w-156 h-11.75 rounded-1.25 overflow-hidden z-[2]"
         style={`top: ${top}px; left: calc(50% + 16px); box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.25);`}>
-        <div class="absolute top-0 left-0 h-full bg-[#347645] rounded-l-[5px] flex items-center justify-center"
+        <div class="absolute top-0 left-0 h-full bg-[#347645] rounded-l-1.25 flex items-center justify-center"
           style="width: 21.63%;">
-          <span class="text-[#f7f1ed] text-[16px] font-medium leading-[1.4] text-center px-2">
+          <span class="text-[#f7f1ed] text-4 font-medium leading-[1.4] text-center px-2">
             {jour.label}
           </span>
         </div>
-        <div class="absolute top-0 right-0 h-full bg-[#f7f1ed] rounded-r-[5px] flex items-center"
+        <div class="absolute top-0 right-0 h-full bg-[#f7f1ed] rounded-r-1.25 flex items-center"
           style="left: 21.63%; padding-left: 35px;">
-          <span class={`text-[16px] font-medium leading-[1.4] ${isFerme ? 'text-[#646262]' : 'text-black'}`}>
+          <span class={`text-4 font-medium leading-[1.4] ${isFerme ? 'text-[#646262]' : 'text-black'}`}>
             {jour.value || 'Fermé'}
           </span>
         </div>
@@ -262,34 +262,34 @@ const hasMap = lat !== 0 && lon !== 0;
     class="absolute left-0 w-full z-[1] bg-[#dfdfdf] flex items-center justify-center"
     style="top: 1464px; height: 541px;">
     {!hasMap && (
-      <p class="text-[#646262] text-[16px] font-medium m-0">Localisation non disponible</p>
+      <p class="text-[#646262] text-4 font-medium m-0">Localisation non disponible</p>
     )}
   </div>
 
   <!-- GALERIE -->
-  <h2 class="absolute left-[80px] text-black m-0 z-[2]" style="top: 2136px;">Galerie</h2>
-  <p class="absolute left-[80px] w-[405px] text-[#646262] text-[16px] font-medium leading-[1.4] m-0 z-[2]" style="top: 2223px;">
+  <h2 class="absolute left-20 text-black m-0 z-[2]" style="top: 2136px;">Galerie</h2>
+  <p class="absolute left-20 w-101.25 text-[#646262] text-4 font-medium leading-[1.4] m-0 z-[2]" style="top: 2223px;">
     Explorez une sélection variée de cocktails et de bières, idéale pour partager un moment entre amis.
   </p>
 
   {landscapePhotos.length > 0 ? (
     <>
       {landscapePhotos[0] && (
-        <div class="absolute overflow-hidden rounded-tr-[5px] rounded-br-[5px] z-[2]"
+        <div class="absolute overflow-hidden rounded-tr-1.25 rounded-br-1.25 z-[2]"
           style="top: 2363px; left: 0; width: 465px; height: 400px;">
           <img src={getImageUrl(bar, landscapePhotos[0])} alt={bar.nom}
             class="w-full h-full object-cover" loading="lazy" />
         </div>
       )}
       {landscapePhotos[1] && (
-        <div class="absolute overflow-hidden rounded-[5px] z-[2]"
+        <div class="absolute overflow-hidden rounded-1.25 z-[2]"
           style="top: 2363px; left: calc(33.33% + 7px); width: 465px; height: 400px;">
           <img src={getImageUrl(bar, landscapePhotos[1])} alt={bar.nom}
             class="w-full h-full object-cover" loading="lazy" />
         </div>
       )}
       {landscapePhotos[2] && (
-        <div class="absolute overflow-hidden rounded-tl-[5px] rounded-bl-[5px] z-[2]"
+        <div class="absolute overflow-hidden rounded-tl-1.25 rounded-bl-1.25 z-[2]"
           style="top: 2363px; left: calc(66.67% + 15px); width: 465px; height: 400px;">
           <img src={getImageUrl(bar, landscapePhotos[2])} alt={bar.nom}
             class="w-full h-full object-cover" loading="lazy" />
@@ -297,7 +297,7 @@ const hasMap = lat !== 0 && lon !== 0;
       )}
     </>
   ) : (
-    <p class="absolute left-[80px] text-[#646262] text-[16px] font-medium m-0 z-[2]" style="top: 2363px;">
+    <p class="absolute left-20 text-[#646262] text-4 font-medium m-0 z-[2]" style="top: 2363px;">
       Aucune photo disponible.
     </p>
   )}
@@ -310,7 +310,7 @@ const hasMap = lat !== 0 && lon !== 0;
       'left: calc(75% - 16px)',
     ];
     return (
-      <div class="absolute overflow-hidden rounded-[5px] z-[2]"
+      <div class="absolute overflow-hidden rounded-1.25 z-[2]"
         style={`top: 2854px; ${positions[i]}; width: 296px; height: 310px;`}>
         <img src={getImageUrl(bar, img)} alt={bar.nom}
           class="w-full h-full object-cover" loading="lazy" />

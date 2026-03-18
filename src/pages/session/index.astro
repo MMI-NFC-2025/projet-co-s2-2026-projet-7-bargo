@@ -57,44 +57,44 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
 <div class="flex flex-col lg:flex-row" style="min-height: calc(100vh - 92px);">
 
   <!-- ===== LEFT PANEL ===== -->
-  <div id="left-panel" class="hidden lg:flex lg:w-[657px] lg:shrink-0 bg-[#094736] flex-col" style="height: calc(100vh - 92px); position: sticky; top: 92px;">
+  <div id="left-panel" class="hidden lg:flex lg:w-164.25 lg:shrink-0 bg-[#094736] flex-col" style="height: calc(100vh - 92px); position: sticky; top: 92px;">
 
-    <div class="px-[70px] pt-[80px]">
+    <div class="px-17.5 pt-20">
       <p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:3px; color:#72c073; margin:0 0 14px 0;">Créer un barathon</p>
       <h2 id="left-title" class="text-white m-0 uppercase">Informations</h2>
-      <p id="left-desc" class="m-0 mt-[16px] leading-[1.6]" style="font-size:14px; font-weight:500; color:rgba(247,241,237,0.7);">
+      <p id="left-desc" class="m-0 mt-4 leading-[1.6]" style="font-size:14px; font-weight:500; color:rgba(247,241,237,0.7);">
         Donnez un nom à votre barathon et choisissez la date et l'heure.
       </p>
     </div>
 
     <!-- Step indicators -->
-    <div class="px-[70px] mt-[60px]">
+    <div class="px-17.5 mt-15">
       <div class="flex items-center">
-        <div class="step-circle flex items-center justify-center w-[46px] h-[46px] rounded-full border-2 shrink-0" data-step="1"
+        <div class="step-circle flex items-center justify-center w-11.5 h-11.5 rounded-full border-2 shrink-0" data-step="1"
           style="background:white; border-color:white;">
           <span class="step-num font-bold" style="font-size:16px; color:#094736;">1</span>
           <svg class="step-check" style="display:none; width:18px; height:18px;" viewBox="0 0 18 18" fill="none">
             <path d="M3.5 9L7.5 13L14.5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <div class="flex-1 h-[2px] mx-[10px]" style="background:rgba(255,255,255,0.25);"></div>
-        <div class="step-circle flex items-center justify-center w-[46px] h-[46px] rounded-full border-2 shrink-0" data-step="2"
+        <div class="flex-1 h-0.5 mx-2.5" style="background:rgba(255,255,255,0.25);"></div>
+        <div class="step-circle flex items-center justify-center w-11.5 h-11.5 rounded-full border-2 shrink-0" data-step="2"
           style="background:transparent; border-color:rgba(255,255,255,0.3);">
           <span class="step-num font-bold" style="font-size:16px; color:rgba(255,255,255,0.3);">2</span>
           <svg class="step-check" style="display:none; width:18px; height:18px;" viewBox="0 0 18 18" fill="none">
             <path d="M3.5 9L7.5 13L14.5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <div class="flex-1 h-[2px] mx-[10px]" style="background:rgba(255,255,255,0.25);"></div>
-        <div class="step-circle flex items-center justify-center w-[46px] h-[46px] rounded-full border-2 shrink-0" data-step="3"
+        <div class="flex-1 h-0.5 mx-2.5" style="background:rgba(255,255,255,0.25);"></div>
+        <div class="step-circle flex items-center justify-center w-11.5 h-11.5 rounded-full border-2 shrink-0" data-step="3"
           style="background:transparent; border-color:rgba(255,255,255,0.3);">
           <span class="step-num font-bold" style="font-size:16px; color:rgba(255,255,255,0.3);">3</span>
           <svg class="step-check" style="display:none; width:18px; height:18px;" viewBox="0 0 18 18" fill="none">
             <path d="M3.5 9L7.5 13L14.5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <div class="flex-1 h-[2px] mx-[10px]" style="background:rgba(255,255,255,0.25);"></div>
-        <div class="step-circle flex items-center justify-center w-[46px] h-[46px] rounded-full border-2 shrink-0" data-step="4"
+        <div class="flex-1 h-0.5 mx-2.5" style="background:rgba(255,255,255,0.25);"></div>
+        <div class="step-circle flex items-center justify-center w-11.5 h-11.5 rounded-full border-2 shrink-0" data-step="4"
           style="background:transparent; border-color:rgba(255,255,255,0.3);">
           <span class="step-num font-bold" style="font-size:16px; color:rgba(255,255,255,0.3);">4</span>
           <svg class="step-check" style="display:none; width:18px; height:18px;" viewBox="0 0 18 18" fill="none">
@@ -102,25 +102,25 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
           </svg>
         </div>
       </div>
-      <div class="flex mt-[10px]">
-        <div class="w-[46px] text-center" style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:500;">Infos</div>
-        <div class="flex-1 mx-[10px]"></div>
-        <div class="w-[46px] text-center" style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:500;">Bars</div>
-        <div class="flex-1 mx-[10px]"></div>
-        <div class="w-[46px] text-center" style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:500;">Jeux</div>
-        <div class="flex-1 mx-[10px]"></div>
-        <div class="w-[46px] text-center" style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:500;">Amis</div>
+      <div class="flex mt-2.5">
+        <div class="w-11.5 text-center" style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:500;">Infos</div>
+        <div class="flex-1 mx-2.5"></div>
+        <div class="w-11.5 text-center" style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:500;">Bars</div>
+        <div class="flex-1 mx-2.5"></div>
+        <div class="w-11.5 text-center" style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:500;">Jeux</div>
+        <div class="flex-1 mx-2.5"></div>
+        <div class="w-11.5 text-center" style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:500;">Amis</div>
       </div>
     </div>
 
     <!-- Selection summary -->
-    <div id="left-summary" class="px-[70px] mt-[40px] flex flex-col gap-[10px]" style="display:none;"></div>
+    <div id="left-summary" class="px-17.5 mt-10 flex flex-col gap-2.5" style="display:none;"></div>
 
     <div class="flex-1"></div>
 
     <!-- Progress bar -->
-    <div class="mx-[70px] mb-[60px]">
-      <div class="h-[6px] rounded-full overflow-hidden" style="background:rgba(255,255,255,0.2);">
+    <div class="mx-17.5 mb-15">
+      <div class="h-1.5 rounded-full overflow-hidden" style="background:rgba(255,255,255,0.2);">
         <div id="progress-bar" class="h-full rounded-full transition-all duration-500" style="width:0%; background:#72c073;"></div>
       </div>
     </div>
@@ -130,21 +130,21 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
   <div id="step-view" class="flex-1 bg-[#1e1e1e] overflow-y-auto">
 
     <!-- ─── STEP 1: Informations ─── -->
-    <div id="panel-1" class="flex flex-col px-5 lg:px-[70px] py-10 lg:py-[80px]" style="min-height: calc(100vh - 92px);">
-      <h2 class="text-white m-0 mb-[50px] uppercase">Informations de la soirée</h2>
-      <div class="flex flex-col gap-[36px] flex-1">
-        <div class="pb-[12px]" style="border-bottom:1px solid rgba(247,241,237,0.25);">
+    <div id="panel-1" class="flex flex-col px-5 lg:px-17.5 py-10 lg:py-20" style="min-height: calc(100vh - 92px);">
+      <h2 class="text-white m-0 mb-12.5 uppercase">Informations de la soirée</h2>
+      <div class="flex flex-col gap-9 flex-1">
+        <div class="pb-3" style="border-bottom:1px solid rgba(247,241,237,0.25);">
           <label style="display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:rgba(247,241,237,0.5); margin-bottom:8px;">Nom du barathon *</label>
           <input id="s1-nom" type="text" placeholder="Mon barathon de folie"
             style="background:transparent; width:100%; font-size:16px; font-weight:500; outline:none; border:none; color:#f7f1ed;"
             class="placeholder-[#f7f1ed]/30" />
         </div>
-        <div class="pb-[12px]" style="border-bottom:1px solid rgba(247,241,237,0.25);">
+        <div class="pb-3" style="border-bottom:1px solid rgba(247,241,237,0.25);">
           <label style="display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:rgba(247,241,237,0.5); margin-bottom:8px;">Date</label>
           <input id="s1-date" type="date"
             style="background:transparent; width:100%; font-size:16px; font-weight:500; outline:none; border:none; color:#f7f1ed; color-scheme:dark;" />
         </div>
-        <div class="pb-[12px]" style="border-bottom:1px solid rgba(247,241,237,0.25);">
+        <div class="pb-3" style="border-bottom:1px solid rgba(247,241,237,0.25);">
           <label style="display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:rgba(247,241,237,0.5); margin-bottom:8px;">Heure de départ</label>
           <input id="s1-heure-debut" type="time"
             style="background:transparent; width:100%; font-size:16px; font-weight:500; outline:none; border:none; color:#f7f1ed; color-scheme:dark;" />
@@ -156,24 +156,24 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
             class="placeholder-[#f7f1ed]/30"></textarea>
         </div>
       </div>
-      <div class="flex justify-end mt-[50px]">
+      <div class="flex justify-end mt-12.5">
         <button id="btn-next-1" style="background:#347645; height:52px; padding:0 50px; color:white; font-size:16px; font-weight:500; border:none; cursor:pointer; border-radius:3px;">Continuer →</button>
       </div>
     </div>
 
     <!-- ─── STEP 2: Bars ─── -->
-    <div id="panel-2" class="flex flex-col px-5 lg:px-[70px] py-10 lg:py-[80px]" style="display:none; min-height: calc(100vh - 92px);">
-      <h2 class="text-white m-0 mb-[28px] uppercase">Choisir mes bars</h2>
-      <div class="flex items-center gap-[12px] rounded-[5px] px-[16px] mb-[20px]" style="background:#2c2c2c; height:48px;">
+    <div id="panel-2" class="flex flex-col px-5 lg:px-17.5 py-10 lg:py-20" style="display:none; min-height: calc(100vh - 92px);">
+      <h2 class="text-white m-0 mb-7 uppercase">Choisir mes bars</h2>
+      <div class="flex items-center gap-3 rounded-1.25 px-4 mb-5" style="background:#2c2c2c; height:48px;">
         <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5"/><path d="M12 12L16 16" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5" stroke-linecap="round"/></svg>
         <input id="search-bars" type="text" placeholder="Rechercher un bar…"
           style="background:transparent; flex:1; font-size:14px; font-weight:500; outline:none; border:none; color:#f7f1ed;"
           class="placeholder-[#f7f1ed]/40" />
       </div>
-      <div id="bars-list" class="flex flex-col gap-[10px] overflow-y-auto flex-1"></div>
-      <div class="flex items-center justify-between mt-[28px] pt-[20px]" style="border-top:1px solid rgba(255,255,255,0.1);">
+      <div id="bars-list" class="flex flex-col gap-2.5 overflow-y-auto flex-1"></div>
+      <div class="flex items-center justify-between mt-7 pt-5" style="border-top:1px solid rgba(255,255,255,0.1);">
         <p id="bars-count" style="color:rgba(247,241,237,0.5); font-size:14px; font-weight:500; margin:0;">0 bar sélectionné</p>
-        <div class="flex gap-[16px]">
+        <div class="flex gap-4">
           <button onclick="goToStep(1)" style="height:52px; padding:0 30px; color:rgba(247,241,237,0.6); font-size:16px; font-weight:500; border:none; background:transparent; cursor:pointer;">← Retour</button>
           <button onclick="goToStep(3)" style="background:#347645; height:52px; padding:0 50px; color:white; font-size:16px; font-weight:500; border:none; cursor:pointer; border-radius:3px;">Continuer →</button>
         </div>
@@ -181,19 +181,19 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
     </div>
 
     <!-- ─── STEP 3: Jeux ─── -->
-    <div id="panel-3" class="flex flex-col px-5 lg:px-[70px] py-10 lg:py-[80px]" style="display:none; min-height: calc(100vh - 92px);">
-      <h2 class="text-white m-0 mb-[4px] uppercase">Choisir mon jeu</h2>
+    <div id="panel-3" class="flex flex-col px-5 lg:px-17.5 py-10 lg:py-20" style="display:none; min-height: calc(100vh - 92px);">
+      <h2 class="text-white m-0 mb-1 uppercase">Choisir mon jeu</h2>
       <p style="color:rgba(247,241,237,0.4); font-size:13px; font-weight:500; margin:0 0 24px;">Un seul jeu par session.</p>
-      <div class="flex items-center gap-[12px] rounded-[5px] px-[16px] mb-[20px]" style="background:#2c2c2c; height:48px;">
+      <div class="flex items-center gap-3 rounded-1.25 px-4 mb-5" style="background:#2c2c2c; height:48px;">
         <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5"/><path d="M12 12L16 16" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5" stroke-linecap="round"/></svg>
         <input id="search-jeux" type="text" placeholder="Rechercher un jeu…"
           style="background:transparent; flex:1; font-size:14px; font-weight:500; outline:none; border:none; color:#f7f1ed;"
           class="placeholder-[#f7f1ed]/40" />
       </div>
-      <div id="jeux-list" class="flex flex-col gap-[10px] overflow-y-auto flex-1"></div>
-      <div class="flex items-center justify-between mt-[28px] pt-[20px]" style="border-top:1px solid rgba(255,255,255,0.1);">
+      <div id="jeux-list" class="flex flex-col gap-2.5 overflow-y-auto flex-1"></div>
+      <div class="flex items-center justify-between mt-7 pt-5" style="border-top:1px solid rgba(255,255,255,0.1);">
         <p id="jeux-count" style="color:rgba(247,241,237,0.5); font-size:14px; font-weight:500; margin:0;">0 jeu sélectionné</p>
-        <div class="flex gap-[16px]">
+        <div class="flex gap-4">
           <button onclick="goToStep(2)" style="height:52px; padding:0 30px; color:rgba(247,241,237,0.6); font-size:16px; font-weight:500; border:none; background:transparent; cursor:pointer;">← Retour</button>
           <button onclick="goToStep(4)" style="background:#347645; height:52px; padding:0 50px; color:white; font-size:16px; font-weight:500; border:none; cursor:pointer; border-radius:3px;">Continuer →</button>
         </div>
@@ -201,18 +201,18 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
     </div>
 
     <!-- ─── STEP 4: Amis ─── -->
-    <div id="panel-4" class="flex flex-col px-5 lg:px-[70px] py-10 lg:py-[80px]" style="display:none; min-height: calc(100vh - 92px);">
-      <h2 class="text-white m-0 mb-[28px] uppercase">Inviter mes amis</h2>
-      <div class="flex items-center gap-[12px] rounded-[5px] px-[16px] mb-[20px]" style="background:#2c2c2c; height:48px;">
+    <div id="panel-4" class="flex flex-col px-5 lg:px-17.5 py-10 lg:py-20" style="display:none; min-height: calc(100vh - 92px);">
+      <h2 class="text-white m-0 mb-7 uppercase">Inviter mes amis</h2>
+      <div class="flex items-center gap-3 rounded-1.25 px-4 mb-5" style="background:#2c2c2c; height:48px;">
         <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5"/><path d="M12 12L16 16" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5" stroke-linecap="round"/></svg>
         <input id="search-users" type="text" placeholder="Rechercher un ami…"
           style="background:transparent; flex:1; font-size:14px; font-weight:500; outline:none; border:none; color:#f7f1ed;"
           class="placeholder-[#f7f1ed]/40" />
       </div>
-      <div id="users-list" class="flex flex-col gap-[10px] overflow-y-auto flex-1"></div>
-      <div class="flex items-center justify-between mt-[28px] pt-[20px]" style="border-top:1px solid rgba(255,255,255,0.1);">
+      <div id="users-list" class="flex flex-col gap-2.5 overflow-y-auto flex-1"></div>
+      <div class="flex items-center justify-between mt-7 pt-5" style="border-top:1px solid rgba(255,255,255,0.1);">
         <p id="users-count" style="color:rgba(247,241,237,0.5); font-size:14px; font-weight:500; margin:0;">0 ami invité</p>
-        <div class="flex gap-[16px]">
+        <div class="flex gap-4">
           <button onclick="goToStep(3)" style="height:52px; padding:0 30px; color:rgba(247,241,237,0.6); font-size:16px; font-weight:500; border:none; background:transparent; cursor:pointer;">← Retour</button>
           <button id="btn-lancer" style="background:#72c073; height:52px; padding:0 50px; color:#094736; font-size:16px; font-weight:700; border:none; cursor:pointer; border-radius:3px;">Lancer 🚀</button>
         </div>

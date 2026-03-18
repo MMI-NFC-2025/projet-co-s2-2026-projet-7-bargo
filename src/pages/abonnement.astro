@@ -69,57 +69,57 @@ const plans = [
 <Layout title="Nos abonnements — Bargo">
 
   <!-- ===== HERO ===== -->
-  <section class="bg-[#094736] h-[280px] lg:h-[450px] relative">
-    <h1 class="absolute top-[60px] left-[20px] lg:top-[141px] lg:left-[80px] text-white m-0 uppercase text-[40px] lg:text-[90px]">Nos abonnements</h1>
-    <p class="hidden lg:block absolute top-[268px] left-[80px] text-[#f7f1ed] text-[14px] font-medium w-[547px] m-0 leading-[1.6]">
+  <section class="bg-[#094736] h-70 lg:h-112.5 relative">
+    <h1 class="absolute top-15 left-5 lg:top-35.25 lg:left-20 text-white m-0 uppercase text-10 lg:text-22.5">Nos abonnements</h1>
+    <p class="hidden lg:block absolute top-67 left-20 text-[#f7f1ed] text-3.5 font-medium w-136.75 m-0 leading-[1.6]">
       Ici vous pouvez prendre les abonnements qui permettront d'avoir un petit plus sur vos soirées&nbsp;!
     </p>
   </section>
 
   <!-- ===== CARDS ===== -->
-  <div class="bg-[#f7f1ed] px-4 lg:px-[80px] py-10 lg:py-[80px]">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-[40px]">
+  <div class="bg-[#f7f1ed] px-4 lg:px-20 py-10 lg:py-20">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10">
 
       {plans.map(plan => (
-        <div class="bg-white rounded-[5px] shadow-[0px_4px_10px_0px_rgba(0,0,0,0.15)] flex flex-col overflow-hidden">
+        <div class="bg-white rounded-1.25 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.15)] flex flex-col overflow-hidden">
 
           <!-- En-tête coloré -->
-          <div class="px-[35px] py-[30px] relative" style={`background-color: ${plan.couleur};`}>
+          <div class="px-8.75 py-7.5 relative" style={`background-color: ${plan.couleur};`}>
             {plan.badge && (
-              <span class="absolute top-[20px] right-[20px] bg-[#72c073] text-[#094736] text-[12px] font-bold px-[10px] py-[4px] rounded-full uppercase tracking-[0.5px]">
+              <span class="absolute top-5 right-5 bg-[#72c073] text-[#094736] text-3 font-bold px-2.5 py-1 rounded-full uppercase tracking-0.125">
                 {plan.badge}
               </span>
             )}
-            <h3 class="text-white m-0 mb-[16px] uppercase tracking-[2px]">{plan.nom}</h3>
-            <div class="flex items-baseline gap-[6px]">
+            <h3 class="text-white m-0 mb-4 uppercase tracking-0.5">{plan.nom}</h3>
+            <div class="flex items-baseline gap-1.5">
               <span class="text-white font-bold leading-none" style="font-size: 50px; font-family: Manrope, sans-serif;">{plan.prix}</span>
-              <span class="text-[#dfdfdf] text-[16px] font-medium">{plan.periode}</span>
+              <span class="text-[#dfdfdf] text-4 font-medium">{plan.periode}</span>
             </div>
           </div>
 
           <!-- Corps -->
-          <div class="px-[35px] py-[30px] flex flex-col flex-1">
+          <div class="px-8.75 py-7.5 flex flex-col flex-1">
 
-            <p class="text-[#646262] text-[14px] font-medium leading-[1.6] m-0 mb-[24px]">{plan.description}</p>
+            <p class="text-[#646262] text-3.5 font-medium leading-[1.6] m-0 mb-6">{plan.description}</p>
 
             <!-- Avantages -->
-            <ul class="list-none m-0 p-0 flex flex-col gap-[12px] mb-[16px]">
+            <ul class="list-none m-0 p-0 flex flex-col gap-3 mb-4">
               {plan.avantages.map(item => (
-                <li class="flex items-start gap-[10px]">
-                  <svg class="shrink-0 mt-[2px]" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <li class="flex items-start gap-2.5">
+                  <svg class="shrink-0 mt-0.5" width="18" height="18" viewBox="0 0 18 18" fill="none">
                     <circle cx="9" cy="9" r="9" fill="#72c073"/>
                     <path d="M4.5 9L7.5 12L13.5 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
-                  <span class="text-black text-[16px] font-medium leading-[1.4]">{item}</span>
+                  <span class="text-black text-4 font-medium leading-[1.4]">{item}</span>
                 </li>
               ))}
               {plan.manques.map(item => (
-                <li class="flex items-start gap-[10px]">
-                  <svg class="shrink-0 mt-[2px]" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <li class="flex items-start gap-2.5">
+                  <svg class="shrink-0 mt-0.5" width="18" height="18" viewBox="0 0 18 18" fill="none">
                     <circle cx="9" cy="9" r="9" fill="#dfdfdf"/>
                     <path d="M5.5 9h7" stroke="#646262" stroke-width="2" stroke-linecap="round"/>
                   </svg>
-                  <span class="text-[#646262] text-[16px] font-medium leading-[1.4] line-through">{item}</span>
+                  <span class="text-[#646262] text-4 font-medium leading-[1.4] line-through">{item}</span>
                 </li>
               ))}
             </ul>
@@ -130,7 +130,7 @@ const plans = [
             <!-- Bouton -->
             <button
               type="button"
-              class="mt-[24px] w-full h-[52px] flex items-center justify-center text-white text-[16px] font-medium hover:opacity-90 transition-opacity cursor-pointer border-0 rounded-[3px]"
+              class="mt-6 w-full h-13 flex items-center justify-center text-white text-4 font-medium hover:opacity-90 transition-opacity cursor-pointer border-0 rounded-0.75"
               style={`background-color: ${plan.couleurBtn};`}
             >
               {plan.cta}

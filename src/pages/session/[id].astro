@@ -88,13 +88,13 @@ const pageData = JSON.stringify({
 <div class="flex flex-col lg:flex-row" style="min-height: calc(100vh - 92px);">
 
   <!-- ===== MAP ===== -->
-  <div id="session-map" class="flex-1 h-[280px] lg:h-auto" style="background:#dfdfdf;"></div>
+  <div id="session-map" class="flex-1 h-70 lg:h-auto" style="background:#dfdfdf;"></div>
 
   <!-- ===== RIGHT PANEL ===== -->
-  <div class="w-full lg:w-[460px] lg:flex-shrink-0 flex flex-col lg:h-[calc(100vh-92px)] overflow-hidden" style="background:#1e1e1e;">
+  <div class="w-full lg:w-115 lg:flex-shrink-0 flex flex-col lg:h-[calc(100vh-92px)] overflow-hidden" style="background:#1e1e1e;">
 
     <!-- Session info -->
-    <div class="px-[28px] pt-[24px] pb-[18px]" style="border-bottom:1px solid rgba(255,255,255,0.1); flex-shrink:0;">
+    <div class="px-7 pt-6 pb-4.5" style="border-bottom:1px solid rgba(255,255,255,0.1); flex-shrink:0;">
       <p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:#72c073; margin:0 0 6px 0;">Barathon</p>
       <h3 class="text-white m-0">{session.nom}</h3>
       {(session.date || session.heure_debut) && (
@@ -106,21 +106,21 @@ const pageData = JSON.stringify({
 
     <!-- Tabs -->
     <div class="flex" style="border-bottom:1px solid rgba(255,255,255,0.1); flex-shrink:0;">
-      <button class="final-tab flex-1 h-[48px] font-medium border-0 bg-transparent cursor-pointer" data-tab="bars"
+      <button class="final-tab flex-1 h-12 font-medium border-0 bg-transparent cursor-pointer" data-tab="bars"
         style="font-size:13px; color:#72c073; border-bottom:2px solid #72c073;">Bars</button>
-      <button class="final-tab flex-1 h-[48px] font-medium border-0 bg-transparent cursor-pointer" data-tab="jeux"
+      <button class="final-tab flex-1 h-12 font-medium border-0 bg-transparent cursor-pointer" data-tab="jeux"
         style="font-size:13px; color:rgba(247,241,237,0.5); border-bottom:2px solid transparent;">Jeux</button>
-      <button class="final-tab flex-1 h-[48px] font-medium border-0 bg-transparent cursor-pointer" data-tab="amis"
+      <button class="final-tab flex-1 h-12 font-medium border-0 bg-transparent cursor-pointer" data-tab="amis"
         style="font-size:13px; color:rgba(247,241,237,0.5); border-bottom:2px solid transparent;">Amis</button>
-      <button class="final-tab flex-1 h-[48px] font-medium border-0 bg-transparent cursor-pointer" data-tab="params"
+      <button class="final-tab flex-1 h-12 font-medium border-0 bg-transparent cursor-pointer" data-tab="params"
         style="font-size:13px; color:rgba(247,241,237,0.5); border-bottom:2px solid transparent;">Paramètres</button>
     </div>
 
     <!-- Tab content -->
-    <div id="tab-content" class="overflow-y-auto flex-1 px-[24px] py-[20px]"></div>
+    <div id="tab-content" class="overflow-y-auto flex-1 px-6 py-5"></div>
 
     <!-- Add more -->
-    <div class="px-[24px] py-[18px]" style="border-top:1px solid rgba(255,255,255,0.1); flex-shrink:0;">
+    <div class="px-6 py-4.5" style="border-top:1px solid rgba(255,255,255,0.1); flex-shrink:0;">
       <button id="btn-add-more" style="width:100%; height:42px; background:transparent; border:1px solid rgba(255,255,255,0.25); color:white; font-size:14px; font-weight:500; cursor:pointer; border-radius:3px;">+ Ajouter</button>
     </div>
   </div>
@@ -131,20 +131,20 @@ const pageData = JSON.stringify({
 <!-- ====================================================== -->
 <div id="add-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:50; align-items:center; justify-content:center;">
   <div style="background:#1e1e1e; width:600px; max-height:80vh; display:flex; flex-direction:column; border-radius:5px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.5);">
-    <div class="flex justify-between items-center px-[28px] py-[20px]" style="border-bottom:1px solid rgba(255,255,255,0.1);">
+    <div class="flex justify-between items-center px-7 py-5" style="border-bottom:1px solid rgba(255,255,255,0.1);">
       <h3 id="modal-title" class="text-white m-0"></h3>
       <button id="modal-close" style="background:transparent; border:none; color:white; font-size:26px; line-height:1; cursor:pointer; opacity:0.6;">×</button>
     </div>
-    <div class="px-[28px] py-[14px]" style="border-bottom:1px solid rgba(255,255,255,0.1);">
-      <div class="flex items-center gap-[12px] rounded-[5px] px-[14px]" style="background:#2c2c2c; height:42px;">
+    <div class="px-7 py-3.5" style="border-bottom:1px solid rgba(255,255,255,0.1);">
+      <div class="flex items-center gap-3 rounded-1.25 px-3.5" style="background:#2c2c2c; height:42px;">
         <svg width="14" height="14" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5"/><path d="M12 12L16 16" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5" stroke-linecap="round"/></svg>
         <input id="modal-search" type="text" placeholder="Rechercher…"
           style="background:transparent; flex:1; font-size:14px; font-weight:500; outline:none; border:none; color:#f7f1ed;"
           class="placeholder-[#f7f1ed]/40" />
       </div>
     </div>
-    <div id="modal-list" class="overflow-y-auto flex-1 px-[28px] py-[20px]"></div>
-    <div class="px-[28px] py-[18px] flex justify-end" style="border-top:1px solid rgba(255,255,255,0.1);">
+    <div id="modal-list" class="overflow-y-auto flex-1 px-7 py-5"></div>
+    <div class="px-7 py-4.5 flex justify-end" style="border-top:1px solid rgba(255,255,255,0.1);">
       <button id="modal-confirm" style="background:#347645; height:42px; padding:0 36px; color:white; font-size:14px; font-weight:500; border:none; cursor:pointer; border-radius:3px;">Confirmer</button>
     </div>
   </div>

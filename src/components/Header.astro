@@ -25,33 +25,33 @@ if (isLoggedIn) {
 ---
 
 <header class="fixed top-0 left-0 w-full z-50 bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
-  <div class="max-w-[1440px] mx-auto px-4 lg:px-20 h-[92px] flex items-center">
+  <div class="max-w-360 mx-auto px-4 lg:px-20 h-23 flex items-center">
 
     <!-- Logo -->
     <a href="/" class="shrink-0">
-      <img src={logoDark.src} alt="Bargo" class="h-[42px] w-auto block" />
+      <img src={logoDark.src} alt="Bargo" class="h-10.5 w-auto block" />
     </a>
 
     <!-- Navigation desktop — inchangé -->
-    <nav class="hidden lg:flex items-center ml-[52px]">
+    <nav class="hidden lg:flex items-center ml-13">
       <a href="/bar"
-        class={`px-[35px] py-[25px] font-medium text-[14px] leading-[1.1] text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-[7px] ${path.startsWith('/bar') ? 'border-[#72c073]' : 'border-transparent'}`}>
+        class={`px-8.75 py-6.25 font-medium text-3.5 leading-[1.1] text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-1.75 ${path.startsWith('/bar') ? 'border-[#72c073]' : 'border-transparent'}`}>
         Nos bars
       </a>
       <a href="/Apropos"
-        class={`px-[35px] py-[25px] font-medium text-[14px] leading-[1.1] text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-[7px] ${path.startsWith('/Apropos') ? 'border-[#72c073]' : 'border-transparent'}`}>
+        class={`px-8.75 py-6.25 font-medium text-3.5 leading-[1.1] text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-1.75 ${path.startsWith('/Apropos') ? 'border-[#72c073]' : 'border-transparent'}`}>
         A propos
       </a>
       <a href="/jeux"
-        class={`px-[35px] py-[25px] font-medium text-[14px] leading-[1.1] text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-[7px] ${path.startsWith('/jeux') ? 'border-[#72c073]' : 'border-transparent'}`}>
+        class={`px-8.75 py-6.25 font-medium text-3.5 leading-[1.1] text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-1.75 ${path.startsWith('/jeux') ? 'border-[#72c073]' : 'border-transparent'}`}>
         Nos jeux
       </a>
       <a href="/boutique"
-        class={`px-[35px] py-[25px] font-medium text-[14px] leading-[1.1] text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-[7px] ${path.startsWith('/boutique') ? 'border-[#72c073]' : 'border-transparent'}`}>
+        class={`px-8.75 py-6.25 font-medium text-3.5 leading-[1.1] text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-1.75 ${path.startsWith('/boutique') ? 'border-[#72c073]' : 'border-transparent'}`}>
         Boutique
       </a>
       <a href="/abonnement"
-        class={`px-[35px] py-[25px] font-medium text-[14px] leading-[1.1] text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-[7px] ${path.startsWith('/abonnement') ? 'border-[#72c073]' : 'border-transparent'}`}>
+        class={`px-8.75 py-6.25 font-medium text-3.5 leading-[1.1] text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-1.75 ${path.startsWith('/abonnement') ? 'border-[#72c073]' : 'border-transparent'}`}>
         Abonnement
       </a>
     </nav>
@@ -60,15 +60,15 @@ if (isLoggedIn) {
     <div class="flex-1"></div>
 
     <!-- Actions desktop — inchangées -->
-    <div class="hidden lg:flex items-center gap-[26px]">
+    <div class="hidden lg:flex items-center gap-6.5">
       <a href={profileHref} aria-label="Mon profil" class="hover:opacity-70 transition-opacity">
         {avatarUrl ? (
-          <img src={avatarUrl} alt="Mon profil" width="31" height="31" class="size-[31px] rounded-full object-cover" />
+          <img src={avatarUrl} alt="Mon profil" width="31" height="31" class="size-7.75 rounded-full object-cover" />
         ) : (
           <img src={userIcon.src} alt="" width="31" height="31" />
         )}
       </a>
-      <a href="/session" class="inline-flex items-center justify-center px-[50px] h-[45px] bg-black text-white font-medium text-[14px] leading-[1.1] whitespace-nowrap hover:opacity-80 transition-opacity">
+      <a href="/session" class="inline-flex items-center justify-center px-12.5 h-11.25 bg-black text-white font-medium text-3.5 leading-[1.1] whitespace-nowrap hover:opacity-80 transition-opacity">
         Crée un barathon
       </a>
     </div>
@@ -79,7 +79,7 @@ if (isLoggedIn) {
       <!-- Connexion / profil -->
       <a href={profileHref} aria-label="Mon profil" class="hover:opacity-70 transition-opacity">
         {avatarUrl ? (
-          <img src={avatarUrl} alt="Mon profil" width="30" height="30" class="size-[30px] rounded-full object-cover" />
+          <img src={avatarUrl} alt="Mon profil" width="30" height="30" class="size-7.5 rounded-full object-cover" />
         ) : (
           <img src={userIcon.src} alt="" width="28" height="28" />
         )}
@@ -87,10 +87,10 @@ if (isLoggedIn) {
 
       <!-- Bouton hamburger / croix -->
       <button id="nav-hamburger" aria-label="Ouvrir le menu"
-        class="relative w-[26px] h-[20px] bg-transparent border-0 cursor-pointer p-0 shrink-0">
-        <span class="ham-bar absolute left-0 w-full h-[2px] bg-black top-0 origin-center"></span>
-        <span class="ham-bar absolute left-0 w-full h-[2px] bg-black top-[9px] origin-center"></span>
-        <span class="ham-bar absolute left-0 w-full h-[2px] bg-black top-[18px] origin-center"></span>
+        class="relative w-6.5 h-5 bg-transparent border-0 cursor-pointer p-0 shrink-0">
+        <span class="ham-bar absolute left-0 w-full h-0.5 bg-black top-0 origin-center"></span>
+        <span class="ham-bar absolute left-0 w-full h-0.5 bg-black top-2.25 origin-center"></span>
+        <span class="ham-bar absolute left-0 w-full h-0.5 bg-black top-4.5 origin-center"></span>
       </button>
 
     </div>
@@ -114,38 +114,38 @@ if (isLoggedIn) {
     <!-- Liens nav -->
     <a href="/bar"
       class={`nav-link group flex items-center justify-between py-5 border-b border-white/10 ${path.startsWith('/bar') ? 'text-[#72c073]' : 'text-white'}`}>
-      <span class="font-['Manrope'] font-bold text-[36px] leading-none uppercase tracking-wide">Nos bars</span>
-      <span class="text-[#72c073] text-[28px] font-light opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+      <span class="font-['Manrope'] font-bold text-9 leading-none uppercase tracking-wide">Nos bars</span>
+      <span class="text-[#72c073] text-7 font-light opacity-0 group-hover:opacity-100 transition-opacity">→</span>
     </a>
 
     <a href="/Apropos"
       class={`nav-link group flex items-center justify-between py-5 border-b border-white/10 ${path.startsWith('/Apropos') ? 'text-[#72c073]' : 'text-white'}`}>
-      <span class="font-['Manrope'] font-bold text-[36px] leading-none uppercase tracking-wide">A propos</span>
-      <span class="text-[#72c073] text-[28px] font-light opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+      <span class="font-['Manrope'] font-bold text-9 leading-none uppercase tracking-wide">A propos</span>
+      <span class="text-[#72c073] text-7 font-light opacity-0 group-hover:opacity-100 transition-opacity">→</span>
     </a>
 
     <a href="/jeux"
       class={`nav-link group flex items-center justify-between py-5 border-b border-white/10 ${path.startsWith('/jeux') ? 'text-[#72c073]' : 'text-white'}`}>
-      <span class="font-['Manrope'] font-bold text-[36px] leading-none uppercase tracking-wide">Nos jeux</span>
-      <span class="text-[#72c073] text-[28px] font-light opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+      <span class="font-['Manrope'] font-bold text-9 leading-none uppercase tracking-wide">Nos jeux</span>
+      <span class="text-[#72c073] text-7 font-light opacity-0 group-hover:opacity-100 transition-opacity">→</span>
     </a>
 
     <a href="/boutique"
       class={`nav-link group flex items-center justify-between py-5 border-b border-white/10 ${path.startsWith('/boutique') ? 'text-[#72c073]' : 'text-white'}`}>
-      <span class="font-['Manrope'] font-bold text-[36px] leading-none uppercase tracking-wide">Boutique</span>
-      <span class="text-[#72c073] text-[28px] font-light opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+      <span class="font-['Manrope'] font-bold text-9 leading-none uppercase tracking-wide">Boutique</span>
+      <span class="text-[#72c073] text-7 font-light opacity-0 group-hover:opacity-100 transition-opacity">→</span>
     </a>
 
     <a href="/abonnement"
       class={`nav-link group flex items-center justify-between py-5 border-b border-white/10 ${path.startsWith('/abonnement') ? 'text-[#72c073]' : 'text-white'}`}>
-      <span class="font-['Manrope'] font-bold text-[36px] leading-none uppercase tracking-wide">Abonnement</span>
-      <span class="text-[#72c073] text-[28px] font-light opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+      <span class="font-['Manrope'] font-bold text-9 leading-none uppercase tracking-wide">Abonnement</span>
+      <span class="text-[#72c073] text-7 font-light opacity-0 group-hover:opacity-100 transition-opacity">→</span>
     </a>
 
     <!-- CTA session -->
     <div class="mt-8">
       <a href="/session"
-        class="nav-link inline-flex items-center justify-center w-full h-[56px] bg-[#72c073] text-[#094736] font-bold text-[16px] uppercase tracking-widest hover:bg-[#5aad5b] transition-colors">
+        class="nav-link inline-flex items-center justify-center w-full h-14 bg-[#72c073] text-[#094736] font-bold text-4 uppercase tracking-widest hover:bg-[#5aad5b] transition-colors">
         Crée un barathon
       </a>
     </div>

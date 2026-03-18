@@ -46,10 +46,10 @@ const faqItems = [
 <Layout>
 
   <!-- ==================== HERO ==================== -->
-  <section class="relative h-[400px] lg:h-[700px] overflow-hidden">
+  <section class="relative h-100 lg:h-175 overflow-hidden">
     <Image src={heroBg} alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
     <div class="absolute inset-0 bg-gradient-to-b from-[rgba(30,30,30,0.7)] to-[#1e1e1e]"></div>
-    <h1 class="absolute bottom-[40px] lg:top-[498px] right-[20px] lg:right-[80px] text-right text-white uppercase m-0 text-[40px] lg:text-[90px] w-[calc(100%-40px)] lg:w-[927px]">
+    <h1 class="absolute bottom-10 lg:top-124.5 right-5 lg:right-20 text-right text-white uppercase m-0 text-10 lg:text-22.5 w-[calc(100%-40px)] lg:w-231.75">
       Qui somme-nous
     </h1>
   </section>
@@ -58,8 +58,8 @@ const faqItems = [
 
   <!-- Mobile -->
   <section class="lg:hidden bg-[#f7f1ed] px-5 py-10">
-    <h2 class="text-black m-0 mb-6 text-[28px]">La naissance du projet</h2>
-    <div class="w-full h-[220px] rounded-[10px] overflow-hidden mb-6">
+    <h2 class="text-black m-0 mb-6 text-7">La naissance du projet</h2>
+    <div class="w-full h-55 rounded-2.5 overflow-hidden mb-6">
       <Image src={naissanceImg} alt="La naissance du projet" class="w-full h-full object-cover block pointer-events-none" />
     </div>
     <p class="text-[#646262] m-0">
@@ -71,17 +71,17 @@ const faqItems = [
   </section>
 
   <!-- Desktop -->
-  <section class="hidden lg:block relative h-[576px] bg-[#f7f1ed] overflow-visible z-[2]">
-    <h2 class="absolute top-[187px] left-[80px] text-black m-0 w-[405px]">
+  <section class="hidden lg:block relative h-144 bg-[#f7f1ed] overflow-visible z-[2]">
+    <h2 class="absolute top-46.75 left-20 text-black m-0 w-101.25">
       La naissance du projet
     </h2>
-    <p class="absolute top-[346px] left-[80px] w-[515px] text-[#646262] m-0">
+    <p class="absolute top-86.5 left-20 w-128.75 text-[#646262] m-0">
       BARGO est né d'un constat simple : organiser une tournée de bars entre amis devient vite compliqué.
       Messages dispersés, choix des bars au dernier moment, absence d'itinéraire clair…
       L'idée est alors apparue de créer une plateforme dédiée à l'organisation des barathons,
       afin de structurer l'expérience tout en conservant l'aspect convivial.
     </p>
-    <div class="absolute top-[160px] left-[calc(50%+16px)] w-[704px] h-[567px] rounded-tl-[10px] rounded-bl-[10px] overflow-hidden">
+    <div class="absolute top-40 left-[calc(50%+16px)] w-176 h-141.75 rounded-tl-2.5 rounded-bl-2.5 overflow-hidden">
       <Image src={naissanceImg} alt="La naissance du projet" class="w-full h-full object-cover block pointer-events-none" />
     </div>
   </section>
@@ -90,15 +90,15 @@ const faqItems = [
 
   <!-- Mobile -->
   <section class="lg:hidden bg-[#1e1e1e] px-5 py-10">
-    <h2 class="text-white m-0 mb-6 text-[28px]">Notre vision</h2>
+    <h2 class="text-white m-0 mb-6 text-7">Notre vision</h2>
     <p class="text-[#dfdfdf] m-0 mb-8">
       BARGO ne se limite pas à l'organisation d'une soirée. Le projet vise à proposer une expérience
       collective structurée, où convivialité et responsabilité vont de pair.
     </p>
-    <div class="w-full h-[220px] rounded-[10px] overflow-hidden mb-8">
+    <div class="w-full h-55 rounded-2.5 overflow-hidden mb-8">
       <Image src={visionImg} alt="Notre vision" class="w-full h-full object-cover block pointer-events-none" />
     </div>
-    <h2 class="text-white m-0 mb-4 text-[28px]">Nos objectifs</h2>
+    <h2 class="text-white m-0 mb-4 text-7">Nos objectifs</h2>
     <div class="text-[#dfdfdf] flex flex-col gap-3">
       <p class="m-0">Simplifier l'organisation des sorties entre amis</p>
       <p class="m-0">Encourager une approche responsable</p>
@@ -108,21 +108,21 @@ const faqItems = [
   </section>
 
   <!-- Desktop -->
-  <section class="hidden lg:block relative h-[799px] bg-[#1e1e1e] overflow-visible z-[1]">
-    <h2 class="absolute top-[101px] left-[80px] text-white m-0">
+  <section class="hidden lg:block relative h-199.75 bg-[#1e1e1e] overflow-visible z-[1]">
+    <h2 class="absolute top-25.25 left-20 text-white m-0">
       Notre vision
     </h2>
-    <p class="absolute top-[214px] left-[80px] w-[405px] text-[#dfdfdf] m-0">
+    <p class="absolute top-53.5 left-20 w-101.25 text-[#dfdfdf] m-0">
       BARGO ne se limite pas à l'organisation d'une soirée. Le projet vise à proposer une expérience
       collective structurée, où convivialité et responsabilité vont de pair.
     </p>
-    <div class="absolute top-[400px] left-0 w-[704px] h-[644px] rounded-tr-[10px] rounded-br-[10px] overflow-hidden">
+    <div class="absolute top-100 left-0 w-176 h-161 rounded-tr-2.5 rounded-br-2.5 overflow-hidden">
       <Image src={visionImg} alt="Notre vision" class="w-full h-full object-cover block pointer-events-none" />
     </div>
-    <h2 class="absolute top-[101px] left-[calc(58.33%+5px)] text-white m-0">
+    <h2 class="absolute top-25.25 left-[calc(58.33%+5px)] text-white m-0">
       Nos objectifs
     </h2>
-    <div class="absolute top-[214px] left-[calc(58.33%+5px)] w-[406px] text-[#dfdfdf]">
+    <div class="absolute top-53.5 left-[calc(58.33%+5px)] w-101.5 text-[#dfdfdf]">
       <p class="m-0">Simplifier l'organisation des sorties entre amis</p>
       <p class="m-0">&nbsp;</p>
       <p class="m-0">Encourager une approche responsable</p>
@@ -137,7 +137,7 @@ const faqItems = [
 
   <!-- Mobile -->
   <section class="lg:hidden bg-[#f7f1ed] px-5 py-10">
-    <h2 class="text-black m-0 mb-4 text-[28px]">Une collaboration collective</h2>
+    <h2 class="text-black m-0 mb-4 text-7">Une collaboration collective</h2>
     <p class="text-[#1e1e1e] m-0 mb-10">
       Ce projet a pu voir le jour grâce à la coordination de notre équipe et au soutien de nos nombreux
       partenaires. Leur collaboration et leur engagement ont contribué à faire de BARGO une plateforme
@@ -146,13 +146,13 @@ const faqItems = [
 
     <!-- Melvyn -->
     <div class="flex items-start gap-5 mb-10">
-      <div class="shrink-0 w-[90px] h-[90px] rounded-full overflow-hidden">
+      <div class="shrink-0 w-22.5 h-22.5 rounded-full overflow-hidden">
         <Image src={membre1} alt="Melvyn Philippon" class="w-full h-full object-cover block pointer-events-none" />
       </div>
       <div>
-        <h2 class="text-[#72c073] m-0 mb-1 text-[20px]">Notre Designer</h2>
+        <h2 class="text-[#72c073] m-0 mb-1 text-5">Notre Designer</h2>
         <h3 class="text-[#1e1e1e] m-0 mb-2">Melvyn Philippon</h3>
-        <p class="text-[#646262] m-0 text-[14px]">
+        <p class="text-[#646262] m-0 text-3.5">
           Responsable de l'identité visuelle et de l'expérience utilisateur, il a conçu l'univers graphique
           de BARGO ainsi que l'interface.
         </p>
@@ -161,13 +161,13 @@ const faqItems = [
 
     <!-- Pierre -->
     <div class="flex items-start gap-5 mb-10">
-      <div class="shrink-0 w-[90px] h-[90px] rounded-full overflow-hidden">
+      <div class="shrink-0 w-22.5 h-22.5 rounded-full overflow-hidden">
         <Image src={membre2} alt="Pierre Mouilleseaux-Lhuillier" class="w-full h-full object-cover block pointer-events-none" />
       </div>
       <div>
-        <h2 class="text-[#72c073] m-0 mb-1 text-[20px]">Notre Développeur</h2>
+        <h2 class="text-[#72c073] m-0 mb-1 text-5">Notre Développeur</h2>
         <h3 class="text-[#1e1e1e] m-0 mb-2">Pierre Mouilleseaux-Lhuillier</h3>
-        <p class="text-[#646262] m-0 text-[14px]">
+        <p class="text-[#646262] m-0 text-3.5">
           En charge de la conception technique, il a structuré l'architecture du site et développé les
           fonctionnalités principales.
         </p>
@@ -176,13 +176,13 @@ const faqItems = [
 
     <!-- Alex -->
     <div class="flex items-start gap-5">
-      <div class="shrink-0 w-[90px] h-[90px] rounded-full overflow-hidden">
+      <div class="shrink-0 w-22.5 h-22.5 rounded-full overflow-hidden">
         <Image src={membre3} alt="Alex Ringenbach" class="w-full h-full object-cover block pointer-events-none" />
       </div>
       <div>
-        <h2 class="text-[#72c073] m-0 mb-1 text-[20px]">Notre responsable Communication</h2>
+        <h2 class="text-[#72c073] m-0 mb-1 text-5">Notre responsable Communication</h2>
         <h3 class="text-[#1e1e1e] m-0 mb-2">Alex Ringenbach</h3>
-        <p class="text-[#646262] m-0 text-[14px]">
+        <p class="text-[#646262] m-0 text-3.5">
           Il définit la stratégie de communication et l'image du projet. Il s'occupe de la cohérence du
           discours et de la mise en avant des valeurs de BARGO.
         </p>
@@ -191,48 +191,48 @@ const faqItems = [
   </section>
 
   <!-- Desktop -->
-  <section class="hidden lg:block relative h-[2080px] bg-[#f7f1ed]">
+  <section class="hidden lg:block relative h-520 bg-[#f7f1ed]">
 
-    <h2 class="absolute top-[364px] left-[80px] text-black m-0 w-[515px]">
+    <h2 class="absolute top-91 left-20 text-black m-0 w-128.75">
       Une collaboration collective
     </h2>
-    <p class="absolute top-[375px] left-[calc(50%+16px)] w-[624px] text-[#1e1e1e] m-0">
+    <p class="absolute top-93.75 left-[calc(50%+16px)] w-156 text-[#1e1e1e] m-0">
       Ce projet a pu voir le jour grâce à la coordination de notre équipe et au soutien de nos nombreux
       partenaires. Leur collaboration et leur engagement ont contribué à faire de BARGO une plateforme
       cohérente et aboutie.
     </p>
 
     <!-- Melvyn -->
-    <div class="absolute top-[668px] left-[80px] w-[296px] h-[296px] rounded-bl-[1000px] rounded-tl-[1000px] rounded-tr-[1000px] overflow-hidden">
+    <div class="absolute top-167 left-20 w-74 h-74 rounded-bl-250 rounded-tl-250 rounded-tr-250 overflow-hidden">
       <Image src={membre1} alt="Melvyn Philippon" class="w-full h-full object-cover block pointer-events-none" />
     </div>
-    <h2 class="absolute top-[668px] left-[calc(25%+48px)] text-[#72c073] m-0">Notre Designer</h2>
-    <h3 class="absolute top-[740px] left-[calc(25%+48px)] text-[#1e1e1e] m-0 w-[296px]">Melvyn Philippon</h3>
-    <p class="absolute top-[816px] left-[calc(25%+48px)] w-[515px] text-[#646262] m-0">
+    <h2 class="absolute top-167 left-[calc(25%+48px)] text-[#72c073] m-0">Notre Designer</h2>
+    <h3 class="absolute top-185 left-[calc(25%+48px)] text-[#1e1e1e] m-0 w-74">Melvyn Philippon</h3>
+    <p class="absolute top-204 left-[calc(25%+48px)] w-128.75 text-[#646262] m-0">
       Responsable de l'identité visuelle et de l'expérience utilisateur, il a conçu l'univers graphique
       de BARGO ainsi que l'interface. Son objectif : proposer une navigation claire, moderne et cohérente
       avec les valeurs du projet.
     </p>
 
     <!-- Pierre -->
-    <div class="absolute top-[1098px] left-[calc(16.67%+59px)] w-[296px] h-[296px] rounded-br-[1000px] rounded-tl-[1000px] rounded-tr-[1000px] overflow-hidden">
+    <div class="absolute top-274.5 left-[calc(16.67%+59px)] w-74 h-74 rounded-br-250 rounded-tl-250 rounded-tr-250 overflow-hidden">
       <Image src={membre2} alt="Pierre Mouilleseaux-Lhuillier" class="w-full h-full object-cover block pointer-events-none" />
     </div>
-    <h2 class="absolute top-[1098px] left-[calc(41.67%+27px)] text-[#72c073] m-0">Notre Développeur</h2>
-    <h3 class="absolute top-[1170px] left-[calc(41.67%+27px)] text-[#1e1e1e] m-0 w-[405px]">Pierre Mouilleseaux-Lhuillier</h3>
-    <p class="absolute top-[1246px] left-[calc(41.67%+27px)] w-[514px] text-[#646262] m-0">
+    <h2 class="absolute top-274.5 left-[calc(41.67%+27px)] text-[#72c073] m-0">Notre Développeur</h2>
+    <h3 class="absolute top-292.5 left-[calc(41.67%+27px)] text-[#1e1e1e] m-0 w-101.25">Pierre Mouilleseaux-Lhuillier</h3>
+    <p class="absolute top-311.5 left-[calc(41.67%+27px)] w-128.5 text-[#646262] m-0">
       En charge de la conception technique, il a structuré l'architecture du site et développé les
       fonctionnalités principales. Il veille à la performance, à la fluidité et au bon fonctionnement
       de la plateforme.
     </p>
 
     <!-- Alex -->
-    <div class="absolute top-[1528px] left-[80px] w-[296px] h-[296px] rounded-bl-[1000px] rounded-tl-[1000px] rounded-tr-[1000px] overflow-hidden">
+    <div class="absolute top-382 left-20 w-74 h-74 rounded-bl-250 rounded-tl-250 rounded-tr-250 overflow-hidden">
       <Image src={membre3} alt="Alex Ringenbach" class="w-full h-full object-cover block pointer-events-none" />
     </div>
-    <h2 class="absolute top-[1528px] left-[calc(25%+48px)] text-[#72c073] m-0 w-[515px]">Notre responsable Communication</h2>
-    <h3 class="absolute top-[1650px] left-[calc(25%+48px)] text-[#1e1e1e] m-0 w-[296px]">Alex Ringenbach</h3>
-    <p class="absolute top-[1726px] left-[calc(25%+48px)] w-[515px] text-[#646262] m-0">
+    <h2 class="absolute top-382 left-[calc(25%+48px)] text-[#72c073] m-0 w-128.75">Notre responsable Communication</h2>
+    <h3 class="absolute top-412.5 left-[calc(25%+48px)] text-[#1e1e1e] m-0 w-74">Alex Ringenbach</h3>
+    <p class="absolute top-431.5 left-[calc(25%+48px)] w-128.75 text-[#646262] m-0">
       Il définit la stratégie de communication et l'image du projet. Il s'occupe de la cohérence du
       discours, de la présentation du concept et de la mise en avant des valeurs de BARGO.
     </p>
@@ -246,7 +246,7 @@ const faqItems = [
 
   <!-- Mobile -->
   <section class="lg:hidden bg-[#f7f1ed] px-5 py-10">
-    <h2 class="text-black m-0 mb-6 text-[28px]">Sortir ensemble, en toute responsabilité</h2>
+    <h2 class="text-black m-0 mb-6 text-7">Sortir ensemble, en toute responsabilité</h2>
     <p class="text-[#646262] m-0">
       Un barathon doit rester un moment convivial et maîtrisé. Pensez à organiser votre retour à l'avance,
       à désigner un conducteur pour la soirée et à respecter vos limites. L'abus d'alcool est dangereux
@@ -255,11 +255,11 @@ const faqItems = [
   </section>
 
   <!-- Desktop -->
-  <section class="hidden lg:block relative h-[507px] bg-[#f7f1ed]">
-    <h2 class="absolute top-[136px] left-[80px] text-black m-0 w-[733px]">
+  <section class="hidden lg:block relative h-126.75 bg-[#f7f1ed]">
+    <h2 class="absolute top-34 left-20 text-black m-0 w-183.25">
       Sortir ensemble, en toute responsabilité
     </h2>
-    <p class="absolute top-[264px] left-[calc(58.33%+5px)] w-[515px] text-[#646262] m-0">
+    <p class="absolute top-66 left-[calc(58.33%+5px)] w-128.75 text-[#646262] m-0">
       Un barathon doit rester un moment convivial et maîtrisé. Pensez à organiser votre retour à l'avance,
       à désigner un conducteur pour la soirée et à respecter vos limites. L'abus d'alcool est dangereux
       pour la santé. Consommez avec modération.
