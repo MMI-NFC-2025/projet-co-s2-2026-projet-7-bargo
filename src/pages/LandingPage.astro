@@ -29,16 +29,18 @@ function truncate15(text) {
   return words.slice(0, 15).join(' ') + '\u2026';
 }
 
-const barsData = bars.map(bar => ({
-  id:          bar.id,
-  nom:         bar.nom ?? '',
-  adresse:     bar.adresse ?? '',
-  description: truncate15(bar.description),
-  parallaxUrl: bar.galerie?.[0]
-    ? getImageUrl(bar, bar.galerie[0])
-    : (bar.img?.[0] ? getImageUrl(bar, bar.img[0]) : ''),
-  cardImgUrl: bar.img?.[0] ? getImageUrl(bar, bar.img[0]) : '',
-}));
+const barsData = bars.map(bar => {
+  const mainImg     = bar.img?.[0]     ? getImageUrl(bar, bar.img[0])     : '';
+  const galerieImg  = bar.galerie?.[0] ? getImageUrl(bar, bar.galerie[0]) : '';
+  return {
+    id:          bar.id,
+    nom:         bar.nom ?? '',
+    adresse:     bar.adresse ?? '',
+    description: truncate15(bar.description),
+    parallaxUrl: galerieImg || mainImg,
+    cardImgUrl:  mainImg    || galerieImg,
+  };
+});
 
 const valeurs = [
   { titre: 'Convivialité',   texte: "Bargo favorise les moments de partage entre amis. La plateforme est pensée pour rendre les sorties plus simples, agréables et collectives." },
@@ -166,7 +168,7 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
         <div class="absolute inset-0 bg-gradient-to-b from-[rgba(30,30,30,0.35)] to-transparent pointer-events-none"></div>
         <h2 id="lp-nom-a" class="absolute left-[73px] top-[378px] text-white w-[411px] m-0">{barsData[0].nom}</h2>
       </div>
-      <div id="lp-bg-b" class="absolute left-0 top-0 w-full h-full translate-y-full">
+      <div id="lp-bg-b" class="absolute left-0 top-0 w-full h-full" style="transform:translateY(100%)">
         <div id="lp-prlx-b" class="absolute inset-0 bg-cover bg-center"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-[rgba(30,30,30,0.65)] to-transparent pointer-events-none"></div>
         <div class="absolute inset-0 bg-gradient-to-b from-[rgba(30,30,30,0.35)] to-transparent pointer-events-none"></div>
@@ -182,16 +184,16 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
         <p id="lp-desc-a" class="absolute left-[78px] top-[343px] w-[177px] text-sm font-medium leading-[1.1] text-[#646262]">{barsData[0].description}</p>
         <a id="lp-link-a" href={`/bar/${barsData[0].id}`} class="absolute left-[78px] top-[526px] w-[218px] h-[80px] bg-[#1e1e1e] inline-flex items-center justify-center text-white text-base font-medium no-underline">En savoir plus</a>
         <div class="absolute left-[328px] top-[156px] w-[438px] h-[505px] rounded-r-[10px] overflow-hidden shadow-[-15px_15px_30px_0px_rgba(0,0,0,0.25)]">
-          <img id="lp-img-a" src={barsData[0].cardImgUrl} alt="" class="w-full h-full object-cover block" />
+          <img id="lp-img-a" src={barsData[0].cardImgUrl || undefined} alt="" class="w-full h-full object-cover block" />
         </div>
       </div>
-      <div id="lp-card-b" class="absolute left-0 top-0 w-full h-full -translate-x-full">
+      <div id="lp-card-b" class="absolute left-0 top-0 w-full h-full" style="transform:translateX(-100%)">
         <div class="absolute left-0 top-[156px] w-[328px] h-[505px] bg-white rounded-l-[10px] shadow-[-15px_15px_30px_0px_rgba(0,0,0,0.15)]"></div>
         <p id="lp-adr-b"  class="absolute left-[78px] top-[214px] w-[218px] text-base font-medium leading-[1.4] text-black"></p>
         <p id="lp-desc-b" class="absolute left-[78px] top-[343px] w-[177px] text-sm font-medium leading-[1.1] text-[#646262]"></p>
         <a id="lp-link-b" href="#" class="absolute left-[78px] top-[526px] w-[218px] h-[80px] bg-[#1e1e1e] inline-flex items-center justify-center text-white text-base font-medium no-underline">En savoir plus</a>
         <div class="absolute left-[328px] top-[156px] w-[438px] h-[505px] rounded-r-[10px] overflow-hidden shadow-[-15px_15px_30px_0px_rgba(0,0,0,0.25)]">
-          <img id="lp-img-b" src="" alt="" class="w-full h-full object-cover block" />
+          <img id="lp-img-b" alt="" class="w-full h-full object-cover block" />
         </div>
       </div>
     </div>
@@ -213,14 +215,14 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
     <div class="block lg:hidden absolute inset-0">
       <!-- Image de fond (moitié basse) -->
       <div class="absolute left-0 top-[324px] w-full h-[478px] overflow-hidden">
-        <img id="lp-mob-bg-src" src={barsData[0].parallaxUrl} alt="" class="w-full h-full object-cover block" />
+        <img id="lp-mob-bg-src" src={barsData[0].parallaxUrl || undefined} alt="" class="w-full h-full object-cover block" />
         <div class="absolute inset-0 bg-gradient-to-b from-[rgba(30,30,30,0)] to-[rgba(30,30,30,0.45)]"></div>
       </div>
 
       <!-- Carte blanche -->
       <div class="absolute top-[27px] left-[25px] w-[344px] h-[416px] bg-white rounded-[5px] shadow-[-7px_7px_15px_0px_rgba(0,0,0,0.25)] overflow-hidden">
         <div class="w-full h-[217px] overflow-hidden rounded-t-[5px] shrink-0">
-          <img id="lp-mob-img" src={barsData[0].cardImgUrl} alt="" class="w-full h-full object-cover block" />
+          <img id="lp-mob-img" src={barsData[0].cardImgUrl || undefined} alt="" class="w-full h-full object-cover block" />
         </div>
         <p id="lp-mob-adr"  class="absolute left-[18px] top-[240px] w-[270px] text-base font-medium leading-[1.4] text-[#1e1e1e]">{barsData[0].adresse}</p>
         <p id="lp-mob-desc" class="absolute left-[18px] top-[287px] w-[200px] text-sm font-medium leading-[1.1] text-[#646262]">{barsData[0].description}</p>
@@ -456,41 +458,61 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
 
   function _q(id) { return document.getElementById(id); }
 
+  // Remplit le contenu d'un panneau desktop (bg + card) avec les données d'un bar
+  function _fillPanel(panel, b) {
+    var prlx = _q('lp-prlx-' + panel);
+    if (prlx) prlx.style.backgroundImage = b.parallaxUrl ? "url('" + b.parallaxUrl + "')" : 'none';
+    var nom  = _q('lp-nom-'  + panel); if (nom)  nom.textContent = b.nom;
+    var adr  = _q('lp-adr-'  + panel); if (adr)  adr.textContent = b.adresse;
+    var desc = _q('lp-desc-' + panel); if (desc) desc.textContent = b.description;
+    var lnk  = _q('lp-link-' + panel); if (lnk)  lnk.href = '/bar/' + b.id;
+    var img  = _q('lp-img-'  + panel);
+    if (img) {
+      if (b.cardImgUrl) { img.src = b.cardImgUrl; }
+      else { img.removeAttribute('src'); }
+    }
+  }
+
   function _updateMobile(b) {
-    var img  = _q('lp-mob-img');    if (img)  img.src          = b.cardImgUrl  || '';
-    var bg   = _q('lp-mob-bg-src'); if (bg)   bg.src           = b.parallaxUrl || '';
+    var img = _q('lp-mob-img');
+    if (img) { if (b.cardImgUrl) img.src = b.cardImgUrl; else img.removeAttribute('src'); }
+    var bg = _q('lp-mob-bg-src');
+    if (bg)  { if (b.parallaxUrl) bg.src = b.parallaxUrl; else bg.removeAttribute('src'); }
     var adr  = _q('lp-mob-adr');    if (adr)  adr.textContent  = b.adresse;
     var desc = _q('lp-mob-desc');   if (desc) desc.textContent = b.description;
     var lnk  = _q('lp-mob-link');   if (lnk)  lnk.href        = '/bar/' + b.id;
     var nom  = _q('lp-mob-nom');    if (nom)  nom.textContent  = b.nom;
   }
 
+  // Double-buffering : pré-charge le panneau caché avec le bar suivant
+  function _prefetchAlt() {
+    var altPanel  = _current === 'a' ? 'b' : 'a';
+    var nextIdx   = (_barIdx + 1) % _bars.length;
+    _fillPanel(altPanel, _bars[nextIdx]);
+  }
+
+  // Pré-charge panel b avec bar[1] dès le départ (pendant que l'utilisateur regarde bar[0])
+  if (_bars.length > 1) { _fillPanel('b', _bars[1]); }
+
   function _goTo(newIdx) {
     if (_busy || !_bars.length || newIdx === _barIdx) return;
     _busy = true;
     var next  = _current === 'a' ? 'b' : 'a';
     var b     = _bars[newIdx];
-    // Capture les éléments courant/suivant avant tout changement de style
+
+    // Si le panneau n'est pas déjà pré-chargé avec le bon bar, on le remplit
+    // (cas du clic "précédent" ou navigation non séquentielle)
+    _fillPanel(next, b);
+
     var bgCur   = _q('lp-bg-'   + _current);
     var cdCur   = _q('lp-card-' + _current);
     var bgNext  = _q('lp-bg-'   + next);
     var cdNext  = _q('lp-card-' + next);
 
-    // Remplit le contenu du panneau suivant
-    var prlx = _q('lp-prlx-' + next); if (prlx) prlx.style.backgroundImage = b.parallaxUrl ? "url('" + b.parallaxUrl + "')" : '';
-    var nom  = _q('lp-nom-'  + next); if (nom)  nom.textContent  = b.nom;
-    var adr  = _q('lp-adr-'  + next); if (adr)  adr.textContent  = b.adresse;
-    var desc = _q('lp-desc-' + next); if (desc) desc.textContent = b.description;
-    var lnk  = _q('lp-link-' + next); if (lnk)  lnk.href        = '/bar/' + b.id;
-    var img  = _q('lp-img-'  + next); if (img)  img.src          = b.cardImgUrl || '';
-
     if (bgNext && bgCur && cdNext && cdCur) {
-      // Positionne le panneau suivant hors-écran sans transition
       bgNext.style.transition = 'none'; bgNext.style.transform = 'translateY(100%)';
       cdNext.style.transition = 'none'; cdNext.style.transform = 'translateX(-100%)';
-      // Force le reflow pour que les styles sans transition soient appliqués
       bgNext.getBoundingClientRect(); cdNext.getBoundingClientRect();
-      // Lance les animations
       var ease = 'transform ' + DUR + 'ms cubic-bezier(0.4, 0, 0.2, 1)';
       bgCur.style.transition  = ease; bgCur.style.transform  = 'translateY(-100%)';
       cdCur.style.transition  = ease; cdCur.style.transform  = 'translateX(100%)';
@@ -500,7 +522,6 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
     _updateMobile(b);
 
     setTimeout(function () {
-      // Remet l'ancien panneau courant hors-écran (en bas) pour la prochaine animation
       if (bgCur && cdCur) {
         bgCur.style.transition = 'none'; bgCur.style.transform = 'translateY(100%)';
         cdCur.style.transition = 'none'; cdCur.style.transform = 'translateX(-100%)';
@@ -508,6 +529,8 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
       _current = next; _barIdx = newIdx; _busy = false;
       var ctr = _q('lp-bar-counter');
       if (ctr) ctr.textContent = (_barIdx + 1) + ' / ' + _bars.length;
+      // Pré-charge immédiatement le panneau maintenant caché avec le bar suivant
+      _prefetchAlt();
     }, DUR + 50);
   }
 
