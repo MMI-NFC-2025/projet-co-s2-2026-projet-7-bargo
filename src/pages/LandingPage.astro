@@ -76,7 +76,7 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
 </section>
 
 <!-- ========== CE QUE BARGO ========== -->
-<section id="produit" class="relative w-full bg-white overflow-hidden lg:h-[1153px]">
+<section id="produit" class="relative w-full bg-[#f7f1ed] lg:bg-white overflow-hidden lg:h-[1153px]">
 
   <!-- Desktop image (droite, cachée mobile) -->
   <div class="hidden lg:block absolute top-[157px] left-[736px] w-[704px] h-[862px] rounded-b-[10px] overflow-hidden">
@@ -212,13 +212,13 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
     <!-- Mobile: carte bar -->
     <div class="block lg:hidden absolute inset-0">
       <!-- Image de fond (moitié basse) -->
-      <div class="absolute left-0 top-[524px] w-full h-[278px] overflow-hidden">
+      <div class="absolute left-0 top-[324px] w-full h-[478px] overflow-hidden">
         <img id="lp-mob-bg-src" src={barsData[0].parallaxUrl} alt="" class="w-full h-full object-cover block" />
-        <div class="absolute inset-0 bg-gradient-to-b from-[rgba(9,71,54,0.9)] to-[rgba(9,71,54,0.5)]"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-[rgba(30,30,30,0)] to-[rgba(30,30,30,0.45)]"></div>
       </div>
 
       <!-- Carte blanche -->
-      <div class="absolute top-[227px] left-[25px] w-[344px] h-[416px] bg-white rounded-[5px] shadow-[-7px_7px_15px_0px_rgba(0,0,0,0.25)] overflow-hidden">
+      <div class="absolute top-[27px] left-[25px] w-[344px] h-[416px] bg-white rounded-[5px] shadow-[-7px_7px_15px_0px_rgba(0,0,0,0.25)] overflow-hidden">
         <div class="w-full h-[217px] overflow-hidden rounded-t-[5px] shrink-0">
           <img id="lp-mob-img" src={barsData[0].cardImgUrl} alt="" class="w-full h-full object-cover block" />
         </div>
@@ -234,7 +234,7 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
       </div>
 
       <!-- Nom du bar -->
-      <h2 id="lp-mob-nom" class="absolute top-[700px] left-[25px] text-white text-[35px] tracking-[2px] leading-[1.1] w-[300px]">{barsData[0].nom}</h2>
+      <h2 id="lp-mob-nom" class="absolute top-[500px] left-[60px] text-white text-[50px] tracking-[3px] leading-none w-[276px]">{barsData[0].nom}</h2>
     </div>
 
   </section>
@@ -439,8 +439,8 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
     </div>
   </div>
 
-  <div class="absolute z-10 left-[28px] right-[28px] lg:left-[80px] lg:right-[80px] border-t border-[rgba(247,241,237,0.3)] top-[520px] lg:top-[375px]"></div>
-  <div class="absolute z-10 left-[28px] right-[28px] lg:left-[80px] lg:right-[80px] flex justify-between items-center top-[536px] lg:top-[398px]">
+  <div class="absolute z-10 left-[28px] right-[28px] lg:left-[80px] lg:right-[80px] border-t border-[rgba(247,241,237,0.3)] top-[581px] lg:top-[375px]"></div>
+  <div class="absolute z-10 left-[28px] right-[28px] lg:left-[80px] lg:right-[80px] flex justify-between items-center top-[597px] lg:top-[398px]">
     <a href="/mention_legal" class="font-medium text-sm leading-[1.1] text-[#f7f1ed] no-underline">Mentions légales</a>
     <p class="font-medium text-sm leading-[1.1] text-[#f7f1ed]">© 2026 BARGO</p>
   </div>
