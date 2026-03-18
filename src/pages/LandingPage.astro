@@ -357,7 +357,7 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
 </section>
 
 <!-- ========== INTÉRESSÉ ? ========== -->
-<section id="lp-interested" class="relative w-full h-[669px] lg:h-[901px] overflow-hidden">
+<section id="lp-interested" class="relative w-full h-[870px] lg:h-[1160px] overflow-hidden">
   <div class="absolute left-0 top-0 w-full lg:w-[813px] h-full bg-[#1e1e1e]"></div>
   <div class="hidden lg:block absolute left-[calc(8.33%+92px)] top-0 w-[1228px] h-full overflow-hidden">
     <Image src={carouselImg} alt="" class="w-full h-full object-cover block" />
@@ -375,26 +375,115 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
     Rejoignez Bargo et découvrez une nouvelle façon de préparer vos soirées entre amis. Planifiez votre parcours, invitez votre groupe et profitez pleinement de votre soirée.
   </p>
 
-  <p class="absolute top-[257px] left-[28px] lg:top-[316px] lg:left-[80px] text-white text-base font-medium leading-[1.4] whitespace-nowrap">Nom</p>
+  <!-- Pseudo -->
+  <p class="absolute top-[257px] left-[28px] lg:top-[316px] lg:left-[80px] text-white text-base font-medium leading-[1.4] whitespace-nowrap">Pseudo</p>
   <div class="absolute top-[293px] left-[28px] w-[334px] h-[35px] lg:top-[356px] lg:left-[80px] lg:w-[624px] lg:h-[62px] bg-[#f7f1ed] rounded-[3px]">
-    <input type="text" placeholder="Nom" class="w-full h-full bg-transparent border-0 px-[33px] text-sm font-medium text-[#646262] outline-none" />
+    <input id="lp-reg-pseudo" type="text" placeholder="VotreNom" class="w-full h-full bg-transparent border-0 px-[33px] text-sm font-medium text-[#646262] outline-none" />
   </div>
 
+  <!-- E-mail -->
   <p class="absolute top-[350px] left-[28px] lg:top-[452px] lg:left-[80px] text-white text-base font-medium leading-[1.4] whitespace-nowrap">Adresse E-mail</p>
   <div class="absolute top-[386px] left-[28px] w-[334px] h-[35px] lg:top-[492px] lg:left-[80px] lg:w-[624px] lg:h-[62px] bg-[#f7f1ed] rounded-[3px]">
-    <input type="email" placeholder="Mail" class="w-full h-full bg-transparent border-0 px-[33px] text-sm font-medium text-[#646262] outline-none" />
+    <input id="lp-reg-email" type="email" placeholder="exemple@mail.com" class="w-full h-full bg-transparent border-0 px-[33px] text-sm font-medium text-[#646262] outline-none" />
   </div>
 
-  <div class="absolute top-[480px] left-[28px] lg:top-[614px] lg:left-[80px] w-[25px] h-[25px] border-[3px] border-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]"></div>
-  <p class="absolute top-[483px] left-[75px] lg:top-[617px] lg:left-[127px] text-white text-sm lg:text-base font-medium leading-[1.4] w-[250px] lg:whitespace-nowrap">J'accepte les conditions d'utilisation</p>
+  <!-- Mot de passe -->
+  <p class="absolute top-[443px] left-[28px] lg:top-[588px] lg:left-[80px] text-white text-base font-medium leading-[1.4] whitespace-nowrap">Mot de passe</p>
+  <div class="absolute top-[479px] left-[28px] w-[334px] h-[35px] lg:top-[628px] lg:left-[80px] lg:w-[624px] lg:h-[62px] bg-[#f7f1ed] rounded-[3px]">
+    <input id="lp-reg-password" type="password" placeholder="••••••••" class="w-full h-full bg-transparent border-0 px-[33px] text-sm font-medium text-[#646262] outline-none" />
+  </div>
 
-  <button type="submit"
-          class="absolute top-[567px] left-[200px] w-[162px] h-[40px] text-sm
-                 lg:top-[713px] lg:left-[calc(25%+107px)] lg:w-[237px] lg:h-[60px] lg:text-base
+  <!-- Confirmation mot de passe -->
+  <p class="absolute top-[536px] left-[28px] lg:top-[724px] lg:left-[80px] text-white text-base font-medium leading-[1.4] whitespace-nowrap">Confirmation mot de passe</p>
+  <div class="absolute top-[572px] left-[28px] w-[334px] h-[35px] lg:top-[764px] lg:left-[80px] lg:w-[624px] lg:h-[62px] bg-[#f7f1ed] rounded-[3px]">
+    <input id="lp-reg-confirm" type="password" placeholder="••••••••" class="w-full h-full bg-transparent border-0 px-[33px] text-sm font-medium text-[#646262] outline-none" />
+  </div>
+
+  <label for="lp-reg-cgu" class="absolute top-[630px] left-[28px] lg:top-[848px] lg:left-[80px] flex items-center gap-[22px] cursor-pointer">
+    <div class="relative w-[25px] h-[25px] flex-shrink-0 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
+      <input id="lp-reg-cgu" type="checkbox" class="peer absolute inset-0 w-full h-full opacity-0 cursor-pointer m-0" />
+      <div class="absolute inset-0 border-[3px] border-white peer-checked:bg-[#72C073] peer-checked:border-[#72C073] pointer-events-none"></div>
+      <svg class="absolute inset-0 m-auto w-[13px] h-[13px] opacity-0 peer-checked:opacity-100 pointer-events-none" viewBox="0 0 13 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 4.5L5 8.5L12 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="text-white text-sm lg:text-base font-medium leading-[1.4] w-[250px] lg:whitespace-nowrap">J'accepte les conditions d'utilisation</span>
+  </label>
+
+  <p id="lp-reg-msg" class="absolute top-[678px] left-[28px] lg:top-[910px] lg:left-[80px] text-sm font-medium leading-[1.4] hidden"></p>
+
+  <button id="lp-reg-btn" type="button"
+          class="absolute top-[714px] left-[200px] w-[162px] h-[40px] text-sm
+                 lg:top-[960px] lg:left-[calc(25%+107px)] lg:w-[237px] lg:h-[60px] lg:text-base
                  bg-transparent border-2 border-white text-white font-medium cursor-pointer inline-flex items-center justify-center">
-    Soumettre
+    S'inscrire
   </button>
 </section>
+
+<script>
+  (function () {
+    var btn  = document.getElementById('lp-reg-btn');
+    var msg  = document.getElementById('lp-reg-msg');
+    if (!btn) return;
+
+    function showMsg(text, ok) {
+      msg.textContent = text;
+      msg.className = msg.className.replace(' hidden', '').replace('hidden', '');
+      msg.style.color = ok ? '#72C073' : '#f87171';
+      msg.classList.remove('hidden');
+    }
+
+    btn.addEventListener('click', async function () {
+      var pseudo   = document.getElementById('lp-reg-pseudo').value.trim();
+      var email    = document.getElementById('lp-reg-email').value.trim();
+      var password = document.getElementById('lp-reg-password').value;
+      var confirm  = document.getElementById('lp-reg-confirm').value;
+      var cgu      = document.getElementById('lp-reg-cgu').checked;
+
+      if (!pseudo || !email || !password || !confirm) { showMsg('Veuillez remplir tous les champs.', false); return; }
+      if (password !== confirm)                       { showMsg('Les mots de passe ne correspondent pas.', false); return; }
+      if (password.length < 8)                        { showMsg('Le mot de passe doit contenir au moins 8 caractères.', false); return; }
+      if (!cgu)                                       { showMsg("Veuillez accepter les conditions d'utilisation.", false); return; }
+
+      btn.disabled = true;
+      btn.textContent = '...';
+
+      try {
+        var res = await fetch('https://pbbargo.pierre-mouilleseaux-lhuillier.fr/api/collections/users/records', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pseudo: pseudo, email: email, password: password, passwordConfirm: confirm })
+        });
+        var json = await res.json();
+        if (!res.ok) {
+          var detail = json?.data?.email?.message || json?.message || 'Erreur lors de l\'inscription.';
+          showMsg(detail, false);
+          btn.disabled = false;
+          btn.textContent = 'S\'inscrire';
+        } else {
+          btn.style.background = '#72C073';
+          btn.style.borderColor = '#72C073';
+          btn.style.color = '#fff';
+          btn.textContent = '✓ Compte créé !';
+          // Connexion automatique via le endpoint SSR qui pose les cookies
+          setTimeout(function () {
+            var f = document.createElement('form');
+            f.method = 'POST';
+            f.action = '/connexion';
+            var ei = document.createElement('input'); ei.type = 'hidden'; ei.name = 'email';    ei.value = email;    f.appendChild(ei);
+            var pi = document.createElement('input'); pi.type = 'hidden'; pi.name = 'password'; pi.value = password; f.appendChild(pi);
+            document.body.appendChild(f);
+            f.submit();
+          }, 1000);
+        }
+      } catch (e) {
+        showMsg('Erreur réseau. Réessayez.', false);
+        btn.disabled = false;
+        btn.textContent = 'S\'inscrire';
+      }
+    });
+  })();
+</script>
 
 <!-- ========== FOOTER LP ========== -->
 <footer class="relative w-full h-[643px] lg:h-[457px] overflow-hidden">

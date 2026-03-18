@@ -142,7 +142,7 @@ const displayName = user.prenom
           ? <img src={avatarUrl} alt="Avatar" class="w-full h-full object-cover" />
           : <div class="w-full h-full bg-[#1e1e1e] flex items-center justify-center">
               <span class="text-white font-bold" style="font-size: 36px;">
-                {(user.pseudo ?? user.email ?? '?')[0].toUpperCase()}
+                {(user.pseudo || user.email || '?')[0].toUpperCase()}
               </span>
             </div>
         }
@@ -171,7 +171,7 @@ const displayName = user.prenom
           ? <img src={avatarUrl} alt="Avatar" class="w-full h-full object-cover" />
           : <div class="w-full h-full bg-[#1e1e1e] flex items-center justify-center">
               <span class="text-white font-bold" style="font-size: 60px;">
-                {(user.pseudo ?? user.email ?? '?')[0].toUpperCase()}
+                {(user.pseudo || user.email || '?')[0].toUpperCase()}
               </span>
             </div>
         }
