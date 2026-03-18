@@ -105,120 +105,100 @@ if (isLoggedIn) {
   class="lg:hidden fixed left-0 right-0 bottom-0 z-45 flex flex-col"
   style="top: 92px;">
 
-  <!-- Fond flouté -->
-  <div id="nav-backdrop" class="absolute inset-0 bg-neutral-800/92 backdrop-blur-xl"></div>
+  <!-- Fond -->
+  <div class="absolute inset-0 bg-neutral-800"></div>
 
   <!-- Contenu du menu -->
-  <nav class="relative z-10 flex flex-col justify-center h-full px-8 gap-1">
+  <nav class="relative z-10 flex flex-col justify-between h-full px-6 py-8">
 
     <!-- Liens nav -->
-    <a href="/bar"
-      class={`nav-link group flex items-center justify-between py-5 border-b border-white/10 ${path.startsWith('/bar') ? 'text-primary-500' : 'text-white'}`}>
-      <span class="font-['Manrope'] font-bold text-9 leading-none uppercase tracking-wide">Nos bars</span>
-      <span class="text-primary-500 text-7 font-light opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-    </a>
+    <div class="flex flex-col gap-0">
 
-    <a href="/Apropos"
-      class={`nav-link group flex items-center justify-between py-5 border-b border-white/10 ${path.startsWith('/Apropos') ? 'text-primary-500' : 'text-white'}`}>
-      <span class="font-['Manrope'] font-bold text-9 leading-none uppercase tracking-wide">A propos</span>
-      <span class="text-primary-500 text-7 font-light opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-    </a>
+      <a href="/bar"
+        class={`nav-link group flex items-center justify-between py-4 border-b border-white/10 ${path.startsWith('/bar') ? 'text-primary-500' : 'text-white'}`}>
+        <div class="flex items-baseline gap-3">
+          <span class="text-primary-500 font-['Inter'] font-medium text-3 opacity-60">01</span>
+          <span class="font-['Manrope'] font-bold leading-none uppercase" style="font-size: clamp(28px, 9vw, 42px);">Nos bars</span>
+        </div>
+        <span class="text-primary-500 text-6 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+      </a>
 
-    <a href="/jeux"
-      class={`nav-link group flex items-center justify-between py-5 border-b border-white/10 ${path.startsWith('/jeux') ? 'text-primary-500' : 'text-white'}`}>
-      <span class="font-['Manrope'] font-bold text-9 leading-none uppercase tracking-wide">Nos jeux</span>
-      <span class="text-primary-500 text-7 font-light opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-    </a>
+      <a href="/Apropos"
+        class={`nav-link group flex items-center justify-between py-4 border-b border-white/10 ${path.startsWith('/Apropos') ? 'text-primary-500' : 'text-white'}`}>
+        <div class="flex items-baseline gap-3">
+          <span class="text-primary-500 font-['Inter'] font-medium text-3 opacity-60">02</span>
+          <span class="font-['Manrope'] font-bold leading-none uppercase" style="font-size: clamp(28px, 9vw, 42px);">A propos</span>
+        </div>
+        <span class="text-primary-500 text-6 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+      </a>
 
-    <a href="/boutique"
-      class={`nav-link group flex items-center justify-between py-5 border-b border-white/10 ${path.startsWith('/boutique') ? 'text-primary-500' : 'text-white'}`}>
-      <span class="font-['Manrope'] font-bold text-9 leading-none uppercase tracking-wide">Boutique</span>
-      <span class="text-primary-500 text-7 font-light opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-    </a>
+      <a href="/jeux"
+        class={`nav-link group flex items-center justify-between py-4 border-b border-white/10 ${path.startsWith('/jeux') ? 'text-primary-500' : 'text-white'}`}>
+        <div class="flex items-baseline gap-3">
+          <span class="text-primary-500 font-['Inter'] font-medium text-3 opacity-60">03</span>
+          <span class="font-['Manrope'] font-bold leading-none uppercase" style="font-size: clamp(28px, 9vw, 42px);">Nos jeux</span>
+        </div>
+        <span class="text-primary-500 text-6 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+      </a>
 
-    <a href="/abonnement"
-      class={`nav-link group flex items-center justify-between py-5 border-b border-white/10 ${path.startsWith('/abonnement') ? 'text-primary-500' : 'text-white'}`}>
-      <span class="font-['Manrope'] font-bold text-9 leading-none uppercase tracking-wide">Abonnement</span>
-      <span class="text-primary-500 text-7 font-light opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-    </a>
+      <a href="/boutique"
+        class={`nav-link group flex items-center justify-between py-4 border-b border-white/10 ${path.startsWith('/boutique') ? 'text-primary-500' : 'text-white'}`}>
+        <div class="flex items-baseline gap-3">
+          <span class="text-primary-500 font-['Inter'] font-medium text-3 opacity-60">04</span>
+          <span class="font-['Manrope'] font-bold leading-none uppercase" style="font-size: clamp(28px, 9vw, 42px);">Boutique</span>
+        </div>
+        <span class="text-primary-500 text-6 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+      </a>
+
+      <a href="/abonnement"
+        class={`nav-link group flex items-center justify-between py-4 ${path.startsWith('/abonnement') ? 'text-primary-500' : 'text-white'}`}>
+        <div class="flex items-baseline gap-3">
+          <span class="text-primary-500 font-['Inter'] font-medium text-3 opacity-60">05</span>
+          <span class="font-['Manrope'] font-bold leading-none uppercase" style="font-size: clamp(28px, 9vw, 42px);">Abonnement</span>
+        </div>
+        <span class="text-primary-500 text-6 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+      </a>
+
+    </div>
 
     <!-- CTA session -->
-    <div class="mt-8">
-      <a href="/session"
-        class="nav-link inline-flex items-center justify-center w-full h-14 bg-primary-500 text-primary-900 font-bold text-4 uppercase tracking-widest hover:bg-primary-550 transition-colors">
-        Crée un barathon
-      </a>
-    </div>
+    <a href="/session"
+      class="nav-link flex items-center justify-center w-full h-14 bg-primary-500 text-primary-900 font-bold text-4 uppercase tracking-widest hover:bg-primary-550 transition-colors">
+      Crée un barathon
+    </a>
 
   </nav>
 </div>
 
 <style>
-  /* Hamburger bars transition */
   .ham-bar {
     transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;
   }
+  #nav-hamburger.is-open .ham-bar:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+  #nav-hamburger.is-open .ham-bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  #nav-hamburger.is-open .ham-bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 
-  /* État ouvert */
-  #nav-hamburger.is-open .ham-bar:nth-child(1) {
-    transform: translateY(9px) rotate(45deg);
-  }
-  #nav-hamburger.is-open .ham-bar:nth-child(2) {
-    opacity: 0;
-    transform: scaleX(0);
-  }
-  #nav-hamburger.is-open .ham-bar:nth-child(3) {
-    transform: translateY(-9px) rotate(-45deg);
-  }
-
-  /* Menu overlay transition */
   #nav-mobile-menu {
     opacity: 0;
     transform: translateY(-12px);
     pointer-events: none;
-    transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1),
-                transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.4,0,0.2,1);
   }
-  #nav-mobile-menu.is-open {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
+  #nav-mobile-menu.is-open { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
-  /* Apparition décalée des liens */
   .nav-link {
     opacity: 0;
     transform: translateX(-16px);
     transition: opacity 0.3s ease, transform 0.3s ease, color 0.2s ease;
   }
   #nav-mobile-menu.is-open .nav-link:nth-child(1) { opacity: 1; transform: translateX(0); transition-delay: 0.05s; }
-  #nav-mobile-menu.is-open .nav-link:nth-child(2) { opacity: 1; transform: translateX(0); transition-delay: 0.1s;  }
+  #nav-mobile-menu.is-open .nav-link:nth-child(2) { opacity: 1; transform: translateX(0); transition-delay: 0.1s; }
   #nav-mobile-menu.is-open .nav-link:nth-child(3) { opacity: 1; transform: translateX(0); transition-delay: 0.15s; }
-  #nav-mobile-menu.is-open .nav-link:nth-child(4) { opacity: 1; transform: translateX(0); transition-delay: 0.2s;  }
+  #nav-mobile-menu.is-open .nav-link:nth-child(4) { opacity: 1; transform: translateX(0); transition-delay: 0.2s; }
   #nav-mobile-menu.is-open .nav-link:nth-child(5) { opacity: 1; transform: translateX(0); transition-delay: 0.25s; }
-  #nav-mobile-menu.is-open .nav-link:nth-child(6) { opacity: 1; transform: translateX(0); transition-delay: 0.3s;  }
+  #nav-mobile-menu.is-open .nav-link:nth-child(6) { opacity: 1; transform: translateX(0); transition-delay: 0.3s; }
 </style>
 
 <script>
-  const btn  = document.getElementById('nav-hamburger');
-  const menu = document.getElementById('nav-mobile-menu');
-
-  if (btn && menu) {
-    btn.addEventListener('click', () => {
-      const isOpen = menu.classList.toggle('is-open');
-      btn.classList.toggle('is-open', isOpen);
-      btn.setAttribute('aria-label', isOpen ? 'Fermer le menu' : 'Ouvrir le menu');
-      // Bloquer le scroll de la page quand le menu est ouvert
-      document.body.style.overflow = isOpen ? 'hidden' : '';
-    });
-
-    // Fermer si on clique sur un lien
-    menu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        menu.classList.remove('is-open');
-        btn.classList.remove('is-open');
-        document.body.style.overflow = '';
-      });
-    });
-  }
+  import '../js/header.js';
 </script>

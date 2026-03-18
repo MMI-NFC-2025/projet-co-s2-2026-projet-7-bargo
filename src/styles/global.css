@@ -22,31 +22,37 @@
     overflow-x: hidden;
   }
 
-  /* H1 — Manrope Bold 90px */
+  /* H1 — mobile 35px / desktop 90px */
   h1 {
     font-family: 'Manrope', sans-serif;
     font-weight: 700;
-    font-size: 90px;
+    font-size: 35px;
     line-height: 1;
-    letter-spacing: 5.4px;
+    letter-spacing: 2.1px;
   }
 
-  /* H2 — Manrope Bold 50px */
+  /* H2 — mobile 26px / desktop 50px */
   h2 {
     font-family: 'Manrope', sans-serif;
     font-weight: 700;
-    font-size: 50px;
+    font-size: 26px;
     line-height: 1;
-    letter-spacing: 3px;
+    letter-spacing: 1.56px;
   }
 
-  /* H3 — Manrope Medium 25px */
+  /* H3 — mobile 18px / desktop 25px */
   h3 {
     font-family: 'Manrope', sans-serif;
     font-weight: 500;
-    font-size: 25px;
+    font-size: 18px;
     line-height: 1.4;
     letter-spacing: -1px;
+  }
+
+  @media (min-width: 1024px) {
+    h1 { font-size: 90px; letter-spacing: 5.4px; }
+    h2 { font-size: 50px; letter-spacing: 3px; }
+    h3 { font-size: 25px; }
   }
 }
 

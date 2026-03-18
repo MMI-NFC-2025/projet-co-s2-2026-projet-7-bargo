@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import facebookIcon from '../assets/icon/facebook.svg';
 import instaIcon    from '../assets/icon/insta.svg';
 import discordIcon  from '../assets/icon/discord.svg';
+import LeafletMap   from '../components/LeafletMap.astro';
 ---
 
 <Layout title="Contact — Bargo">
@@ -82,13 +83,13 @@ import discordIcon  from '../assets/icon/discord.svg';
         </p>
 
         <!-- Carte OpenStreetMap — IUT de Montbéliard -->
-        <div
+        <LeafletMap
           id="contact-map"
-          data-lat="47.5072"
-          data-lon="6.7955"
-          data-name="IUT de Montbéliard"
+          lat={47.5072}
+          lon={6.7955}
+          name="IUT de Montbéliard"
           class="w-full h-43.5 rounded-2.5 overflow-hidden z-0 bg-neutral-300"
-        ></div>
+        />
 
         <!-- Informations de contact -->
         <div class="flex flex-col gap-3.5">
@@ -133,32 +134,3 @@ import discordIcon  from '../assets/icon/discord.svg';
 
 </Layout>
 
-<script is:inline>
-(function() {
-  var mapEl = document.getElementById('contact-map');
-  if (!mapEl) return;
-  var lat = parseFloat(mapEl.dataset.lat);
-  var lon = parseFloat(mapEl.dataset.lon);
-  var name = mapEl.dataset.name || 'BARGO';
-
-  var link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-  document.head.appendChild(link);
-
-  var script = document.createElement('script');
-  script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-  script.onload = function() {
-    mapEl.innerHTML = '';
-    var map = L.map('contact-map').setView([lat, lon], 16);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
-    L.marker([lat, lon])
-      .addTo(map)
-      .bindPopup('<strong style="color:#347645">' + name + '</strong><br>4 Pl. Tharradin, 25200 Montbéliard')
-      .openPopup();
-  };
-  document.head.appendChild(script);
-})();
-</script>
