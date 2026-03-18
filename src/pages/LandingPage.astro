@@ -7,14 +7,9 @@ import Layout from '../layouts/Layout.astro';
 import heroImg     from '../assets/img/landing_page_hero.avif';
 import cotelImg    from '../assets/img/cotel.avif';
 import carouselImg from '../assets/img/img_carousle-1.avif';
-import footerBg    from '../assets/img/footer.avif';
 import membre1     from '../assets/img/melvyn_philippon.avif';
 import membre2     from '../assets/img/pierre_mouilleseaux_lhuillier.avif';
 import membre3     from '../assets/img/alex_ringenbach.avif';
-import iconFb      from '../assets/icon/facebook.svg';
-import iconInsta   from '../assets/icon/insta.svg';
-import iconDiscord from '../assets/icon/discord.svg';
-import logoLight   from '../assets/icon/logo-light.svg';
 
 const token  = Astro.cookies.get('pb_token')?.value;
 const userId = Astro.cookies.get('pb_user_id')?.value;
@@ -50,7 +45,7 @@ const valeurs = [
 const valeursImages = [cotelImg, heroImg, carouselImg];
 ---
 
-<Layout title="Bargo — Sortez organisés, rentrez en sécurité" noFooter>
+<Layout title="Bargo — Sortez organisés, rentrez en sécurité">
 
 <!-- ========== HERO ========== -->
 <section class="relative w-full h-[630px] lg:h-[685px] overflow-hidden">
@@ -420,237 +415,14 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
   </button>
 </section>
 
-<script>
-  (function () {
-    var btn  = document.getElementById('lp-reg-btn');
-    var msg  = document.getElementById('lp-reg-msg');
-    if (!btn) return;
 
-    function showMsg(text, ok) {
-      msg.textContent = text;
-      msg.className = msg.className.replace(' hidden', '').replace('hidden', '');
-      msg.style.color = ok ? '#72C073' : '#f87171';
-      msg.classList.remove('hidden');
-    }
-
-    btn.addEventListener('click', async function () {
-      var pseudo   = document.getElementById('lp-reg-pseudo').value.trim();
-      var email    = document.getElementById('lp-reg-email').value.trim();
-      var password = document.getElementById('lp-reg-password').value;
-      var confirm  = document.getElementById('lp-reg-confirm').value;
-      var cgu      = document.getElementById('lp-reg-cgu').checked;
-
-      if (!pseudo || !email || !password || !confirm) { showMsg('Veuillez remplir tous les champs.', false); return; }
-      if (password !== confirm)                       { showMsg('Les mots de passe ne correspondent pas.', false); return; }
-      if (password.length < 8)                        { showMsg('Le mot de passe doit contenir au moins 8 caractères.', false); return; }
-      if (!cgu)                                       { showMsg("Veuillez accepter les conditions d'utilisation.", false); return; }
-
-      btn.disabled = true;
-      btn.textContent = '...';
-
-      try {
-        var res = await fetch('https://pbbargo.pierre-mouilleseaux-lhuillier.fr/api/collections/users/records', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ pseudo: pseudo, email: email, password: password, passwordConfirm: confirm })
-        });
-        var json = await res.json();
-        if (!res.ok) {
-          var detail = json?.data?.email?.message || json?.message || 'Erreur lors de l\'inscription.';
-          showMsg(detail, false);
-          btn.disabled = false;
-          btn.textContent = 'S\'inscrire';
-        } else {
-          btn.style.background = '#72C073';
-          btn.style.borderColor = '#72C073';
-          btn.style.color = '#fff';
-          btn.textContent = '✓ Compte créé !';
-          // Connexion automatique via le endpoint SSR qui pose les cookies
-          setTimeout(function () {
-            var f = document.createElement('form');
-            f.method = 'POST';
-            f.action = '/connexion';
-            var ei = document.createElement('input'); ei.type = 'hidden'; ei.name = 'email';    ei.value = email;    f.appendChild(ei);
-            var pi = document.createElement('input'); pi.type = 'hidden'; pi.name = 'password'; pi.value = password; f.appendChild(pi);
-            document.body.appendChild(f);
-            f.submit();
-          }, 1000);
-        }
-      } catch (e) {
-        showMsg('Erreur réseau. Réessayez.', false);
-        btn.disabled = false;
-        btn.textContent = 'S\'inscrire';
-      }
-    });
-  })();
-</script>
-
-<!-- ========== FOOTER LP ========== -->
-<footer class="relative w-full h-[643px] lg:h-[457px] overflow-hidden">
-  <Image src={footerBg} alt="" class="absolute inset-0 w-full h-full object-cover" />
-  <div class="absolute inset-0 bg-gradient-to-b from-[rgba(30,30,30,0.7)] to-[#1e1e1e]"></div>
-
-  <div class="absolute top-[31px] left-[28px] lg:top-[35px] lg:left-[80px] z-10">
-    <img src={logoLight.src} alt="Bargo" class="h-[36px] lg:h-[44px] w-auto" />
-  </div>
-
-  <!-- Navigation colonnes -->
-  <div class="absolute top-[137px] lg:top-[123px] z-10 w-full">
-    <!-- Col 1 NAVIGATION -->
-    <div class="absolute left-[28px] lg:left-[80px] top-0 flex flex-col gap-[23px] lg:gap-[35px]">
-      <p class="font-bold text-base leading-[1.4] text-white">NAVIGATION</p>
-      <div class="flex flex-col gap-[18px]">
-        <a href="/bar"       class="font-medium text-base leading-[1.4] text-[#f7f1ed] no-underline">Voir tous les bars</a>
-        <a href="/jeux"      class="font-medium text-base leading-[1.4] text-[#f7f1ed] no-underline">Liste des jeux</a>
-        <a href="/connexion" class="font-medium text-base leading-[1.4] text-[#f7f1ed] no-underline">Inscription</a>
-      </div>
-    </div>
-    <!-- Col 2 INFORMATIONS -->
-    <div class="absolute left-[211px] lg:left-[calc(25%+48px)] top-0 flex flex-col gap-[23px] lg:gap-[35px]">
-      <p class="font-bold text-base leading-[1.4] text-white">INFORMATIONS</p>
-      <div class="flex flex-col gap-[18px]">
-        <a href="/Apropos"       class="font-medium text-base leading-[1.4] text-[#f7f1ed] no-underline">À propos</a>
-        <a href="/contact"       class="font-medium text-base leading-[1.4] text-[#f7f1ed] no-underline">Contact</a>
-        <a href="/mention_legal" class="font-medium text-base leading-[1.4] text-[#f7f1ed] no-underline">Mentions légales</a>
-      </div>
-    </div>
-    <!-- Col 3 PRÉVENTION -->
-    <div class="absolute left-[28px] top-[180px] lg:top-0 lg:left-[calc(50%+16px)] flex flex-col gap-[23px] lg:gap-[35px] w-[340px] lg:w-[261px]">
-      <p class="font-bold text-base leading-[1.4] text-white">PRÉVENTION</p>
-      <p class="font-medium text-base leading-[1.4] text-[#f7f1ed]">Votre sécurité avant tout<br/>L'abus d'alcool est dangereux pour la santé. BARGO vous accompagne pour des soirées responsables.</p>
-    </div>
-    <!-- Col 4 SUIVEZ-NOUS -->
-    <div class="absolute left-[28px] top-[307px] lg:top-0 lg:left-[calc(83.33%-30px)] flex flex-col gap-[23px] lg:gap-[35px]">
-      <p class="font-bold text-base leading-[1.4] text-white">SUIVEZ-NOUS</p>
-      <div class="flex gap-[29px] items-center">
-        <a href="#" aria-label="Facebook"><img src={iconFb.src}    alt="Facebook"  width="24" height="24" class="invert" /></a>
-        <a href="#" aria-label="Instagram"><img src={iconInsta.src} alt="Instagram" width="24" height="24" class="invert" /></a>
-        <a href="#" aria-label="Discord"><img src={iconDiscord.src} alt="Discord"   width="24" height="24" class="invert" /></a>
-      </div>
-    </div>
-  </div>
-
-  <div class="absolute z-10 left-[28px] right-[28px] lg:left-[80px] lg:right-[80px] border-t border-[rgba(247,241,237,0.3)] top-[581px] lg:top-[375px]"></div>
-  <div class="absolute z-10 left-[28px] right-[28px] lg:left-[80px] lg:right-[80px] flex justify-between items-center top-[597px] lg:top-[398px]">
-    <a href="/mention_legal" class="font-medium text-sm leading-[1.1] text-[#f7f1ed] no-underline">Mentions légales</a>
-    <p class="font-medium text-sm leading-[1.1] text-[#f7f1ed]">© 2026 BARGO</p>
-  </div>
-</footer>
 
 <script is:inline define:vars={{ barsData }}>
-(function () {
-  var _bars    = barsData;
-  var _barIdx  = 0;
-  var _current = 'a';
-  var _busy    = false;
-  var DUR      = 600;
-
-  function _q(id) { return document.getElementById(id); }
-
-  // Remplit le contenu d'un panneau desktop (bg + card) avec les données d'un bar
-  function _fillPanel(panel, b) {
-    var prlx = _q('lp-prlx-' + panel);
-    if (prlx) prlx.style.backgroundImage = b.parallaxUrl ? "url('" + b.parallaxUrl + "')" : 'none';
-    var nom  = _q('lp-nom-'  + panel); if (nom)  nom.textContent = b.nom;
-    var adr  = _q('lp-adr-'  + panel); if (adr)  adr.textContent = b.adresse;
-    var desc = _q('lp-desc-' + panel); if (desc) desc.textContent = b.description;
-    var lnk  = _q('lp-link-' + panel); if (lnk)  lnk.href = '/bar/' + b.id;
-    var img  = _q('lp-img-'  + panel);
-    if (img) {
-      if (b.cardImgUrl) { img.src = b.cardImgUrl; }
-      else { img.removeAttribute('src'); }
-    }
-  }
-
-  function _updateMobile(b) {
-    var img = _q('lp-mob-img');
-    if (img) { if (b.cardImgUrl) img.src = b.cardImgUrl; else img.removeAttribute('src'); }
-    var bg = _q('lp-mob-bg-src');
-    if (bg)  { if (b.parallaxUrl) bg.src = b.parallaxUrl; else bg.removeAttribute('src'); }
-    var adr  = _q('lp-mob-adr');    if (adr)  adr.textContent  = b.adresse;
-    var desc = _q('lp-mob-desc');   if (desc) desc.textContent = b.description;
-    var lnk  = _q('lp-mob-link');   if (lnk)  lnk.href        = '/bar/' + b.id;
-    var nom  = _q('lp-mob-nom');    if (nom)  nom.textContent  = b.nom;
-  }
-
-  // Double-buffering : pré-charge le panneau caché avec le bar suivant
-  function _prefetchAlt() {
-    var altPanel  = _current === 'a' ? 'b' : 'a';
-    var nextIdx   = (_barIdx + 1) % _bars.length;
-    _fillPanel(altPanel, _bars[nextIdx]);
-  }
-
-  // Pré-charge panel b avec bar[1] dès le départ (pendant que l'utilisateur regarde bar[0])
-  if (_bars.length > 1) { _fillPanel('b', _bars[1]); }
-
-  function _goTo(newIdx) {
-    if (_busy || !_bars.length || newIdx === _barIdx) return;
-    _busy = true;
-    var next  = _current === 'a' ? 'b' : 'a';
-    var b     = _bars[newIdx];
-
-    // Si le panneau n'est pas déjà pré-chargé avec le bon bar, on le remplit
-    // (cas du clic "précédent" ou navigation non séquentielle)
-    _fillPanel(next, b);
-
-    var bgCur   = _q('lp-bg-'   + _current);
-    var cdCur   = _q('lp-card-' + _current);
-    var bgNext  = _q('lp-bg-'   + next);
-    var cdNext  = _q('lp-card-' + next);
-
-    if (bgNext && bgCur && cdNext && cdCur) {
-      bgNext.style.transition = 'none'; bgNext.style.transform = 'translateY(100%)';
-      cdNext.style.transition = 'none'; cdNext.style.transform = 'translateX(-100%)';
-      bgNext.getBoundingClientRect(); cdNext.getBoundingClientRect();
-      var ease = 'transform ' + DUR + 'ms cubic-bezier(0.4, 0, 0.2, 1)';
-      bgCur.style.transition  = ease; bgCur.style.transform  = 'translateY(-100%)';
-      cdCur.style.transition  = ease; cdCur.style.transform  = 'translateX(100%)';
-      bgNext.style.transition = ease; bgNext.style.transform = 'translateY(0)';
-      cdNext.style.transition = ease; cdNext.style.transform = 'translateX(0)';
-    }
-    _updateMobile(b);
-
-    setTimeout(function () {
-      if (bgCur && cdCur) {
-        bgCur.style.transition = 'none'; bgCur.style.transform = 'translateY(100%)';
-        cdCur.style.transition = 'none'; cdCur.style.transform = 'translateX(-100%)';
-      }
-      _current = next; _barIdx = newIdx; _busy = false;
-      var ctr = _q('lp-bar-counter');
-      if (ctr) ctr.textContent = (_barIdx + 1) + ' / ' + _bars.length;
-      // Pré-charge immédiatement le panneau maintenant caché avec le bar suivant
-      _prefetchAlt();
-    }, DUR + 50);
-  }
-
-  var prev = _q('lp-bar-prev'); var nxt = _q('lp-bar-next');
-  if (prev) prev.addEventListener('click', function () { _goTo((_barIdx - 1 + _bars.length) % _bars.length); });
-  if (nxt)  nxt.addEventListener('click',  function () { _goTo((_barIdx + 1) % _bars.length); });
-  var mp = _q('lp-mob-prev'); var mn = _q('lp-mob-next');
-  if (mp) mp.addEventListener('click', function () { _goTo((_barIdx - 1 + _bars.length) % _bars.length); });
-  if (mn) mn.addEventListener('click', function () { _goTo((_barIdx + 1) % _bars.length); });
-
-  window.addEventListener('scroll', function () {
-    var prlx = _q('lp-prlx-' + _current); if (!prlx) return;
-    var wrap = _q('lp-bg-wrap');           if (!wrap) return;
-    var rect = wrap.getBoundingClientRect();
-    prlx.style.backgroundPositionY = (50 - (rect.top / window.innerHeight) * 15) + '%';
-  }, { passive: true });
-
-  // CAROUSEL VALEURS
-  var _valIdx   = 0;
-  var _valTotal = 3;
-  var _valTrack = _q('lp-val-track');
-  function _updateVal() {
-    if (_valTrack) {
-      _valTrack.style.transition = 'transform 0.5s ease-in-out';
-      _valTrack.style.transform  = 'translateX(-' + (_valIdx * (100 / _valTotal)) + '%)';
-    }
-  }
-  var vp = _q('lp-val-prev'); var vn = _q('lp-val-next');
-  if (vp) vp.addEventListener('click', function () { _valIdx = (_valIdx - 1 + _valTotal) % _valTotal; _updateVal(); });
-  if (vn) vn.addEventListener('click', function () { _valIdx = (_valIdx + 1) % _valTotal; _updateVal(); });
-})();
+  window.__LP_BARS__ = barsData;
+</script>
+<script>
+  import '../js/lp-carousel.js';
+  import '../js/lp-register.js';
 </script>
 
 </Layout>
