@@ -23,9 +23,9 @@ function pageUrl(p) {
 <Layout title="Nos jeux — Bargo">
 
   <!-- ===== HERO ===== -->
-  <section class="bg-[#094736] h-[450px] relative">
-    <h1 class="absolute top-[141px] left-[80px] text-white m-0 uppercase">Nos jeux</h1>
-    <p class="absolute top-[268px] left-[80px] text-[#f7f1ed] text-[14px] font-medium w-[547px] m-0 leading-[1.6]">
+  <section class="bg-[#094736] h-[280px] lg:h-[450px] relative">
+    <h1 class="absolute top-[60px] left-[20px] lg:top-[141px] lg:left-[80px] text-white m-0 uppercase text-[40px] lg:text-[90px]">Nos jeux</h1>
+    <p class="hidden lg:block absolute top-[268px] left-[80px] text-[#f7f1ed] text-[14px] font-medium w-[547px] m-0 leading-[1.6]">
       Ici vous pourrez tester des jeux à faire tout au long de votre soirée. Si vous voulez donner
       votre avis sur les jeux ou si vous avez d'autres idées, n'hésitez pas à nous en parler via
       mail ou via le <a href="/contact" class="underline hover:opacity-70 transition-opacity">formulaire de contact</a>.
@@ -33,40 +33,46 @@ function pageUrl(p) {
   </section>
 
   <!-- ===== GRILLE ===== -->
-  <div class="bg-[#f7f1ed] px-[80px] pt-[58px] pb-[80px]">
+  <div class="bg-[#f7f1ed] px-4 lg:px-[80px] pt-8 lg:pt-[58px] pb-10 lg:pb-[80px]">
 
     {jeux.length > 0 ? (
-      <div class="grid grid-cols-3 gap-[32px]">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-[32px]">
         {jeux.map(jeu => {
           const imageFile = Array.isArray(jeu.img) ? jeu.img[0] : jeu.img;
           return (
-            <div class="h-[532px] bg-white rounded-[2px] shadow-[0px_7px_4px_0px_rgba(0,0,0,0.25)] relative overflow-hidden">
+            <div class="bg-white rounded-[2px] shadow-[0px_7px_4px_0px_rgba(0,0,0,0.25)] overflow-hidden">
 
               <!-- Image -->
-              <div class="absolute top-0 left-0 right-0 h-[300px] overflow-hidden rounded-tl-[2px] rounded-tr-[2px]">
-                <PbImage record={jeu} recordImage={imageFile} width={405} height={300} />
+              <div class="w-full h-[200px] lg:h-[300px] overflow-hidden">
+                <PbImage record={jeu} recordImage={imageFile} width={405} height={300} class="w-full h-full object-cover" />
               </div>
 
-              <!-- Nom -->
-              <h3 class="absolute top-[320px] left-[19px] right-[40px] m-0 text-black truncate">{jeu.nom}</h3>
+              <!-- Contenu -->
+              <div class="p-4 lg:p-0 lg:relative lg:h-[232px]">
 
-              <!-- Description -->
-              <p class="absolute top-[373px] left-[19px] w-[220px] text-[#646262] text-[16px] font-medium leading-[1.4] m-0 line-clamp-2">
-                {jeu.description}
-              </p>
+                <!-- Nom -->
+                <h3 class="m-0 text-black truncate lg:absolute lg:top-[20px] lg:left-[19px] lg:right-[40px]">{jeu.nom}</h3>
 
-              <!-- Like -->
-              <button class="like-btn absolute top-[451px] right-[21px] bg-transparent border-0 cursor-pointer p-0" data-id={jeu.id} type="button" aria-label="Ajouter aux favoris">
-                <img src={likeIcon.src} alt="" class="like-empty size-[24px]" />
-                <img src={likeFillIcon.src} alt="" class="like-filled size-[24px] hidden" />
-              </button>
+                <!-- Description -->
+                <p class="mt-2 lg:mt-0 text-[#646262] text-[16px] font-medium leading-[1.4] m-0 line-clamp-2 lg:absolute lg:top-[73px] lg:left-[19px] lg:w-[220px]">
+                  {jeu.description}
+                </p>
 
-              <!-- Bouton Jouer -->
-              <button type="button"
-                class="absolute top-[442px] bottom-[30px] left-[19px] w-[237px] bg-[#1e1e1e] flex items-center justify-center text-white text-[16px] font-medium hover:opacity-90 transition-opacity cursor-pointer border-0">
-                Jouer
-              </button>
+                <!-- Actions -->
+                <div class="mt-4 lg:mt-0 flex items-center gap-3 lg:block">
+                  <!-- Bouton Jouer -->
+                  <button type="button"
+                    class="flex-1 lg:flex-none lg:absolute lg:top-[142px] lg:bottom-[30px] lg:left-[19px] lg:w-[237px] h-[48px] lg:h-auto bg-[#1e1e1e] flex items-center justify-center text-white text-[16px] font-medium hover:opacity-90 transition-opacity cursor-pointer border-0">
+                    Jouer
+                  </button>
+                  <!-- Like -->
+                  <button class="like-btn lg:absolute lg:top-[151px] lg:right-[21px] bg-transparent border-0 cursor-pointer p-0 shrink-0" data-id={jeu.id} type="button" aria-label="Ajouter aux favoris">
+                    <img src={likeIcon.src} alt="" class="like-empty size-[24px]" />
+                    <img src={likeFillIcon.src} alt="" class="like-filled size-[24px] hidden" />
+                  </button>
+                </div>
 
+              </div>
             </div>
           );
         })}

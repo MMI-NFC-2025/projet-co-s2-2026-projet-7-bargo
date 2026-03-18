@@ -52,9 +52,9 @@ function pageUrl(p) {
 <Layout title="Boutique — Bargo">
 
   <!-- ===== HERO ===== -->
-  <section class="bg-[#094736] h-[450px] relative">
-    <h1 class="absolute top-[141px] left-[80px] text-white m-0 uppercase">Boutique</h1>
-    <p class="absolute top-[268px] left-[80px] text-[#f7f1ed] text-[14px] font-medium w-[547px] m-0 leading-[1.6]">
+  <section class="bg-[#094736] h-[280px] lg:h-[450px] relative">
+    <h1 class="absolute top-[60px] left-[20px] lg:top-[141px] lg:left-[80px] text-white m-0 uppercase text-[40px] lg:text-[90px]">Boutique</h1>
+    <p class="hidden lg:block absolute top-[268px] left-[80px] text-[#f7f1ed] text-[14px] font-medium w-[547px] m-0 leading-[1.6]">
       Personnalisez votre profil et affirmez votre style au sein du groupe. Débloquez des avatars,
       des cadres et des thèmes exclusifs grâce à votre participation et à vos succès.
       Plus vous prenez part aux barathons, plus votre profil évolue.
@@ -67,14 +67,14 @@ function pageUrl(p) {
     <!-- Tab bar -->
     <div class="pt-[23px]">
       <div class="border-b-2 border-[#e7e5e5] shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25)]">
-        <div class="px-[80px] flex items-center justify-between h-[52px]">
+        <div class="px-4 lg:px-[80px] flex items-center justify-between h-[52px]">
 
           <!-- Onglets -->
-          <div class="flex items-center h-full">
+          <div class="flex items-center h-full overflow-x-auto">
             {tabs.map(tab => (
               <a
                 href={tabUrl(tab.id)}
-                class={`flex items-center justify-center px-[25px] h-full text-[16px] font-medium text-black border-b-[7px] transition-colors no-underline ${activeTab === tab.id ? 'border-[#72c073]' : 'border-transparent'}`}
+                class={`flex items-center justify-center px-4 lg:px-[25px] h-full text-[14px] lg:text-[16px] font-medium text-black border-b-[7px] transition-colors no-underline whitespace-nowrap ${activeTab === tab.id ? 'border-[#72c073]' : 'border-transparent'}`}
               >
                 {tab.label}
               </a>
@@ -83,9 +83,9 @@ function pageUrl(p) {
 
           <!-- Points utilisateur -->
           {userPoints !== null && (
-            <div class="flex items-center gap-3">
-              <span class="text-black text-[16px] font-medium">Vos points :</span>
-              <h3 class="m-0 text-black">{userPoints} points</h3>
+            <div class="flex items-center gap-2 lg:gap-3 shrink-0 ml-4">
+              <span class="hidden lg:block text-black text-[16px] font-medium">Vos points :</span>
+              <h3 class="m-0 text-black text-[14px] lg:text-[25px]">{userPoints} pts</h3>
             </div>
           )}
 
@@ -94,35 +94,35 @@ function pageUrl(p) {
     </div>
 
     <!-- Grille de produits -->
-    <div class="px-[80px] pt-[92px] pb-[80px]">
+    <div class="px-4 lg:px-[80px] pt-8 lg:pt-[92px] pb-8 lg:pb-[80px]">
       {produits.length > 0 ? (
-        <div class="grid grid-cols-4 gap-[32px]">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-[32px]">
           {produits.map(produit => {
             const imageFile = Array.isArray(produit.item) ? produit.item[0] : produit.item;
             return (
-              <div class="h-[367px] rounded-[2px] shadow-[0px_4px_6px_0px_rgba(0,0,0,0.25)] relative overflow-hidden bg-[#646262]">
+              <div class="h-[300px] lg:h-[367px] rounded-[2px] shadow-[0px_4px_6px_0px_rgba(0,0,0,0.25)] relative overflow-hidden bg-[#646262]">
 
                 <!-- Zone blanche du bas -->
-                <div class="absolute bottom-0 left-0 right-0 h-[143px] bg-white rounded-bl-[2px] rounded-br-[2px]"></div>
+                <div class="absolute bottom-0 left-0 right-0 h-[120px] lg:h-[143px] bg-white rounded-bl-[2px] rounded-br-[2px]"></div>
 
                 <!-- Image avatar (cercle centré) -->
-                <div class="absolute top-[42px] left-1/2 -translate-x-1/2 size-[150px] rounded-full overflow-hidden">
+                <div class="absolute top-[30px] lg:top-[42px] left-1/2 -translate-x-1/2 size-[110px] lg:size-[150px] rounded-full overflow-hidden">
                   <PbImage record={produit} recordImage={imageFile} width={150} height={150} />
                 </div>
 
                 <!-- Ligne points + like -->
-                <div class="absolute top-[239px] left-[29px] right-[27px] flex items-center justify-between">
-                  <h3 class="m-0 text-black">{produit.prix} points</h3>
+                <div class="absolute top-[195px] lg:top-[239px] left-[16px] lg:left-[29px] right-[16px] lg:right-[27px] flex items-center justify-between">
+                  <h3 class="m-0 text-black text-[16px] lg:text-[25px]">{produit.prix} pts</h3>
                   <button class="like-btn" data-id={produit.id} type="button">
-                    <img src={likeIcon.src} alt="Ajouter aux favoris" class="like-empty size-[24px]" />
-                    <img src={likeFillIcon.src} alt="Retirer des favoris" class="like-filled size-[24px] hidden" />
+                    <img src={likeIcon.src} alt="Ajouter aux favoris" class="like-empty size-[20px] lg:size-[24px]" />
+                    <img src={likeFillIcon.src} alt="Retirer des favoris" class="like-filled size-[20px] lg:size-[24px] hidden" />
                   </button>
                 </div>
 
                 <!-- Bouton Acheter -->
                 <button type="button"
-                  class="absolute top-[295px] bottom-[12px] left-[29px] right-[30px] bg-[#1e1e1e] flex items-center justify-center hover:opacity-90 transition-opacity cursor-pointer border-0">
-                  <span class="text-white text-[16px] font-medium">Acheter</span>
+                  class="absolute top-[240px] lg:top-[295px] bottom-[8px] lg:bottom-[12px] left-[16px] lg:left-[29px] right-[16px] lg:right-[30px] bg-[#1e1e1e] flex items-center justify-center hover:opacity-90 transition-opacity cursor-pointer border-0">
+                  <span class="text-white text-[14px] lg:text-[16px] font-medium">Acheter</span>
                 </button>
 
               </div>

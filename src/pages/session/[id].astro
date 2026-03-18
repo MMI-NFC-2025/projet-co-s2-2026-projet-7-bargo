@@ -85,13 +85,13 @@ const pageData = JSON.stringify({
 <!-- ====================================================== -->
 <!-- FULL-SCREEN LAYOUT (sous le header)                   -->
 <!-- ====================================================== -->
-<div class="flex" style="height: calc(100vh - 92px);">
+<div class="flex flex-col lg:flex-row" style="min-height: calc(100vh - 92px);">
 
   <!-- ===== MAP ===== -->
-  <div id="session-map" class="flex-1" style="background:#dfdfdf; height:100%;"></div>
+  <div id="session-map" class="flex-1 h-[280px] lg:h-auto" style="background:#dfdfdf;"></div>
 
   <!-- ===== RIGHT PANEL ===== -->
-  <div style="width:460px; flex-shrink:0; background:#1e1e1e; display:flex; flex-direction:column; height:100%; overflow:hidden;">
+  <div class="w-full lg:w-[460px] lg:flex-shrink-0 flex flex-col lg:h-[calc(100vh-92px)] overflow-hidden" style="background:#1e1e1e;">
 
     <!-- Session info -->
     <div class="px-[28px] pt-[24px] pb-[18px]" style="border-bottom:1px solid rgba(255,255,255,0.1); flex-shrink:0;">

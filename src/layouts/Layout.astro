@@ -8,11 +8,13 @@ import "../styles/global.css";
 interface Props {
   title?: string;
   description?: string;
+  noFooter?: boolean;
 }
 
 const {
   title = 'Bargo — Organisez votre barathon',
   description = 'Bargo vous aide à organiser et vivre des barathons inoubliables. Découvrez nos bars partenaires, nos jeux et créez votre parcours.',
+  noFooter = false,
 } = Astro.props;
 ---
 
@@ -49,7 +51,7 @@ const {
       <slot />
     </main>
 
-    <Footer />
+    {!noFooter && <Footer />}
     <CookieBanner />
   </body>
 </html>

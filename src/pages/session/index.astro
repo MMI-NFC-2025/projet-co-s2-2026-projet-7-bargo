@@ -54,10 +54,10 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
 <!-- ====================================================== -->
 <!-- MAIN LAYOUT                                            -->
 <!-- ====================================================== -->
-<div class="flex" style="min-height: calc(100vh - 92px);">
+<div class="flex flex-col lg:flex-row" style="min-height: calc(100vh - 92px);">
 
   <!-- ===== LEFT PANEL ===== -->
-  <div id="left-panel" class="w-[657px] shrink-0 bg-[#094736] flex flex-col" style="height: calc(100vh - 92px); position: sticky; top: 92px;">
+  <div id="left-panel" class="hidden lg:flex lg:w-[657px] lg:shrink-0 bg-[#094736] flex-col" style="height: calc(100vh - 92px); position: sticky; top: 92px;">
 
     <div class="px-[70px] pt-[80px]">
       <p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:3px; color:#72c073; margin:0 0 14px 0;">Créer un barathon</p>
@@ -127,10 +127,10 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
   </div>
 
   <!-- ===== RIGHT PANEL ===== -->
-  <div id="step-view" class="flex-1 bg-[#1e1e1e] overflow-y-auto" style="max-height: calc(100vh - 92px);">
+  <div id="step-view" class="flex-1 bg-[#1e1e1e] overflow-y-auto">
 
     <!-- ─── STEP 1: Informations ─── -->
-    <div id="panel-1" class="flex flex-col px-[70px] py-[80px]" style="min-height: calc(100vh - 92px);">
+    <div id="panel-1" class="flex flex-col px-5 lg:px-[70px] py-10 lg:py-[80px]" style="min-height: calc(100vh - 92px);">
       <h2 class="text-white m-0 mb-[50px] uppercase">Informations de la soirée</h2>
       <div class="flex flex-col gap-[36px] flex-1">
         <div class="pb-[12px]" style="border-bottom:1px solid rgba(247,241,237,0.25);">
@@ -162,7 +162,7 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
     </div>
 
     <!-- ─── STEP 2: Bars ─── -->
-    <div id="panel-2" class="flex flex-col px-[70px] py-[80px]" style="display:none; min-height: calc(100vh - 92px);">
+    <div id="panel-2" class="flex flex-col px-5 lg:px-[70px] py-10 lg:py-[80px]" style="display:none; min-height: calc(100vh - 92px);">
       <h2 class="text-white m-0 mb-[28px] uppercase">Choisir mes bars</h2>
       <div class="flex items-center gap-[12px] rounded-[5px] px-[16px] mb-[20px]" style="background:#2c2c2c; height:48px;">
         <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5"/><path d="M12 12L16 16" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -181,7 +181,7 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
     </div>
 
     <!-- ─── STEP 3: Jeux ─── -->
-    <div id="panel-3" class="flex flex-col px-[70px] py-[80px]" style="display:none; min-height: calc(100vh - 92px);">
+    <div id="panel-3" class="flex flex-col px-5 lg:px-[70px] py-10 lg:py-[80px]" style="display:none; min-height: calc(100vh - 92px);">
       <h2 class="text-white m-0 mb-[4px] uppercase">Choisir mon jeu</h2>
       <p style="color:rgba(247,241,237,0.4); font-size:13px; font-weight:500; margin:0 0 24px;">Un seul jeu par session.</p>
       <div class="flex items-center gap-[12px] rounded-[5px] px-[16px] mb-[20px]" style="background:#2c2c2c; height:48px;">
@@ -201,7 +201,7 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
     </div>
 
     <!-- ─── STEP 4: Amis ─── -->
-    <div id="panel-4" class="flex flex-col px-[70px] py-[80px]" style="display:none; min-height: calc(100vh - 92px);">
+    <div id="panel-4" class="flex flex-col px-5 lg:px-[70px] py-10 lg:py-[80px]" style="display:none; min-height: calc(100vh - 92px);">
       <h2 class="text-white m-0 mb-[28px] uppercase">Inviter mes amis</h2>
       <div class="flex items-center gap-[12px] rounded-[5px] px-[16px] mb-[20px]" style="background:#2c2c2c; height:48px;">
         <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5"/><path d="M12 12L16 16" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5" stroke-linecap="round"/></svg>

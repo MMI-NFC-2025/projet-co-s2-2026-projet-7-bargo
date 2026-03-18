@@ -160,13 +160,54 @@ En Tailwind, utiliser les valeurs hex directement : `bg-[#094736]`, `text-[#72c0
 
 ---
 
+## Responsive — approche mobile-first avec Tailwind
+
+Le responsive se fait **exclusivement avec les préfixes Tailwind**. Pas de `@media` en CSS brut, pas d'`!important`.
+
+### Règle fondamentale
+
+| Contexte | Préfixe | Exemple |
+|---|---|---|
+| **Mobile** (base, < 1024px) | *(aucun)* | `text-sm`, `flex-col`, `px-4` |
+| **Desktop** (≥ 1024px) | `lg:` | `lg:text-base`, `lg:flex-row`, `lg:px-20` |
+
+> On utilise **`lg:` comme breakpoint principal** pour passer du mobile au desktop (1024px). Les autres breakpoints (`sm:`, `md:`, `xl:`) sont autorisés si le design le justifie.
+
+### Pattern standard
+
+```astro
+<!-- Mobile : colonne / Desktop : ligne -->
+<div class="flex flex-col lg:flex-row gap-4 lg:gap-13">
+  <h1 class="text-[35px] lg:text-[90px]">Titre</h1>
+  <p class="text-sm lg:text-base px-4 lg:px-20">Texte</p>
+</div>
+```
+
+### Ce qu'on ne fait PAS
+
+- ❌ `style="..."` avec des media queries inline
+- ❌ `@media` dans `<style>` ou `global.css` pour du responsive page par page
+- ❌ `!important` pour écraser des styles responsive
+- ❌ Dupliquer le HTML pour mobile/desktop (sauf cas extrême avec `hidden lg:block`)
+
+### Éléments à cacher/montrer selon le viewport
+
+```astro
+<!-- Visible uniquement mobile -->
+<div class="block lg:hidden">...</div>
+
+<!-- Visible uniquement desktop -->
+<div class="hidden lg:block">...</div>
+```
+
+---
+
 ## Layout
 
-- Largeur max des contenus : `max-w-[1440px] mx-auto px-20`
+- Largeur max des contenus : `max-w-[1440px] mx-auto px-4 lg:px-20`
 - Les sections pleine largeur n'ont **pas** de `max-w` sur l'élément `<section>` lui-même
 - `main` dans `Layout.astro` est `w-full` sans padding ni max-width
-- Design **desktop uniquement** pour l'instant (responsive mobile à prévoir plus tard)
-- Breakpoints Tailwind par défaut
+- Breakpoints Tailwind — **`lg:` est le breakpoint desktop principal**
 
 ### Grille 12 colonnes
 

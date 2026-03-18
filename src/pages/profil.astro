@@ -132,69 +132,91 @@ const displayName = user.prenom
 ---
 
 <Layout title="Mon profil — Bargo">
-  <section class="relative bg-[#f7f1ed] overflow-x-hidden">
+  <section class="bg-[#f7f1ed] overflow-x-hidden">
 
-    <!-- ===== PROFILE HEADER ===== -->
-
-    <!-- Photo de profil -->
-    <div class="absolute left-[80px] top-[119px] size-[187px] rounded-full overflow-hidden z-[2]"
-      style="border: 15px solid #dfdfdf;">
-      {avatarUrl
-        ? <img src={avatarUrl} alt="Avatar" class="w-full h-full object-cover" />
-        : <div class="w-full h-full bg-[#1e1e1e] flex items-center justify-center">
-            <span class="text-white font-bold" style="font-size: 60px;">
-              {(user.pseudo ?? user.email ?? '?')[0].toUpperCase()}
-            </span>
-          </div>
-      }
+    <!-- ===== MOBILE PROFILE HEADER ===== -->
+    <div class="block lg:hidden px-5 pt-8 pb-6">
+      <!-- Avatar -->
+      <div class="mx-auto w-[100px] h-[100px] rounded-full overflow-hidden" style="border: 8px solid #dfdfdf;">
+        {avatarUrl
+          ? <img src={avatarUrl} alt="Avatar" class="w-full h-full object-cover" />
+          : <div class="w-full h-full bg-[#1e1e1e] flex items-center justify-center">
+              <span class="text-white font-bold" style="font-size: 36px;">
+                {(user.pseudo ?? user.email ?? '?')[0].toUpperCase()}
+              </span>
+            </div>
+        }
+      </div>
+      <h2 class="text-black m-0 mt-4 text-center text-[28px]">{displayName}</h2>
+      <h3 class="m-0 mt-1 text-[#72c073] text-center">{user.pseudo ?? ''}</h3>
+      <p class="m-0 mt-2 text-center text-[#1e1e1e] text-[16px] font-medium">{user.amis ?? 0} ami(e)s</p>
+      <div class="mt-3 h-[50px] bg-[#094736] rounded-[5px] flex items-center justify-center gap-4">
+        <h3 class="text-white m-0">Points :</h3>
+        <h3 class="text-white m-0">{user.points ?? 0}</h3>
+      </div>
+      {user.devise && (
+        <div class="mt-4">
+          <p class="m-0 text-[16px] font-medium text-black uppercase">DESCRIPTION</p>
+          <p class="m-0 mt-1 text-[#646262] text-[16px] font-medium leading-[1.4]">{user.devise}</p>
+        </div>
+      )}
     </div>
 
-    <!-- Nom -->
-    <h2 class="absolute m-0 text-black overflow-hidden text-ellipsis whitespace-nowrap w-[344px]"
-      style="left: calc(16.67% + 59px); top: 119px;">
-      {displayName}
-    </h2>
-
-    <!-- Pseudo -->
-    <h3 class="absolute m-0 text-[#72c073]"
-      style="left: calc(16.67% + 59px); top: 185px;">
-      {user.pseudo ?? ''}
-    </h3>
-
-    <!-- Ami(e)s -->
-    <p class="absolute m-0 text-[#1e1e1e] text-[16px] font-medium leading-[1.4]"
-      style="left: calc(33.33% + 79px); top: 198px;">
-      {user.amis ?? 0} ami(e)s
-    </p>
-
-    <!-- Points badge -->
-    <div class="absolute h-[65px] w-[344px] bg-[#094736] rounded-[5px] shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25)] flex items-center pl-[16px] gap-4"
-      style="left: calc(16.67% + 59px); top: 241px;">
-      <h3 class="text-white m-0">Points :</h3>
-      <h3 class="text-white m-0">{user.points ?? 0}</h3>
+    <!-- ===== DESKTOP PROFILE HEADER ===== -->
+    <div class="hidden lg:block relative" style="height: 420px;">
+      <!-- Photo de profil -->
+      <div class="absolute left-[80px] top-[119px] size-[187px] rounded-full overflow-hidden z-[2]"
+        style="border: 15px solid #dfdfdf;">
+        {avatarUrl
+          ? <img src={avatarUrl} alt="Avatar" class="w-full h-full object-cover" />
+          : <div class="w-full h-full bg-[#1e1e1e] flex items-center justify-center">
+              <span class="text-white font-bold" style="font-size: 60px;">
+                {(user.pseudo ?? user.email ?? '?')[0].toUpperCase()}
+              </span>
+            </div>
+        }
+      </div>
+      <!-- Nom -->
+      <h2 class="absolute m-0 text-black overflow-hidden text-ellipsis whitespace-nowrap w-[344px]"
+        style="left: calc(16.67% + 59px); top: 119px;">
+        {displayName}
+      </h2>
+      <!-- Pseudo -->
+      <h3 class="absolute m-0 text-[#72c073]"
+        style="left: calc(16.67% + 59px); top: 185px;">
+        {user.pseudo ?? ''}
+      </h3>
+      <!-- Ami(e)s -->
+      <p class="absolute m-0 text-[#1e1e1e] text-[16px] font-medium leading-[1.4]"
+        style="left: calc(33.33% + 79px); top: 198px;">
+        {user.amis ?? 0} ami(e)s
+      </p>
+      <!-- Points badge -->
+      <div class="absolute h-[65px] w-[344px] bg-[#094736] rounded-[5px] shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25)] flex items-center pl-[16px] gap-4"
+        style="left: calc(16.67% + 59px); top: 241px;">
+        <h3 class="text-white m-0">Points :</h3>
+        <h3 class="text-white m-0">{user.points ?? 0}</h3>
+      </div>
+      <!-- DESCRIPTION label -->
+      <p class="absolute m-0 text-[16px] font-medium text-black uppercase leading-[1.4]"
+        style="left: calc(50% + 17px); top: 127px;">
+        DESCRIPTION
+      </p>
+      <!-- Description text -->
+      <p class="absolute m-0 text-[#646262] text-[16px] font-medium leading-[1.4] w-[623px]"
+        style="left: calc(50% + 16px); top: 174px;">
+        {user.devise ?? '—'}
+      </p>
     </div>
 
-    <!-- DESCRIPTION label -->
-    <p class="absolute m-0 text-[16px] font-medium text-black uppercase leading-[1.4]"
-      style="left: calc(50% + 17px); top: 127px;">
-      DESCRIPTION
-    </p>
-
-    <!-- Description text -->
-    <p class="absolute m-0 text-[#646262] text-[16px] font-medium leading-[1.4] w-[623px]"
-      style="left: calc(50% + 16px); top: 174px;">
-      {user.devise ?? '—'}
-    </p>
-
-    <!-- Séparateur shadow -->
-    <div class="absolute left-0 w-full h-[18px] bg-[#f7f1ed] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] z-[3]"
-      style="top: 402px;"></div>
+    <!-- Séparateur shadow (desktop only) -->
+    <div class="hidden lg:block h-[18px] bg-[#f7f1ed] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] z-[3]"></div>
 
     <!-- ===== DEUX COLONNES ===== -->
-    <div class="flex" style="margin-top: 420px;">
+    <div class="flex flex-col lg:flex-row">
 
-      <!-- SIDEBAR SOMBRE -->
-      <div class="w-[376px] shrink-0 bg-[#1e1e1e]">
+      <!-- SIDEBAR SOMBRE (desktop only) -->
+      <div class="hidden lg:block lg:w-[376px] lg:shrink-0 bg-[#1e1e1e]">
         <div class="px-[69px] pt-[16px] flex flex-col gap-[109px]">
 
           <!-- Boutique -->
@@ -214,15 +236,15 @@ const displayName = user.prenom
       <div class="flex-1 bg-[#f7f1ed]">
 
         <!-- BARRE D'ONGLETS BLANCHE -->
-        <div class="bg-white h-[100px] flex items-stretch px-[80px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
-          <div class="flex items-stretch">
+        <div class="bg-white flex flex-wrap items-stretch px-4 lg:px-[80px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] min-h-[64px] lg:h-[100px]">
+          <div class="flex items-stretch overflow-x-auto">
             <button data-tab="profil"
-              class="tab-btn px-[25px] text-[16px] font-medium text-black border-b-[7px] border-transparent hover:border-[#dfdfdf] transition-colors cursor-pointer bg-transparent"
+              class="tab-btn px-4 lg:px-[25px] text-[14px] lg:text-[16px] font-medium text-black border-b-[7px] border-transparent hover:border-[#dfdfdf] transition-colors cursor-pointer bg-transparent whitespace-nowrap"
               style={activeTab === 'profil' ? 'border-bottom-color: #72c073;' : ''}>
               Mon profil
             </button>
             <button data-tab="notifications"
-              class="tab-btn px-[25px] text-[16px] font-medium text-black border-b-[7px] border-transparent hover:border-[#dfdfdf] transition-colors cursor-pointer bg-transparent inline-flex items-center gap-2"
+              class="tab-btn px-4 lg:px-[25px] text-[14px] lg:text-[16px] font-medium text-black border-b-[7px] border-transparent hover:border-[#dfdfdf] transition-colors cursor-pointer bg-transparent inline-flex items-center gap-2 whitespace-nowrap"
               style={activeTab === 'notifications' ? 'border-bottom-color: #72c073;' : ''}>
               Notifications
               {unreadNotifs > 0 && (
@@ -230,15 +252,15 @@ const displayName = user.prenom
               )}
             </button>
             <button data-tab="parametres"
-              class="tab-btn px-[25px] text-[16px] font-medium text-black border-b-[7px] border-transparent hover:border-[#dfdfdf] transition-colors cursor-pointer bg-transparent"
+              class="tab-btn px-4 lg:px-[25px] text-[14px] lg:text-[16px] font-medium text-black border-b-[7px] border-transparent hover:border-[#dfdfdf] transition-colors cursor-pointer bg-transparent whitespace-nowrap"
               style={activeTab === 'parametres' ? 'border-bottom-color: #72c073;' : ''}>
               Paramètres
             </button>
           </div>
 
-          <!-- Editer / Annuler -->
+          <!-- Editer / Annuler (desktop only) -->
           <button id="edit-btn"
-            class="ml-auto bg-[#347645] h-[51px] w-[257px] flex items-center justify-center text-white text-[16px] font-medium hover:opacity-90 transition-opacity cursor-pointer border-0 self-center">
+            class="hidden lg:flex ml-auto bg-[#347645] h-[51px] w-[257px] items-center justify-center text-white text-[16px] font-medium hover:opacity-90 transition-opacity cursor-pointer border-0 self-center">
             Editer le profil
           </button>
           <button id="cancel-btn" style="display: none;"
@@ -251,7 +273,7 @@ const displayName = user.prenom
         <!-- PANEL : MON PROFIL           -->
         <!-- ============================= -->
         <div id="panel-profil" data-panel class={activeTab !== 'profil' ? 'hidden' : ''}>
-          <div class="px-[80px] pt-[45px] pb-[120px]">
+          <div class="px-4 lg:px-[80px] pt-8 lg:pt-[45px] pb-16 lg:pb-[120px]">
 
             {updateSuccess && <p class="text-[#347645] text-sm font-medium mb-6 m-0">Profil mis à jour avec succès.</p>}
             {updateError   && <p class="text-red-500 text-sm font-medium mb-6 m-0">{updateError}</p>}
@@ -266,9 +288,9 @@ const displayName = user.prenom
               <input type="hidden" name="_action" value="edit" />
 
               <!-- Box 1 : Informations personnelles -->
-              <div class="bg-white border-[3px] border-[#dfdfdf] rounded-[10px] px-[30px] py-[22px] mb-[18px]">
+              <div class="bg-white border-[3px] border-[#dfdfdf] rounded-[10px] px-4 lg:px-[30px] py-[22px] mb-[18px]">
                 <h3 class="text-black m-0 mb-[35px]">Informations personnel</h3>
-                <div class="flex gap-[100px]">
+                <div class="flex flex-col lg:flex-row gap-4 lg:gap-[100px]">
                   <div class="flex flex-col gap-1">
                     <span class="text-[#646262] text-[16px] font-medium leading-[1.4]">Ville</span>
                     <span class="view-field text-black text-[16px] font-medium leading-[1.4]">{user.ville ?? '—'}</span>
@@ -289,9 +311,9 @@ const displayName = user.prenom
               </div>
 
               <!-- Box 2 : Activité sur Bargo -->
-              <div class="bg-white border-[3px] border-[#dfdfdf] rounded-[10px] px-[30px] py-[22px] mb-[18px]">
+              <div class="bg-white border-[3px] border-[#dfdfdf] rounded-[10px] px-4 lg:px-[30px] py-[22px] mb-[18px]">
                 <h3 class="text-black m-0 mb-[35px]">Activité sur Bargo</h3>
-                <div class="flex gap-[100px]">
+                <div class="flex flex-col lg:flex-row gap-4 lg:gap-[100px]">
                   <div class="flex flex-col gap-1">
                     <span class="text-[#646262] text-[16px] font-medium leading-[1.4]">Sorties organisées</span>
                     <span class="text-black text-[16px] font-medium leading-[1.4]">
@@ -312,7 +334,7 @@ const displayName = user.prenom
               </div>
 
               <!-- Box 3 : Réseaux sociaux -->
-              <div class="bg-white border-[3px] border-[#dfdfdf] rounded-[10px] px-[30px] py-[22px]">
+              <div class="bg-white border-[3px] border-[#dfdfdf] rounded-[10px] px-4 lg:px-[30px] py-[22px]">
                 <h3 class="text-black m-0 mb-[35px]">Réseaux sociaux</h3>
                 <div class="flex gap-[100px]">
                   <div class="flex flex-col gap-1">
@@ -368,7 +390,7 @@ const displayName = user.prenom
 
             <!-- Grille favoris -->
             {barFavori ? (
-              <div class="grid grid-cols-3 gap-[33px]">
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-[33px]">
                 <div class="relative bg-white rounded-[2px] h-[351px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
                   <div class="absolute top-0 left-0 right-0 h-[200px] overflow-hidden rounded-tl-[2px] rounded-tr-[2px]">
                     <PbImage record={barFavori} recordImage={barFavori.img?.[0]} width={280} height={200} class="w-full h-full object-cover" />
@@ -394,7 +416,7 @@ const displayName = user.prenom
         <!-- PANEL : NOTIFICATIONS        -->
         <!-- ============================= -->
         <div id="panel-notifications" data-panel class={activeTab !== 'notifications' ? 'hidden' : ''}>
-          <div class="px-[80px] pt-[45px] pb-[120px]">
+          <div class="px-4 lg:px-[80px] pt-8 lg:pt-[45px] pb-16 lg:pb-[120px]">
 
             <div class="flex items-center gap-[30px] mb-[45px]">
               <h2 class="text-black m-0 shrink-0">Notifications</h2>
@@ -439,7 +461,7 @@ const displayName = user.prenom
         <!-- PANEL : PARAMÈTRES           -->
         <!-- ============================= -->
         <div id="panel-parametres" data-panel class={activeTab !== 'parametres' ? 'hidden' : ''}>
-          <div class="px-[80px] pt-[45px] pb-[120px]">
+          <div class="px-4 lg:px-[80px] pt-8 lg:pt-[45px] pb-16 lg:pb-[120px]">
 
             <div class="flex items-center gap-[30px] mb-[45px]">
               <h2 class="text-black m-0 shrink-0">Paramètres</h2>
@@ -455,7 +477,7 @@ const displayName = user.prenom
               </div>
               {emailSuccess && <p class="text-[#347645] text-sm font-medium mb-4 m-0">Email mis à jour.</p>}
               {emailError   && <p class="text-red-500 text-sm font-medium mb-4 m-0">{emailError}</p>}
-              <form method="POST" enctype="application/x-www-form-urlencoded" class="flex items-end gap-4">
+              <form method="POST" enctype="application/x-www-form-urlencoded" class="flex flex-col lg:flex-row lg:items-end gap-4">
                 <input type="hidden" name="_action" value="change_email" />
                 <div class="flex-1">
                   <label class="block text-[16px] font-medium text-black mb-2">Nouvel email</label>

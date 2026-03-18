@@ -7,22 +7,21 @@ import Layout from '../layouts/Layout.astro';
   <section class="w-full bg-[#f7f1ed]">
     <div class="max-w-[1440px] mx-auto">
 
-      <!-- H1 — pt-[209px] = 301px (Figma) - 92px (header) -->
-      <div class="px-20 pt-[209px] pb-[162px]">
-        <h1 class="text-black uppercase m-0">Mentions légales</h1>
+      <!-- H1 -->
+      <div class="px-5 lg:px-20 pt-16 lg:pt-[209px] pb-10 lg:pb-[162px]">
+        <h1 class="text-black uppercase m-0 text-[40px] lg:text-[90px]">Mentions légales</h1>
       </div>
 
-      <!-- Deux colonnes : contenu gauche (955px) + bloc vert décoratif (485px) -->
-      <!-- Le flex stretch fait que le bloc vert prend exactement la hauteur du contenu -->
+      <!-- Deux colonnes : contenu gauche + bloc vert décoratif -->
       <div class="flex">
 
-        <!-- Colonne gauche : 955px, pl-20, contenu limité à w-[624px] -->
-        <div class="shrink-0 pl-20 pt-[15px] pb-[120px]" style="width: 955px;">
-          <div class="w-[624px]">
+        <!-- Colonne gauche -->
+        <div class="shrink-0 px-5 lg:pl-20 lg:pr-0 pt-4 lg:pt-[15px] pb-12 lg:pb-[120px] w-full lg:w-[955px]">
+          <div class="w-full lg:w-[624px]">
 
             <!-- Section 1 : Éditeur du site -->
             <div>
-              <h3 class="text-[#347645] m-0 mb-[67px]">Éditeur du site</h3>
+              <h3 class="text-[#347645] m-0 mb-8 lg:mb-[67px]">Éditeur du site</h3>
               <div class="text-[#646262] text-[16px] font-medium leading-[1.4]">
                 <p class="m-0">le site BARGO est édité par un groupe d'étudiants du BUT Métiers du Multimédia et de l'Internet (MMI) dans le cadre d'un projet de fin de semestre.</p>
                 <p class="m-0 mt-[22px]">Ce projet académique est réalisé à des fins pédagogiques et ne constitue pas une activité commerciale ; il ne forme pas d'entité juridique.</p>
@@ -31,16 +30,16 @@ import Layout from '../layouts/Layout.astro';
             </div>
 
             <!-- Section 2 : Directeur de la publication -->
-            <div class="mt-[100px]">
-              <h3 class="text-[#347645] m-0 mb-[67px]">Directeur de la publication</h3>
+            <div class="mt-12 lg:mt-[100px]">
+              <h3 class="text-[#347645] m-0 mb-8 lg:mb-[67px]">Directeur de la publication</h3>
               <p class="text-[#646262] text-[16px] font-medium leading-[1.4] m-0">
                 la direction de la publication est assurée collectivement par l'équipe de projet, qui veille à la cohérence et à la qualité des contenus publiés dans le cadre de ce travail universitaire.
               </p>
             </div>
 
             <!-- Section 3 : Hébergeur -->
-            <div class="mt-[100px]">
-              <h3 class="text-[#347645] m-0 mb-[67px]">Hébergeur</h3>
+            <div class="mt-12 lg:mt-[100px]">
+              <h3 class="text-[#347645] m-0 mb-8 lg:mb-[67px]">Hébergeur</h3>
               <div class="text-[#646262] text-[16px] font-medium leading-[1.4]">
                 <p class="m-0">le site est hébergé par <span class="text-[#72c073]">Infomaniak Network SA</span>, société de droit suisse au capital de 102 000 CHF, dont le siège social est situé Avenue de la Praille 26, 1227 Carouge, Suisse.</p>
                 <p class="m-0 mt-[22px]">Pour toute question relative à l'hébergement, Infomaniak peut être contacté à l'adresse <a href="mailto:support@infomaniak.com" class="text-[#72c073] hover:underline">support@infomaniak.com</a> ou par téléphone au +41 22 820 35 40.</p>
@@ -48,8 +47,8 @@ import Layout from '../layouts/Layout.astro';
             </div>
 
             <!-- Section 4 : Propriété intellectuelle -->
-            <div class="mt-[100px]">
-              <h3 class="text-[#347645] m-0 mb-[67px]">Propriété intellectuelle</h3>
+            <div class="mt-12 lg:mt-[100px]">
+              <h3 class="text-[#347645] m-0 mb-8 lg:mb-[67px]">Propriété intellectuelle</h3>
               <div class="text-[#646262] text-[16px] font-medium leading-[1.4]">
                 <p class="m-0">L'ensemble du contenu du site (textes, images, graphismes, logos, vidéos, etc.) est la propriété exclusive de Bargo ou de ses partenaires, sauf mention contraire.</p>
                 <p class="m-0 mt-[22px]">Toute reproduction, représentation ou utilisation, même partielle, des contenus du site sans autorisation préalable est interdite et constitue une contrefaçon susceptible d'entraîner la responsabilité civile et pénale de l'auteur.</p>
@@ -57,8 +56,8 @@ import Layout from '../layouts/Layout.astro';
             </div>
 
             <!-- Section 5 : Utilisation des images -->
-            <div class="mt-[100px]">
-              <h3 class="text-[#347645] m-0 mb-[67px]">Utilisation des images et créations graphiques</h3>
+            <div class="mt-12 lg:mt-[100px]">
+              <h3 class="text-[#347645] m-0 mb-8 lg:mb-[67px]">Utilisation des images et créations graphiques</h3>
               <div class="text-[#646262] text-[16px] font-medium leading-[1.4]">
                 <p class="m-0">les images illustrant le site sont des visuels libres de droits sélectionnés pour leur adéquation avec l'univers de Bargo.</p>
                 <p class="m-0 mt-[22px]">Pour certains éléments graphiques, tels que les logos ou pictogrammes, nous avons utilisé l'outil d'assistance Copilot afin de produire un rendu plus professionnel.</p>
@@ -67,8 +66,8 @@ import Layout from '../layouts/Layout.astro';
             </div>
 
             <!-- Section 6 : Responsabilité -->
-            <div class="mt-[100px]">
-              <h3 class="text-[#347645] m-0 mb-[67px]">Responsabilité</h3>
+            <div class="mt-12 lg:mt-[100px]">
+              <h3 class="text-[#347645] m-0 mb-8 lg:mb-[67px]">Responsabilité</h3>
               <div class="text-[#646262] text-[16px] font-medium leading-[1.4]">
                 <p class="m-0">Bargo s'efforce d'assurer l'exactitude et la mise à jour des informations diffusées sur son site, mais ne peut garantir que les informations sont exactes, complètes ou à jour. L'utilisateur reconnaît utiliser ces informations sous sa responsabilité exclusive.</p>
                 <p class="m-0 mt-[22px]">les mentions légales sont soumises au droit français et toute contestation relative à leur interprétation ou leur exécution relève de la compétence des tribunaux français.</p>
@@ -76,8 +75,8 @@ import Layout from '../layouts/Layout.astro';
             </div>
 
             <!-- Section 7 : RGPD -->
-            <div class="mt-[100px]">
-              <h3 class="text-[#347645] m-0 mb-[67px]">Protection des données personnelles (RGPD)</h3>
+            <div class="mt-12 lg:mt-[100px]">
+              <h3 class="text-[#347645] m-0 mb-8 lg:mb-[67px]">Protection des données personnelles (RGPD)</h3>
               <div class="text-[#646262] text-[16px] font-medium leading-[1.4]">
                 <p class="m-0">Dans le cadre du projet pédagogique Bargo, certaines données personnelles peuvent être collectées via les formulaires présents sur le site (formulaire de contact, questionnaire, formulaire d'avis).</p>
                 <p class="m-0 mt-[22px]">Les données susceptibles d'être collectées sont notamment : adresse e-mail, nom ou pseudonyme, réponses aux questionnaires.</p>
@@ -90,8 +89,8 @@ import Layout from '../layouts/Layout.astro';
             </div>
 
             <!-- Section 8 : Cookies -->
-            <div class="mt-[100px]">
-              <h3 class="text-[#347645] m-0 mb-[67px]">Cookies</h3>
+            <div class="mt-12 lg:mt-[100px]">
+              <h3 class="text-[#347645] m-0 mb-8 lg:mb-[67px]">Cookies</h3>
               <div class="text-[#646262] text-[16px] font-medium leading-[1.4]">
                 <p class="m-0">Le site peut utiliser des cookies strictement nécessaires à son bon fonctionnement technique (navigation, affichage, sécurité).</p>
                 <p class="m-0 mt-[22px]">Aucun cookie publicitaire ou à des fins commerciales n'est utilisé dans le cadre de ce projet pédagogique.</p>
@@ -102,8 +101,8 @@ import Layout from '../layouts/Layout.astro';
           </div>
         </div>
 
-        <!-- Bloc vert décoratif — flex-1 se cale sur la hauteur du contenu gauche -->
-        <div class="flex-1 bg-[#094736]"></div>
+        <!-- Bloc vert décoratif — desktop uniquement -->
+        <div class="hidden lg:block flex-1 bg-[#094736]"></div>
 
       </div>
     </div>

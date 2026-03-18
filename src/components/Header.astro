@@ -25,15 +25,15 @@ if (isLoggedIn) {
 ---
 
 <header class="fixed top-0 left-0 w-full z-50 bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
-  <div class="max-w-[1440px] mx-auto px-20 h-[92px] flex items-center">
+  <div class="max-w-[1440px] mx-auto px-4 lg:px-20 h-[92px] flex items-center">
 
     <!-- Logo -->
     <a href="/" class="shrink-0">
       <img src={logoDark.src} alt="Bargo" class="h-[42px] w-auto block" />
     </a>
 
-    <!-- Navigation -->
-    <nav class="flex items-center ml-[52px]">
+    <!-- Navigation desktop -->
+    <nav class="hidden lg:flex items-center ml-[52px]">
       <a href="/bar"
         class={`px-[35px] py-[25px] font-medium text-[14px] leading-[1.1] text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-[7px] ${path.startsWith('/bar') ? 'border-[#72c073]' : 'border-transparent'}`}>
         Nos bars
@@ -59,8 +59,8 @@ if (isLoggedIn) {
     <!-- Spacer -->
     <div class="flex-1"></div>
 
-    <!-- Actions -->
-    <div class="flex items-center gap-[26px]">
+    <!-- Actions desktop -->
+    <div class="hidden lg:flex items-center gap-[26px]">
       <a href={profileHref} aria-label="Mon profil" class="hover:opacity-70 transition-opacity">
         {avatarUrl ? (
           <img src={avatarUrl} alt="Mon profil" width="31" height="31" class="size-[31px] rounded-full object-cover" />
@@ -73,5 +73,60 @@ if (isLoggedIn) {
       </a>
     </div>
 
+    <!-- Hamburger button mobile -->
+    <button id="nav-hamburger" aria-label="Menu" class="lg:hidden flex flex-col justify-center gap-[5px] w-[32px] h-[32px] p-0 bg-transparent border-0 cursor-pointer shrink-0">
+      <span class="block w-full h-[2px] bg-black transition-all"></span>
+      <span class="block w-full h-[2px] bg-black transition-all"></span>
+      <span class="block w-full h-[2px] bg-black transition-all"></span>
+    </button>
+
   </div>
 </header>
+
+<!-- Mobile menu overlay -->
+<div id="nav-mobile-menu" class="lg:hidden fixed top-[92px] left-0 w-full bg-white z-40 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] hidden">
+  <nav class="flex flex-col py-4">
+    <a href="/bar"
+      class={`px-6 py-4 font-medium text-[16px] text-black border-l-4 ${path.startsWith('/bar') ? 'border-[#72c073]' : 'border-transparent'}`}>
+      Nos bars
+    </a>
+    <a href="/Apropos"
+      class={`px-6 py-4 font-medium text-[16px] text-black border-l-4 ${path.startsWith('/Apropos') ? 'border-[#72c073]' : 'border-transparent'}`}>
+      A propos
+    </a>
+    <a href="/jeux"
+      class={`px-6 py-4 font-medium text-[16px] text-black border-l-4 ${path.startsWith('/jeux') ? 'border-[#72c073]' : 'border-transparent'}`}>
+      Nos jeux
+    </a>
+    <a href="/boutique"
+      class={`px-6 py-4 font-medium text-[16px] text-black border-l-4 ${path.startsWith('/boutique') ? 'border-[#72c073]' : 'border-transparent'}`}>
+      Boutique
+    </a>
+    <a href="/abonnement"
+      class={`px-6 py-4 font-medium text-[16px] text-black border-l-4 ${path.startsWith('/abonnement') ? 'border-[#72c073]' : 'border-transparent'}`}>
+      Abonnement
+    </a>
+    <div class="flex items-center gap-4 px-6 pt-4 pb-2 border-t border-[#dfdfdf] mt-2">
+      <a href={profileHref} aria-label="Mon profil" class="hover:opacity-70 transition-opacity">
+        {avatarUrl ? (
+          <img src={avatarUrl} alt="Mon profil" width="31" height="31" class="size-[31px] rounded-full object-cover" />
+        ) : (
+          <img src={userIcon.src} alt="" width="31" height="31" />
+        )}
+      </a>
+      <a href="/session" class="inline-flex items-center justify-center px-6 h-[45px] bg-black text-white font-medium text-[14px] whitespace-nowrap hover:opacity-80 transition-opacity">
+        Crée un barathon
+      </a>
+    </div>
+  </nav>
+</div>
+
+<script>
+  const btn = document.getElementById('nav-hamburger');
+  const menu = document.getElementById('nav-mobile-menu');
+  if (btn && menu) {
+    btn.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+    });
+  }
+</script>

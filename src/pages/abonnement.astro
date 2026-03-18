@@ -69,16 +69,16 @@ const plans = [
 <Layout title="Nos abonnements — Bargo">
 
   <!-- ===== HERO ===== -->
-  <section class="bg-[#094736] h-[450px] relative">
-    <h1 class="absolute top-[141px] left-[80px] text-white m-0 uppercase">Nos abonnements</h1>
-    <p class="absolute top-[268px] left-[80px] text-[#f7f1ed] text-[14px] font-medium w-[547px] m-0 leading-[1.6]">
+  <section class="bg-[#094736] h-[280px] lg:h-[450px] relative">
+    <h1 class="absolute top-[60px] left-[20px] lg:top-[141px] lg:left-[80px] text-white m-0 uppercase text-[40px] lg:text-[90px]">Nos abonnements</h1>
+    <p class="hidden lg:block absolute top-[268px] left-[80px] text-[#f7f1ed] text-[14px] font-medium w-[547px] m-0 leading-[1.6]">
       Ici vous pouvez prendre les abonnements qui permettront d'avoir un petit plus sur vos soirées&nbsp;!
     </p>
   </section>
 
   <!-- ===== CARDS ===== -->
-  <div class="bg-[#f7f1ed] px-[80px] py-[80px]">
-    <div class="grid grid-cols-3 gap-[40px]">
+  <div class="bg-[#f7f1ed] px-4 lg:px-[80px] py-10 lg:py-[80px]">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-[40px]">
 
       {plans.map(plan => (
         <div class="bg-white rounded-[5px] shadow-[0px_4px_10px_0px_rgba(0,0,0,0.15)] flex flex-col overflow-hidden">

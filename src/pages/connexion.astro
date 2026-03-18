@@ -35,54 +35,54 @@ if (Astro.request.method === 'POST') {
 <Layout title="Connexion — Bargo">
   <section class="relative min-h-[800px] overflow-hidden">
 
-    <!-- Fond sombre gauche -->
-    <div class="absolute inset-0 bg-[#1e1e1e]" style="width: 813px;"></div>
+    <!-- Fond sombre gauche — desktop uniquement -->
+    <div class="absolute inset-0 bg-[#1e1e1e] lg:w-[813px]"></div>
 
-    <!-- Photo droite -->
-    <div class="absolute top-0 bottom-0 right-0 overflow-hidden" style="left: 813px;">
+    <!-- Photo droite — desktop uniquement -->
+    <div class="hidden lg:block absolute top-0 bottom-0 right-0 overflow-hidden" style="left: 813px;">
       <Image src={bgImg} alt="" class="w-full h-full object-cover object-top" />
     </div>
 
     <!-- Erreur serveur -->
     {error && (
-      <p class="absolute top-[95px] left-[80px] text-red-400 text-[14px] font-medium m-0 z-10">{error}</p>
+      <p class="absolute top-[95px] left-[20px] lg:left-[80px] text-red-400 text-[14px] font-medium m-0 z-10">{error}</p>
     )}
 
     <!-- H2 -->
-    <h2 class="absolute top-[95px] left-[79px] text-white m-0 uppercase">
+    <h2 class="absolute top-[60px] lg:top-[95px] left-[20px] lg:left-[79px] text-white m-0 uppercase text-[32px] lg:text-[50px]">
       CONNECTEZ-VOUS
     </h2>
 
     <!-- Sous-titre -->
-    <p class="absolute top-[172px] left-[80px] text-[14px] font-medium leading-[1.1] text-white m-0 w-[547px]">
+    <p class="absolute top-[120px] lg:top-[172px] left-[20px] lg:left-[80px] text-[14px] font-medium leading-[1.1] text-white m-0 w-[calc(100%-40px)] lg:w-[547px]">
       Accédez à votre espace BARGO et retrouvez vos barathons.
     </p>
 
     <form method="POST" enctype="application/x-www-form-urlencoded">
 
       <!-- ─── Adresse E-mail ─── -->
-      <label class="absolute top-[254px] left-[80px] text-white text-[16px] font-medium leading-[1.4]">Adresse E-mail</label>
-      <div class="absolute top-[294px] left-[80px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[624px] flex items-center px-8">
+      <label class="absolute top-[190px] lg:top-[254px] left-[20px] lg:left-[80px] text-white text-[16px] font-medium leading-[1.4]">Adresse E-mail</label>
+      <div class="absolute top-[225px] lg:top-[294px] left-[20px] lg:left-[80px] right-[20px] lg:right-auto bg-[#f7f1ed] rounded-[3px] h-[62px] lg:w-[624px] flex items-center px-8">
         <input type="email" name="email" placeholder="Mail" required
           class="bg-transparent w-full text-[14px] font-medium text-[#646262] placeholder-[#646262] outline-none" />
       </div>
 
       <!-- ─── Mot de passe ─── -->
-      <label class="absolute top-[392px] left-[80px] text-white text-[16px] font-medium leading-[1.4]">Mots de passe</label>
-      <div class="absolute top-[432px] left-[80px] bg-[#f7f1ed] rounded-[3px] h-[62px] w-[624px] flex items-center px-8">
+      <label class="absolute top-[315px] lg:top-[392px] left-[20px] lg:left-[80px] text-white text-[16px] font-medium leading-[1.4]">Mots de passe</label>
+      <div class="absolute top-[350px] lg:top-[432px] left-[20px] lg:left-[80px] right-[20px] lg:right-auto bg-[#f7f1ed] rounded-[3px] h-[62px] lg:w-[624px] flex items-center px-8">
         <input type="password" name="password" placeholder="Mots de passe" required
           class="bg-transparent w-full text-[14px] font-medium text-[#646262] placeholder-[#646262] outline-none" />
       </div>
 
       <!-- ─── Mot de passe oublié ─── -->
-      <p class="absolute top-[514px] left-[80px] text-[14px] font-medium leading-[1.1] text-[#dfdfdf] m-0">
+      <p class="absolute top-[432px] lg:top-[514px] left-[20px] lg:left-[80px] text-[14px] font-medium leading-[1.1] text-[#dfdfdf] m-0">
         Mot de passe oublié ?
       </p>
 
       <!-- ─── Bouton SE CONNECTER ─── -->
       <button type="submit"
-        class="absolute top-[580px] bg-[#347645] h-[60px] inline-flex items-center justify-center gap-4 text-white text-[16px] font-medium leading-[1.4] px-12 hover:opacity-90 transition-opacity cursor-pointer border-0"
-        style="left: calc(25% + 107px);">
+        class="absolute top-[490px] lg:top-[580px] left-[20px] lg:left-auto bg-[#347645] h-[60px] inline-flex items-center justify-center gap-4 text-white text-[16px] font-medium leading-[1.4] px-8 lg:px-12 hover:opacity-90 transition-opacity cursor-pointer border-0"
+        style="left: max(20px, calc(25% + 107px));">
         SE CONNECTER
         <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" clip-rule="evenodd" d="M7.29167 17.5C7.29167 17.016 7.68401 16.6237 8.16667 16.6237H23.8905L18.3959 11.1291C18.0472 10.7803 18.0472 10.2155 18.3959 9.86675C18.7447 9.51797 19.3095 9.51797 19.6582 9.86675L25.7749 15.9834C26.5251 16.7336 26.5251 17.9581 25.7749 18.7083L19.6582 24.825C19.3095 25.1737 18.7447 25.1737 18.3959 24.825C18.0472 24.4762 18.0472 23.9114 18.3959 23.5626L23.8905 18.0763H8.16667C7.68401 18.0763 7.29167 17.6839 7.29167 17.5Z" fill="white"/>
@@ -90,8 +90,7 @@ if (Astro.request.method === 'POST') {
       </button>
 
       <!-- ─── Lien inscription ─── -->
-      <p class="absolute top-[680px] text-[14px] font-medium leading-[1.1] text-white m-0"
-        style="left: calc(25% + 344px); transform: translateX(-100%);">
+      <p class="absolute top-[575px] lg:top-[680px] left-[20px] text-[14px] font-medium leading-[1.1] text-white m-0">
         Pas encore de compte ?&nbsp;<a href="/inscription" class="underline hover:opacity-70 transition-opacity">S'inscrire</a>
       </p>
 
