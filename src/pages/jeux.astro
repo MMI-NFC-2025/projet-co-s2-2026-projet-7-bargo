@@ -67,7 +67,7 @@ function pageUrl(p) {
                     Jouer
                   </button>
                   <!-- Like -->
-                  <button class="like-btn lg:absolute lg:top-37.75 lg:right-5.25 bg-transparent border-0 cursor-pointer p-0 shrink-0" data-id={jeu.id} type="button" aria-label="Ajouter aux favoris">
+                  <button class="like-btn-jeux lg:absolute lg:top-37.75 lg:right-5.25 bg-transparent border-0 cursor-pointer p-0 shrink-0" data-id={jeu.id} type="button" aria-label="Ajouter aux favoris">
                     <img src={likeIcon.src} alt="" class="like-empty size-6" />
                     <img src={likeFillIcon.src} alt="" class="like-filled size-6 hidden" />
                   </button>
@@ -118,7 +118,7 @@ function pageUrl(p) {
   )}
 
   <script>
-    import '../js/jeux.js';
+    import '../js/like.js';
   </script>
 
 </Layout>

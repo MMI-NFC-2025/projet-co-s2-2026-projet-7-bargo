@@ -59,68 +59,54 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
   <!-- ===== LEFT PANEL ===== -->
   <div id="left-panel" class="hidden lg:flex lg:w-164.25 lg:shrink-0 bg-primary-900 flex-col" style="height: calc(100vh - 92px); position: sticky; top: 92px;">
 
-    <div class="px-17.5 pt-20">
-      <p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:3px; color:#72c073; margin:0 0 14px 0;">Créer un barathon</p>
-      <h2 id="left-title" class="text-white m-0 uppercase">Informations</h2>
-      <p id="left-desc" class="m-0 mt-4 leading-[1.6]" style="font-size:14px; font-weight:500; color:rgba(247,241,237,0.7);">
-        Donnez un nom à votre barathon et choisissez la date et l'heure.
-      </p>
+    <!-- Title zone -->
+    <div class="px-20 pt-18.75">
+      <p style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:3px; color:#72c073; margin:0 0 20px 0;">Créer un barathon</p>
+      <h1 id="left-title" class="text-white m-0 uppercase leading-none" style="font-size:50px; letter-spacing:3px; word-break:break-word;">Informations<br>de la soiree</h1>
     </div>
-
-    <!-- Step indicators -->
-    <div class="px-17.5 mt-15">
-      <div class="flex items-center">
-        <div class="step-circle flex items-center justify-center w-11.5 h-11.5 rounded-full border-2 shrink-0" data-step="1"
-          style="background:white; border-color:white;">
-          <span class="step-num font-bold" style="font-size:16px; color:#094736;">1</span>
-          <svg class="step-check" style="display:none; width:18px; height:18px;" viewBox="0 0 18 18" fill="none">
-            <path d="M3.5 9L7.5 13L14.5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <div class="flex-1 h-0.5 mx-2.5" style="background:rgba(255,255,255,0.25);"></div>
-        <div class="step-circle flex items-center justify-center w-11.5 h-11.5 rounded-full border-2 shrink-0" data-step="2"
-          style="background:transparent; border-color:rgba(255,255,255,0.3);">
-          <span class="step-num font-bold" style="font-size:16px; color:rgba(255,255,255,0.3);">2</span>
-          <svg class="step-check" style="display:none; width:18px; height:18px;" viewBox="0 0 18 18" fill="none">
-            <path d="M3.5 9L7.5 13L14.5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <div class="flex-1 h-0.5 mx-2.5" style="background:rgba(255,255,255,0.25);"></div>
-        <div class="step-circle flex items-center justify-center w-11.5 h-11.5 rounded-full border-2 shrink-0" data-step="3"
-          style="background:transparent; border-color:rgba(255,255,255,0.3);">
-          <span class="step-num font-bold" style="font-size:16px; color:rgba(255,255,255,0.3);">3</span>
-          <svg class="step-check" style="display:none; width:18px; height:18px;" viewBox="0 0 18 18" fill="none">
-            <path d="M3.5 9L7.5 13L14.5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <div class="flex-1 h-0.5 mx-2.5" style="background:rgba(255,255,255,0.25);"></div>
-        <div class="step-circle flex items-center justify-center w-11.5 h-11.5 rounded-full border-2 shrink-0" data-step="4"
-          style="background:transparent; border-color:rgba(255,255,255,0.3);">
-          <span class="step-num font-bold" style="font-size:16px; color:rgba(255,255,255,0.3);">4</span>
-          <svg class="step-check" style="display:none; width:18px; height:18px;" viewBox="0 0 18 18" fill="none">
-            <path d="M3.5 9L7.5 13L14.5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-      </div>
-      <div class="flex mt-2.5">
-        <div class="w-11.5 text-center" style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:500;">Infos</div>
-        <div class="flex-1 mx-2.5"></div>
-        <div class="w-11.5 text-center" style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:500;">Bars</div>
-        <div class="flex-1 mx-2.5"></div>
-        <div class="w-11.5 text-center" style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:500;">Jeux</div>
-        <div class="flex-1 mx-2.5"></div>
-        <div class="w-11.5 text-center" style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:500;">Amis</div>
-      </div>
-    </div>
-
-    <!-- Selection summary -->
-    <div id="left-summary" class="px-17.5 mt-10 flex flex-col gap-2.5" style="display:none;"></div>
 
     <div class="flex-1"></div>
 
+    <!-- Step indicators -->
+    <div class="px-20 mb-5">
+      <div class="flex items-center">
+        <div class="step-circle flex items-center justify-center w-12.5 h-12.5 rounded-full border-2 shrink-0 transition-all duration-400" data-step="1"
+          style="background:white; border-color:white;">
+          <span class="step-num font-bold" style="font-size:18px; color:#094736;">1</span>
+          <svg class="step-check" style="display:none; width:20px; height:20px; color:white;" viewBox="0 0 18 18" fill="none">
+            <path d="M3.5 9L7.5 13L14.5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="step-line flex-1 mx-2 transition-all duration-400" style="height:5px; background:rgba(255,255,255,0.25); border-radius:100px;"></div>
+        <div class="step-circle flex items-center justify-center w-12.5 h-12.5 rounded-full border-2 shrink-0 transition-all duration-400" data-step="2"
+          style="background:transparent; border-color:rgba(255,255,255,0.3);">
+          <span class="step-num font-bold" style="font-size:18px; color:rgba(255,255,255,0.3);">2</span>
+          <svg class="step-check" style="display:none; width:20px; height:20px; color:white;" viewBox="0 0 18 18" fill="none">
+            <path d="M3.5 9L7.5 13L14.5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="step-line flex-1 mx-2 transition-all duration-400" style="height:5px; background:rgba(255,255,255,0.25); border-radius:100px;"></div>
+        <div class="step-circle flex items-center justify-center w-12.5 h-12.5 rounded-full border-2 shrink-0 transition-all duration-400" data-step="3"
+          style="background:transparent; border-color:rgba(255,255,255,0.3);">
+          <span class="step-num font-bold" style="font-size:18px; color:rgba(255,255,255,0.3);">3</span>
+          <svg class="step-check" style="display:none; width:20px; height:20px; color:white;" viewBox="0 0 18 18" fill="none">
+            <path d="M3.5 9L7.5 13L14.5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="step-line flex-1 mx-2 transition-all duration-400" style="height:5px; background:rgba(255,255,255,0.25); border-radius:100px;"></div>
+        <div class="step-circle flex items-center justify-center w-12.5 h-12.5 rounded-full border-2 shrink-0 transition-all duration-400" data-step="4"
+          style="background:transparent; border-color:rgba(255,255,255,0.3);">
+          <span class="step-num font-bold" style="font-size:18px; color:rgba(255,255,255,0.3);">4</span>
+          <svg class="step-check" style="display:none; width:20px; height:20px; color:white;" viewBox="0 0 18 18" fill="none">
+            <path d="M3.5 9L7.5 13L14.5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
     <!-- Progress bar -->
-    <div class="mx-17.5 mb-15">
-      <div class="h-1.5 rounded-full overflow-hidden" style="background:rgba(255,255,255,0.2);">
+    <div class="px-20 mb-15">
+      <div class="h-3.75 rounded-full overflow-hidden" style="background:rgba(255,255,255,0.2);">
         <div id="progress-bar" class="h-full rounded-full transition-all duration-500" style="width:0%; background:#72c073;"></div>
       </div>
     </div>
@@ -130,92 +116,159 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
   <div id="step-view" class="flex-1 bg-neutral-800 overflow-y-auto">
 
     <!-- ─── STEP 1: Informations ─── -->
-    <div id="panel-1" class="flex flex-col px-5 lg:px-17.5 py-10 lg:py-20" style="min-height: calc(100vh - 92px);">
-      <h2 class="text-white m-0 mb-12.5 uppercase">Informations de la soirée</h2>
-      <div class="flex flex-col gap-9 flex-1">
-        <div class="pb-3" style="border-bottom:1px solid rgba(247,241,237,0.25);">
-          <label style="display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:rgba(247,241,237,0.5); margin-bottom:8px;">Nom du barathon *</label>
-          <input id="s1-nom" type="text" placeholder="Mon barathon de folie"
-            style="background:transparent; width:100%; font-size:16px; font-weight:500; outline:none; border:none; color:#f7f1ed;"
-            class="placeholder-neutral-200/30" />
+    <div id="panel-1" class="flex flex-col px-5 lg:px-17.5 py-10 lg:py-14" style="min-height: calc(100vh - 92px);">
+      <h3 class="text-white m-0 mb-10" style="font-size:25px; font-weight:500; letter-spacing:-1px;">Creer son barathon</h3>
+
+      <div class="flex flex-col gap-7 flex-1">
+
+        <!-- Nom du barathon -->
+        <div>
+          <div class="flex items-center gap-2.5 mb-3">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M15.728 3.272a2.5 2.5 0 0 1 0 3.536L6.5 16.035l-3.5.965.965-3.5L13.192 3.272a2.5 2.5 0 0 1 3.536 0z"/></svg>
+            <span style="font-size:16px; font-weight:700; color:white;">Nom du barathon</span>
+          </div>
+          <div style="background:#f7f1ed; border-radius:5px; box-shadow:0 4px 10px rgba(0,0,0,0.25); height:61px; display:flex; align-items:center; padding:0 20px;">
+            <input id="s1-nom" type="text" placeholder="Ex : La tourner du vendredi soir"
+              style="background:transparent; width:100%; font-size:14px; font-weight:500; outline:none; border:none; color:#1e1e1e;"
+              class="placeholder-neutral-500" />
+          </div>
         </div>
-        <div class="pb-3" style="border-bottom:1px solid rgba(247,241,237,0.25);">
-          <label style="display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:rgba(247,241,237,0.5); margin-bottom:8px;">Date</label>
-          <input id="s1-date" type="date"
-            style="background:transparent; width:100%; font-size:16px; font-weight:500; outline:none; border:none; color:#f7f1ed; color-scheme:dark;" />
+
+        <!-- Date + Heure départ + Heure fin -->
+        <div class="flex gap-4">
+          <div class="flex-1">
+            <div class="flex items-center gap-2.5 mb-3">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="16" height="14" rx="2" stroke="white" stroke-width="1.5"/><path d="M3 9h16M8 3v4M14 3v4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <span style="font-size:16px; font-weight:700; color:white;">Date</span>
+            </div>
+            <div style="background:#f7f1ed; border-radius:5px; box-shadow:0 4px 10px rgba(0,0,0,0.25); height:61px; display:flex; align-items:center; padding:0 20px;">
+              <input id="s1-date" type="date"
+                style="background:transparent; width:100%; font-size:14px; font-weight:500; outline:none; border:none; color:#646262; color-scheme:light;" />
+            </div>
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center gap-2.5 mb-3">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8" stroke="white" stroke-width="1.5"/><path d="M11 7v4l3 2" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span style="font-size:16px; font-weight:700; color:white;">Heure de départ</span>
+            </div>
+            <div style="background:#f7f1ed; border-radius:5px; box-shadow:0 4px 10px rgba(0,0,0,0.25); height:61px; display:flex; align-items:center; padding:0 20px;">
+              <input id="s1-heure-debut" type="time"
+                style="background:transparent; width:100%; font-size:14px; font-weight:500; outline:none; border:none; color:#646262; color-scheme:light;" />
+            </div>
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center gap-2.5 mb-3">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8" stroke="white" stroke-width="1.5"/><path d="M11 7v4l3 2" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span style="font-size:16px; font-weight:700; color:white;">Heure de fin</span>
+            </div>
+            <div style="background:#f7f1ed; border-radius:5px; box-shadow:0 4px 10px rgba(0,0,0,0.25); height:61px; display:flex; align-items:center; padding:0 20px;">
+              <input id="s1-heure-fin" type="time"
+                style="background:transparent; width:100%; font-size:14px; font-weight:500; outline:none; border:none; color:#646262; color-scheme:light;" />
+            </div>
+          </div>
         </div>
-        <div class="pb-3" style="border-bottom:1px solid rgba(247,241,237,0.25);">
-          <label style="display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:rgba(247,241,237,0.5); margin-bottom:8px;">Heure de départ</label>
-          <input id="s1-heure-debut" type="time"
-            style="background:transparent; width:100%; font-size:16px; font-weight:500; outline:none; border:none; color:#f7f1ed; color-scheme:dark;" />
+
+        <!-- Description -->
+        <div>
+          <div class="flex items-center gap-2.5 mb-3">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 4h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8l-4-4V6a2 2 0 0 1 2-2z" stroke="white" stroke-width="1.5"/><path d="M8 9h6M8 12h4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <span style="font-size:16px; font-weight:700; color:white;">Description</span>
+          </div>
+          <div style="background:#f7f1ed; border-radius:5px; box-shadow:0 4px 10px rgba(0,0,0,0.25); padding:16px 20px;">
+            <textarea id="s1-desc" placeholder="Décris t'a soirée en quelque mots..." rows="6"
+              style="background:transparent; width:100%; font-size:14px; font-weight:500; outline:none; border:none; color:#1e1e1e; resize:none;"
+              class="placeholder-neutral-500"></textarea>
+          </div>
         </div>
-        <div style="border-bottom:1px solid rgba(247,241,237,0.25);">
-          <label style="display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:rgba(247,241,237,0.5); margin-bottom:8px;">Description</label>
-          <textarea id="s1-desc" placeholder="Décrivez votre soirée..." rows="4"
-            style="background:transparent; width:100%; font-size:16px; font-weight:500; outline:none; border:none; color:#f7f1ed; resize:none;"
-            class="placeholder-neutral-200/30"></textarea>
-        </div>
+
       </div>
-      <div class="flex justify-end mt-12.5">
-        <button id="btn-next-1" style="background:#347645; height:52px; padding:0 50px; color:white; font-size:16px; font-weight:500; border:none; cursor:pointer; border-radius:3px;">Continuer →</button>
+
+      <div class="flex justify-end mt-10">
+        <button id="btn-next-1" style="background:#347645; height:60px; width:237px; color:white; font-size:16px; font-weight:500; border:none; cursor:pointer;">Continuer</button>
       </div>
     </div>
 
     <!-- ─── STEP 2: Bars ─── -->
-    <div id="panel-2" class="flex flex-col px-5 lg:px-17.5 py-10 lg:py-20" style="display:none; min-height: calc(100vh - 92px);">
-      <h2 class="text-white m-0 mb-7 uppercase">Choisir mes bars</h2>
-      <div class="flex items-center gap-3 rounded-1.25 px-4 mb-5" style="background:#2c2c2c; height:48px;">
-        <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5"/><path d="M12 12L16 16" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5" stroke-linecap="round"/></svg>
-        <input id="search-bars" type="text" placeholder="Rechercher un bar…"
-          style="background:transparent; flex:1; font-size:14px; font-weight:500; outline:none; border:none; color:#f7f1ed;"
-          class="placeholder-neutral-200/40" />
-      </div>
-      <div id="bars-list" class="flex flex-col gap-2.5 overflow-y-auto flex-1"></div>
-      <div class="flex items-center justify-between mt-7 pt-5" style="border-top:1px solid rgba(255,255,255,0.1);">
-        <p id="bars-count" style="color:rgba(247,241,237,0.5); font-size:14px; font-weight:500; margin:0;">0 bar sélectionné</p>
-        <div class="flex gap-4">
-          <button onclick="goToStep(1)" style="height:52px; padding:0 30px; color:rgba(247,241,237,0.6); font-size:16px; font-weight:500; border:none; background:transparent; cursor:pointer;">← Retour</button>
-          <button onclick="goToStep(3)" style="background:#347645; height:52px; padding:0 50px; color:white; font-size:16px; font-weight:500; border:none; cursor:pointer; border-radius:3px;">Continuer →</button>
+    <div id="panel-2" class="flex flex-col px-5 lg:px-17.5 py-10 lg:py-14" style="display:none; min-height: calc(100vh - 92px);">
+      <h3 class="text-white m-0 mb-7" style="font-size:25px; font-weight:500; letter-spacing:-1px;">Creer son barathon</h3>
+
+      <!-- Search + Favoris -->
+      <div class="flex gap-3 mb-5">
+        <div class="flex items-center gap-3 flex-1 px-4" style="background:#f7f1ed; height:52px; border-radius:2px;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="8.5" cy="8.5" r="5.5" stroke="#646262" stroke-width="1.5"/><path d="M13 13L17 17" stroke="#646262" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <input id="search-bars" type="text" placeholder="Rechercher un bar ..."
+            style="background:transparent; flex:1; font-size:14px; font-weight:500; outline:none; border:none; color:#1e1e1e;"
+            class="placeholder-neutral-500" />
         </div>
+        <button style="background:#347645; height:52px; width:120px; color:white; font-size:14px; font-weight:500; border:none; cursor:pointer; border-radius:2px; flex-shrink:0;">Favoris</button>
+      </div>
+
+      <div id="bars-list" class="flex flex-col gap-2.5 flex-1"></div>
+
+      <!-- Selected summary -->
+      <div id="bars-summary-box" class="mt-5 p-4 rounded-5px" style="display:none; background:white; border:2px solid #dfdfdf;">
+        <p id="bars-count" style="color:#1e1e1e; font-size:14px; font-weight:500; margin:0;">Bars sélectionnés : 0</p>
+        <p id="bars-names" style="color:#646262; font-size:14px; font-weight:500; margin:4px 0 0;"></p>
+      </div>
+
+      <div class="flex justify-between items-center mt-5">
+        <button onclick="goToStep(1)" style="height:60px; width:237px; color:white; font-size:16px; font-weight:500; border:2px solid white; background:transparent; cursor:pointer;">Retour</button>
+        <button onclick="goToStep(3)" style="background:#347645; height:60px; width:237px; color:white; font-size:16px; font-weight:500; border:none; cursor:pointer;">Continuer</button>
       </div>
     </div>
 
     <!-- ─── STEP 3: Jeux ─── -->
-    <div id="panel-3" class="flex flex-col px-5 lg:px-17.5 py-10 lg:py-20" style="display:none; min-height: calc(100vh - 92px);">
-      <h2 class="text-white m-0 mb-1 uppercase">Choisir mon jeu</h2>
-      <p style="color:rgba(247,241,237,0.4); font-size:13px; font-weight:500; margin:0 0 24px;">Un seul jeu par session.</p>
-      <div class="flex items-center gap-3 rounded-1.25 px-4 mb-5" style="background:#2c2c2c; height:48px;">
-        <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5"/><path d="M12 12L16 16" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5" stroke-linecap="round"/></svg>
-        <input id="search-jeux" type="text" placeholder="Rechercher un jeu…"
-          style="background:transparent; flex:1; font-size:14px; font-weight:500; outline:none; border:none; color:#f7f1ed;"
-          class="placeholder-neutral-200/40" />
-      </div>
-      <div id="jeux-list" class="flex flex-col gap-2.5 overflow-y-auto flex-1"></div>
-      <div class="flex items-center justify-between mt-7 pt-5" style="border-top:1px solid rgba(255,255,255,0.1);">
-        <p id="jeux-count" style="color:rgba(247,241,237,0.5); font-size:14px; font-weight:500; margin:0;">0 jeu sélectionné</p>
-        <div class="flex gap-4">
-          <button onclick="goToStep(2)" style="height:52px; padding:0 30px; color:rgba(247,241,237,0.6); font-size:16px; font-weight:500; border:none; background:transparent; cursor:pointer;">← Retour</button>
-          <button onclick="goToStep(4)" style="background:#347645; height:52px; padding:0 50px; color:white; font-size:16px; font-weight:500; border:none; cursor:pointer; border-radius:3px;">Continuer →</button>
+    <div id="panel-3" class="flex flex-col px-5 lg:px-17.5 py-10 lg:py-14" style="display:none; min-height: calc(100vh - 92px);">
+      <h3 class="text-white m-0 mb-7" style="font-size:25px; font-weight:500; letter-spacing:-1px;">Creer son barathon</h3>
+
+      <!-- Search + Favoris -->
+      <div class="flex gap-3 mb-5">
+        <div class="flex items-center gap-3 flex-1 px-4" style="background:#f7f1ed; height:52px; border-radius:2px;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="8.5" cy="8.5" r="5.5" stroke="#646262" stroke-width="1.5"/><path d="M13 13L17 17" stroke="#646262" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <input id="search-jeux" type="text" placeholder="Rechercher des jeux ..."
+            style="background:transparent; flex:1; font-size:14px; font-weight:500; outline:none; border:none; color:#1e1e1e;"
+            class="placeholder-neutral-500" />
         </div>
+        <button style="background:#347645; height:52px; width:120px; color:white; font-size:14px; font-weight:500; border:none; cursor:pointer; border-radius:2px; flex-shrink:0;">Favoris</button>
+      </div>
+
+      <div id="jeux-list" class="flex flex-col gap-2.5 flex-1"></div>
+
+      <!-- Selected summary -->
+      <div id="jeux-summary-box" class="mt-5 p-4 rounded-5px" style="display:none; background:white; border:2px solid #dfdfdf;">
+        <p id="jeux-count" style="color:#1e1e1e; font-size:14px; font-weight:500; margin:0;">Jeux sélectionnés : 0</p>
+        <p id="jeux-names" style="color:#646262; font-size:14px; font-weight:500; margin:4px 0 0;"></p>
+      </div>
+
+      <div class="flex justify-between items-center mt-5">
+        <button onclick="goToStep(2)" style="height:60px; width:237px; color:white; font-size:16px; font-weight:500; border:2px solid white; background:transparent; cursor:pointer;">Retour</button>
+        <button onclick="goToStep(4)" style="background:#347645; height:60px; width:237px; color:white; font-size:16px; font-weight:500; border:none; cursor:pointer;">Continuer</button>
       </div>
     </div>
 
     <!-- ─── STEP 4: Amis ─── -->
-    <div id="panel-4" class="flex flex-col px-5 lg:px-17.5 py-10 lg:py-20" style="display:none; min-height: calc(100vh - 92px);">
-      <h2 class="text-white m-0 mb-7 uppercase">Inviter mes amis</h2>
-      <div class="flex items-center gap-3 rounded-1.25 px-4 mb-5" style="background:#2c2c2c; height:48px;">
-        <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5"/><path d="M12 12L16 16" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5" stroke-linecap="round"/></svg>
-        <input id="search-users" type="text" placeholder="Rechercher un ami…"
-          style="background:transparent; flex:1; font-size:14px; font-weight:500; outline:none; border:none; color:#f7f1ed;"
-          class="placeholder-neutral-200/40" />
+    <div id="panel-4" class="flex flex-col px-5 lg:px-17.5 py-10 lg:py-14" style="display:none; min-height: calc(100vh - 92px);">
+      <h3 class="text-white m-0 mb-7" style="font-size:25px; font-weight:500; letter-spacing:-1px;">Creer son barathon</h3>
+
+      <!-- Search -->
+      <div class="flex items-center gap-3 mb-5 px-4" style="background:#f7f1ed; height:52px; border-radius:2px;">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="8.5" cy="8.5" r="5.5" stroke="#646262" stroke-width="1.5"/><path d="M13 13L17 17" stroke="#646262" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <input id="search-users" type="text" placeholder="Rechercher des participants ..."
+          style="background:transparent; flex:1; font-size:14px; font-weight:500; outline:none; border:none; color:#1e1e1e;"
+          class="placeholder-neutral-500" />
       </div>
-      <div id="users-list" class="flex flex-col gap-2.5 overflow-y-auto flex-1"></div>
-      <div class="flex items-center justify-between mt-7 pt-5" style="border-top:1px solid rgba(255,255,255,0.1);">
-        <p id="users-count" style="color:rgba(247,241,237,0.5); font-size:14px; font-weight:500; margin:0;">0 ami invité</p>
-        <div class="flex gap-4">
-          <button onclick="goToStep(3)" style="height:52px; padding:0 30px; color:rgba(247,241,237,0.6); font-size:16px; font-weight:500; border:none; background:transparent; cursor:pointer;">← Retour</button>
-          <button id="btn-lancer" style="background:#72c073; height:52px; padding:0 50px; color:#094736; font-size:16px; font-weight:700; border:none; cursor:pointer; border-radius:3px;">Lancer 🚀</button>
-        </div>
+
+      <div id="users-list" class="flex flex-col gap-2.5 flex-1"></div>
+
+      <!-- Selected summary -->
+      <div id="users-summary-box" class="mt-5 p-4 rounded-5px" style="display:none; background:white; border:2px solid #dfdfdf;">
+        <p id="users-count" style="color:#1e1e1e; font-size:14px; font-weight:500; margin:0;">Amis sélectionnés : 0</p>
+        <p id="users-names" style="color:#646262; font-size:14px; font-weight:500; margin:4px 0 0;"></p>
+      </div>
+
+      <div class="flex justify-between items-center mt-5">
+        <button onclick="goToStep(3)" style="height:60px; width:237px; color:white; font-size:16px; font-weight:500; border:2px solid white; background:transparent; cursor:pointer;">Retour</button>
+        <button id="btn-lancer" style="background:#347645; height:60px; width:237px; color:white; font-size:16px; font-weight:700; border:none; cursor:pointer;">Lancer</button>
       </div>
     </div>
 
@@ -244,10 +297,10 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
   var selectedAmis = [];
 
   var stepMeta = {
-    1: { title: 'Informations',     desc: 'Donnez un nom à votre barathon et choisissez la date et l\'heure.', progress: 0 },
-    2: { title: 'Choisir mes bars', desc: 'Sélectionnez les bars que vous souhaitez visiter ce soir.',         progress: 35 },
-    3: { title: 'Choisir mes jeux', desc: 'Choisissez les jeux pour animer votre soirée.',                     progress: 65 },
-    4: { title: 'Inviter mes amis', desc: 'Invitez vos amis et désignez un Sam parmi eux.',                    progress: 95 },
+    1: { title: 'Informations<br>de la soiree', progress: 0 },
+    2: { title: 'Choisir<br>mes bars',          progress: 35 },
+    3: { title: 'Choisir<br>mes jeux',          progress: 65 },
+    4: { title: 'Inviter<br>mes amis',          progress: 95 },
   };
 
   // ── Helpers ───────────────────────────────────────────────────────
@@ -258,9 +311,11 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
     return file ? PB_URL + '/api/files/' + rec.collectionName + '/' + rec.id + '/' + file : null;
   }
   function thumb(url, alt) {
-    if (!url) return '<div style="width:100%;height:100%;background:#3a3a3a;border-radius:3px;"></div>';
+    if (!url) return '<div style="width:100%;height:100%;background:#e7e5e5;border-radius:5px 0 0 5px;"></div>';
     return '<img src="' + url + '" alt="' + esc(alt) + '" style="width:100%;height:100%;object-fit:cover;" />';
   }
+  var iconPlus = '<svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="10" stroke="#1e1e1e" stroke-width="1.5"/><path d="M11 7v8M7 11h8" stroke="#1e1e1e" stroke-width="1.5" stroke-linecap="round"/></svg>';
+  var iconCheck = '<svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="11" fill="#72c073"/><path d="M6 11l4 4 6-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   function avatarHtml(user) {
     var url = imgUrl(user, user.avatar);
     if (url) return '<img src="' + url + '" alt="' + esc(user.pseudo) + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />';
@@ -284,18 +339,18 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
     currentStep = step;
     document.getElementById('panel-' + step).style.display = 'flex';
     var m = stepMeta[step];
-    document.getElementById('left-title').textContent   = m.title;
-    document.getElementById('left-desc').textContent    = m.desc;
+    document.getElementById('left-title').innerHTML     = m.title;
     document.getElementById('progress-bar').style.width = m.progress + '%';
     refreshCircles();
-    refreshSummary();
     if (step === 2) renderBars();
     if (step === 3) renderJeux();
     if (step === 4) renderUsers();
   };
 
   function refreshCircles() {
-    document.querySelectorAll('.step-circle').forEach(function (el) {
+    var circles = document.querySelectorAll('.step-circle');
+    var lines   = document.querySelectorAll('.step-line');
+    circles.forEach(function (el) {
       var s   = parseInt(el.dataset.step);
       var num = el.querySelector('.step-num');
       var chk = el.querySelector('.step-check');
@@ -309,6 +364,10 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
         el.style.background  = 'transparent'; el.style.borderColor = 'rgba(255,255,255,0.3)';
         num.style.display = 'block'; num.style.color = 'rgba(255,255,255,0.3)'; chk.style.display = 'none';
       }
+    });
+    // connector lines: green if both sides are completed
+    lines.forEach(function (line, i) {
+      line.style.background = (i < currentStep - 1) ? '#72c073' : 'rgba(255,255,255,0.25)';
     });
   }
 
@@ -329,23 +388,31 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
     var filtered = allBars.filter(function (b) { return !q || b.nom.toLowerCase().includes(q) || b.adresse.toLowerCase().includes(q); });
     list.innerHTML = filtered.map(function (bar) {
       var sel = selectedBars.some(function (b) { return b.id === bar.id; });
-      return '<div style="display:flex;align-items:center;gap:16px;background:#2c2c2c;border-radius:5px;padding:14px;">' +
-        '<div style="width:60px;height:60px;flex-shrink:0;border-radius:3px;overflow:hidden;">' + thumb(imgUrl(bar, bar.img), bar.nom) + '</div>' +
-        '<div style="flex:1;min-width:0;"><p style="color:white;font-size:15px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(bar.nom) + '</p><p style="color:rgba(247,241,237,0.5);font-size:13px;margin:2px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(bar.adresse) + '</p></div>' +
-        '<button data-action="toggle-bar" data-id="' + bar.id + '" style="flex-shrink:0;height:36px;padding:0 18px;font-size:13px;font-weight:500;border:none;cursor:pointer;border-radius:3px;background:' + (sel ? '#72c073' : '#347645') + ';color:' + (sel ? '#094736' : 'white') + ';">' + (sel ? '✓ Ajouté' : 'Ajouter') + '</button>' +
+      return '<div style="display:flex;align-items:center;background:white;border:2px solid #dfdfdf;border-radius:5px;box-shadow:0 4px 4px rgba(0,0,0,0.25);padding:10px;gap:8px;">' +
+        '<div style="width:120px;height:75px;flex-shrink:0;border-radius:5px 0 0 5px;overflow:hidden;">' + thumb(imgUrl(bar, bar.img), bar.nom) + '</div>' +
+        '<div style="flex:1;min-width:0;"><p style="color:#000;font-size:16px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(bar.nom) + '</p><p style="color:#646262;font-size:14px;font-weight:500;margin:4px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(bar.adresse) + '</p></div>' +
+        '<button data-action="toggle-bar" data-id="' + bar.id + '" style="flex-shrink:0;width:141px;height:37px;background:white;border:2px solid ' + (sel ? '#72c073' : '#dfdfdf') + ';border-radius:5px;box-shadow:0 4px 4px rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-size:14px;font-weight:500;color:#1e1e1e;">Ajouter ' + (sel ? iconCheck : iconPlus) + '</button>' +
       '</div>';
     }).join('');
     list.querySelectorAll('[data-action="toggle-bar"]').forEach(function (btn) {
       btn.addEventListener('click', function () { toggleBar(btn.dataset.id); renderBars(document.getElementById('search-bars').value); });
     });
-    updateCount('bars-count', selectedBars.length, 'bar sélectionné', 'bars sélectionnés');
+    refreshBarsSummary();
+  }
+  function refreshBarsSummary() {
+    var box = document.getElementById('bars-summary-box');
+    var countEl = document.getElementById('bars-count');
+    var namesEl = document.getElementById('bars-names');
+    if (!box) return;
+    box.style.display = selectedBars.length ? 'block' : 'none';
+    if (countEl) countEl.textContent = 'Bars sélectionnés : ' + selectedBars.length;
+    if (namesEl) namesEl.textContent = selectedBars.map(function(b){ return b.nom; }).join(' , ');
   }
   function toggleBar(id) {
     var idx = selectedBars.findIndex(function (b) { return b.id === id; });
     if (idx >= 0) selectedBars.splice(idx, 1);
     else { var b = allBars.find(function (b) { return b.id === id; }); if (b) selectedBars.push(b); }
-    updateCount('bars-count', selectedBars.length, 'bar sélectionné', 'bars sélectionnés');
-    refreshSummary();
+    refreshBarsSummary();
   }
 
   // ── Jeux ──────────────────────────────────────────────────────────
@@ -356,29 +423,34 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
     var filtered = allJeux.filter(function (j) { return !q || j.nom.toLowerCase().includes(q); });
     list.innerHTML = filtered.map(function (jeu) {
       var sel = selectedJeux.length > 0 && selectedJeux[0].id === jeu.id;
-      return '<div style="display:flex;align-items:center;gap:16px;background:#2c2c2c;border-radius:5px;padding:14px;">' +
-        '<div style="width:60px;height:60px;flex-shrink:0;border-radius:3px;overflow:hidden;">' + thumb(imgUrl(jeu, jeu.img), jeu.nom) + '</div>' +
-        '<div style="flex:1;min-width:0;"><p style="color:white;font-size:15px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(jeu.nom) + '</p><p style="color:rgba(247,241,237,0.5);font-size:13px;margin:2px 0 0;overflow:hidden;text-overflow:ellipsis;">' + esc(jeu.description) + '</p></div>' +
-        '<button data-action="toggle-jeu" data-id="' + jeu.id + '" style="flex-shrink:0;height:36px;padding:0 18px;font-size:13px;font-weight:500;border:none;cursor:pointer;border-radius:3px;background:' + (sel ? '#72c073' : '#347645') + ';color:' + (sel ? '#094736' : 'white') + ';">' + (sel ? '✓ Choisi' : 'Choisir') + '</button>' +
+      return '<div style="display:flex;align-items:center;background:white;border:2px solid #dfdfdf;border-radius:5px;box-shadow:0 4px 4px rgba(0,0,0,0.25);padding:10px;gap:8px;">' +
+        '<div style="width:120px;height:75px;flex-shrink:0;border-radius:5px 0 0 5px;overflow:hidden;">' + thumb(imgUrl(jeu, jeu.img), jeu.nom) + '</div>' +
+        '<div style="flex:1;min-width:0;"><p style="color:#000;font-size:16px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(jeu.nom) + '</p><p style="color:#646262;font-size:14px;font-weight:500;margin:4px 0 0;overflow:hidden;text-overflow:ellipsis;">' + esc(jeu.description) + '</p></div>' +
+        '<button data-action="toggle-jeu" data-id="' + jeu.id + '" style="flex-shrink:0;width:141px;height:37px;background:white;border:2px solid ' + (sel ? '#72c073' : '#dfdfdf') + ';border-radius:5px;box-shadow:0 4px 4px rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-size:14px;font-weight:500;color:#1e1e1e;">Ajouter ' + (sel ? iconCheck : iconPlus) + '</button>' +
       '</div>';
     }).join('');
     list.querySelectorAll('[data-action="toggle-jeu"]').forEach(function (btn) {
       btn.addEventListener('click', function () { toggleJeu(btn.dataset.id); renderJeux(document.getElementById('search-jeux').value); });
     });
-    var el = document.getElementById('jeux-count');
-    if (el) el.textContent = selectedJeux.length > 0 ? '1 jeu sélectionné : ' + esc(selectedJeux[0].nom) : 'Aucun jeu sélectionné';
+    refreshJeuxSummary();
+  }
+  function refreshJeuxSummary() {
+    var box = document.getElementById('jeux-summary-box');
+    var countEl = document.getElementById('jeux-count');
+    var namesEl = document.getElementById('jeux-names');
+    if (!box) return;
+    box.style.display = selectedJeux.length ? 'block' : 'none';
+    if (countEl) countEl.textContent = selectedJeux.length > 0 ? 'Jeux sélectionnés : 1' : 'Jeux sélectionnés : 0';
+    if (namesEl) namesEl.textContent = selectedJeux.length > 0 ? selectedJeux[0].nom : '';
   }
   function toggleJeu(id) {
-    // Single → désélectionner si déjà choisi, sinon remplacer
     if (selectedJeux.length > 0 && selectedJeux[0].id === id) {
       selectedJeux = [];
     } else {
       var j = allJeux.find(function (j) { return j.id === id; });
       selectedJeux = j ? [j] : [];
     }
-    var el = document.getElementById('jeux-count');
-    if (el) el.textContent = selectedJeux.length > 0 ? '1 jeu sélectionné : ' + esc(selectedJeux[0].nom) : 'Aucun jeu sélectionné';
-    refreshSummary();
+    refreshJeuxSummary();
   }
 
   // ── Users ─────────────────────────────────────────────────────────
@@ -390,13 +462,13 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
       var ami  = selectedAmis.find(function (a) { return a.id === user.id; });
       var sel  = !!ami; var isSam = ami && ami.sam;
       var name = esc(user.pseudo || (user.prenom + ' ' + user.nom).trim() || 'Utilisateur');
-      return '<div style="display:flex;align-items:center;gap:14px;background:#2c2c2c;border-radius:5px;padding:14px;">' +
-        '<div style="width:48px;height:48px;flex-shrink:0;border-radius:50%;overflow:hidden;">' + avatarHtml(user) + '</div>' +
-        '<div style="flex:1;min-width:0;"><p style="color:white;font-size:15px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + name + '</p>' +
-        (user.pseudo && (user.prenom || user.nom) ? '<p style="color:rgba(247,241,237,0.5);font-size:13px;margin:2px 0 0;">' + esc((user.prenom + ' ' + user.nom).trim()) + '</p>' : '') + '</div>' +
+      return '<div style="display:flex;align-items:center;gap:14px;background:white;border:2px solid #dfdfdf;border-radius:5px;box-shadow:0 4px 4px rgba(0,0,0,0.25);padding:14px;">' +
+        '<div style="width:55px;height:55px;flex-shrink:0;border-radius:50%;overflow:hidden;">' + avatarHtml(user) + '</div>' +
+        '<div style="flex:1;min-width:0;"><p style="color:#000;font-size:16px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + name + '</p>' +
+        (user.pseudo && (user.prenom || user.nom) ? '<p style="color:#646262;font-size:14px;font-weight:500;margin:2px 0 0;">' + esc((user.prenom + ' ' + user.nom).trim()) + '</p>' : '') + '</div>' +
         '<div style="display:flex;gap:8px;flex-shrink:0;">' +
-          '<button data-action="toggle-ami" data-id="' + user.id + '" style="height:36px;padding:0 16px;font-size:13px;font-weight:500;border:none;cursor:pointer;border-radius:3px;background:' + (sel ? '#72c073' : '#347645') + ';color:' + (sel ? '#094736' : 'white') + ';">' + (sel ? '✓' : 'Ajouter') + '</button>' +
-          '<button data-action="toggle-sam" data-id="' + user.id + '" style="height:36px;padding:0 14px;font-size:13px;font-weight:700;cursor:pointer;border-radius:3px;background:' + (isSam ? '#f7f1ed' : 'transparent') + ';color:' + (isSam ? '#094736' : 'rgba(247,241,237,0.5)') + ';border:1px solid ' + (isSam ? '#f7f1ed' : 'rgba(255,255,255,0.25)') + ';">SAM</button>' +
+          '<button data-action="toggle-ami" data-id="' + user.id + '" style="width:141px;height:37px;background:white;border:2px solid ' + (sel ? '#72c073' : '#dfdfdf') + ';border-radius:5px;box-shadow:0 4px 4px rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-size:14px;font-weight:500;color:#1e1e1e;">Ajouter ' + (sel ? iconCheck : iconPlus) + '</button>' +
+          '<button data-action="toggle-sam" data-id="' + user.id + '" style="height:37px;padding:0 18px;font-size:14px;font-weight:500;cursor:pointer;border-radius:5px;background:white;color:#1e1e1e;border:2px solid ' + (isSam ? '#347645' : '#dfdfdf') + ';box-shadow:0 4px 4px rgba(0,0,0,0.25);">SAM</button>' +
         '</div>' +
       '</div>';
     }).join('');
@@ -406,19 +478,27 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
     list.querySelectorAll('[data-action="toggle-sam"]').forEach(function (btn) {
       btn.addEventListener('click', function () { toggleSam(btn.dataset.id); renderUsers(document.getElementById('search-users').value); });
     });
-    updateCount('users-count', selectedAmis.length, 'ami invité', 'amis invités');
+    refreshUsersSummary();
+  }
+  function refreshUsersSummary() {
+    var box = document.getElementById('users-summary-box');
+    var countEl = document.getElementById('users-count');
+    var namesEl = document.getElementById('users-names');
+    if (!box) return;
+    box.style.display = selectedAmis.length ? 'block' : 'none';
+    if (countEl) countEl.textContent = 'Amis sélectionnés : ' + selectedAmis.length;
+    if (namesEl) namesEl.textContent = selectedAmis.map(function(a){ return a.pseudo || (a.prenom + ' ' + a.nom).trim(); }).join(' , ');
   }
   function toggleAmi(id) {
     var idx = selectedAmis.findIndex(function (a) { return a.id === id; });
     if (idx >= 0) selectedAmis.splice(idx, 1);
     else { var u = allUsers.find(function (u) { return u.id === id; }); if (u) selectedAmis.push(Object.assign({}, u, { sam: false })); }
-    updateCount('users-count', selectedAmis.length, 'ami invité', 'amis invités');
-    refreshSummary();
+    refreshUsersSummary();
   }
   function toggleSam(id) {
     var ami = selectedAmis.find(function (a) { return a.id === id; });
     if (ami) { ami.sam = !ami.sam; }
-    else { var u = allUsers.find(function (u) { return u.id === id; }); if (u) { selectedAmis.push(Object.assign({}, u, { sam: true })); updateCount('users-count', selectedAmis.length, 'ami invité', 'amis invités'); refreshSummary(); } }
+    else { var u = allUsers.find(function (u) { return u.id === id; }); if (u) { selectedAmis.push(Object.assign({}, u, { sam: true })); refreshUsersSummary(); } }
   }
 
   // ── Save & launch ─────────────────────────────────────────────────
@@ -434,6 +514,7 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
       nom:          nom,
       date_session: document.getElementById('s1-date').value        || null,
       heur_depart:  document.getElementById('s1-heure-debut').value || null,
+      heur_fin:     document.getElementById('s1-heure-fin').value   || null,
       description:  document.getElementById('s1-desc').value        || null,
       id_hote:      USER_ID,
       id_bar:       selectedBars.map(function (b) { return b.id; }),

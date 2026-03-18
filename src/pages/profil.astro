@@ -3,7 +3,7 @@
 import Layout from '../layouts/Layout.astro';
 import { getUserAuth, updateUser, deleteUser, getCollection, getImageUrl } from '../js/backend.js';
 import PbImage from '../components/PbImage.astro';
-import heartIcon from '../assets/icon/heart.svg';
+import likeFillIcon from '../assets/icon/like_fill.svg';
 
 // Auth guard
 const token  = Astro.cookies.get('pb_token')?.value;

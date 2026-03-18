@@ -2,7 +2,8 @@
 import Layout from '../../layouts/Layout.astro';
 import PbImage from '../../components/PbImage.astro';
 import { getCollection } from '../../js/backend.js';
-import heartIcon from '../../assets/icon/heart.svg';
+import likeIcon     from '../../assets/icon/like.svg';
+import likeFillIcon from '../../assets/icon/like_fill.svg';
 
 const bars = await getCollection('bar', { sort: 'nom', perPage: 200 });
 ---
@@ -61,9 +62,10 @@ const bars = await getCollection('bar', { sort: 'nom', perPage: 200 });
                   Choisir mes bars
                 </a>
                 <!-- Cœur -->
-                <div class="lg:absolute lg:top-37.75 lg:right-5.25 w-10.25 h-10.25 flex items-center justify-center shrink-0">
-                  <img src={heartIcon.src} alt="" width="24" height="24" />
-                </div>
+                <button class="like-btn-bar lg:absolute lg:top-37.75 lg:right-5.25 w-10.25 h-10.25 flex items-center justify-center shrink-0 bg-transparent border-0 cursor-pointer p-0" data-id={bar.id} type="button" aria-label="Ajouter aux favoris">
+                  <img src={likeIcon.src}     alt="" class="like-empty size-6" />
+                  <img src={likeFillIcon.src} alt="" class="like-filled size-6 hidden" />
+                </button>
               </div>
 
             </div>
@@ -73,5 +75,9 @@ const bars = await getCollection('bar', { sort: 'nom', perPage: 200 });
 
     </div>
   </section>
+
+  <script>
+    import '../../js/like.js';
+  </script>
 
 </Layout>
