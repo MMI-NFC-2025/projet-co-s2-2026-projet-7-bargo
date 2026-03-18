@@ -37,17 +37,128 @@ const hasMap = lat !== 0 && lon !== 0;
 
 <Layout title={`${bar.nom ?? 'Bar'} — Bargo`}>
 
-<!-- ===================================================== -->
-<!-- HERO                                                   -->
-<!-- ===================================================== -->
-<div class="relative bg-[#f7f1ed] overflow-x-hidden" style="height: 3312px;">
+<!-- =====================================================
+     MOBILE
+===================================================== -->
+<div class="block lg:hidden bg-[#f7f1ed]">
+
+  <!-- Photo hero -->
+  <div class="relative w-full h-[260px] overflow-hidden">
+    <PbImage record={bar} recordImage={bar.img?.[0]} width={800} height={400} />
+    <div class="absolute inset-0 pointer-events-none"
+      style="background: linear-gradient(to bottom, rgba(30,30,30,0) 30%, rgba(30,30,30,0.85) 100%);"></div>
+    <h1 class="absolute bottom-[16px] left-[16px] text-white uppercase m-0 text-[32px] leading-tight">{bar.nom}</h1>
+  </div>
+
+  <!-- Icônes réseaux + actions -->
+  <div class="bg-[#1e1e1e] flex items-center justify-between px-5 py-3">
+    <div class="flex gap-4">
+      <img src={instaIcon.src}    alt="Instagram" width="22" height="22" class="invert" />
+      <img src={linkedinIcon.src} alt="LinkedIn"  width="22" height="22" class="invert" />
+      <img src={discordIcon.src}  alt="Discord"   width="22" height="22" class="invert" />
+      <img src={fbIcon.src}       alt="Facebook"  width="22" height="22" class="invert" />
+    </div>
+    <div class="flex gap-4">
+      <img src={notifIcon.src}   alt="Notifier" width="22" height="22" class="invert" />
+      <img src={partageIcon.src} alt="Partager" width="22" height="22" class="invert" />
+      <img src={heartIcon.src}   alt="Favori"   width="22" height="22" class="invert" />
+    </div>
+  </div>
+
+  <!-- Description -->
+  <div class="px-5 py-6 bg-white">
+    <p class="text-[#646262] text-[16px] font-medium leading-[1.4] m-0">{bar.description ?? ''}</p>
+  </div>
+
+  <!-- Infos : Adresse, Spécialités, Disponibilité, Contact -->
+  <div class="bg-[#1e1e1e] px-5 py-6 flex flex-col gap-6">
+    <div>
+      <h3 class="text-white m-0 mb-2">Adresse</h3>
+      <p class="text-[#dfdfdf] text-[16px] font-medium leading-[1.4] m-0">{bar.adresse ?? '—'}</p>
+    </div>
+    <div>
+      <h3 class="text-white m-0 mb-2">Spécialités</h3>
+      <p class="text-[#dfdfdf] text-[16px] font-medium leading-[1.4] m-0">{bar.specialites ?? '—'}</p>
+    </div>
+    <div>
+      <h3 class="text-white m-0 mb-2">Disponibilité</h3>
+      <p class="text-[#dfdfdf] text-[16px] font-medium leading-[1.4] m-0">{bar.disponibilite ?? '—'}</p>
+    </div>
+    <div>
+      <h3 class="text-white m-0 mb-2">Contact</h3>
+      <p class="text-[#dfdfdf] text-[16px] font-medium leading-[1.4] m-0">
+        {bar.liens
+          ? <a href={bar.liens} target="_blank" rel="noopener" class="text-[#72c073] hover:underline">{bar.liens}</a>
+          : '—'
+        }
+      </p>
+    </div>
+  </div>
+
+  <!-- Horaires -->
+  <div class="bg-[#094736] px-5 py-6">
+    <h3 class="text-white m-0 mb-4">Horaires</h3>
+    <div class="flex flex-col gap-3">
+      {jours.map((jour) => {
+        const isFerme = !jour.value || jour.value.toLowerCase().includes('ferm');
+        return (
+          <div class="h-[47px] rounded-[5px] overflow-hidden flex shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25)]">
+            <div class="w-[110px] shrink-0 bg-[#347645] flex items-center justify-center">
+              <span class="text-[#f7f1ed] text-[14px] font-medium">{jour.label}</span>
+            </div>
+            <div class="flex-1 bg-[#f7f1ed] flex items-center px-4">
+              <span class={`text-[14px] font-medium ${isFerme ? 'text-[#646262]' : 'text-black'}`}>
+                {jour.value || 'Fermé'}
+              </span>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+
+  <!-- Carte -->
+  <div id="bar-map-mobile"
+    data-lat={lat}
+    data-lon={lon}
+    data-name={bar.nom}
+    class="w-full h-[280px] bg-[#dfdfdf] flex items-center justify-center">
+    {!hasMap && (
+      <p class="text-[#646262] text-[16px] font-medium m-0">Localisation non disponible</p>
+    )}
+  </div>
+
+  <!-- Galerie -->
+  {galerie.length > 0 && (
+    <div class="px-5 py-6 bg-[#f7f1ed]">
+      <h2 class="text-black m-0 mb-4 text-[28px]">Galerie</h2>
+      <p class="text-[#646262] text-[14px] font-medium leading-[1.4] m-0 mb-5">
+        Explorez une sélection variée de cocktails et de bières, idéale pour partager un moment entre amis.
+      </p>
+      <div class="grid grid-cols-2 gap-3">
+        {galerie.slice(0, 6).map((img) => (
+          <div class="h-[140px] rounded-[5px] overflow-hidden">
+            <img src={getImageUrl(bar, img)} alt={bar.nom}
+              class="w-full h-full object-cover" loading="lazy" />
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+
+</div>
+
+<!-- =====================================================
+     DESKTOP (original)
+===================================================== -->
+<div class="hidden lg:block relative bg-[#f7f1ed] overflow-x-hidden" style="height: 3312px;">
 
   <!-- Photo pleine largeur -->
   <div class="absolute top-0 left-0 w-full h-[530px] overflow-hidden">
     <PbImage record={bar} recordImage={bar.img?.[0]} width={1440} height={530} />
   </div>
 
-  <!-- Gradient overlay (depuis sous la navbar) -->
+  <!-- Gradient overlay -->
   <div class="absolute top-[70px] left-0 w-full h-[460px] pointer-events-none"
     style="background: linear-gradient(to bottom, rgba(30,30,30,0) 0%, rgba(30,30,30,0.9) 100%);"></div>
 
@@ -56,7 +167,7 @@ const hasMap = lat !== 0 && lon !== 0;
     {bar.nom}
   </h1>
 
-  <!-- Icônes réseaux sociaux (top droite, sur la photo) -->
+  <!-- Icônes réseaux sociaux -->
   <div class="absolute top-[449px] z-[2]" style="left: calc(83.33% - 17px)">
     <img src={instaIcon.src}   alt="Instagram" width="24" height="24" class="invert" />
   </div>
@@ -70,7 +181,7 @@ const hasMap = lat !== 0 && lon !== 0;
     <img src={fbIcon.src}       alt="Facebook"  width="24" height="24" class="invert" />
   </div>
 
-  <!-- Actions (cœur, partage, notif, chat) -->
+  <!-- Actions -->
   <div class="absolute top-[602px] z-[2]" style="left: calc(83.33% - 17px)">
     <img src={notifIcon.src}   alt="Notifier" width="24" height="24" />
   </div>
@@ -78,7 +189,6 @@ const hasMap = lat !== 0 && lon !== 0;
     <img src={partageIcon.src} alt="Partager" width="24" height="24" />
   </div>
   <div class="absolute top-[602px] z-[2]" style="left: calc(91.67% - 39px)">
-    <!-- Chat icon (inline) -->
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
         stroke="#1e1e1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -93,36 +203,24 @@ const hasMap = lat !== 0 && lon !== 0;
     {bar.description ?? ''}
   </p>
 
-<!-- ===================================================== -->
-<!-- PANNEAUX INFO (dark gauche + vert droite)             -->
-<!-- ===================================================== -->
-
   <!-- Fond sombre (gauche) -->
   <div class="absolute top-[794px] left-0 w-[704px] h-[670px] bg-[#1e1e1e]"></div>
   <!-- Fond vert (droite) -->
   <div class="absolute top-[794px] w-[736px] h-[670px] bg-[#094736]" style="left: calc(50% - 16px)"></div>
 
   <!-- INFOS GAUCHE -->
-
-  <!-- Adresse -->
   <h3 class="absolute top-[852px] left-[80px] text-white m-0 z-[2]">Adresse</h3>
   <p class="absolute top-[909px] left-[80px] text-[#dfdfdf] text-[16px] font-medium leading-[1.4] m-0 z-[2]">
     {bar.adresse ?? '—'}
   </p>
-
-  <!-- Spécialités -->
   <h3 class="absolute top-[990px] left-[80px] text-white m-0 z-[2]">Spécialités</h3>
   <p class="absolute top-[1047px] left-[80px] text-[#dfdfdf] text-[16px] font-medium leading-[1.4] m-0 z-[2] w-[540px]">
     {bar.specialites ?? '—'}
   </p>
-
-  <!-- Disponibilité -->
   <h3 class="absolute top-[1128px] left-[80px] text-white m-0 z-[2]">Disponibilité</h3>
   <p class="absolute top-[1185px] left-[80px] text-[#dfdfdf] text-[16px] font-medium leading-[1.4] m-0 z-[2] w-[540px]">
     {bar.disponibilite ?? '—'}
   </p>
-
-  <!-- Contact / Liens -->
   <h3 class="absolute top-[1266px] left-[80px] text-white m-0 z-[2]">Contact</h3>
   <p class="absolute top-[1323px] left-[80px] text-[#dfdfdf] text-[16px] font-medium leading-[1.4] m-0 z-[2]">
     {bar.liens
@@ -140,14 +238,12 @@ const hasMap = lat !== 0 && lon !== 0;
     return (
       <div class="absolute w-[624px] h-[47px] rounded-[5px] overflow-hidden z-[2]"
         style={`top: ${top}px; left: calc(50% + 16px); box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.25);`}>
-        <!-- Étiquette jour -->
         <div class="absolute top-0 left-0 h-full bg-[#347645] rounded-l-[5px] flex items-center justify-center"
           style="width: 21.63%;">
           <span class="text-[#f7f1ed] text-[16px] font-medium leading-[1.4] text-center px-2">
             {jour.label}
           </span>
         </div>
-        <!-- Horaire -->
         <div class="absolute top-0 right-0 h-full bg-[#f7f1ed] rounded-r-[5px] flex items-center"
           style="left: 21.63%; padding-left: 35px;">
           <span class={`text-[16px] font-medium leading-[1.4] ${isFerme ? 'text-[#646262]' : 'text-black'}`}>
@@ -158,10 +254,7 @@ const hasMap = lat !== 0 && lon !== 0;
     );
   })}
 
-<!-- ===================================================== -->
-<!-- CARTE                                                 -->
-<!-- ===================================================== -->
-
+  <!-- CARTE -->
   <div id="bar-map"
     data-lat={lat}
     data-lon={lon}
@@ -173,16 +266,12 @@ const hasMap = lat !== 0 && lon !== 0;
     )}
   </div>
 
-<!-- ===================================================== -->
-<!-- GALERIE                                               -->
-<!-- ===================================================== -->
-
+  <!-- GALERIE -->
   <h2 class="absolute left-[80px] text-black m-0 z-[2]" style="top: 2136px;">Galerie</h2>
   <p class="absolute left-[80px] w-[405px] text-[#646262] text-[16px] font-medium leading-[1.4] m-0 z-[2]" style="top: 2223px;">
     Explorez une sélection variée de cocktails et de bières, idéale pour partager un moment entre amis.
   </p>
 
-  <!-- 3 photos paysage -->
   {landscapePhotos.length > 0 ? (
     <>
       {landscapePhotos[0] && (
@@ -213,7 +302,6 @@ const hasMap = lat !== 0 && lon !== 0;
     </p>
   )}
 
-  <!-- 4 photos portrait -->
   {portraitPhotos.map((img, i) => {
     const positions = [
       'left: 80px',
@@ -230,12 +318,13 @@ const hasMap = lat !== 0 && lon !== 0;
     );
   })}
 
-</div><!-- /wrapper -->
+</div><!-- /desktop wrapper -->
+
 </Layout>
 
-<!-- ===================================================== -->
-<!-- CARTE LEAFLET                                         -->
-<!-- ===================================================== -->
+<!-- =====================================================
+     CARTE LEAFLET (desktop)
+===================================================== -->
 <script is:inline>
 (function() {
   var mapEl = document.getElementById('bar-map');
@@ -244,18 +333,49 @@ const hasMap = lat !== 0 && lon !== 0;
   var lon = parseFloat(mapEl.dataset.lon);
   if (!lat || !lon) return;
 
-  // Charger Leaflet CSS
   var link = document.createElement('link');
   link.rel = 'stylesheet';
   link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
   document.head.appendChild(link);
 
-  // Charger Leaflet JS puis initialiser
   var script = document.createElement('script');
   script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
   script.onload = function() {
     mapEl.innerHTML = '';
     var map = L.map('bar-map').setView([lat, lon], 16);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+    L.marker([lat, lon])
+      .addTo(map)
+      .bindPopup('<strong>' + (mapEl.dataset.name || 'Bar') + '</strong>')
+      .openPopup();
+  };
+  document.head.appendChild(script);
+})();
+</script>
+
+<!-- =====================================================
+     CARTE LEAFLET (mobile)
+===================================================== -->
+<script is:inline>
+(function() {
+  var mapEl = document.getElementById('bar-map-mobile');
+  if (!mapEl) return;
+  var lat = parseFloat(mapEl.dataset.lat);
+  var lon = parseFloat(mapEl.dataset.lon);
+  if (!lat || !lon) return;
+
+  var link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+  document.head.appendChild(link);
+
+  var script = document.createElement('script');
+  script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+  script.onload = function() {
+    mapEl.innerHTML = '';
+    var map = L.map('bar-map-mobile').setView([lat, lon], 16);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);

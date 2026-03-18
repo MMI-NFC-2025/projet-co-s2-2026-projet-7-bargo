@@ -32,7 +32,7 @@ if (isLoggedIn) {
       <img src={logoDark.src} alt="Bargo" class="h-[42px] w-auto block" />
     </a>
 
-    <!-- Navigation desktop -->
+    <!-- Navigation desktop — inchangé -->
     <nav class="hidden lg:flex items-center ml-[52px]">
       <a href="/bar"
         class={`px-[35px] py-[25px] font-medium text-[14px] leading-[1.1] text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-[7px] ${path.startsWith('/bar') ? 'border-[#72c073]' : 'border-transparent'}`}>
@@ -59,7 +59,7 @@ if (isLoggedIn) {
     <!-- Spacer -->
     <div class="flex-1"></div>
 
-    <!-- Actions desktop -->
+    <!-- Actions desktop — inchangées -->
     <div class="hidden lg:flex items-center gap-[26px]">
       <a href={profileHref} aria-label="Mon profil" class="hover:opacity-70 transition-opacity">
         {avatarUrl ? (
@@ -73,60 +73,152 @@ if (isLoggedIn) {
       </a>
     </div>
 
-    <!-- Hamburger button mobile -->
-    <button id="nav-hamburger" aria-label="Menu" class="lg:hidden flex flex-col justify-center gap-[5px] w-[32px] h-[32px] p-0 bg-transparent border-0 cursor-pointer shrink-0">
-      <span class="block w-full h-[2px] bg-black transition-all"></span>
-      <span class="block w-full h-[2px] bg-black transition-all"></span>
-      <span class="block w-full h-[2px] bg-black transition-all"></span>
-    </button>
+    <!-- Zone droite mobile : icône connexion + hamburger -->
+    <div class="lg:hidden flex items-center gap-4">
+
+      <!-- Connexion / profil -->
+      <a href={profileHref} aria-label="Mon profil" class="hover:opacity-70 transition-opacity">
+        {avatarUrl ? (
+          <img src={avatarUrl} alt="Mon profil" width="30" height="30" class="size-[30px] rounded-full object-cover" />
+        ) : (
+          <img src={userIcon.src} alt="" width="28" height="28" />
+        )}
+      </a>
+
+      <!-- Bouton hamburger / croix -->
+      <button id="nav-hamburger" aria-label="Ouvrir le menu"
+        class="relative w-[26px] h-[20px] bg-transparent border-0 cursor-pointer p-0 shrink-0">
+        <span class="ham-bar absolute left-0 w-full h-[2px] bg-black top-0 origin-center"></span>
+        <span class="ham-bar absolute left-0 w-full h-[2px] bg-black top-[9px] origin-center"></span>
+        <span class="ham-bar absolute left-0 w-full h-[2px] bg-black top-[18px] origin-center"></span>
+      </button>
+
+    </div>
 
   </div>
 </header>
 
-<!-- Mobile menu overlay -->
-<div id="nav-mobile-menu" class="lg:hidden fixed top-[92px] left-0 w-full bg-white z-40 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] hidden">
-  <nav class="flex flex-col py-4">
+<!-- =====================================================
+     MENU MOBILE PLEIN ÉCRAN
+===================================================== -->
+<div id="nav-mobile-menu"
+  class="lg:hidden fixed left-0 right-0 bottom-0 z-[45] flex flex-col"
+  style="top: 92px;">
+
+  <!-- Fond flouté -->
+  <div id="nav-backdrop" class="absolute inset-0 bg-[#1e1e1e]/92 backdrop-blur-xl"></div>
+
+  <!-- Contenu du menu -->
+  <nav class="relative z-10 flex flex-col justify-center h-full px-8 gap-1">
+
+    <!-- Liens nav -->
     <a href="/bar"
-      class={`px-6 py-4 font-medium text-[16px] text-black border-l-4 ${path.startsWith('/bar') ? 'border-[#72c073]' : 'border-transparent'}`}>
-      Nos bars
+      class={`nav-link group flex items-center justify-between py-5 border-b border-white/10 ${path.startsWith('/bar') ? 'text-[#72c073]' : 'text-white'}`}>
+      <span class="font-['Manrope'] font-bold text-[36px] leading-none uppercase tracking-wide">Nos bars</span>
+      <span class="text-[#72c073] text-[28px] font-light opacity-0 group-hover:opacity-100 transition-opacity">→</span>
     </a>
+
     <a href="/Apropos"
-      class={`px-6 py-4 font-medium text-[16px] text-black border-l-4 ${path.startsWith('/Apropos') ? 'border-[#72c073]' : 'border-transparent'}`}>
-      A propos
+      class={`nav-link group flex items-center justify-between py-5 border-b border-white/10 ${path.startsWith('/Apropos') ? 'text-[#72c073]' : 'text-white'}`}>
+      <span class="font-['Manrope'] font-bold text-[36px] leading-none uppercase tracking-wide">A propos</span>
+      <span class="text-[#72c073] text-[28px] font-light opacity-0 group-hover:opacity-100 transition-opacity">→</span>
     </a>
+
     <a href="/jeux"
-      class={`px-6 py-4 font-medium text-[16px] text-black border-l-4 ${path.startsWith('/jeux') ? 'border-[#72c073]' : 'border-transparent'}`}>
-      Nos jeux
+      class={`nav-link group flex items-center justify-between py-5 border-b border-white/10 ${path.startsWith('/jeux') ? 'text-[#72c073]' : 'text-white'}`}>
+      <span class="font-['Manrope'] font-bold text-[36px] leading-none uppercase tracking-wide">Nos jeux</span>
+      <span class="text-[#72c073] text-[28px] font-light opacity-0 group-hover:opacity-100 transition-opacity">→</span>
     </a>
+
     <a href="/boutique"
-      class={`px-6 py-4 font-medium text-[16px] text-black border-l-4 ${path.startsWith('/boutique') ? 'border-[#72c073]' : 'border-transparent'}`}>
-      Boutique
+      class={`nav-link group flex items-center justify-between py-5 border-b border-white/10 ${path.startsWith('/boutique') ? 'text-[#72c073]' : 'text-white'}`}>
+      <span class="font-['Manrope'] font-bold text-[36px] leading-none uppercase tracking-wide">Boutique</span>
+      <span class="text-[#72c073] text-[28px] font-light opacity-0 group-hover:opacity-100 transition-opacity">→</span>
     </a>
+
     <a href="/abonnement"
-      class={`px-6 py-4 font-medium text-[16px] text-black border-l-4 ${path.startsWith('/abonnement') ? 'border-[#72c073]' : 'border-transparent'}`}>
-      Abonnement
+      class={`nav-link group flex items-center justify-between py-5 border-b border-white/10 ${path.startsWith('/abonnement') ? 'text-[#72c073]' : 'text-white'}`}>
+      <span class="font-['Manrope'] font-bold text-[36px] leading-none uppercase tracking-wide">Abonnement</span>
+      <span class="text-[#72c073] text-[28px] font-light opacity-0 group-hover:opacity-100 transition-opacity">→</span>
     </a>
-    <div class="flex items-center gap-4 px-6 pt-4 pb-2 border-t border-[#dfdfdf] mt-2">
-      <a href={profileHref} aria-label="Mon profil" class="hover:opacity-70 transition-opacity">
-        {avatarUrl ? (
-          <img src={avatarUrl} alt="Mon profil" width="31" height="31" class="size-[31px] rounded-full object-cover" />
-        ) : (
-          <img src={userIcon.src} alt="" width="31" height="31" />
-        )}
-      </a>
-      <a href="/session" class="inline-flex items-center justify-center px-6 h-[45px] bg-black text-white font-medium text-[14px] whitespace-nowrap hover:opacity-80 transition-opacity">
+
+    <!-- CTA session -->
+    <div class="mt-8">
+      <a href="/session"
+        class="nav-link inline-flex items-center justify-center w-full h-[56px] bg-[#72c073] text-[#094736] font-bold text-[16px] uppercase tracking-widest hover:bg-[#5aad5b] transition-colors">
         Crée un barathon
       </a>
     </div>
+
   </nav>
 </div>
 
+<style>
+  /* Hamburger bars transition */
+  .ham-bar {
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;
+  }
+
+  /* État ouvert */
+  #nav-hamburger.is-open .ham-bar:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+  }
+  #nav-hamburger.is-open .ham-bar:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  #nav-hamburger.is-open .ham-bar:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+  }
+
+  /* Menu overlay transition */
+  #nav-mobile-menu {
+    opacity: 0;
+    transform: translateY(-12px);
+    pointer-events: none;
+    transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1),
+                transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+  #nav-mobile-menu.is-open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  /* Apparition décalée des liens */
+  .nav-link {
+    opacity: 0;
+    transform: translateX(-16px);
+    transition: opacity 0.3s ease, transform 0.3s ease, color 0.2s ease;
+  }
+  #nav-mobile-menu.is-open .nav-link:nth-child(1) { opacity: 1; transform: translateX(0); transition-delay: 0.05s; }
+  #nav-mobile-menu.is-open .nav-link:nth-child(2) { opacity: 1; transform: translateX(0); transition-delay: 0.1s;  }
+  #nav-mobile-menu.is-open .nav-link:nth-child(3) { opacity: 1; transform: translateX(0); transition-delay: 0.15s; }
+  #nav-mobile-menu.is-open .nav-link:nth-child(4) { opacity: 1; transform: translateX(0); transition-delay: 0.2s;  }
+  #nav-mobile-menu.is-open .nav-link:nth-child(5) { opacity: 1; transform: translateX(0); transition-delay: 0.25s; }
+  #nav-mobile-menu.is-open .nav-link:nth-child(6) { opacity: 1; transform: translateX(0); transition-delay: 0.3s;  }
+</style>
+
 <script>
-  const btn = document.getElementById('nav-hamburger');
+  const btn  = document.getElementById('nav-hamburger');
   const menu = document.getElementById('nav-mobile-menu');
+
   if (btn && menu) {
     btn.addEventListener('click', () => {
-      menu.classList.toggle('hidden');
+      const isOpen = menu.classList.toggle('is-open');
+      btn.classList.toggle('is-open', isOpen);
+      btn.setAttribute('aria-label', isOpen ? 'Fermer le menu' : 'Ouvrir le menu');
+      // Bloquer le scroll de la page quand le menu est ouvert
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+
+    // Fermer si on clique sur un lien
+    menu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        menu.classList.remove('is-open');
+        btn.classList.remove('is-open');
+        document.body.style.overflow = '';
+      });
     });
   }
 </script>

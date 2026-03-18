@@ -7,13 +7,13 @@ import discordIcon  from '../assets/icon/discord.svg';
 
 <Layout title="Contact — Bargo">
 
-  <section class="flex min-h-[1024px]">
+  <section class="flex flex-col lg:flex-row min-h-[1024px]">
 
     <!-- ===== COLONNE GAUCHE (sombre) ===== -->
-    <div class="w-[704px] shrink-0 bg-[#1e1e1e] relative">
+    <div class="w-full lg:w-[704px] lg:shrink-0 bg-[#1e1e1e] lg:relative px-5 pt-10 pb-10 lg:px-0 lg:pt-0 lg:pb-0">
 
       <!-- Titre -->
-      <h2 class="absolute top-[223px] left-[195px] text-white m-0">
+      <h2 class="text-white m-0 mb-8 lg:mb-0 lg:absolute lg:top-[223px] lg:left-[195px]">
         <span class="text-[#72c073]">Nous</span> Contacter
       </h2>
 
@@ -21,7 +21,7 @@ import discordIcon  from '../assets/icon/discord.svg';
       <form
         method="POST"
         action="#"
-        class="absolute top-[351px] left-[195px] w-[430px] flex flex-col gap-[27px]"
+        class="flex flex-col gap-[27px] lg:absolute lg:top-[351px] lg:left-[195px] lg:w-[430px]"
       >
         <!-- Nom -->
         <div class="border-b border-[#f7f1ed] pb-[10px]">
@@ -62,7 +62,7 @@ import discordIcon  from '../assets/icon/discord.svg';
         <!-- Bouton Envoyer -->
         <button
           type="submit"
-          class="mt-[60px] bg-[#347645] h-[60px] w-[237px] flex items-center justify-center text-white text-[16px] font-medium hover:opacity-90 transition-opacity cursor-pointer border-0"
+          class="mt-[20px] lg:mt-[60px] bg-[#347645] h-[60px] w-full lg:w-[237px] flex items-center justify-center text-white text-[16px] font-medium hover:opacity-90 transition-opacity cursor-pointer border-0"
         >
           Envoyer
         </button>
@@ -71,9 +71,9 @@ import discordIcon  from '../assets/icon/discord.svg';
     </div>
 
     <!-- ===== COLONNE DROITE (beige) ===== -->
-    <div class="flex-1 bg-[#f7f1ed] relative">
+    <div class="flex-1 bg-[#f7f1ed] lg:relative">
 
-      <div class="absolute top-[334px] left-[141px] w-[407px] flex flex-col gap-[28px]">
+      <div class="px-5 py-10 lg:px-0 lg:py-0 flex flex-col gap-[28px] lg:absolute lg:top-[334px] lg:left-[141px] lg:w-[407px]">
 
         <!-- Description -->
         <p class="text-black text-[16px] font-medium leading-[1.4] m-0">

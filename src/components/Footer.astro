@@ -7,7 +7,56 @@ import iconInsta   from '../assets/icon/insta.svg';
 import iconDiscord from '../assets/icon/discord.svg';
 ---
 
-<footer class="relative w-full h-[457px] overflow-hidden">
+<!-- ===== MOBILE FOOTER ===== -->
+<footer class="block lg:hidden bg-[#1e1e1e] px-5 pt-10 pb-6">
+
+  <!-- Logo -->
+  <img src={logoLight.src} alt="Bargo" height="36" class="mb-8" />
+
+  <!-- 2 colonnes de liens -->
+  <div class="flex gap-8 mb-8">
+    <div class="flex flex-col gap-4">
+      <p class="font-bold text-[13px] leading-[1.4] text-white m-0 uppercase tracking-wider">Navigation</p>
+      <a href="/bar"       class="text-[#f7f1ed] text-[14px] font-medium hover:opacity-70 transition-opacity">Voir tous les bars</a>
+      <a href="/jeux"      class="text-[#f7f1ed] text-[14px] font-medium hover:opacity-70 transition-opacity">Liste des jeux</a>
+      <a href="/boutique"  class="text-[#f7f1ed] text-[14px] font-medium hover:opacity-70 transition-opacity">Boutique</a>
+    </div>
+    <div class="flex flex-col gap-4">
+      <p class="font-bold text-[13px] leading-[1.4] text-white m-0 uppercase tracking-wider">Informations</p>
+      <a href="/Apropos"   class="text-[#f7f1ed] text-[14px] font-medium hover:opacity-70 transition-opacity">A propos</a>
+      <a href="/contact"   class="text-[#f7f1ed] text-[14px] font-medium hover:opacity-70 transition-opacity">Contact</a>
+      <a href="/abonnement" class="text-[#f7f1ed] text-[14px] font-medium hover:opacity-70 transition-opacity">Abonnement</a>
+    </div>
+  </div>
+
+  <!-- Prévention -->
+  <p class="text-[#f7f1ed]/60 text-[12px] font-medium leading-[1.5] mb-6">
+    L'abus d'alcool est dangereux pour la santé. BARGO vous accompagne pour des soirées responsables.
+  </p>
+
+  <!-- Réseaux sociaux -->
+  <div class="flex gap-5 mb-8">
+    <a href="#" aria-label="Facebook"  class="opacity-80 hover:opacity-100 transition-opacity">
+      <img src={iconFb.src}      alt="Facebook"  width="22" height="22" class="invert" />
+    </a>
+    <a href="#" aria-label="Instagram" class="opacity-80 hover:opacity-100 transition-opacity">
+      <img src={iconInsta.src}   alt="Instagram" width="22" height="22" class="invert" />
+    </a>
+    <a href="#" aria-label="Discord"   class="opacity-80 hover:opacity-100 transition-opacity">
+      <img src={iconDiscord.src} alt="Discord"   width="22" height="22" class="invert" />
+    </a>
+  </div>
+
+  <!-- Séparateur + bas de page -->
+  <div class="border-t border-white/10 pt-4 flex justify-between items-center">
+    <a href="/mention_legal" class="text-[#f7f1ed]/60 text-[12px] font-medium hover:opacity-100 transition-opacity">Mentions légales</a>
+    <p class="text-[#f7f1ed]/60 text-[12px] font-medium m-0">© 2026 BARGO</p>
+  </div>
+
+</footer>
+
+<!-- ===== DESKTOP FOOTER (inchangé) ===== -->
+<footer class="hidden lg:block relative w-full h-[457px] overflow-hidden">
 
   <!-- Image de fond -->
   <Image src={footerBg} alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
@@ -27,8 +76,8 @@ import iconDiscord from '../assets/icon/discord.svg';
     <div class="absolute left-[80px] flex flex-col gap-[35px]">
       <p class="font-bold text-[16px] leading-[1.4] text-white m-0">NAVIGATION</p>
       <div class="flex flex-col gap-[18px]">
-        <a href="/bar" class="font-medium text-[16px] leading-[1.4] text-[#f7f1ed] hover:opacity-70 transition-opacity">Voir tous les bars</a>
-        <a href="/jeux" class="font-medium text-[16px] leading-[1.4] text-[#f7f1ed] hover:opacity-70 transition-opacity">Liste des jeux</a>
+        <a href="/bar"      class="font-medium text-[16px] leading-[1.4] text-[#f7f1ed] hover:opacity-70 transition-opacity">Voir tous les bars</a>
+        <a href="/jeux"     class="font-medium text-[16px] leading-[1.4] text-[#f7f1ed] hover:opacity-70 transition-opacity">Liste des jeux</a>
         <a href="/boutique" class="font-medium text-[16px] leading-[1.4] text-[#f7f1ed] hover:opacity-70 transition-opacity">Boutique</a>
       </div>
     </div>
@@ -38,8 +87,8 @@ import iconDiscord from '../assets/icon/discord.svg';
       <p class="font-bold text-[16px] leading-[1.4] text-white m-0">INFORMATIONS</p>
       <div class="flex flex-col gap-[18px]">
         <a href="/partenaires" class="font-medium text-[16px] leading-[1.4] text-[#f7f1ed] hover:opacity-70 transition-opacity">Partenaires</a>
-        <a href="/Apropos" class="font-medium text-[16px] leading-[1.4] text-[#f7f1ed] hover:opacity-70 transition-opacity">A propos</a>
-        <a href="/contact" class="font-medium text-[16px] leading-[1.4] text-[#f7f1ed] hover:opacity-70 transition-opacity">Contact</a>
+        <a href="/Apropos"     class="font-medium text-[16px] leading-[1.4] text-[#f7f1ed] hover:opacity-70 transition-opacity">A propos</a>
+        <a href="/contact"     class="font-medium text-[16px] leading-[1.4] text-[#f7f1ed] hover:opacity-70 transition-opacity">Contact</a>
       </div>
     </div>
 
@@ -57,20 +106,20 @@ import iconDiscord from '../assets/icon/discord.svg';
       <p class="font-bold text-[16px] leading-[1.4] text-white m-0">SUIVEZ-NOUS</p>
       <div class="flex gap-[29px] items-center">
         <a href="#" aria-label="Facebook" class="opacity-90 hover:opacity-100 transition-opacity">
-          <img src={iconFb.src} alt="Facebook" width="24" height="24" class="invert" />
+          <img src={iconFb.src}      alt="Facebook"  width="24" height="24" class="invert" />
         </a>
         <a href="#" aria-label="Instagram" class="opacity-90 hover:opacity-100 transition-opacity">
-          <img src={iconInsta.src} alt="Instagram" width="24" height="24" class="invert" />
+          <img src={iconInsta.src}   alt="Instagram" width="24" height="24" class="invert" />
         </a>
         <a href="#" aria-label="Discord" class="opacity-90 hover:opacity-100 transition-opacity">
-          <img src={iconDiscord.src} alt="Discord" width="24" height="24" class="invert" />
+          <img src={iconDiscord.src} alt="Discord"   width="24" height="24" class="invert" />
         </a>
       </div>
     </div>
 
   </div>
 
-  <!-- Ligne séparatrice horizontale -->
+  <!-- Ligne séparatrice -->
   <div class="absolute z-10 left-[80px] right-[80px] border-t border-[#f7f1ed]/30" style="top: 375px;"></div>
 
   <!-- Bas de page -->
