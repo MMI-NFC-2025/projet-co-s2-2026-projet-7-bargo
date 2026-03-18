@@ -69,15 +69,15 @@ const plans = [
 <Layout title="Nos abonnements — Bargo">
 
   <!-- ===== HERO ===== -->
-  <section class="bg-[#094736] h-70 lg:h-112.5 relative">
+  <section class="bg-primary-900 h-70 lg:h-112.5 relative">
     <h1 class="absolute top-15 left-5 lg:top-35.25 lg:left-20 text-white m-0 uppercase text-10 lg:text-22.5">Nos abonnements</h1>
-    <p class="hidden lg:block absolute top-67 left-20 text-[#f7f1ed] text-3.5 font-medium w-136.75 m-0 leading-[1.6]">
+    <p class="hidden lg:block absolute top-67 left-20 text-neutral-200 text-3.5 font-medium w-136.75 m-0 leading-[1.6]">
       Ici vous pouvez prendre les abonnements qui permettront d'avoir un petit plus sur vos soirées&nbsp;!
     </p>
   </section>
 
   <!-- ===== CARDS ===== -->
-  <div class="bg-[#f7f1ed] px-4 lg:px-20 py-10 lg:py-20">
+  <div class="bg-neutral-200 px-4 lg:px-20 py-10 lg:py-20">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10">
 
       {plans.map(plan => (
@@ -86,21 +86,21 @@ const plans = [
           <!-- En-tête coloré -->
           <div class="px-8.75 py-7.5 relative" style={`background-color: ${plan.couleur};`}>
             {plan.badge && (
-              <span class="absolute top-5 right-5 bg-[#72c073] text-[#094736] text-3 font-bold px-2.5 py-1 rounded-full uppercase tracking-0.125">
+              <span class="absolute top-5 right-5 bg-primary-500 text-primary-900 text-3 font-bold px-2.5 py-1 rounded-full uppercase tracking-0.125">
                 {plan.badge}
               </span>
             )}
             <h3 class="text-white m-0 mb-4 uppercase tracking-0.5">{plan.nom}</h3>
             <div class="flex items-baseline gap-1.5">
               <span class="text-white font-bold leading-none" style="font-size: 50px; font-family: Manrope, sans-serif;">{plan.prix}</span>
-              <span class="text-[#dfdfdf] text-4 font-medium">{plan.periode}</span>
+              <span class="text-neutral-300 text-4 font-medium">{plan.periode}</span>
             </div>
           </div>
 
           <!-- Corps -->
           <div class="px-8.75 py-7.5 flex flex-col flex-1">
 
-            <p class="text-[#646262] text-3.5 font-medium leading-[1.6] m-0 mb-6">{plan.description}</p>
+            <p class="text-neutral-500 text-3.5 font-medium leading-[1.6] m-0 mb-6">{plan.description}</p>
 
             <!-- Avantages -->
             <ul class="list-none m-0 p-0 flex flex-col gap-3 mb-4">
@@ -119,7 +119,7 @@ const plans = [
                     <circle cx="9" cy="9" r="9" fill="#dfdfdf"/>
                     <path d="M5.5 9h7" stroke="#646262" stroke-width="2" stroke-linecap="round"/>
                   </svg>
-                  <span class="text-[#646262] text-4 font-medium leading-[1.4] line-through">{item}</span>
+                  <span class="text-neutral-500 text-4 font-medium leading-[1.4] line-through">{item}</span>
                 </li>
               ))}
             </ul>

@@ -36,7 +36,7 @@ if (Astro.request.method === 'POST') {
   <section class="relative min-h-200 overflow-hidden">
 
     <!-- Fond sombre gauche — desktop uniquement -->
-    <div class="absolute inset-0 bg-[#1e1e1e] lg:w-203.25"></div>
+    <div class="absolute inset-0 bg-neutral-800 lg:w-203.25"></div>
 
     <!-- Photo droite — desktop uniquement -->
     <div class="hidden lg:block absolute top-0 bottom-0 right-0 overflow-hidden" style="left: 813px;">
@@ -62,26 +62,26 @@ if (Astro.request.method === 'POST') {
 
       <!-- ─── Adresse E-mail ─── -->
       <label class="absolute top-47.5 lg:top-63.5 left-5 lg:left-20 text-white text-4 font-medium leading-[1.4]">Adresse E-mail</label>
-      <div class="absolute top-56.25 lg:top-73.5 left-5 lg:left-20 right-5 lg:right-auto bg-[#f7f1ed] rounded-0.75 h-15.5 lg:w-156 flex items-center px-8">
+      <div class="absolute top-56.25 lg:top-73.5 left-5 lg:left-20 right-5 lg:right-auto bg-neutral-200 rounded-0.75 h-15.5 lg:w-156 flex items-center px-8">
         <input type="email" name="email" placeholder="Mail" required
-          class="bg-transparent w-full text-3.5 font-medium text-[#646262] placeholder-[#646262] outline-none" />
+          class="bg-transparent w-full text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none" />
       </div>
 
       <!-- ─── Mot de passe ─── -->
       <label class="absolute top-78.75 lg:top-98 left-5 lg:left-20 text-white text-4 font-medium leading-[1.4]">Mots de passe</label>
-      <div class="absolute top-87.5 lg:top-108 left-5 lg:left-20 right-5 lg:right-auto bg-[#f7f1ed] rounded-0.75 h-15.5 lg:w-156 flex items-center px-8">
+      <div class="absolute top-87.5 lg:top-108 left-5 lg:left-20 right-5 lg:right-auto bg-neutral-200 rounded-0.75 h-15.5 lg:w-156 flex items-center px-8">
         <input type="password" name="password" placeholder="Mots de passe" required
-          class="bg-transparent w-full text-3.5 font-medium text-[#646262] placeholder-[#646262] outline-none" />
+          class="bg-transparent w-full text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none" />
       </div>
 
       <!-- ─── Mot de passe oublié ─── -->
-      <p class="absolute top-108 lg:top-128.5 left-5 lg:left-20 text-3.5 font-medium leading-[1.1] text-[#dfdfdf] m-0">
+      <p class="absolute top-108 lg:top-128.5 left-5 lg:left-20 text-3.5 font-medium leading-[1.1] text-neutral-300 m-0">
         Mot de passe oublié ?
       </p>
 
       <!-- ─── Bouton SE CONNECTER ─── -->
       <button type="submit"
-        class="absolute top-122.5 lg:top-145 left-5 lg:left-auto bg-[#347645] h-15 inline-flex items-center justify-center gap-4 text-white text-4 font-medium leading-[1.4] px-8 lg:px-12 hover:opacity-90 transition-opacity cursor-pointer border-0"
+        class="absolute top-122.5 lg:top-145 left-5 lg:left-auto bg-primary-600 h-15 inline-flex items-center justify-center gap-4 text-white text-4 font-medium leading-[1.4] px-8 lg:px-12 hover:opacity-90 transition-opacity cursor-pointer border-0"
         style="left: max(20px, calc(25% + 107px));">
         SE CONNECTER
         <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">

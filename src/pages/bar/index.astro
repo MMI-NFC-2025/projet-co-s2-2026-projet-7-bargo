@@ -10,22 +10,22 @@ const bars = await getCollection('bar', { sort: 'nom', perPage: 200 });
 <Layout title="Nos bars — Bargo">
 
   <!-- ===== HERO ===== -->
-  <section class="relative w-full bg-[#094736] h-70 lg:h-112.5">
+  <section class="relative w-full bg-primary-900 h-70 lg:h-112.5">
     <h1 class="absolute top-15 left-5 lg:top-35.25 lg:left-18.5 text-white uppercase m-0 text-10 lg:text-22.5">
       Nos bars
     </h1>
-    <p class="hidden lg:block absolute top-38.75 left-[calc(50%+16px)] w-136.75 text-[#f7f1ed] text-4 font-medium leading-[1.4] m-0">
+    <p class="hidden lg:block absolute top-38.75 left-[calc(50%+16px)] w-136.75 text-neutral-200 text-4 font-medium leading-[1.4] m-0">
       Explorez les bars de Montbéliard et choisissez les étapes de votre prochaine tournée.
       Créez un parcours sur mesure pour une soirée organisée et conviviale.
     </p>
   </section>
 
   <!-- ===== GRILLE DES BARS ===== -->
-  <section class="w-full bg-[#f7f1ed] pt-8 lg:pt-13.25 pb-12 lg:pb-30">
+  <section class="w-full bg-neutral-200 pt-8 lg:pt-13.25 pb-12 lg:pb-30">
     <div class="max-w-360 mx-auto px-4 lg:px-20">
 
       {bars.length === 0 && (
-        <p class="text-[#646262] text-4 font-medium text-center py-20">
+        <p class="text-neutral-500 text-4 font-medium text-center py-20">
           Aucun bar disponible pour le moment.
         </p>
       )}
@@ -49,7 +49,7 @@ const bars = await getCollection('bar', { sort: 'nom', perPage: 200 });
               </h3>
 
               <!-- Adresse -->
-              <p class="mt-2 lg:mt-0 text-[#646262] text-4 font-medium leading-[1.4] m-0 lg:absolute lg:top-18.25 lg:left-4.75 lg:right-41.75">
+              <p class="mt-2 lg:mt-0 text-neutral-500 text-4 font-medium leading-[1.4] m-0 lg:absolute lg:top-18.25 lg:left-4.75 lg:right-41.75">
                 {bar.adresse ?? ''}
               </p>
 
@@ -57,7 +57,7 @@ const bars = await getCollection('bar', { sort: 'nom', perPage: 200 });
               <div class="mt-4 lg:mt-0 flex items-center gap-3 lg:block">
                 <!-- Bouton -->
                 <a href={`/bar/${bar.id}`}
-                  class="flex-1 lg:flex-none lg:absolute lg:top-35.5 lg:left-4.75 lg:w-59.25 lg:h-15 h-12 bg-[#1e1e1e] flex items-center justify-center text-white text-4 font-medium whitespace-nowrap hover:opacity-80 transition-opacity">
+                  class="flex-1 lg:flex-none lg:absolute lg:top-35.5 lg:left-4.75 lg:w-59.25 lg:h-15 h-12 bg-neutral-800 flex items-center justify-center text-white text-4 font-medium whitespace-nowrap hover:opacity-80 transition-opacity">
                   Choisir mes bars
                 </a>
                 <!-- Cœur -->

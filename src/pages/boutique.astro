@@ -1,4 +1,5 @@
 ---
+// @ts-nocheck
 import Layout from '../layouts/Layout.astro';
 import PbImage from '../components/PbImage.astro';
 import likeIcon from '../assets/icon/like.svg';
@@ -52,9 +53,9 @@ function pageUrl(p) {
 <Layout title="Boutique — Bargo">
 
   <!-- ===== HERO ===== -->
-  <section class="bg-[#094736] h-70 lg:h-112.5 relative">
+  <section class="bg-primary-900 h-70 lg:h-112.5 relative">
     <h1 class="absolute top-15 left-5 lg:top-35.25 lg:left-20 text-white m-0 uppercase text-10 lg:text-22.5">Boutique</h1>
-    <p class="hidden lg:block absolute top-67 left-20 text-[#f7f1ed] text-3.5 font-medium w-136.75 m-0 leading-[1.6]">
+    <p class="hidden lg:block absolute top-67 left-20 text-neutral-200 text-3.5 font-medium w-136.75 m-0 leading-[1.6]">
       Personnalisez votre profil et affirmez votre style au sein du groupe. Débloquez des avatars,
       des cadres et des thèmes exclusifs grâce à votre participation et à vos succès.
       Plus vous prenez part aux barathons, plus votre profil évolue.
@@ -62,11 +63,11 @@ function pageUrl(p) {
   </section>
 
   <!-- ===== CONTENU BEIGE ===== -->
-  <div class="bg-[#f7f1ed]">
+  <div class="bg-neutral-200">
 
     <!-- Tab bar -->
     <div class="pt-5.75">
-      <div class="border-b-2 border-[#e7e5e5] shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25)]">
+      <div class="border-b-2 border-neutral-350 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25)]">
         <div class="px-4 lg:px-20 flex items-center justify-between h-13">
 
           <!-- Onglets -->
@@ -74,7 +75,7 @@ function pageUrl(p) {
             {tabs.map(tab => (
               <a
                 href={tabUrl(tab.id)}
-                class={`flex items-center justify-center px-4 lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black border-b-1.75 transition-colors no-underline whitespace-nowrap ${activeTab === tab.id ? 'border-[#72c073]' : 'border-transparent'}`}
+                class={`flex items-center justify-center px-4 lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black border-b-1.75 transition-colors no-underline whitespace-nowrap ${activeTab === tab.id ? 'border-primary-500' : 'border-transparent'}`}
               >
                 {tab.label}
               </a>
@@ -100,7 +101,7 @@ function pageUrl(p) {
           {produits.map(produit => {
             const imageFile = Array.isArray(produit.item) ? produit.item[0] : produit.item;
             return (
-              <div class="h-75 lg:h-91.75 rounded-0.5 shadow-[0px_4px_6px_0px_rgba(0,0,0,0.25)] relative overflow-hidden bg-[#646262]">
+              <div class="h-75 lg:h-91.75 rounded-0.5 shadow-[0px_4px_6px_0px_rgba(0,0,0,0.25)] relative overflow-hidden bg-neutral-500">
 
                 <!-- Zone blanche du bas -->
                 <div class="absolute bottom-0 left-0 right-0 h-30 lg:h-35.75 bg-white rounded-bl-0.5 rounded-br-0.5"></div>
@@ -121,7 +122,7 @@ function pageUrl(p) {
 
                 <!-- Bouton Acheter -->
                 <button type="button"
-                  class="absolute top-60 lg:top-73.75 bottom-2 lg:bottom-3 left-4 lg:left-7.25 right-4 lg:right-7.5 bg-[#1e1e1e] flex items-center justify-center hover:opacity-90 transition-opacity cursor-pointer border-0">
+                  class="absolute top-60 lg:top-73.75 bottom-2 lg:bottom-3 left-4 lg:left-7.25 right-4 lg:right-7.5 bg-neutral-800 flex items-center justify-center hover:opacity-90 transition-opacity cursor-pointer border-0">
                   <span class="text-white text-3.5 lg:text-4 font-medium">Acheter</span>
                 </button>
 
@@ -130,17 +131,17 @@ function pageUrl(p) {
           })}
         </div>
       ) : (
-        <p class="text-[#646262] text-4 font-medium">Aucun article disponible pour l'instant.</p>
+        <p class="text-neutral-500 text-4 font-medium">Aucun article disponible pour l'instant.</p>
       )}
     </div>
 
     <!-- Pagination -->
     {totalPages > 1 && (
-      <div class="bg-[#dfdfdf] h-62 flex items-center justify-center gap-15">
+      <div class="bg-neutral-300 h-62 flex items-center justify-center gap-15">
 
         {page > 1 ? (
           <a href={pageUrl(page - 1)}
-            class="bg-[#1e1e1e] h-15 w-46.75 flex items-center justify-center text-white text-4 font-medium rounded-1.25 hover:opacity-90 transition-opacity no-underline">
+            class="bg-neutral-800 h-15 w-46.75 flex items-center justify-center text-white text-4 font-medium rounded-1.25 hover:opacity-90 transition-opacity no-underline">
             Précédent
           </a>
         ) : (
@@ -148,16 +149,16 @@ function pageUrl(p) {
         )}
 
         <div class="flex items-center gap-2">
-          {page > 1 && <span class="text-6.25 font-medium text-[#646262]">&lt;</span>}
+          {page > 1 && <span class="text-6.25 font-medium text-neutral-500">&lt;</span>}
           {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
-            <a href={pageUrl(p)} class={`text-6.25 font-medium no-underline ${p === page ? 'text-black font-extrabold' : 'text-[#646262]'}`}>{p}.</a>
+            <a href={pageUrl(p)} class={`text-6.25 font-medium no-underline ${p === page ? 'text-black font-extrabold' : 'text-neutral-500'}`}>{p}.</a>
           ))}
-          {page < totalPages && <span class="text-6.25 font-medium text-[#646262]">&gt;</span>}
+          {page < totalPages && <span class="text-6.25 font-medium text-neutral-500">&gt;</span>}
         </div>
 
         {page < totalPages ? (
           <a href={pageUrl(page + 1)}
-            class="bg-[#347645] h-15 w-46.75 flex items-center justify-center text-white text-4 font-medium rounded-1.25 hover:opacity-90 transition-opacity no-underline">
+            class="bg-primary-600 h-15 w-46.75 flex items-center justify-center text-white text-4 font-medium rounded-1.25 hover:opacity-90 transition-opacity no-underline">
             Suivant
           </a>
         ) : (

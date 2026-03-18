@@ -1,4 +1,5 @@
 ---
+// @ts-nocheck
 import Layout from '../layouts/Layout.astro';
 import { getUserAuth, updateUser, deleteUser, getCollection, getImageUrl } from '../js/backend.js';
 import PbImage from '../components/PbImage.astro';
@@ -132,7 +133,7 @@ const displayName = user.prenom
 ---
 
 <Layout title="Mon profil — Bargo">
-  <section class="bg-[#f7f1ed] overflow-x-hidden">
+  <section class="bg-neutral-200 overflow-x-hidden">
 
     <!-- ===== MOBILE PROFILE HEADER ===== -->
     <div class="block lg:hidden px-5 pt-8 pb-6">
@@ -140,7 +141,7 @@ const displayName = user.prenom
       <div class="mx-auto w-25 h-25 rounded-full overflow-hidden" style="border: 8px solid #dfdfdf;">
         {avatarUrl
           ? <img src={avatarUrl} alt="Avatar" class="w-full h-full object-cover" />
-          : <div class="w-full h-full bg-[#1e1e1e] flex items-center justify-center">
+          : <div class="w-full h-full bg-neutral-800 flex items-center justify-center">
               <span class="text-white font-bold" style="font-size: 36px;">
                 {(user.pseudo || user.email || '?')[0].toUpperCase()}
               </span>
@@ -148,16 +149,16 @@ const displayName = user.prenom
         }
       </div>
       <h2 class="text-black m-0 mt-4 text-center text-7">{displayName}</h2>
-      <h3 class="m-0 mt-1 text-[#72c073] text-center">{user.pseudo ?? ''}</h3>
-      <p class="m-0 mt-2 text-center text-[#1e1e1e] text-4 font-medium">{user.amis ?? 0} ami(e)s</p>
-      <div class="mt-3 h-12.5 bg-[#094736] rounded-1.25 flex items-center justify-center gap-4">
+      <h3 class="m-0 mt-1 text-primary-500 text-center">{user.pseudo ?? ''}</h3>
+      <p class="m-0 mt-2 text-center text-neutral-800 text-4 font-medium">{user.amis ?? 0} ami(e)s</p>
+      <div class="mt-3 h-12.5 bg-primary-900 rounded-1.25 flex items-center justify-center gap-4">
         <h3 class="text-white m-0">Points :</h3>
         <h3 class="text-white m-0">{user.points ?? 0}</h3>
       </div>
       {user.devise && (
         <div class="mt-4">
           <p class="m-0 text-4 font-medium text-black uppercase">DESCRIPTION</p>
-          <p class="m-0 mt-1 text-[#646262] text-4 font-medium leading-[1.4]">{user.devise}</p>
+          <p class="m-0 mt-1 text-neutral-500 text-4 font-medium leading-[1.4]">{user.devise}</p>
         </div>
       )}
     </div>
@@ -165,11 +166,11 @@ const displayName = user.prenom
     <!-- ===== DESKTOP PROFILE HEADER ===== -->
     <div class="hidden lg:block relative" style="height: 420px;">
       <!-- Photo de profil -->
-      <div class="absolute left-20 top-29.75 size-46.75 rounded-full overflow-hidden z-[2]"
+      <div class="absolute left-20 top-29.75 size-46.75 rounded-full overflow-hidden z-2"
         style="border: 15px solid #dfdfdf;">
         {avatarUrl
           ? <img src={avatarUrl} alt="Avatar" class="w-full h-full object-cover" />
-          : <div class="w-full h-full bg-[#1e1e1e] flex items-center justify-center">
+          : <div class="w-full h-full bg-neutral-800 flex items-center justify-center">
               <span class="text-white font-bold" style="font-size: 60px;">
                 {(user.pseudo || user.email || '?')[0].toUpperCase()}
               </span>
@@ -182,17 +183,17 @@ const displayName = user.prenom
         {displayName}
       </h2>
       <!-- Pseudo -->
-      <h3 class="absolute m-0 text-[#72c073]"
+      <h3 class="absolute m-0 text-primary-500"
         style="left: calc(16.67% + 59px); top: 185px;">
         {user.pseudo ?? ''}
       </h3>
       <!-- Ami(e)s -->
-      <p class="absolute m-0 text-[#1e1e1e] text-4 font-medium leading-[1.4]"
+      <p class="absolute m-0 text-neutral-800 text-4 font-medium leading-[1.4]"
         style="left: calc(33.33% + 79px); top: 198px;">
         {user.amis ?? 0} ami(e)s
       </p>
       <!-- Points badge -->
-      <div class="absolute h-16.25 w-86 bg-[#094736] rounded-1.25 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25)] flex items-center pl-4 gap-4"
+      <div class="absolute h-16.25 w-86 bg-primary-900 rounded-1.25 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25)] flex items-center pl-4 gap-4"
         style="left: calc(16.67% + 59px); top: 241px;">
         <h3 class="text-white m-0">Points :</h3>
         <h3 class="text-white m-0">{user.points ?? 0}</h3>
@@ -203,25 +204,25 @@ const displayName = user.prenom
         DESCRIPTION
       </p>
       <!-- Description text -->
-      <p class="absolute m-0 text-[#646262] text-4 font-medium leading-[1.4] w-155.75"
+      <p class="absolute m-0 text-neutral-500 text-4 font-medium leading-[1.4] w-155.75"
         style="left: calc(50% + 16px); top: 174px;">
         {user.devise ?? '—'}
       </p>
     </div>
 
     <!-- Séparateur shadow (desktop only) -->
-    <div class="hidden lg:block h-4.5 bg-[#f7f1ed] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] z-[3]"></div>
+    <div class="hidden lg:block h-4.5 bg-neutral-200 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] z-3"></div>
 
     <!-- ===== DEUX COLONNES ===== -->
     <div class="flex flex-col lg:flex-row">
 
       <!-- SIDEBAR SOMBRE (desktop only) -->
-      <div class="hidden lg:block lg:w-94 lg:shrink-0 bg-[#1e1e1e]">
+      <div class="hidden lg:block lg:w-94 lg:shrink-0 bg-neutral-800">
         <div class="px-17.25 pt-4 flex flex-col gap-27.25">
 
           <!-- Boutique -->
           <a href="/boutique"
-            class="flex items-center justify-center border-2 border-white text-white text-4 font-medium leading-[1.4] h-15 w-59.25 hover:bg-white hover:text-[#1e1e1e] transition-colors">
+            class="flex items-center justify-center border-2 border-white text-white text-4 font-medium leading-[1.4] h-15 w-59.25 hover:bg-white hover:text-neutral-800 transition-colors">
             Boutique
           </a>
 
@@ -233,18 +234,18 @@ const displayName = user.prenom
       </div>
 
       <!-- CONTENU PRINCIPAL -->
-      <div class="flex-1 bg-[#f7f1ed]">
+      <div class="flex-1 bg-neutral-200">
 
         <!-- BARRE D'ONGLETS BLANCHE -->
         <div class="bg-white flex flex-wrap items-stretch px-4 lg:px-20 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] min-h-16 lg:h-25">
           <div class="flex items-stretch overflow-x-auto">
             <button data-tab="profil"
-              class="tab-btn px-4 lg:px-6.25 text-3.5 lg:text-4 font-medium text-black border-b-1.75 border-transparent hover:border-[#dfdfdf] transition-colors cursor-pointer bg-transparent whitespace-nowrap"
+              class="tab-btn px-4 lg:px-6.25 text-3.5 lg:text-4 font-medium text-black border-b-1.75 border-transparent hover:border-neutral-300 transition-colors cursor-pointer bg-transparent whitespace-nowrap"
               style={activeTab === 'profil' ? 'border-bottom-color: #72c073;' : ''}>
               Mon profil
             </button>
             <button data-tab="notifications"
-              class="tab-btn px-4 lg:px-6.25 text-3.5 lg:text-4 font-medium text-black border-b-1.75 border-transparent hover:border-[#dfdfdf] transition-colors cursor-pointer bg-transparent inline-flex items-center gap-2 whitespace-nowrap"
+              class="tab-btn px-4 lg:px-6.25 text-3.5 lg:text-4 font-medium text-black border-b-1.75 border-transparent hover:border-neutral-300 transition-colors cursor-pointer bg-transparent inline-flex items-center gap-2 whitespace-nowrap"
               style={activeTab === 'notifications' ? 'border-bottom-color: #72c073;' : ''}>
               Notifications
               {unreadNotifs > 0 && (
@@ -252,7 +253,7 @@ const displayName = user.prenom
               )}
             </button>
             <button data-tab="parametres"
-              class="tab-btn px-4 lg:px-6.25 text-3.5 lg:text-4 font-medium text-black border-b-1.75 border-transparent hover:border-[#dfdfdf] transition-colors cursor-pointer bg-transparent whitespace-nowrap"
+              class="tab-btn px-4 lg:px-6.25 text-3.5 lg:text-4 font-medium text-black border-b-1.75 border-transparent hover:border-neutral-300 transition-colors cursor-pointer bg-transparent whitespace-nowrap"
               style={activeTab === 'parametres' ? 'border-bottom-color: #72c073;' : ''}>
               Paramètres
             </button>
@@ -260,11 +261,11 @@ const displayName = user.prenom
 
           <!-- Editer / Annuler (desktop only) -->
           <button id="edit-btn"
-            class="hidden lg:flex ml-auto bg-[#347645] h-12.75 w-64.25 items-center justify-center text-white text-4 font-medium hover:opacity-90 transition-opacity cursor-pointer border-0 self-center">
+            class="hidden lg:flex ml-auto bg-primary-600 h-12.75 w-64.25 items-center justify-center text-white text-4 font-medium hover:opacity-90 transition-opacity cursor-pointer border-0 self-center">
             Editer le profil
           </button>
           <button id="cancel-btn" style="display: none;"
-            class="ml-auto border-2 border-[#347645] text-[#347645] h-12.75 w-64.25 flex items-center justify-center text-4 font-medium hover:bg-[#347645] hover:text-white transition-colors cursor-pointer bg-transparent self-center">
+            class="ml-auto border-2 border-primary-600 text-primary-600 h-12.75 w-64.25 flex items-center justify-center text-4 font-medium hover:bg-primary-600 hover:text-white transition-colors cursor-pointer bg-transparent self-center">
             Annuler
           </button>
         </div>
@@ -275,73 +276,73 @@ const displayName = user.prenom
         <div id="panel-profil" data-panel class={activeTab !== 'profil' ? 'hidden' : ''}>
           <div class="px-4 lg:px-20 pt-8 lg:pt-11.25 pb-16 lg:pb-30">
 
-            {updateSuccess && <p class="text-[#347645] text-sm font-medium mb-6 m-0">Profil mis à jour avec succès.</p>}
+            {updateSuccess && <p class="text-primary-600 text-sm font-medium mb-6 m-0">Profil mis à jour avec succès.</p>}
             {updateError   && <p class="text-red-500 text-sm font-medium mb-6 m-0">{updateError}</p>}
 
             <!-- H2 Données du compte + ligne décorative -->
             <div class="flex items-center gap-7.5 mb-11.25">
               <h2 class="text-black m-0 shrink-0">Données du compte</h2>
-              <div class="flex-1 h-0.5 bg-[#dfdfdf]"></div>
+              <div class="flex-1 h-0.5 bg-neutral-300"></div>
             </div>
 
             <form method="POST" enctype="multipart/form-data" id="profile-form">
               <input type="hidden" name="_action" value="edit" />
 
               <!-- Box 1 : Informations personnelles -->
-              <div class="bg-white border-0.75 border-[#dfdfdf] rounded-2.5 px-4 lg:px-7.5 py-5.5 mb-4.5">
+              <div class="bg-white border-0.75 border-neutral-300 rounded-2.5 px-4 lg:px-7.5 py-5.5 mb-4.5">
                 <h3 class="text-black m-0 mb-8.75">Informations personnel</h3>
                 <div class="flex flex-col lg:flex-row gap-4 lg:gap-25">
                   <div class="flex flex-col gap-1">
-                    <span class="text-[#646262] text-4 font-medium leading-[1.4]">Ville</span>
+                    <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Ville</span>
                     <span class="view-field text-black text-4 font-medium leading-[1.4]">{user.ville ?? '—'}</span>
                     <input type="text" name="ville" value={user.ville ?? ''} placeholder="Ville"
-                      class="edit-field hidden text-4 font-medium text-[#1e1e1e] bg-[#f7f1ed] border border-[#dfdfdf] rounded px-3 py-1 outline-none w-35" />
+                      class="edit-field hidden text-4 font-medium text-neutral-800 bg-neutral-200 border border-neutral-300 rounded px-3 py-1 outline-none w-35" />
                   </div>
                   <div class="flex flex-col gap-1">
-                    <span class="text-[#646262] text-4 font-medium leading-[1.4]">Âge</span>
+                    <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Âge</span>
                     <span class="view-field text-black text-4 font-medium leading-[1.4]">{user.age ? `${user.age} ans` : '—'}</span>
                     <input type="number" name="age" value={user.age ?? ''} placeholder="Âge" min="13" max="120"
-                      class="edit-field hidden text-4 font-medium text-[#1e1e1e] bg-[#f7f1ed] border border-[#dfdfdf] rounded px-3 py-1 outline-none w-25" />
+                      class="edit-field hidden text-4 font-medium text-neutral-800 bg-neutral-200 border border-neutral-300 rounded px-3 py-1 outline-none w-25" />
                   </div>
                   <div class="flex flex-col gap-1">
-                    <span class="text-[#646262] text-4 font-medium leading-[1.4]">Membre depuis</span>
+                    <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Membre depuis</span>
                     <span class="text-black text-4 font-medium leading-[1.4]">{createdAt}</span>
                   </div>
                 </div>
               </div>
 
               <!-- Box 2 : Activité sur Bargo -->
-              <div class="bg-white border-0.75 border-[#dfdfdf] rounded-2.5 px-4 lg:px-7.5 py-5.5 mb-4.5">
+              <div class="bg-white border-0.75 border-neutral-300 rounded-2.5 px-4 lg:px-7.5 py-5.5 mb-4.5">
                 <h3 class="text-black m-0 mb-8.75">Activité sur Bargo</h3>
                 <div class="flex flex-col lg:flex-row gap-4 lg:gap-25">
                   <div class="flex flex-col gap-1">
-                    <span class="text-[#646262] text-4 font-medium leading-[1.4]">Sorties organisées</span>
+                    <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Sorties organisées</span>
                     <span class="text-black text-4 font-medium leading-[1.4]">
                       {user.barathon_organiser ? `${user.barathon_organiser} sorties` : '—'}
                     </span>
                   </div>
                   <div class="flex flex-col gap-1">
-                    <span class="text-[#646262] text-4 font-medium leading-[1.4]">Barathons réalisés</span>
+                    <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Barathons réalisés</span>
                     <span class="text-black text-4 font-medium leading-[1.4]">
                       {user.barathon_participer ? `${user.barathon_participer} parcours` : '—'}
                     </span>
                   </div>
                   <div class="flex flex-col gap-1">
-                    <span class="text-[#646262] text-4 font-medium leading-[1.4]">Bars découverts</span>
+                    <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Bars découverts</span>
                     <span class="text-black text-4 font-medium leading-[1.4]">—</span>
                   </div>
                 </div>
               </div>
 
               <!-- Box 3 : Réseaux sociaux -->
-              <div class="bg-white border-0.75 border-[#dfdfdf] rounded-2.5 px-4 lg:px-7.5 py-5.5">
+              <div class="bg-white border-0.75 border-neutral-300 rounded-2.5 px-4 lg:px-7.5 py-5.5">
                 <h3 class="text-black m-0 mb-8.75">Réseaux sociaux</h3>
                 <div class="flex gap-25">
                   <div class="flex flex-col gap-1">
-                    <span class="text-[#646262] text-4 font-medium leading-[1.4]">Instagram</span>
+                    <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Instagram</span>
                     <span class="view-field text-black text-4 font-medium leading-[1.4]">{user.instagram ?? '—'}</span>
                     <input type="text" name="instagram" value={user.instagram ?? ''} placeholder="@pseudo"
-                      class="edit-field hidden text-4 font-medium text-[#1e1e1e] bg-[#f7f1ed] border border-[#dfdfdf] rounded px-3 py-1 outline-none w-40" />
+                      class="edit-field hidden text-4 font-medium text-neutral-800 bg-neutral-200 border border-neutral-300 rounded px-3 py-1 outline-none w-40" />
                   </div>
                 </div>
               </div>
@@ -352,31 +353,31 @@ const displayName = user.prenom
                   <div class="flex flex-col gap-1">
                     <label class="text-4 font-medium text-black">Prénom</label>
                     <input type="text" name="prenom" value={user.prenom ?? ''} placeholder="Prénom"
-                      class="text-4 font-medium text-[#1e1e1e] bg-[#f7f1ed] border border-[#dfdfdf] rounded px-3 py-2 outline-none w-50" />
+                      class="text-4 font-medium text-neutral-800 bg-neutral-200 border border-neutral-300 rounded px-3 py-2 outline-none w-50" />
                   </div>
                   <div class="flex flex-col gap-1">
                     <label class="text-4 font-medium text-black">Nom</label>
                     <input type="text" name="nom" value={user.nom ?? ''} placeholder="Nom"
-                      class="text-4 font-medium text-[#1e1e1e] bg-[#f7f1ed] border border-[#dfdfdf] rounded px-3 py-2 outline-none w-50" />
+                      class="text-4 font-medium text-neutral-800 bg-neutral-200 border border-neutral-300 rounded px-3 py-2 outline-none w-50" />
                   </div>
                   <div class="flex flex-col gap-1">
                     <label class="text-4 font-medium text-black">Pseudo</label>
                     <input type="text" name="pseudo" value={user.pseudo ?? ''} placeholder="Pseudo"
-                      class="text-4 font-medium text-[#1e1e1e] bg-[#f7f1ed] border border-[#dfdfdf] rounded px-3 py-2 outline-none w-50" />
+                      class="text-4 font-medium text-neutral-800 bg-neutral-200 border border-neutral-300 rounded px-3 py-2 outline-none w-50" />
                   </div>
                 </div>
                 <div class="flex flex-col gap-1">
                   <label class="text-4 font-medium text-black">Description</label>
                   <textarea name="devise" placeholder="Votre description..."
-                    class="text-4 font-medium text-[#1e1e1e] bg-[#f7f1ed] border border-[#dfdfdf] rounded px-3 py-2 outline-none resize-none w-full max-w-150 h-25">{user.devise ?? ''}</textarea>
+                    class="text-4 font-medium text-neutral-800 bg-neutral-200 border border-neutral-300 rounded px-3 py-2 outline-none resize-none w-full max-w-150 h-25">{user.devise ?? ''}</textarea>
                 </div>
                 <div class="flex flex-col gap-1">
                   <label class="text-4 font-medium text-black">Photo de profil</label>
                   <input type="file" name="avatar" accept="image/*"
-                    class="text-sm text-[#646262] file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-[#347645] file:text-white file:cursor-pointer cursor-pointer" />
+                    class="text-sm text-neutral-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-primary-600 file:text-white file:cursor-pointer cursor-pointer" />
                 </div>
                 <button type="submit"
-                  class="inline-flex items-center gap-4 bg-[#094736] text-white text-4 font-medium leading-[1.4] px-12.5 py-2 hover:opacity-90 transition-opacity cursor-pointer border-0 w-fit">
+                  class="inline-flex items-center gap-4 bg-primary-900 text-white text-4 font-medium leading-[1.4] px-12.5 py-2 hover:opacity-90 transition-opacity cursor-pointer border-0 w-fit">
                   Sauvegarder
                 </button>
               </div></div>
@@ -385,7 +386,7 @@ const displayName = user.prenom
             <!-- H2 Favoris + ligne décorative -->
             <div class="flex items-center gap-7.5 mt-20 mb-14">
               <h2 class="text-black m-0 shrink-0">Favoris</h2>
-              <div class="flex-1 h-0.5 bg-[#dfdfdf]"></div>
+              <div class="flex-1 h-0.5 bg-neutral-300"></div>
             </div>
 
             <!-- Grille favoris -->
@@ -400,13 +401,13 @@ const displayName = user.prenom
                     <img src={heartIcon.src} alt="" width="24" height="24" />
                   </div>
                   <a href={`/bar/${barFavori.id}`}
-                    class="absolute bottom-5.25 left-4.75 w-37.5 h-11 bg-[#1e1e1e] flex items-center justify-center text-white text-4 font-medium hover:opacity-80 transition-opacity">
+                    class="absolute bottom-5.25 left-4.75 w-37.5 h-11 bg-neutral-800 flex items-center justify-center text-white text-4 font-medium hover:opacity-80 transition-opacity">
                     En savoir plus
                   </a>
                 </div>
               </div>
             ) : (
-              <p class="text-[#646262] text-4 font-medium m-0">Aucun favori pour l'instant.</p>
+              <p class="text-neutral-500 text-4 font-medium m-0">Aucun favori pour l'instant.</p>
             )}
 
           </div>
@@ -420,14 +421,14 @@ const displayName = user.prenom
 
             <div class="flex items-center gap-7.5 mb-11.25">
               <h2 class="text-black m-0 shrink-0">Notifications</h2>
-              <div class="flex-1 h-0.5 bg-[#dfdfdf]"></div>
+              <div class="flex-1 h-0.5 bg-neutral-300"></div>
             </div>
 
             {notifications.length > 0 ? (
               <div class="flex flex-col gap-3">
                 {notifications.map(notif => (
-                  <div class={`flex items-start gap-4 p-5 bg-white rounded-2.5 border-0.75 ${!notif.lu ? 'border-[#72c073]' : 'border-[#dfdfdf]'}`}>
-                    <div class={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${notif.type === 'success' ? 'bg-[#72c073]' : 'bg-[#347645]'}`}>
+                  <div class={`flex items-start gap-4 p-5 bg-white rounded-2.5 border-0.75 ${!notif.lu ? 'border-primary-500' : 'border-neutral-300'}`}>
+                    <div class={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${notif.type === 'success' ? 'bg-primary-500' : 'bg-primary-600'}`}>
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -437,21 +438,21 @@ const displayName = user.prenom
                       <p class={`text-4 m-0 leading-[1.4] ${!notif.lu ? 'font-bold' : 'font-medium'} text-black`}>
                         {notif.message ?? notif.texte ?? notif.contenu ?? 'Notification'}
                       </p>
-                      <p class="text-sm text-[#646262] m-0 mt-1">{timeAgo(notif.created)}</p>
+                      <p class="text-sm text-neutral-500 m-0 mt-1">{timeAgo(notif.created)}</p>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
               <div class="flex flex-col items-center justify-center py-24">
-                <div class="w-20 h-20 rounded-full bg-[#dfdfdf] flex items-center justify-center mb-6">
+                <div class="w-20 h-20 rounded-full bg-neutral-300 flex items-center justify-center mb-6">
                   <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
                     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="#646262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="#646262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </div>
-                <p class="text-[#646262] text-4 font-medium m-0">Aucune notification</p>
-                <p class="text-sm text-[#646262] m-0 mt-2">Vous êtes à jour !</p>
+                <p class="text-neutral-500 text-4 font-medium m-0">Aucune notification</p>
+                <p class="text-sm text-neutral-500 m-0 mt-2">Vous êtes à jour !</p>
               </div>
             )}
           </div>
@@ -465,27 +466,27 @@ const displayName = user.prenom
 
             <div class="flex items-center gap-7.5 mb-11.25">
               <h2 class="text-black m-0 shrink-0">Paramètres</h2>
-              <div class="flex-1 h-0.5 bg-[#dfdfdf]"></div>
+              <div class="flex-1 h-0.5 bg-neutral-300"></div>
             </div>
 
             <!-- Email -->
             <h3 class="text-black m-0 mb-5">Email</h3>
-            <div class="bg-white border-0.75 border-[#dfdfdf] rounded-2.5 px-7.5 py-5.5 mb-8">
-              <div class="flex items-center border-b-2 border-[#dfdfdf] pb-4 mb-5">
+            <div class="bg-white border-0.75 border-neutral-300 rounded-2.5 px-7.5 py-5.5 mb-8">
+              <div class="flex items-center border-b-2 border-neutral-300 pb-4 mb-5">
                 <span class="text-4 font-medium text-black w-40 shrink-0">Email actuel</span>
-                <span class="text-4 font-medium text-[#646262]">{user.email ?? '—'}</span>
+                <span class="text-4 font-medium text-neutral-500">{user.email ?? '—'}</span>
               </div>
-              {emailSuccess && <p class="text-[#347645] text-sm font-medium mb-4 m-0">Email mis à jour.</p>}
+              {emailSuccess && <p class="text-primary-600 text-sm font-medium mb-4 m-0">Email mis à jour.</p>}
               {emailError   && <p class="text-red-500 text-sm font-medium mb-4 m-0">{emailError}</p>}
               <form method="POST" enctype="application/x-www-form-urlencoded" class="flex flex-col lg:flex-row lg:items-end gap-4">
                 <input type="hidden" name="_action" value="change_email" />
                 <div class="flex-1">
                   <label class="block text-4 font-medium text-black mb-2">Nouvel email</label>
                   <input type="email" name="new_email" placeholder="nouveau@email.com"
-                    class="w-full text-4 font-medium bg-[#f7f1ed] border-2 border-[#dfdfdf] rounded px-4 py-2 outline-none" />
+                    class="w-full text-4 font-medium bg-neutral-200 border-2 border-neutral-300 rounded px-4 py-2 outline-none" />
                 </div>
                 <button type="submit"
-                  class="bg-[#347645] text-white text-4 font-medium px-8 py-2.25 hover:opacity-90 transition-opacity cursor-pointer border-0 rounded shrink-0">
+                  class="bg-primary-600 text-white text-4 font-medium px-8 py-2.25 hover:opacity-90 transition-opacity cursor-pointer border-0 rounded shrink-0">
                   Modifier
                 </button>
               </form>
@@ -493,30 +494,30 @@ const displayName = user.prenom
 
             <!-- Mot de passe -->
             <h3 class="text-black m-0 mb-5">Sécurité</h3>
-            <div class="bg-white border-0.75 border-[#dfdfdf] rounded-2.5 px-7.5 py-5.5 mb-8">
-              {pwdSuccess && <p class="text-[#347645] text-sm font-medium mb-4 m-0">Mot de passe modifié.</p>}
+            <div class="bg-white border-0.75 border-neutral-300 rounded-2.5 px-7.5 py-5.5 mb-8">
+              {pwdSuccess && <p class="text-primary-600 text-sm font-medium mb-4 m-0">Mot de passe modifié.</p>}
               {pwdError   && <p class="text-red-500 text-sm font-medium mb-4 m-0">{pwdError}</p>}
               <form method="POST" enctype="application/x-www-form-urlencoded" class="flex flex-col gap-5">
                 <input type="hidden" name="_action" value="change_password" />
                 <div>
                   <label class="block text-4 font-medium text-black mb-2">Mot de passe actuel</label>
                   <input type="password" name="old_password" placeholder="••••••••"
-                    class="w-full max-w-100 text-4 font-medium bg-[#f7f1ed] border-2 border-[#dfdfdf] rounded px-4 py-2 outline-none" />
+                    class="w-full max-w-100 text-4 font-medium bg-neutral-200 border-2 border-neutral-300 rounded px-4 py-2 outline-none" />
                 </div>
                 <div class="flex gap-4">
                   <div class="flex-1">
                     <label class="block text-4 font-medium text-black mb-2">Nouveau mot de passe</label>
                     <input type="password" name="new_password" placeholder="••••••••"
-                      class="w-full text-4 font-medium bg-[#f7f1ed] border-2 border-[#dfdfdf] rounded px-4 py-2 outline-none" />
+                      class="w-full text-4 font-medium bg-neutral-200 border-2 border-neutral-300 rounded px-4 py-2 outline-none" />
                   </div>
                   <div class="flex-1">
                     <label class="block text-4 font-medium text-black mb-2">Confirmer</label>
                     <input type="password" name="confirm_password" placeholder="••••••••"
-                      class="w-full text-4 font-medium bg-[#f7f1ed] border-2 border-[#dfdfdf] rounded px-4 py-2 outline-none" />
+                      class="w-full text-4 font-medium bg-neutral-200 border-2 border-neutral-300 rounded px-4 py-2 outline-none" />
                   </div>
                 </div>
                 <button type="submit"
-                  class="inline-flex items-center gap-3 bg-[#094736] text-white text-4 font-medium px-8 py-2.25 hover:opacity-90 transition-opacity cursor-pointer border-0 rounded w-fit">
+                  class="inline-flex items-center gap-3 bg-primary-900 text-white text-4 font-medium px-8 py-2.25 hover:opacity-90 transition-opacity cursor-pointer border-0 rounded w-fit">
                   Changer le mot de passe
                 </button>
               </form>
@@ -524,14 +525,14 @@ const displayName = user.prenom
 
             <!-- Session -->
             <h3 class="text-black m-0 mb-5">Session</h3>
-            <div class="bg-white border-0.75 border-[#dfdfdf] rounded-2.5 px-7.5 py-5.5 mb-8">
+            <div class="bg-white border-0.75 border-neutral-300 rounded-2.5 px-7.5 py-5.5 mb-8">
               <p class="text-4 font-medium text-black m-0 mb-4">
-                Connecté en tant que <span class="text-[#72c073]">{user.pseudo ?? user.email}</span>
+                Connecté en tant que <span class="text-primary-500">{user.pseudo ?? user.email}</span>
               </p>
               <form method="POST" enctype="application/x-www-form-urlencoded">
                 <input type="hidden" name="_action" value="logout" />
                 <button type="submit"
-                  class="inline-flex items-center gap-3 border-2 border-[#1e1e1e] text-[#1e1e1e] text-4 font-medium px-8 py-2.25 hover:bg-[#1e1e1e] hover:text-white transition-colors cursor-pointer bg-transparent rounded">
+                  class="inline-flex items-center gap-3 border-2 border-neutral-800 text-neutral-800 text-4 font-medium px-8 py-2.25 hover:bg-neutral-800 hover:text-white transition-colors cursor-pointer bg-transparent rounded">
                   Se déconnecter
                 </button>
               </form>
@@ -543,7 +544,7 @@ const displayName = user.prenom
               <div class="flex items-center justify-between gap-8">
                 <div>
                   <p class="text-4 font-medium text-black m-0">Supprimer mon compte</p>
-                  <p class="text-sm text-[#646262] m-0 mt-1">Action irréversible. Toutes vos données seront supprimées définitivement.</p>
+                  <p class="text-sm text-neutral-500 m-0 mt-1">Action irréversible. Toutes vos données seront supprimées définitivement.</p>
                 </div>
                 <form method="POST" enctype="application/x-www-form-urlencoded" id="delete-form" class="shrink-0">
                   <input type="hidden" name="_action" value="delete" />

@@ -51,7 +51,7 @@ if (Astro.request.method === 'POST') {
 <Layout title="Inscription — Bargo">
 
   <!-- ===== MOBILE ===== -->
-  <section class="block lg:hidden bg-[#1e1e1e] px-5 py-10 min-h-screen">
+  <section class="block lg:hidden bg-neutral-800 px-5 py-10 min-h-screen">
 
     <h2 class="text-white m-0 mb-3 uppercase text-8">INSCRIVEZ-VOUS</h2>
     <p class="text-3.5 font-medium leading-[1.1] text-white m-0 mb-6">
@@ -68,16 +68,16 @@ if (Astro.request.method === 'POST') {
       <div class="flex gap-3">
         <div class="flex-1 flex flex-col gap-1">
           <label class="text-white text-3.5 font-medium">Nom</label>
-          <div class="bg-[#f7f1ed] rounded-0.75 h-13 flex items-center px-4">
+          <div class="bg-neutral-200 rounded-0.75 h-13 flex items-center px-4">
             <input type="text" name="nom" placeholder="Nom" required
-              class="bg-transparent w-full text-3.5 font-medium text-[#646262] placeholder-[#646262] outline-none" />
+              class="bg-transparent w-full text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none" />
           </div>
         </div>
         <div class="flex-1 flex flex-col gap-1">
-          <label class="text-white text-3.5 font-medium">Prénom <span class="text-[#dfdfdf] text-3">(facultatif)</span></label>
-          <div class="bg-[#f7f1ed] rounded-0.75 h-13 flex items-center px-4">
+          <label class="text-white text-3.5 font-medium">Prénom <span class="text-neutral-300 text-3">(facultatif)</span></label>
+          <div class="bg-neutral-200 rounded-0.75 h-13 flex items-center px-4">
             <input type="text" name="prenom" placeholder="Prénom"
-              class="bg-transparent w-full text-3.5 font-medium text-[#646262] placeholder-[#646262] outline-none" />
+              class="bg-transparent w-full text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none" />
           </div>
         </div>
       </div>
@@ -85,36 +85,36 @@ if (Astro.request.method === 'POST') {
       <!-- Pseudo -->
       <div class="flex flex-col gap-1">
         <label class="text-white text-3.5 font-medium">Pseudo</label>
-        <div class="bg-[#f7f1ed] rounded-0.75 h-13 flex items-center px-4">
+        <div class="bg-neutral-200 rounded-0.75 h-13 flex items-center px-4">
           <input type="text" name="pseudo" placeholder="Pseudo" required
-            class="bg-transparent w-full text-3.5 font-medium text-[#646262] placeholder-[#646262] outline-none" />
+            class="bg-transparent w-full text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none" />
         </div>
       </div>
 
       <!-- Email -->
       <div class="flex flex-col gap-1">
         <label class="text-white text-3.5 font-medium">Adresse E-mail</label>
-        <div class="bg-[#f7f1ed] rounded-0.75 h-13 flex items-center px-4">
+        <div class="bg-neutral-200 rounded-0.75 h-13 flex items-center px-4">
           <input type="email" name="email" placeholder="Mail" required
-            class="bg-transparent w-full text-3.5 font-medium text-[#646262] placeholder-[#646262] outline-none" />
+            class="bg-transparent w-full text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none" />
         </div>
       </div>
 
       <!-- Mot de passe -->
       <div class="flex flex-col gap-1">
         <label class="text-white text-3.5 font-medium">Mots de passe</label>
-        <div class="bg-[#f7f1ed] rounded-0.75 h-13 flex items-center px-4">
+        <div class="bg-neutral-200 rounded-0.75 h-13 flex items-center px-4">
           <input type="password" name="password" placeholder="Mots de passe" required minlength="8"
-            class="bg-transparent w-full text-3.5 font-medium text-[#646262] placeholder-[#646262] outline-none" />
+            class="bg-transparent w-full text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none" />
         </div>
       </div>
 
       <!-- Confirmer mot de passe -->
       <div class="flex flex-col gap-1">
         <label class="text-white text-3.5 font-medium">Confirmer le mot de passe</label>
-        <div class="bg-[#f7f1ed] rounded-0.75 h-13 flex items-center px-4">
+        <div class="bg-neutral-200 rounded-0.75 h-13 flex items-center px-4">
           <input type="password" name="passwordConfirm" placeholder="Confirmer le mot de passe" required minlength="8"
-            class="bg-transparent w-full text-3.5 font-medium text-[#646262] placeholder-[#646262] outline-none" />
+            class="bg-transparent w-full text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none" />
         </div>
       </div>
 
@@ -123,7 +123,7 @@ if (Astro.request.method === 'POST') {
         <div class="relative w-6.25 h-6.25 shrink-0">
           <input type="checkbox" name="terms" id="terms-checkbox-mobile"
             class="absolute inset-0 opacity-0 w-full h-full cursor-pointer peer" />
-          <div class="w-6.25 h-6.25 border-0.75 border-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] peer-checked:bg-[#347645] peer-checked:border-[#347645] transition-colors">
+          <div class="w-6.25 h-6.25 border-0.75 border-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] peer-checked:bg-primary-600 peer-checked:border-primary-600 transition-colors">
             <svg class="hidden peer-checked:block w-full h-full p-0.5" viewBox="0 0 16 16" fill="none">
               <path d="M2 8l4 4 8-8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -134,7 +134,7 @@ if (Astro.request.method === 'POST') {
 
       <!-- Bouton -->
       <button type="submit"
-        class="mt-2 bg-[#347645] h-13 w-full flex items-center justify-center text-white text-4 font-medium hover:opacity-90 transition-opacity cursor-pointer border-0">
+        class="mt-2 bg-primary-600 h-13 w-full flex items-center justify-center text-white text-4 font-medium hover:opacity-90 transition-opacity cursor-pointer border-0">
         Créer mon compte
       </button>
 
@@ -150,7 +150,7 @@ if (Astro.request.method === 'POST') {
   <section class="hidden lg:block relative min-h-300 overflow-hidden">
 
     <!-- Fond sombre gauche -->
-    <div class="absolute inset-0 bg-[#1e1e1e]" style="width: 813px;"></div>
+    <div class="absolute inset-0 bg-neutral-800" style="width: 813px;"></div>
 
     <!-- Photo droite -->
     <div class="absolute top-0 bottom-0 right-0 overflow-hidden" style="left: 813px;">
@@ -176,51 +176,51 @@ if (Astro.request.method === 'POST') {
 
       <!-- ─── Nom ─── -->
       <label class="absolute top-63.5 left-20 text-white text-4 font-medium leading-[1.4]">Nom</label>
-      <div class="absolute top-73.5 left-20 bg-[#f7f1ed] rounded-0.75 h-15.5 w-74 flex items-center px-8">
+      <div class="absolute top-73.5 left-20 bg-neutral-200 rounded-0.75 h-15.5 w-74 flex items-center px-8">
         <input type="text" name="nom" placeholder="Nom" required
-          class="bg-transparent w-full text-3.5 font-medium text-[#646262] placeholder-[#646262] outline-none" />
+          class="bg-transparent w-full text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none" />
       </div>
 
       <!-- ─── Prénom (facultatif) ─── -->
       <div class="absolute top-63.5 flex items-baseline gap-2" style="left: calc(25% + 48px);">
         <label class="text-white text-4 font-medium leading-[1.4]">Prénom</label>
-        <span class="text-[#dfdfdf] text-3.5 font-semibold">( facultatif )</span>
+        <span class="text-neutral-300 text-3.5 font-semibold">( facultatif )</span>
       </div>
-      <div class="absolute top-73.5 bg-[#f7f1ed] rounded-0.75 h-15.5 w-74 flex items-center px-8" style="left: calc(25% + 48px);">
+      <div class="absolute top-73.5 bg-neutral-200 rounded-0.75 h-15.5 w-74 flex items-center px-8" style="left: calc(25% + 48px);">
         <input type="text" name="prenom" placeholder="Prénom"
-          class="bg-transparent w-full text-3.5 font-medium text-[#646262] placeholder-[#646262] outline-none" />
+          class="bg-transparent w-full text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none" />
       </div>
 
       <!-- ─── Pseudo ─── -->
       <label class="absolute top-98 left-20 text-white text-4 font-medium leading-[1.4]">Pseudo</label>
-      <div class="absolute top-108 left-20 bg-[#f7f1ed] rounded-0.75 h-15.5 w-156 flex items-center px-8">
+      <div class="absolute top-108 left-20 bg-neutral-200 rounded-0.75 h-15.5 w-156 flex items-center px-8">
         <input type="text" name="pseudo" placeholder="Pseudo" required
-          class="bg-transparent w-full text-3.5 font-medium text-[#646262] placeholder-[#646262] outline-none" />
+          class="bg-transparent w-full text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none" />
       </div>
 
       <!-- ─── Email ─── -->
       <label class="absolute top-127.5 left-20 text-white text-4 font-medium leading-[1.4]">Adresse E-mail</label>
-      <div class="absolute top-137.5 left-20 bg-[#f7f1ed] rounded-0.75 h-15.5 w-156 flex items-center px-8">
+      <div class="absolute top-137.5 left-20 bg-neutral-200 rounded-0.75 h-15.5 w-156 flex items-center px-8">
         <input type="email" name="email" placeholder="Mail" required
-          class="bg-transparent w-full text-3.5 font-medium text-[#646262] placeholder-[#646262] outline-none" />
+          class="bg-transparent w-full text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none" />
       </div>
 
       <!-- ─── Mot de passe ─── -->
       <label class="absolute top-157 left-20 text-white text-4 font-medium leading-[1.4]">Mots de passe</label>
-      <div class="absolute top-167 left-20 bg-[#f7f1ed] rounded-0.75 h-15.5 w-156 flex items-center px-8">
+      <div class="absolute top-167 left-20 bg-neutral-200 rounded-0.75 h-15.5 w-156 flex items-center px-8">
         <input type="password" name="password" placeholder="Mots de passe" required minlength="8"
-          class="bg-transparent w-full text-3.5 font-medium text-[#646262] placeholder-[#646262] outline-none" />
+          class="bg-transparent w-full text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none" />
       </div>
 
       <!-- ─── Confirmer mot de passe ─── -->
       <label class="absolute top-187.5 left-20 text-white text-4 font-medium leading-[1.4]">Confirmer le mot de passe</label>
-      <div class="absolute top-197.5 left-20 bg-[#f7f1ed] rounded-0.75 h-15.5 w-156 flex items-center px-8">
+      <div class="absolute top-197.5 left-20 bg-neutral-200 rounded-0.75 h-15.5 w-156 flex items-center px-8">
         <input type="password" name="passwordConfirm" placeholder="Confirmer le mot de passe" required minlength="8"
-          class="bg-transparent w-full text-3.5 font-medium text-[#646262] placeholder-[#646262] outline-none" />
+          class="bg-transparent w-full text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none" />
       </div>
 
       <!-- ─── Mot de passe oublié ─── -->
-      <p class="absolute top-218 left-20 text-3.5 font-medium leading-[1.1] text-[#dfdfdf] m-0">
+      <p class="absolute top-218 left-20 text-3.5 font-medium leading-[1.1] text-neutral-300 m-0">
         Mot de passe oublié ?
       </p>
 
@@ -229,7 +229,7 @@ if (Astro.request.method === 'POST') {
         <div class="relative w-6.25 h-6.25 shrink-0">
           <input type="checkbox" name="terms" id="terms-checkbox"
             class="absolute inset-0 opacity-0 w-full h-full cursor-pointer peer" />
-          <div class="w-6.25 h-6.25 border-0.75 border-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] peer-checked:bg-[#347645] peer-checked:border-[#347645] transition-colors">
+          <div class="w-6.25 h-6.25 border-0.75 border-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] peer-checked:bg-primary-600 peer-checked:border-primary-600 transition-colors">
             <svg class="hidden peer-checked:block w-full h-full p-0.5" viewBox="0 0 16 16" fill="none">
               <path d="M2 8l4 4 8-8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -240,7 +240,7 @@ if (Astro.request.method === 'POST') {
 
       <!-- ─── Bouton Créer mon compte ─── -->
       <button type="submit" id="submit-btn"
-        class="absolute top-239 bg-[#347645] h-15 w-59.25 flex items-center justify-center text-white text-4 font-medium leading-[1.4] hover:opacity-90 transition-opacity cursor-pointer border-0 disabled:opacity-40 disabled:cursor-not-allowed"
+        class="absolute top-239 bg-primary-600 h-15 w-59.25 flex items-center justify-center text-white text-4 font-medium leading-[1.4] hover:opacity-90 transition-opacity cursor-pointer border-0 disabled:opacity-40 disabled:cursor-not-allowed"
         style="left: calc(25% + 107px);">
         Créer mon compte
       </button>
