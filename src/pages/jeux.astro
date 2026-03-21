@@ -57,10 +57,15 @@ const totalPages = Math.ceil((data.totalItems ?? 0) / perPage);
                 <!-- Actions -->
                 <div class="mt-4 lg:mt-0 flex items-center gap-3 lg:block">
                   <!-- Bouton Jouer -->
-                  <button type="button"
-                    class="flex-1 lg:flex-none lg:absolute lg:top-35.5 lg:bottom-7.5 lg:left-4.75 lg:w-59.25 h-12 lg:h-auto bg-neutral-800 flex items-center justify-center text-white text-4 font-medium hover:opacity-90 transition-opacity cursor-pointer border-0">
-                    Jouer
-                  </button>
+                  {(() => {
+                    const href = jeu.type_du_jeux === 'questionaire' ? '/jeux_questionaire' : '#';
+                    return (
+                      <a href={href}
+                        class="flex-1 lg:flex-none lg:absolute lg:top-35.5 lg:bottom-7.5 lg:left-4.75 lg:w-59.25 h-12 lg:h-auto bg-neutral-800 flex items-center justify-center text-white text-4 font-medium hover:opacity-90 transition-opacity no-underline">
+                        Jouer
+                      </a>
+                    );
+                  })()}
                   <!-- Like -->
                   <LikeButton id={jeu.id} variant="jeux" class="lg:absolute lg:top-37.75 lg:right-5.25 bg-transparent border-0 cursor-pointer p-0 shrink-0" ariaLabel="Ajouter aux favoris" />
                 </div>
