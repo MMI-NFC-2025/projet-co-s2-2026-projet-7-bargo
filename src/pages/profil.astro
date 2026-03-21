@@ -1,10 +1,13 @@
 ---
 // @ts-nocheck
 import Layout from '../layouts/Layout.astro';
-import { getUserAuth, updateUser, deleteUser, getCollection, getImageUrl } from '../js/backend.js';
+import { getUserAuth, updateUser, deleteUser, getCollection, getImageUrl, PB_URL } from '../js/backend.js';
 import PbImage from '../components/PbImage.astro';
 import heartIcon    from '../assets/icon/like.svg';
 import likeFillIcon from '../assets/icon/like_fill.svg';
+import instaIcon    from '../assets/icon/insta.svg';
+import facebookIcon from '../assets/icon/facebook.svg';
+import discordIcon  from '../assets/icon/discord.svg';
 
 // Auth guard
 const token  = Astro.cookies.get('pb_token')?.value;
@@ -38,7 +41,7 @@ if (Astro.request.method === 'POST') {
 
   if (action === 'edit') {
     const pbData = new FormData();
-    for (const field of ['prenom', 'nom', 'pseudo', 'age', 'ville', 'instagram', 'devise']) {
+    for (const field of ['prenom', 'nom', 'pseudo', 'age', 'ville', 'insta', 'facbook', 'discord', 'description']) {
       const val = formData.get(field);
       if (val !== null && val.toString() !== '') pbData.append(field, val.toString());
     }
@@ -102,6 +105,14 @@ try {
   });
 } catch {}
 
+// Bars découverts
+const barDecouver = Array.isArray(user.bar_decouver) ? user.bar_decouver : [];
+let totalBars = 0;
+try {
+  const bRes = await fetch(`${PB_URL}/api/collections/bar/records?perPage=1`);
+  if (bRes.ok) { const bd = await bRes.json(); totalBars = bd.totalItems ?? 0; }
+} catch {}
+
 // Bars favoris (tous)
 let barsFavori = [];
 try {
@@ -110,6 +121,32 @@ try {
     const filterStr = favIds.map(id => `id="${id}"`).join('||');
     barsFavori = await getCollection('bar', { filter: filterStr, perPage: 200 });
   }
+} catch {}
+
+// Demandes d'amis entrantes (expand already done in getUserAuth)
+const demandeAmies = (user.expand?.demande_amies ?? []).map(u => ({
+  id: u.id, collectionName: u.collectionName,
+  pseudo: u.pseudo ?? '', prenom: u.prenom ?? '', nom: u.nom ?? '',
+  avatar: u.avatar ?? null,
+}));
+const amiesIds    = Array.isArray(user.amies) ? user.amies : [];
+const amiesExpand = (user.expand?.amies ?? []).map(u => ({
+  id: u.id, collectionName: u.collectionName,
+  pseudo: u.pseudo ?? '', prenom: u.prenom ?? '', nom: u.nom ?? '',
+  avatar: u.avatar ?? null,
+}));
+
+// Tous les utilisateurs pour le modal ami (exclure soi-même)
+let allUsers = [];
+try {
+  const usersRes = await getCollection('users', { sort: 'pseudo', perPage: 200 });
+  allUsers = usersRes
+    .filter(u => u.id !== userId)
+    .map(u => ({
+      id: u.id, collectionName: u.collectionName,
+      pseudo: u.pseudo ?? '', prenom: u.prenom ?? '', nom: u.nom ?? '',
+      avatar: u.avatar ?? null,
+    }));
 } catch {}
 
 const avatarUrl    = user.avatar ? getImageUrl(user, user.avatar) : null;
@@ -151,15 +188,15 @@ const displayName = user.prenom
       </div>
       <h2 class="text-black m-0 mt-4 text-center text-7">{displayName}</h2>
       <h3 class="m-0 mt-1 text-primary-500 text-center">{user.pseudo ?? ''}</h3>
-      <p class="m-0 mt-2 text-center text-neutral-800 text-4 font-medium">{user.amis ?? 0} ami(e)s</p>
+      <p class="m-0 mt-2 text-center text-neutral-800 text-4 font-medium">{amiesIds.length} ami(e)s</p>
       <div class="mt-3 h-12.5 bg-primary-900 rounded-1.25 flex items-center justify-center gap-4">
         <h3 class="text-white m-0">Points :</h3>
         <h3 class="text-white m-0">{user.points ?? 0}</h3>
       </div>
-      {user.devise && (
+      {user.description && (
         <div class="mt-4">
           <p class="m-0 text-4 font-medium text-black uppercase">DESCRIPTION</p>
-          <p class="m-0 mt-1 text-neutral-500 text-4 font-medium leading-[1.4]">{user.devise}</p>
+          <p class="m-0 mt-1 text-neutral-500 text-4 font-medium leading-[1.4]">{user.description}</p>
         </div>
       )}
     </div>
@@ -167,7 +204,7 @@ const displayName = user.prenom
     <!-- ===== DESKTOP PROFILE HEADER ===== -->
     <div class="hidden lg:block relative" style="height: 420px;">
       <!-- Photo de profil -->
-      <div class="absolute left-20 top-29.75 size-46.75 rounded-full overflow-hidden z-2"
+      <div id="profile-avatar-wrap" class="absolute left-20 top-29.75 size-46.75 rounded-full overflow-hidden z-2"
         style="border: 15px solid #dfdfdf;">
         {avatarUrl
           ? <img src={avatarUrl} alt="Avatar" class="w-full h-full object-cover" />
@@ -191,7 +228,7 @@ const displayName = user.prenom
       <!-- Ami(e)s -->
       <p class="absolute m-0 text-neutral-800 text-4 font-medium leading-[1.4]"
         style="left: calc(33.33% + 79px); top: 198px;">
-        {user.amis ?? 0} ami(e)s
+        {amiesIds.length} ami(e)s
       </p>
       <!-- Points badge -->
       <div class="absolute h-16.25 w-86 bg-primary-900 rounded-1.25 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25)] flex items-center pl-4 gap-4"
@@ -207,7 +244,7 @@ const displayName = user.prenom
       <!-- Description text -->
       <p class="absolute m-0 text-neutral-500 text-4 font-medium leading-[1.4] w-155.75"
         style="left: calc(50% + 16px); top: 174px;">
-        {user.devise ?? '—'}
+        {user.description ?? '—'}
       </p>
     </div>
 
@@ -218,19 +255,42 @@ const displayName = user.prenom
     <div class="flex flex-col lg:flex-row">
 
       <!-- SIDEBAR SOMBRE (desktop only) -->
-      <div class="hidden lg:block lg:w-94 lg:shrink-0 bg-neutral-800">
-        <div class="px-17.25 pt-4 flex flex-col gap-27.25">
+      <div class="hidden lg:block lg:w-94 lg:shrink-0 bg-neutral-800 overflow-y-auto">
+        <div class="px-8 pt-6 pb-10 flex flex-col gap-5">
 
           <!-- Boutique -->
           <a href="/boutique"
-            class="flex items-center justify-center border-2 border-white text-white text-4 font-medium leading-[1.4] h-15 w-59.25 hover:bg-white hover:text-neutral-800 transition-colors">
+            class="flex items-center justify-center border-2 border-white text-white text-4 font-medium leading-[1.4] h-15 w-59.25 hover:bg-white hover:text-neutral-800 transition-colors shrink-0">
             Boutique
           </a>
 
-          <!-- Amis (affichés si données disponibles) -->
-          <div class="flex flex-col gap-27.25">
-            <!-- Placeholder — sera peuplé quand la collection amis sera prête -->
-          </div>
+          <!-- Ajouter des amis -->
+          <button id="btn-open-friends"
+            class="flex items-center justify-center border-2 border-white text-white text-4 font-medium leading-[1.4] h-15 w-59.25 hover:bg-white hover:text-neutral-800 transition-colors cursor-pointer bg-transparent shrink-0">
+            Ajouter des amis
+          </button>
+
+          <!-- Liste des amis -->
+          {amiesExpand.length > 0 && (
+            <div class="flex flex-col gap-5 mt-3">
+              {amiesExpand.map(ami => (
+                <div class="flex items-center gap-4">
+                  <div class="w-16 h-16 rounded-full overflow-hidden shrink-0">
+                    {ami.avatar
+                      ? <img src={getImageUrl(ami, ami.avatar)} alt={ami.pseudo} class="w-full h-full object-cover" />
+                      : <div class="w-full h-full bg-primary-600 flex items-center justify-center">
+                          <span class="text-white font-bold text-6">{(ami.pseudo || ami.prenom || '?')[0].toUpperCase()}</span>
+                        </div>
+                    }
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-white font-bold text-4 m-0 truncate">{ami.pseudo || ''}</p>
+                    <p class="text-neutral-300 text-3.5 font-medium m-0 truncate">{`${ami.prenom ?? ''} ${ami.nom ?? ''}`.trim()}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -249,8 +309,8 @@ const displayName = user.prenom
               class="tab-btn px-4 lg:px-6.25 text-3.5 lg:text-4 font-medium text-black border-b-1.75 border-transparent hover:border-neutral-300 transition-colors cursor-pointer bg-transparent inline-flex items-center gap-2 whitespace-nowrap"
               style={activeTab === 'notifications' ? 'border-bottom-color: #72c073;' : ''}>
               Notifications
-              {unreadNotifs > 0 && (
-                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white text-2.75 font-bold">{unreadNotifs}</span>
+              {(unreadNotifs + demandeAmies.length) > 0 && (
+                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white text-2.75 font-bold">{unreadNotifs + demandeAmies.length}</span>
               )}
             </button>
             <button data-tab="parametres"
@@ -330,7 +390,7 @@ const displayName = user.prenom
                   </div>
                   <div class="flex flex-col gap-1">
                     <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Bars découverts</span>
-                    <span class="text-black text-4 font-medium leading-[1.4]">—</span>
+                    <span class="text-black text-4 font-medium leading-[1.4]">{barDecouver.length}/{totalBars}</span>
                   </div>
                 </div>
               </div>
@@ -338,11 +398,32 @@ const displayName = user.prenom
               <!-- Box 3 : Réseaux sociaux -->
               <div class="bg-white border-0.75 border-neutral-300 rounded-2.5 px-4 lg:px-7.5 py-5.5">
                 <h3 class="text-black m-0 mb-8.75">Réseaux sociaux</h3>
-                <div class="flex gap-25">
+                <div class="flex flex-wrap gap-10">
                   <div class="flex flex-col gap-1">
                     <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Instagram</span>
-                    <span class="view-field text-black text-4 font-medium leading-[1.4]">{user.instagram ?? '—'}</span>
-                    <input type="text" name="instagram" value={user.instagram ?? ''} placeholder="@pseudo"
+                    <div class="view-field flex items-center gap-2">
+                      <img src={instaIcon.src} alt="" width="18" height="18" />
+                      <span class="text-black text-4 font-medium leading-[1.4]">{user.insta || '—'}</span>
+                    </div>
+                    <input type="text" name="insta" value={user.insta ?? ''} placeholder="@pseudo"
+                      class="edit-field hidden text-4 font-medium text-neutral-800 bg-neutral-200 border border-neutral-300 rounded px-3 py-1 outline-none w-40" />
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Facebook</span>
+                    <div class="view-field flex items-center gap-2">
+                      <img src={facebookIcon.src} alt="" width="18" height="18" />
+                      <span class="text-black text-4 font-medium leading-[1.4]">{user.facbook || '—'}</span>
+                    </div>
+                    <input type="text" name="facbook" value={user.facbook ?? ''} placeholder="Nom Facebook"
+                      class="edit-field hidden text-4 font-medium text-neutral-800 bg-neutral-200 border border-neutral-300 rounded px-3 py-1 outline-none w-40" />
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Discord</span>
+                    <div class="view-field flex items-center gap-2">
+                      <img src={discordIcon.src} alt="" width="18" height="18" />
+                      <span class="text-black text-4 font-medium leading-[1.4]">{user.discord || '—'}</span>
+                    </div>
+                    <input type="text" name="discord" value={user.discord ?? ''} placeholder="@pseudo"
                       class="edit-field hidden text-4 font-medium text-neutral-800 bg-neutral-200 border border-neutral-300 rounded px-3 py-1 outline-none w-40" />
                   </div>
                 </div>
@@ -369,12 +450,12 @@ const displayName = user.prenom
                 </div>
                 <div class="flex flex-col gap-1">
                   <label class="text-4 font-medium text-black">Description</label>
-                  <textarea name="devise" placeholder="Votre description..."
-                    class="text-4 font-medium text-neutral-800 bg-neutral-200 border border-neutral-300 rounded px-3 py-2 outline-none resize-none w-full max-w-150 h-25">{user.devise ?? ''}</textarea>
+                  <textarea name="description" placeholder="Votre description..."
+                    class="text-4 font-medium text-neutral-800 bg-neutral-200 border border-neutral-300 rounded px-3 py-2 outline-none resize-none w-full max-w-150 h-25">{user.description ?? ''}</textarea>
                 </div>
                 <div class="flex flex-col gap-1">
                   <label class="text-4 font-medium text-black">Photo de profil</label>
-                  <input type="file" name="avatar" accept="image/*"
+                  <input id="avatar-upload" type="file" name="avatar" accept="image/*"
                     class="text-sm text-neutral-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-primary-600 file:text-white file:cursor-pointer cursor-pointer" />
                 </div>
                 <button type="submit"
@@ -427,6 +508,33 @@ const displayName = user.prenom
               <h2 class="text-black m-0 shrink-0">Notifications</h2>
               <div class="flex-1 h-0.5 bg-neutral-300"></div>
             </div>
+
+            {demandeAmies.length > 0 && (
+              <div id="friend-requests-section" class="mb-8">
+                <h3 class="text-black m-0 mb-5">Demandes d'amis ({demandeAmies.length})</h3>
+                <div class="flex flex-col gap-3">
+                  {demandeAmies.map(requester => (
+                    <div class="friend-request-item flex items-center gap-4 p-5 bg-white rounded-2.5 border-0.75 border-primary-500" data-friend-id={requester.id}>
+                      <div class="w-12 h-12 rounded-full overflow-hidden shrink-0 bg-neutral-800 flex items-center justify-center">
+                        {requester.avatar
+                          ? <img src={getImageUrl(requester, requester.avatar)} alt="" class="w-full h-full object-cover" />
+                          : <span class="text-white font-bold text-5">{(requester.pseudo || requester.prenom || '?')[0].toUpperCase()}</span>
+                        }
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <p class="text-4 font-medium text-black m-0">
+                          <strong>{requester.pseudo || `${requester.prenom} ${requester.nom}`.trim() || 'Utilisateur'}</strong> vous a envoyé une demande d'ami
+                        </p>
+                      </div>
+                      <div class="flex gap-2 shrink-0">
+                        <button class="friend-accept bg-primary-600 text-white text-3.5 font-medium px-4 py-2 cursor-pointer border-0 rounded hover:opacity-90 transition-opacity">Accepter</button>
+                        <button class="friend-refuse border-2 border-neutral-300 text-neutral-500 text-3.5 font-medium px-4 py-2 cursor-pointer bg-transparent rounded hover:border-neutral-500 transition-colors">Refuser</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {notifications.length > 0 ? (
               <div class="flex flex-col gap-3">
@@ -568,6 +676,25 @@ const displayName = user.prenom
 
   </section>
 
+  <!-- Friend modal -->
+  <div id="friend-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:50; align-items:center; justify-content:center;">
+    <div style="background:#1e1e1e; width:min(520px,95vw); max-height:80vh; display:flex; flex-direction:column; border-radius:5px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:20px 28px; border-bottom:1px solid rgba(255,255,255,0.1);">
+        <h3 style="color:white; margin:0; font-size:25px; font-weight:500; letter-spacing:-1px;">Ajouter des amis</h3>
+        <button id="friend-modal-close" style="background:transparent; border:none; color:white; font-size:26px; line-height:1; cursor:pointer; opacity:0.6;">×</button>
+      </div>
+      <div style="padding:14px 28px; border-bottom:1px solid rgba(255,255,255,0.1);">
+        <div style="display:flex; align-items:center; gap:12px; background:#2c2c2c; border-radius:5px; padding:0 14px; height:42px;">
+          <svg width="14" height="14" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5"/><path d="M12 12L16 16" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <input id="friend-search" type="text" placeholder="Rechercher un utilisateur…" style="background:transparent; flex:1; font-size:14px; font-weight:500; outline:none; border:none; color:#f7f1ed;" class="placeholder-neutral-200/40" />
+        </div>
+      </div>
+      <div id="friend-modal-list" style="overflow-y:auto; flex:1; padding:20px 28px;"></div>
+    </div>
+  </div>
+
+  <script id="friend-data" type="application/json" set:html={JSON.stringify({ allUsers, amiesIds, userId, token, PB_URL })}></script>
+
   <script is:inline define:vars={{ token, userId }}>
     if (token && userId) {
       window.__AUTH__ = { token, userId };
@@ -577,5 +704,135 @@ const displayName = user.prenom
   <script>
     import '../js/profil.js';
     import '../js/like.js';
+  </script>
+
+  <script is:inline>
+  (function() {
+    var fd = document.getElementById('friend-data');
+    if (!fd) return;
+    var d        = JSON.parse(fd.textContent);
+    var allUsers = d.allUsers;
+    var amiesIds = d.amiesIds.slice();
+    var userId   = d.userId;
+    var TOKEN    = d.token;
+    var PB_URL   = d.PB_URL;
+    var sentRequests = [];
+
+    function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function imgUrl(rec, file) { return file ? PB_URL+'/api/files/'+rec.collectionName+'/'+rec.id+'/'+file : null; }
+    function avatarHtml(user) {
+      var url = imgUrl(user, user.avatar);
+      if (url) return '<img src="'+url+'" alt="'+esc(user.pseudo)+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />';
+      var l = (user.pseudo||user.prenom||'?').charAt(0).toUpperCase();
+      return '<div style="width:100%;height:100%;background:#347645;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:17px;">'+esc(l)+'</div>';
+    }
+
+    function renderFriendList(q) {
+      q = (q||'').toLowerCase();
+      var list = document.getElementById('friend-modal-list');
+      if (!list) return;
+      var filtered = allUsers.filter(function(u) {
+        return !q || (u.pseudo+' '+u.prenom+' '+u.nom).toLowerCase().includes(q);
+      });
+      list.innerHTML = filtered.map(function(user) {
+        var isAmi  = amiesIds.indexOf(user.id) >= 0;
+        var isSent = sentRequests.indexOf(user.id) >= 0;
+        var name   = esc(user.pseudo || (user.prenom+' '+(user.nom||'')).trim() || 'Utilisateur');
+        var btnHtml;
+        if (isAmi) {
+          btnHtml = '<span style="font-size:13px;font-weight:500;color:#72c073;padding:0 4px;">Déjà ami</span>';
+        } else if (isSent) {
+          btnHtml = '<span style="font-size:13px;font-weight:500;color:rgba(247,241,237,0.5);padding:0 4px;">Demande envoyée</span>';
+        } else {
+          btnHtml = '<button data-action="send-request" data-id="'+user.id+'" style="height:32px;padding:0 16px;font-size:13px;font-weight:500;border:none;cursor:pointer;border-radius:3px;background:#347645;color:white;">Demander</button>';
+        }
+        return '<div style="display:flex;align-items:center;gap:14px;background:#2c2c2c;border-radius:5px;padding:12px;margin-bottom:8px;">'+
+          '<div style="width:44px;height:44px;flex-shrink:0;border-radius:50%;overflow:hidden;">'+avatarHtml(user)+'</div>'+
+          '<div style="flex:1;min-width:0;"><p style="color:white;font-size:14px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+name+'</p></div>'+
+          btnHtml+
+        '</div>';
+      }).join('') || '<p style="color:rgba(247,241,237,0.5);font-size:14px;">Aucun résultat.</p>';
+
+      list.querySelectorAll('[data-action="send-request"]').forEach(function(btn) {
+        btn.addEventListener('click', function() { sendFriendRequest(btn.dataset.id); });
+      });
+    }
+
+    async function sendFriendRequest(recipientId) {
+      try {
+        var res = await fetch(PB_URL+'/api/collections/users/records/'+recipientId, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer '+TOKEN },
+          body: JSON.stringify({ 'demande_amies+': [userId] }),
+        });
+        if (res.ok) {
+          sentRequests.push(recipientId);
+          renderFriendList(document.getElementById('friend-search')?.value || '');
+        }
+      } catch(_) {}
+    }
+
+    // Open/close modal
+    document.getElementById('btn-open-friends')?.addEventListener('click', function() {
+      document.getElementById('friend-modal').style.display = 'flex';
+      renderFriendList('');
+    });
+    document.getElementById('friend-modal-close')?.addEventListener('click', function() {
+      document.getElementById('friend-modal').style.display = 'none';
+    });
+    document.getElementById('friend-modal')?.addEventListener('click', function(e) {
+      if (e.target === this) this.style.display = 'none';
+    });
+    document.getElementById('friend-search')?.addEventListener('input', function() {
+      renderFriendList(this.value);
+    });
+
+    // Accept / Refuse friend requests
+    document.querySelectorAll('.friend-accept').forEach(function(btn) {
+      var item = btn.closest('.friend-request-item');
+      var friendId = item && item.dataset.friendId;
+      if (!friendId) return;
+      btn.addEventListener('click', async function() {
+        btn.disabled = true;
+        try {
+          await fetch(PB_URL+'/api/collections/users/records/'+userId, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', Authorization: 'Bearer '+TOKEN },
+            body: JSON.stringify({ 'amies+': [friendId], 'demande_amies-': [friendId] }),
+          });
+          await fetch(PB_URL+'/api/collections/users/records/'+friendId, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', Authorization: 'Bearer '+TOKEN },
+            body: JSON.stringify({ 'amies+': [userId] }),
+          });
+          amiesIds.push(friendId);
+          item.remove();
+          if (!document.querySelector('.friend-request-item')) {
+            document.getElementById('friend-requests-section')?.remove();
+          }
+        } catch(_) { btn.disabled = false; }
+      });
+    });
+
+    document.querySelectorAll('.friend-refuse').forEach(function(btn) {
+      var item = btn.closest('.friend-request-item');
+      var friendId = item && item.dataset.friendId;
+      if (!friendId) return;
+      btn.addEventListener('click', async function() {
+        btn.disabled = true;
+        try {
+          await fetch(PB_URL+'/api/collections/users/records/'+userId, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', Authorization: 'Bearer '+TOKEN },
+            body: JSON.stringify({ 'demande_amies-': [friendId] }),
+          });
+          item.remove();
+          if (!document.querySelector('.friend-request-item')) {
+            document.getElementById('friend-requests-section')?.remove();
+          }
+        } catch(_) { btn.disabled = false; }
+      });
+    });
+  })();
   </script>
 </Layout>

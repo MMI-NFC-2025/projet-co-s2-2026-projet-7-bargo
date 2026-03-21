@@ -47,6 +47,7 @@ const users = usersRaw
   }));
 
 let barFavori = [];
+let amiesIds  = [];
 if (userId && token) {
   const userRes = await fetch(`${PB_URL}/api/collections/users/records/${userId}`, {
     headers: { Authorization: `Bearer ${token}` }
@@ -54,10 +55,11 @@ if (userId && token) {
   if (userRes.ok) {
     const user = await userRes.json();
     barFavori = Array.isArray(user.bar_favori) ? user.bar_favori : [];
+    amiesIds  = Array.isArray(user.amies)      ? user.amies      : [];
   }
 }
 
-const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId, barFavori });
+const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId, barFavori, amiesIds });
 ---
 
 <Layout title="Créer un barathon — Bargo">
@@ -152,9 +154,13 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId, barFa
               <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="16" height="14" rx="2" stroke="white" stroke-width="1.5"/><path d="M3 9h16M8 3v4M14 3v4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
               <span style="font-size:16px; font-weight:700; color:white;">Date</span>
             </div>
-            <div style="background:#f7f1ed; border-radius:5px; box-shadow:0 4px 10px rgba(0,0,0,0.25); height:61px; display:flex; align-items:center; padding:0 20px;">
-              <input id="s1-date" type="date"
-                style="background:transparent; width:100%; font-size:14px; font-weight:500; outline:none; border:none; color:#646262; color-scheme:light;" />
+            <div style="position:relative;">
+              <div onclick="window.togglePicker('date')" style="background:#f7f1ed; border-radius:5px; box-shadow:0 4px 10px rgba(0,0,0,0.25); height:61px; display:flex; align-items:center; justify-content:space-between; padding:0 20px; cursor:pointer; user-select:none;">
+                <span id="date-display" style="font-size:14px; font-weight:500; color:#646262;">jj / mm / aaaa</span>
+                <svg width="18" height="18" viewBox="0 0 22 22" fill="none"><rect x="3" y="5" width="16" height="14" rx="2" stroke="#646262" stroke-width="1.5"/><path d="M3 9h16M8 3v4M14 3v4" stroke="#646262" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </div>
+              <div id="date-popup" style="display:none; position:absolute; top:68px; left:0; width:280px; background:white; border-radius:8px; box-shadow:0 8px 32px rgba(0,0,0,0.25); z-index:300; padding:16px;"></div>
+              <input type="hidden" id="s1-date" />
             </div>
           </div>
           <div class="flex-1">
@@ -162,9 +168,13 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId, barFa
               <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8" stroke="white" stroke-width="1.5"/><path d="M11 7v4l3 2" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               <span style="font-size:16px; font-weight:700; color:white;">Heure de départ</span>
             </div>
-            <div style="background:#f7f1ed; border-radius:5px; box-shadow:0 4px 10px rgba(0,0,0,0.25); height:61px; display:flex; align-items:center; padding:0 20px;">
-              <input id="s1-heure-debut" type="time"
-                style="background:transparent; width:100%; font-size:14px; font-weight:500; outline:none; border:none; color:#646262; color-scheme:light;" />
+            <div style="position:relative;">
+              <div onclick="window.togglePicker('heure-debut')" style="background:#f7f1ed; border-radius:5px; box-shadow:0 4px 10px rgba(0,0,0,0.25); height:61px; display:flex; align-items:center; justify-content:space-between; padding:0 20px; cursor:pointer; user-select:none;">
+                <span id="heure-debut-display" style="font-size:14px; font-weight:500; color:#646262;">--:--</span>
+                <svg width="18" height="18" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="#646262" stroke-width="1.5"/><path d="M11 7v4l3 2" stroke="#646262" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div id="heure-debut-popup" style="display:none; position:absolute; top:68px; left:0; width:200px; background:white; border-radius:8px; box-shadow:0 8px 32px rgba(0,0,0,0.25); z-index:300; padding:12px;"></div>
+              <input type="hidden" id="s1-heure-debut" />
             </div>
           </div>
           <div class="flex-1">
@@ -172,9 +182,13 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId, barFa
               <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8" stroke="white" stroke-width="1.5"/><path d="M11 7v4l3 2" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               <span style="font-size:16px; font-weight:700; color:white;">Heure de fin</span>
             </div>
-            <div style="background:#f7f1ed; border-radius:5px; box-shadow:0 4px 10px rgba(0,0,0,0.25); height:61px; display:flex; align-items:center; padding:0 20px;">
-              <input id="s1-heure-fin" type="time"
-                style="background:transparent; width:100%; font-size:14px; font-weight:500; outline:none; border:none; color:#646262; color-scheme:light;" />
+            <div style="position:relative;">
+              <div onclick="window.togglePicker('heure-fin')" style="background:#f7f1ed; border-radius:5px; box-shadow:0 4px 10px rgba(0,0,0,0.25); height:61px; display:flex; align-items:center; justify-content:space-between; padding:0 20px; cursor:pointer; user-select:none;">
+                <span id="heure-fin-display" style="font-size:14px; font-weight:500; color:#646262;">--:--</span>
+                <svg width="18" height="18" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="#646262" stroke-width="1.5"/><path d="M11 7v4l3 2" stroke="#646262" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div id="heure-fin-popup" style="display:none; position:absolute; top:68px; left:0; width:200px; background:white; border-radius:8px; box-shadow:0 8px 32px rgba(0,0,0,0.25); z-index:300; padding:12px;"></div>
+              <input type="hidden" id="s1-heure-fin" />
             </div>
           </div>
         </div>
@@ -303,11 +317,13 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId, barFa
   var USER_ID  = d.userId;
   var barFavori = d.barFavori || [];
 
-  var currentStep  = 1;
-  var selectedBars = [];
-  var selectedJeux = [];
-  var selectedAmis = [];
-  var showFavsOnly = false;
+  var currentStep        = 1;
+  var selectedBars       = [];
+  var selectedJeux       = [];
+  var selectedAmis       = [];
+  var showFavsOnly       = false;
+  var amiesIds           = d.amiesIds ? d.amiesIds.slice() : [];
+  var sentFriendRequests = [];
 
   var stepMeta = {
     1: { title: 'Informations<br>de la soiree', progress: 0 },
@@ -476,13 +492,21 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId, barFa
       var ami  = selectedAmis.find(function (a) { return a.id === user.id; });
       var sel  = !!ami; var isSam = ami && ami.sam;
       var name = esc(user.pseudo || (user.prenom + ' ' + user.nom).trim() || 'Utilisateur');
+      var isAmi   = amiesIds.indexOf(user.id) >= 0;
+      var isSent  = sentFriendRequests.indexOf(user.id) >= 0;
+      var friendBtn = isAmi
+        ? '<span style="font-size:12px;font-weight:600;color:#72c073;padding:0 8px;">Ami(e)</span>'
+        : isSent
+        ? '<span style="font-size:12px;font-weight:500;color:#646262;padding:0 8px;">Demandé</span>'
+        : '<button data-action="add-friend" data-id="'+user.id+'" style="height:37px;padding:0 14px;font-size:13px;font-weight:500;cursor:pointer;border-radius:5px;background:white;color:#347645;border:2px solid #347645;box-shadow:0 4px 4px rgba(0,0,0,0.25);">+ Ami</button>';
       return '<div style="display:flex;align-items:center;gap:14px;background:white;border:2px solid #dfdfdf;border-radius:5px;box-shadow:0 4px 4px rgba(0,0,0,0.25);padding:14px;">' +
         '<div style="width:55px;height:55px;flex-shrink:0;border-radius:50%;overflow:hidden;">' + avatarHtml(user) + '</div>' +
         '<div style="flex:1;min-width:0;"><p style="color:#000;font-size:16px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + name + '</p>' +
         (user.pseudo && (user.prenom || user.nom) ? '<p style="color:#646262;font-size:14px;font-weight:500;margin:2px 0 0;">' + esc((user.prenom + ' ' + user.nom).trim()) + '</p>' : '') + '</div>' +
-        '<div style="display:flex;gap:8px;flex-shrink:0;">' +
+        '<div style="display:flex;gap:8px;flex-shrink:0;align-items:center;">' +
           '<button data-action="toggle-ami" data-id="' + user.id + '" style="width:141px;height:37px;background:white;border:2px solid ' + (sel ? '#72c073' : '#dfdfdf') + ';border-radius:5px;box-shadow:0 4px 4px rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-size:14px;font-weight:500;color:#1e1e1e;">Ajouter ' + (sel ? iconCheck : iconPlus) + '</button>' +
           '<button data-action="toggle-sam" data-id="' + user.id + '" style="height:37px;padding:0 18px;font-size:14px;font-weight:500;cursor:pointer;border-radius:5px;background:white;color:#1e1e1e;border:2px solid ' + (isSam ? '#347645' : '#dfdfdf') + ';box-shadow:0 4px 4px rgba(0,0,0,0.25);">SAM</button>' +
+          friendBtn +
         '</div>' +
       '</div>';
     }).join('');
@@ -491,6 +515,9 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId, barFa
     });
     list.querySelectorAll('[data-action="toggle-sam"]').forEach(function (btn) {
       btn.addEventListener('click', function () { toggleSam(btn.dataset.id); renderUsers(document.getElementById('search-users').value); });
+    });
+    list.querySelectorAll('[data-action="add-friend"]').forEach(function (btn) {
+      btn.addEventListener('click', function () { sendFriendRequest(btn.dataset.id); });
     });
     refreshUsersSummary();
   }
@@ -513,6 +540,21 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId, barFa
     var ami = selectedAmis.find(function (a) { return a.id === id; });
     if (ami) { ami.sam = !ami.sam; }
     else { var u = allUsers.find(function (u) { return u.id === id; }); if (u) { selectedAmis.push(Object.assign({}, u, { sam: true })); refreshUsersSummary(); } }
+  }
+
+  // ── Friend request ────────────────────────────────────────────────
+  async function sendFriendRequest(recipientId) {
+    try {
+      var res = await fetch(PB_URL+'/api/collections/users/records/'+recipientId, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer '+TOKEN },
+        body: JSON.stringify({ 'demande_amies+': [USER_ID] }),
+      });
+      if (res.ok) {
+        sentFriendRequests.push(recipientId);
+        renderUsers(document.getElementById('search-users').value);
+      }
+    } catch(_) {}
   }
 
   // ── Save & launch ─────────────────────────────────────────────────
@@ -564,6 +606,134 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId, barFa
     this.style.background = showFavsOnly ? '#094736' : '#347645';
     renderBars(document.getElementById('search-bars').value);
   });
+
+  // ── Date & Time Pickers ───────────────────────────────────────────
+  var MONTHS_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  var DAYS_FR   = ['lu','ma','me','je','ve','sa','di'];
+  var pickerOpen = null;
+  var calYear, calMonth, calSelected = null;
+  (function() { var n = new Date(); calYear = n.getFullYear(); calMonth = n.getMonth(); })();
+  var timeVals = { 'heure-debut': { h: null, m: null }, 'heure-fin': { h: null, m: null } };
+
+  window.togglePicker = function(type) {
+    if (pickerOpen === type) { closePickers(); return; }
+    closePickers();
+    pickerOpen = type;
+    if (type === 'date') renderCal();
+    else renderTime(type);
+    document.getElementById(type === 'date' ? 'date-popup' : type + '-popup').style.display = 'block';
+  };
+  function closePickers() {
+    ['date-popup','heure-debut-popup','heure-fin-popup'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+    pickerOpen = null;
+  }
+  document.addEventListener('click', function(e) {
+    if (!pickerOpen) return;
+    var inDate  = e.target.closest && (e.target.closest('#date-popup') || e.target.closest('[onclick*="date"]'));
+    var inDeb   = e.target.closest && (e.target.closest('#heure-debut-popup') || e.target.closest('[onclick*="heure-debut"]'));
+    var inFin   = e.target.closest && (e.target.closest('#heure-fin-popup')   || e.target.closest('[onclick*="heure-fin"]'));
+    if (!inDate && !inDeb && !inFin) closePickers();
+  });
+
+  function renderCal() {
+    var popup = document.getElementById('date-popup');
+    var today = new Date();
+    var first = new Date(calYear, calMonth, 1);
+    var last  = new Date(calYear, calMonth + 1, 0);
+    var startDow = (first.getDay() + 6) % 7;
+    var h = '';
+    // Header
+    h += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">';
+    h += '<button type="button" onclick="window.calNav(-1)" style="background:none;border:none;cursor:pointer;padding:4px;border-radius:50%;color:#1e1e1e;line-height:1;">';
+    h += '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="#1e1e1e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
+    h += '<span style="font-size:14px;font-weight:700;color:#1e1e1e;">' + MONTHS_FR[calMonth] + ' ' + calYear + '</span>';
+    h += '<button type="button" onclick="window.calNav(1)" style="background:none;border:none;cursor:pointer;padding:4px;border-radius:50%;color:#1e1e1e;line-height:1;">';
+    h += '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#1e1e1e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
+    h += '</div>';
+    // Day headers
+    h += '<div style="display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px;">';
+    DAYS_FR.forEach(function(d) { h += '<div style="font-size:11px;font-weight:600;color:#646262;text-align:center;padding:3px 0;">' + d + '</div>'; });
+    h += '</div>';
+    // Days
+    h += '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">';
+    for (var i = 0; i < startDow; i++) h += '<div></div>';
+    for (var d = 1; d <= last.getDate(); d++) {
+      var isToday = (d === today.getDate() && calMonth === today.getMonth() && calYear === today.getFullYear());
+      var isSel   = calSelected && (d === calSelected.getDate() && calMonth === calSelected.getMonth() && calYear === calSelected.getFullYear());
+      h += '<button type="button" onclick="window.calSelect(' + d + ')" style="'
+        + 'background:' + (isSel ? '#72c073' : 'transparent') + ';'
+        + 'color:' + (isSel ? 'white' : '#1e1e1e') + ';'
+        + 'border:' + (isToday && !isSel ? '1.5px solid #094736' : '1.5px solid transparent') + ';'
+        + 'border-radius:50%;width:32px;height:32px;margin:auto;display:flex;align-items:center;justify-content:center;'
+        + 'font-size:13px;font-weight:500;cursor:pointer;">' + d + '</button>';
+    }
+    h += '</div>';
+    popup.innerHTML = h;
+  }
+  window.calNav = function(dir) {
+    calMonth += dir;
+    if (calMonth < 0)  { calMonth = 11; calYear--; }
+    if (calMonth > 11) { calMonth = 0;  calYear++; }
+    renderCal();
+  };
+  window.calSelect = function(day) {
+    calSelected = new Date(calYear, calMonth, day);
+    var dd = String(day).padStart(2,'0');
+    var mm = String(calMonth + 1).padStart(2,'0');
+    var el = document.getElementById('date-display');
+    el.textContent = dd + ' / ' + mm + ' / ' + calYear;
+    el.style.color = '#1e1e1e';
+    document.getElementById('s1-date').value = calYear + '-' + mm + '-' + dd;
+    closePickers();
+  };
+
+  function renderTime(type) {
+    var popup = document.getElementById(type + '-popup');
+    var tv = timeVals[type];
+    var h = '<div style="display:flex;gap:8px;">';
+    // Hours
+    h += '<div style="flex:1;"><div style="text-align:center;font-size:11px;font-weight:700;color:#646262;margin-bottom:6px;text-transform:uppercase;">h</div>';
+    h += '<div id="' + type + '-hcol" style="max-height:180px;overflow-y:auto;border-radius:4px;">';
+    for (var hh = 0; hh < 24; hh++) {
+      var hs = String(hh).padStart(2,'0');
+      var sel = (hh === tv.h);
+      h += '<div onclick="window.timeSel(\'' + type + '\',\'h\',' + hh + ')" style="padding:5px;text-align:center;border-radius:4px;cursor:pointer;font-size:14px;font-weight:500;background:' + (sel ? '#72c073' : 'transparent') + ';color:' + (sel ? 'white' : '#1e1e1e') + ';">' + hs + '</div>';
+    }
+    h += '</div></div>';
+    // Separator
+    h += '<div style="display:flex;align-items:center;padding-top:22px;font-size:20px;font-weight:700;color:#1e1e1e;">:</div>';
+    // Minutes
+    h += '<div style="flex:1;"><div style="text-align:center;font-size:11px;font-weight:700;color:#646262;margin-bottom:6px;text-transform:uppercase;">min</div>';
+    h += '<div id="' + type + '-mcol" style="max-height:180px;overflow-y:auto;border-radius:4px;">';
+    for (var mm = 0; mm < 60; mm += 5) {
+      var ms = String(mm).padStart(2,'0');
+      var selm = (mm === tv.m);
+      h += '<div onclick="window.timeSel(\'' + type + '\',\'m\',' + mm + ')" style="padding:5px;text-align:center;border-radius:4px;cursor:pointer;font-size:14px;font-weight:500;background:' + (selm ? '#72c073' : 'transparent') + ';color:' + (selm ? 'white' : '#1e1e1e') + ';">' + ms + '</div>';
+    }
+    h += '</div></div></div>';
+    popup.innerHTML = h;
+    // Scroll to selected
+    var hcol = document.getElementById(type + '-hcol');
+    var mcol = document.getElementById(type + '-mcol');
+    if (hcol) { var hs2 = hcol.querySelector('[style*="#72c073"]'); if (hs2) hs2.scrollIntoView({block:'center'}); }
+    if (mcol) { var ms2 = mcol.querySelector('[style*="#72c073"]'); if (ms2) ms2.scrollIntoView({block:'center'}); }
+  }
+  window.timeSel = function(type, part, val) {
+    timeVals[type][part] = val;
+    var tv = timeVals[type];
+    renderTime(type);
+    if (tv.h !== null && tv.m !== null) {
+      var hs = String(tv.h).padStart(2,'0');
+      var ms = String(tv.m).padStart(2,'0');
+      var disp = document.getElementById(type + '-display');
+      disp.textContent = hs + ':' + ms;
+      disp.style.color = '#1e1e1e';
+      document.getElementById('s1-' + type).value = hs + ':' + ms;
+    }
+  };
 
   refreshCircles();
 })();

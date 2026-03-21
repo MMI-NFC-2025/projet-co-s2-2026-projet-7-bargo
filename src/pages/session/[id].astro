@@ -150,6 +150,28 @@ const pageData = JSON.stringify({
   </div>
 </div>
 
+<!-- Delete confirmation modal -->
+<div id="delete-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:60; align-items:center; justify-content:center;">
+  <div style="background:#1e1e1e; width:min(440px,92vw); border-radius:5px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.6);">
+    <!-- Header rouge -->
+    <div style="background:#ef4444; padding:20px 28px;">
+      <p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:rgba(255,255,255,0.75); margin:0 0 6px;">Action irréversible</p>
+      <h3 style="color:white; margin:0; font-size:25px; font-weight:500; letter-spacing:-1px;">Supprimer la session</h3>
+    </div>
+    <!-- Corps -->
+    <div style="padding:24px 28px;">
+      <p style="color:rgba(247,241,237,0.7); font-size:14px; font-weight:500; margin:0; line-height:1.5;">
+        Cette action est irréversible. La session et toutes ses données (bars, jeux, invités) seront définitivement supprimées.
+      </p>
+    </div>
+    <!-- Actions -->
+    <div style="display:flex; gap:12px; padding:0 28px 24px; justify-content:flex-end;">
+      <button id="delete-modal-cancel" style="height:42px; padding:0 24px; background:transparent; border:1px solid rgba(255,255,255,0.25); color:rgba(247,241,237,0.7); font-size:14px; font-weight:500; cursor:pointer; border-radius:3px;">Annuler</button>
+      <button id="delete-modal-confirm" style="height:42px; padding:0 24px; background:#ef4444; border:none; color:white; font-size:14px; font-weight:500; cursor:pointer; border-radius:3px;">Supprimer</button>
+    </div>
+  </div>
+</div>
+
 <!-- JSON data -->
 <script id="page-data" type="application/json" set:html={pageData}></script>
 
@@ -169,9 +191,10 @@ const pageData = JSON.stringify({
   var allJeux  = d.allJeux;
   var allUsers = d.allUsers;
 
-  var activeTab = 'bars';
-  var modalMode = null;
-  var isHote    = d.isHote;
+  var activeTab     = 'bars';
+  var modalMode     = null;
+  var isHote        = d.isHote;
+  var paramsEditing = false;
 
   // ── Helpers ──────────────────────────────────────────────────────
   function esc(s) {
@@ -195,18 +218,26 @@ const pageData = JSON.stringify({
   // ── Tab render ───────────────────────────────────────────────────
   function switchTab(tab) {
     activeTab = tab;
+    paramsEditing = false;
     document.querySelectorAll('.final-tab').forEach(function (btn) {
       var active = btn.dataset.tab === tab;
       btn.style.color             = active ? '#72c073' : 'rgba(247,241,237,0.5)';
       btn.style.borderBottomColor = active ? '#72c073' : 'transparent';
     });
-    // Griser le bouton "+ Ajouter" si non-hôte sur l'onglet Jeux
     var addBtn = document.getElementById('btn-add-more');
     if (addBtn) {
-      var blocked = tab === 'jeux' && !isHote;
-      addBtn.style.opacity = blocked ? '0.3' : '1';
-      addBtn.style.cursor  = blocked ? 'not-allowed' : 'pointer';
-      addBtn.title         = blocked ? 'Seul l\'hôte peut modifier le jeu' : '';
+      if (tab === 'params') {
+        addBtn.textContent   = 'Modifier';
+        addBtn.style.opacity = isHote ? '1' : '0.3';
+        addBtn.style.cursor  = isHote ? 'pointer' : 'not-allowed';
+        addBtn.title         = isHote ? '' : "Seul l'hôte peut modifier les paramètres";
+      } else {
+        addBtn.textContent   = '+ Ajouter';
+        var blocked = tab === 'jeux' && !isHote;
+        addBtn.style.opacity = blocked ? '0.3' : '1';
+        addBtn.style.cursor  = blocked ? 'not-allowed' : 'pointer';
+        addBtn.title         = blocked ? "Seul l'hôte peut modifier le jeu" : '';
+      }
     }
     renderTab();
   }
@@ -239,13 +270,35 @@ const pageData = JSON.stringify({
         '</div>';
       }).join('');
     } else {
-      el.innerHTML = '<div style="display:flex;flex-direction:column;gap:16px;">' +
-        param('Nom',         session.nom || '—') +
-        param('Date',        session.date || '—') +
-        param('Heure de départ', session.heure_debut || '—') +
-        (session.description ? param('Description', session.description) : '') +
-      '</div>';
+      if (!paramsEditing) {
+        el.innerHTML = '<div style="display:flex;flex-direction:column;gap:16px;">' +
+          param('Nom',             session.nom || '—') +
+          param('Date',            session.date || '—') +
+          param('Heure de départ', session.heure_debut || '—') +
+          (session.description ? param('Description', session.description) : '') +
+          (isHote ? '<div style="margin-top:8px;"><button id="btn-delete-session" style="background:#ef4444;border:none;color:white;font-size:13px;font-weight:500;height:36px;padding:0 18px;border-radius:3px;cursor:pointer;">Supprimer la session</button></div>' : '') +
+        '</div>';
+        if (isHote) {
+          document.getElementById('btn-delete-session')?.addEventListener('click', deleteSession);
+        }
+      } else {
+        el.innerHTML = '<div style="display:flex;flex-direction:column;gap:14px;">' +
+          editParam('Nom',             'p-nom',   'text', session.nom || '') +
+          editParam('Date',            'p-date',  'date', session.date || '') +
+          editParam('Heure de départ', 'p-heure', 'time', session.heure_debut || '') +
+          editParamArea('Description', 'p-desc', session.description || '') +
+        '</div>';
+      }
     }
+  }
+
+  function editParam(label, id, type, value) {
+    return '<div><p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(247,241,237,0.5);margin:0 0 4px;">' + esc(label) + '</p>' +
+      '<input id="' + id + '" type="' + type + '" value="' + esc(value) + '" style="width:100%;background:#2c2c2c;border:1px solid rgba(255,255,255,0.15);border-radius:3px;padding:7px 12px;color:white;font-size:14px;font-weight:500;outline:none;box-sizing:border-box;" /></div>';
+  }
+  function editParamArea(label, id, value) {
+    return '<div><p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(247,241,237,0.5);margin:0 0 4px;">' + esc(label) + '</p>' +
+      '<textarea id="' + id + '" rows="3" style="width:100%;background:#2c2c2c;border:1px solid rgba(255,255,255,0.15);border-radius:3px;padding:7px 12px;color:white;font-size:14px;font-weight:500;outline:none;resize:none;box-sizing:border-box;">' + esc(value) + '</textarea></div>';
   }
 
   function card(url, title, sub) {
@@ -260,6 +313,34 @@ const pageData = JSON.stringify({
   }
   function param(label, value) {
     return '<div><p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(247,241,237,0.5);margin:0 0 4px;">' + esc(label) + '</p><p style="color:white;font-size:15px;font-weight:500;margin:0;">' + esc(value) + '</p></div>';
+  }
+
+  // ── Session delete / patch params ───────────────────────────────
+  function deleteSession() {
+    document.getElementById('delete-modal').style.display = 'flex';
+  }
+
+  async function confirmDeleteSession() {
+    var btn = document.getElementById('delete-modal-confirm');
+    btn.disabled    = true;
+    btn.textContent = 'Suppression…';
+    try {
+      await fetch(PB_URL + '/api/collections/session_barathon/records/' + session.id, {
+        method: 'DELETE',
+        headers: { Authorization: 'Bearer ' + TOKEN }
+      });
+    } catch (_) {}
+    window.location.href = '/session';
+  }
+
+  async function patchSessionParams(nom, date, heure_debut, description) {
+    try {
+      await fetch(PB_URL + '/api/collections/session_barathon/records/' + session.id, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
+        body: JSON.stringify({ nom: nom, date_session: date, heur_depart: heure_debut, description: description }),
+      });
+    } catch (_) {}
   }
 
   // ── Modal ────────────────────────────────────────────────────────
@@ -406,14 +487,43 @@ const pageData = JSON.stringify({
   });
 
   document.getElementById('btn-add-more').addEventListener('click', function () {
-    var mode = activeTab === 'params' ? 'bars' : activeTab;
-    if (mode === 'jeux' && !isHote) return; // seul l'hôte peut modifier le jeu
-    openModal(mode);
+    if (activeTab === 'params') {
+      if (!isHote) return;
+      if (!paramsEditing) {
+        paramsEditing = true;
+        this.textContent = 'Confirmer';
+        renderTab();
+      } else {
+        var nom   = document.getElementById('p-nom')?.value   ?? session.nom;
+        var date  = document.getElementById('p-date')?.value  ?? session.date;
+        var heure = document.getElementById('p-heure')?.value ?? session.heure_debut;
+        var desc  = document.getElementById('p-desc')?.value  ?? session.description;
+        session.nom         = nom;
+        session.date        = date;
+        session.heure_debut = heure;
+        session.description = desc;
+        patchSessionParams(nom, date, heure, desc);
+        paramsEditing = false;
+        this.textContent = 'Modifier';
+        renderTab();
+      }
+      return;
+    }
+    if (activeTab === 'jeux' && !isHote) return;
+    openModal(activeTab);
   });
   document.getElementById('modal-close').addEventListener('click', closeModal);
   document.getElementById('modal-confirm').addEventListener('click', closeModal);
   document.getElementById('add-modal').addEventListener('click', function (e) { if (e.target === this) closeModal(); });
   document.getElementById('modal-search').addEventListener('input', function () { renderModal(this.value); });
+
+  document.getElementById('delete-modal-confirm').addEventListener('click', confirmDeleteSession);
+  document.getElementById('delete-modal-cancel').addEventListener('click', function () {
+    document.getElementById('delete-modal').style.display = 'none';
+  });
+  document.getElementById('delete-modal').addEventListener('click', function (e) {
+    if (e.target === this) this.style.display = 'none';
+  });
 
   // ── Init ─────────────────────────────────────────────────────────
   renderTab();

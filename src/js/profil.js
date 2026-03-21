@@ -16,6 +16,7 @@ function toggleEdit() {
   if (!editBtn || !cancelBtn) return;
   const isView = editBtn.style.display !== 'none';
   if (isView) {
+    switchTab('profil');
     document.querySelectorAll('.view-field').forEach(el => el.classList.add('hidden'));
     document.querySelectorAll('.edit-field').forEach(el => el.classList.remove('hidden'));
     editBtn.style.display   = 'none';
@@ -48,3 +49,10 @@ document.querySelectorAll('[data-tab]').forEach(btn => {
 document.getElementById('edit-btn')?.addEventListener('click', toggleEdit);
 document.getElementById('cancel-btn')?.addEventListener('click', toggleEdit);
 document.getElementById('delete-btn')?.addEventListener('click', confirmDelete);
+
+// Click avatar to open file picker in edit mode
+document.getElementById('profile-avatar-wrap')?.addEventListener('click', function() {
+  if (document.getElementById('edit-btn')?.style.display === 'none') {
+    document.getElementById('avatar-upload')?.click();
+  }
+});
