@@ -2,6 +2,8 @@
 // @ts-nocheck
 import Layout from '../../layouts/Layout.astro';
 
+const sessionId = Astro.url.searchParams.get('session') ?? '';
+
 const themes = [
   { value: 'cultrue_g', label: 'Culture générale' },
   { value: 'jeux_video', label: 'Jeux vidéo' },
@@ -150,9 +152,11 @@ const timeOptions = [
         return;
       }
       document.getElementById('theme-error')?.classList.add('hidden');
-      const themes = Array.from(checked).map(cb => cb.value).join(',');
-      const time   = form.querySelector('input[name="time"]:checked')?.value ?? '20';
-      window.location.href = `/jeux_questionaire/jouer?themes=${encodeURIComponent(themes)}&time=${time}`;
+      const themes    = Array.from(checked).map(cb => cb.value).join(',');
+      const time      = form.querySelector('input[name="time"]:checked')?.value ?? '20';
+      const sessionId = new URL(window.location.href).searchParams.get('session') ?? '';
+      const sessionParam = sessionId ? `&session=${encodeURIComponent(sessionId)}` : '';
+      window.location.href = `/jeux_questionaire/jouer?themes=${encodeURIComponent(themes)}&time=${time}${sessionParam}`;
     });
 
     const checkboxes = document.querySelectorAll('input[name="themes"]');

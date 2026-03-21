@@ -30,7 +30,7 @@ const bars  = (session.expand?.id_bar  ?? []).map(b => ({
 // id_jeux est Single — peut être un objet ou null
 const jeuxRaw = session.expand?.id_jeux;
 const jeux = jeuxRaw
-  ? [{ id: jeuxRaw.id, collectionName: jeuxRaw.collectionName, nom: jeuxRaw.nom ?? '', description: jeuxRaw.description ?? '', img: Array.isArray(jeuxRaw.img) ? (jeuxRaw.img[0] ?? null) : (jeuxRaw.img ?? null) }]
+  ? [{ id: jeuxRaw.id, collectionName: jeuxRaw.collectionName, nom: jeuxRaw.nom ?? '', description: jeuxRaw.description ?? '', img: Array.isArray(jeuxRaw.img) ? (jeuxRaw.img[0] ?? null) : (jeuxRaw.img ?? null), type_du_jeux: jeuxRaw.type_du_jeux ?? '' }]
   : [];
 
 const amis  = (session.expand?.id_inviter ?? []).map(u => ({
@@ -39,7 +39,7 @@ const amis  = (session.expand?.id_inviter ?? []).map(u => ({
   avatar: u.avatar ?? null,
 }));
 
-const samIds = new Set((session.expand?.id_sam ?? []).map(u => u.id));
+const samIds = (session.expand?.id_sam ?? []).map(u => u.id);
 
 // All users for "Ajouter" modal (re-fetch a light list)
 const usersRes  = await fetch(`${PB_URL}/api/collections/users/records?perPage=200&sort=pseudo`);
@@ -68,15 +68,30 @@ const allJeux  = (jeuxData.items ?? []).map(j => ({
   id: j.id, collectionName: j.collectionName,
   nom: j.nom ?? '', description: j.description ?? '',
   img: Array.isArray(j.img) ? (j.img[0] ?? null) : (j.img ?? null),
+  type_du_jeux: j.type_du_jeux ?? '',
 }));
 
 const isHote = session.id_hote === userId;
 
+const isSam     = (session.expand?.id_sam ?? []).some(u => u.id === userId);
+const barActuel = session.bar_actuel ?? 0;
+
+// Determine session state: pas_commencer | en_cours | fini
+const statut = session.etat_session ?? 'pas_commencer';
+if (statut === 'fini') return Astro.redirect('/session');
+let isEnCours = statut === 'en_cours';
+if (!isEnCours && session.date_session && session.heur_depart) {
+  try {
+    const dt = new Date(`${session.date_session}T${session.heur_depart}`);
+    if (!isNaN(dt.getTime())) isEnCours = new Date() >= dt;
+  } catch(_) {}
+}
+
 const pageData = JSON.stringify({
   session: { id: session.id, nom: session.nom, date: session.date_session, heure_debut: session.heur_depart, description: session.description },
-  bars, jeux, amis, samIds: [...samIds],
+  bars, jeux, amis, samIds,
   allBars, allJeux, allUsers,
-  PB_URL, token, isHote,
+  PB_URL, token, isHote, isSam, userId, isEnCours, barActuel,
 });
 ---
 
@@ -119,8 +134,13 @@ const pageData = JSON.stringify({
     <!-- Tab content -->
     <div id="tab-content" class="overflow-y-auto flex-1 px-6 py-5"></div>
 
-    <!-- Add more -->
-    <div class="px-6 py-4.5" style="border-top:1px solid rgba(255,255,255,0.1); flex-shrink:0;">
+    <!-- Bottom bar – visible only en_attente -->
+    <div id="bottom-bar" class="px-6 py-4.5" style={`border-top:1px solid rgba(255,255,255,0.1); flex-shrink:0; display:${isEnCours ? 'none' : 'block'};`}>
+      {isHote && (
+        <button id="btn-launch-session" style="width:100%; height:42px; background:#347645; border:none; color:white; font-size:14px; font-weight:500; cursor:pointer; border-radius:3px; margin-bottom:10px;">
+          ▶ Lancer la session
+        </button>
+      )}
       <button id="btn-add-more" style="width:100%; height:42px; background:transparent; border:1px solid rgba(255,255,255,0.25); color:white; font-size:14px; font-weight:500; cursor:pointer; border-radius:3px;">+ Ajouter</button>
     </div>
   </div>
@@ -172,20 +192,60 @@ const pageData = JSON.stringify({
   </div>
 </div>
 
+<!-- Stop session modal -->
+<div id="stop-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:60; align-items:center; justify-content:center;">
+  <div style="background:#1e1e1e; width:min(440px,92vw); border-radius:5px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.6);">
+    <div style="background:#f59e0b; padding:20px 28px;">
+      <p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:rgba(255,255,255,0.75); margin:0 0 6px;">Confirmation</p>
+      <h3 style="color:white; margin:0; font-size:25px; font-weight:500; letter-spacing:-1px;">Arrêter la session</h3>
+    </div>
+    <div style="padding:24px 28px;">
+      <p style="color:rgba(247,241,237,0.7); font-size:14px; font-weight:500; margin:0; line-height:1.5;">
+        La session sera marquée comme terminée. Tous les participants perdront l'accès à la session en cours.
+      </p>
+    </div>
+    <div style="display:flex; gap:12px; padding:0 28px 24px; justify-content:flex-end;">
+      <button id="stop-modal-cancel" style="height:42px; padding:0 24px; background:transparent; border:1px solid rgba(255,255,255,0.25); color:rgba(247,241,237,0.7); font-size:14px; font-weight:500; cursor:pointer; border-radius:3px;">Annuler</button>
+      <button id="stop-modal-confirm" style="height:42px; padding:0 24px; background:#f59e0b; border:none; color:white; font-size:14px; font-weight:500; cursor:pointer; border-radius:3px;">Arrêter</button>
+    </div>
+  </div>
+</div>
+
+<!-- End screen -->
+<div id="end-screen" style="display:none; position:fixed; inset:0; background:#1e1e1e; z-index:70; overflow-y:auto;">
+  <div style="max-width:520px; margin:0 auto; padding:48px 24px 60px;">
+    <p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:#72c073; margin:0 0 8px;">Barathon terminé</p>
+    <h2 style="color:white; margin:0 0 36px; letter-spacing:-1px;">Résumé de la session</h2>
+    <div id="end-bonus-card"></div>
+    <div id="end-members-list"></div>
+    <a href="/session" style="display:flex; align-items:center; justify-content:center; height:50px; background:#347645; color:white; font-size:15px; font-weight:500; text-decoration:none; border-radius:3px; margin-top:32px;">
+      Terminer
+    </a>
+  </div>
+</div>
+
 <!-- JSON data -->
 <script id="page-data" type="application/json" set:html={pageData}></script>
 
 <script is:inline>
 (function () {
+  // @ts-nocheck
   var d        = JSON.parse(document.getElementById('page-data').textContent);
   var session  = d.session;
   var PB_URL   = d.PB_URL;
   var TOKEN    = d.token;
 
+  var isEnCours   = d.isEnCours;
+  var barActuel   = d.barActuel;
+  var isSam       = d.isSam;
+  var isHote      = d.isHote;
+  var isHoteOrSam = isHote || isSam;
+  var samIds      = d.samIds; // array
+
   // Mutable selections (start from what's in the DB)
   var bars     = d.bars.slice();
   var jeux     = d.jeux.slice();
-  var amis     = d.amis.map(function (u) { return Object.assign({}, u, { sam: d.samIds.includes(u.id) }); });
+  var amis     = d.amis.map(function (u) { return Object.assign({}, u, { sam: samIds.indexOf(u.id) >= 0 }); });
 
   var allBars  = d.allBars;
   var allJeux  = d.allJeux;
@@ -193,7 +253,6 @@ const pageData = JSON.stringify({
 
   var activeTab     = 'bars';
   var modalMode     = null;
-  var isHote        = d.isHote;
   var paramsEditing = false;
 
   // ── Helpers ──────────────────────────────────────────────────────
@@ -215,6 +274,49 @@ const pageData = JSON.stringify({
     return '<div style="width:100%;height:100%;background:#347645;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:' + Math.round(size * 0.38) + 'px;">' + esc(l) + '</div>';
   }
 
+  function card(url, title, sub) {
+    return '<div style="display:flex;align-items:center;gap:14px;background:#2c2c2c;border-radius:5px;padding:12px;margin-bottom:10px;">' +
+      '<div style="width:50px;height:50px;flex-shrink:0;border-radius:3px;overflow:hidden;">' + thumb(url, title) + '</div>' +
+      '<div style="flex:1;min-width:0;"><p style="color:white;font-size:14px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(title) + '</p>' +
+        (sub ? '<p style="color:rgba(247,241,237,0.5);font-size:12px;margin:2px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(sub) + '</p>' : '') +
+      '</div></div>';
+  }
+  function empty(msg) {
+    return '<p style="color:rgba(247,241,237,0.5);font-size:14px;font-weight:500;margin:0;">' + esc(msg) + '</p>';
+  }
+  function param(label, value) {
+    return '<div><p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(247,241,237,0.5);margin:0 0 4px;">' + esc(label) + '</p><p style="color:white;font-size:15px;font-weight:500;margin:0;">' + esc(value) + '</p></div>';
+  }
+
+  function bigBarCard(bar, isCurrent) {
+    var url = imgUrl(bar, bar.img);
+    var border = isCurrent ? 'border:2px solid #72c073;' : 'border:2px solid rgba(255,255,255,0.08);';
+    return '<div style="background:#2c2c2c;border-radius:5px;overflow:hidden;' + border + '">' +
+      '<div style="width:100%;height:120px;overflow:hidden;">' +
+      (url ? '<img src="' + url + '" alt="' + esc(bar.nom) + '" style="width:100%;height:100%;object-fit:cover;" />'
+           : '<div style="width:100%;height:100%;background:#3a3a3a;"></div>') +
+      '</div>' +
+      '<div style="padding:12px 14px;">' +
+      '<p style="color:white;font-size:15px;font-weight:600;margin:0 0 3px;">' + esc(bar.nom) + '</p>' +
+      (bar.adresse ? '<p style="color:rgba(247,241,237,0.5);font-size:12px;font-weight:500;margin:0;">' + esc(bar.adresse) + '</p>' : '') +
+      '</div>' +
+    '</div>';
+  }
+
+  function amiCard(ami, isSamRole) {
+    var size = 44;
+    var avUrl = imgUrl(ami, ami.avatar);
+    var avHtml = avUrl
+      ? '<img src="' + avUrl + '" alt="' + esc(ami.pseudo) + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />'
+      : '<div style="width:100%;height:100%;background:#347645;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:' + Math.round(size * 0.38) + 'px;">' + esc((ami.pseudo || ami.prenom || '?').charAt(0).toUpperCase()) + '</div>';
+    return '<div style="display:flex;align-items:center;gap:12px;background:#2c2c2c;border-radius:5px;padding:12px;margin-bottom:10px;">' +
+      '<div style="width:44px;height:44px;flex-shrink:0;border-radius:50%;overflow:hidden;">' + avHtml + '</div>' +
+      '<div style="flex:1;min-width:0;"><p style="color:white;font-size:14px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(ami.pseudo || (ami.prenom + ' ' + ami.nom).trim() || 'Utilisateur') + '</p>' +
+        (isSamRole ? '<span style="display:inline-block;background:#f7f1ed;color:#094736;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:4px;">SAM</span>' : '') +
+      '</div>' +
+    '</div>';
+  }
+
   // ── Tab render ───────────────────────────────────────────────────
   function switchTab(tab) {
     activeTab = tab;
@@ -224,25 +326,39 @@ const pageData = JSON.stringify({
       btn.style.color             = active ? '#72c073' : 'rgba(247,241,237,0.5)';
       btn.style.borderBottomColor = active ? '#72c073' : 'transparent';
     });
-    var addBtn = document.getElementById('btn-add-more');
-    if (addBtn) {
-      if (tab === 'params') {
-        addBtn.textContent   = 'Modifier';
-        addBtn.style.opacity = isHote ? '1' : '0.3';
-        addBtn.style.cursor  = isHote ? 'pointer' : 'not-allowed';
-        addBtn.title         = isHote ? '' : "Seul l'hôte peut modifier les paramètres";
-      } else {
-        addBtn.textContent   = '+ Ajouter';
-        var blocked = tab === 'jeux' && !isHote;
-        addBtn.style.opacity = blocked ? '0.3' : '1';
-        addBtn.style.cursor  = blocked ? 'not-allowed' : 'pointer';
-        addBtn.title         = blocked ? "Seul l'hôte peut modifier le jeu" : '';
+    // bottom bar only in en_attente
+    var bottomBar = document.getElementById('bottom-bar');
+    if (bottomBar) bottomBar.style.display = isEnCours ? 'none' : 'block';
+
+    if (!isEnCours) {
+      var addBtn = document.getElementById('btn-add-more');
+      if (addBtn) {
+        if (tab === 'params') {
+          addBtn.textContent   = 'Modifier';
+          addBtn.style.opacity = isHote ? '1' : '0.3';
+          addBtn.style.cursor  = isHote ? 'pointer' : 'not-allowed';
+          addBtn.title         = isHote ? '' : "Seul l'hôte peut modifier les paramètres";
+        } else {
+          addBtn.textContent   = '+ Ajouter';
+          var blocked = tab === 'jeux' && !isHote;
+          addBtn.style.opacity = blocked ? '0.3' : '1';
+          addBtn.style.cursor  = blocked ? 'not-allowed' : 'pointer';
+          addBtn.title         = blocked ? "Seul l'hôte peut modifier le jeu" : '';
+        }
       }
     }
     renderTab();
   }
 
   function renderTab() {
+    if (isEnCours) {
+      renderTabEnCours();
+    } else {
+      renderTabEnAttente();
+    }
+  }
+
+  function renderTabEnAttente() {
     var el = document.getElementById('tab-content');
     if (activeTab === 'bars') {
       if (!bars.length) { el.innerHTML = empty('Aucun bar sélectionné.'); return; }
@@ -292,6 +408,76 @@ const pageData = JSON.stringify({
     }
   }
 
+  function renderTabEnCours() {
+    var el = document.getElementById('tab-content');
+
+    if (activeTab === 'bars') {
+      if (!bars.length) { el.innerHTML = empty('Aucun bar dans cette session.'); return; }
+      var cur  = Math.min(barActuel, bars.length - 1);
+      var next = cur + 1 < bars.length ? bars[cur + 1] : null;
+      var html = '';
+
+      html += '<div style="margin-bottom:20px;">';
+      html += '<p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#72c073;margin:0 0 10px;">Bar actuel</p>';
+      html += bigBarCard(bars[cur], true);
+      html += '</div>';
+
+      if (next) {
+        html += '<div style="margin-bottom:20px;">';
+        html += '<p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:rgba(247,241,237,0.4);margin:0 0 10px;">Prochain bar</p>';
+        html += bigBarCard(next, false);
+        html += '</div>';
+      }
+
+      if (cur < bars.length - 1 && isHoteOrSam) {
+        html += '<button id="btn-next-bar" style="width:100%;height:42px;background:#347645;border:none;color:white;font-size:14px;font-weight:500;cursor:pointer;border-radius:3px;margin-top:4px;">Passer au prochain bar →</button>';
+      } else if (cur >= bars.length - 1) {
+        html += '<p style="color:rgba(247,241,237,0.4);font-size:13px;font-weight:500;margin:8px 0 0;text-align:center;">Dernier bar de la session</p>';
+      }
+
+      el.innerHTML = html;
+      document.getElementById('btn-next-bar')?.addEventListener('click', passerProchainBar);
+
+    } else if (activeTab === 'jeux') {
+      if (!jeux.length) { el.innerHTML = empty('Aucun jeu sélectionné.'); return; }
+      el.innerHTML = jeux.map(function (jeu) {
+        var url = imgUrl(jeu, jeu.img);
+        var href = jeu.type_du_jeux === 'questionaire' ? '/jeux_questionaire?session=' + session.id : '/jeux';
+        return '<div style="display:flex;align-items:center;gap:14px;background:#2c2c2c;border-radius:5px;padding:12px;margin-bottom:10px;">' +
+          '<div style="width:50px;height:50px;flex-shrink:0;border-radius:3px;overflow:hidden;">' + thumb(url, jeu.nom) + '</div>' +
+          '<div style="flex:1;min-width:0;"><p style="color:white;font-size:14px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(jeu.nom) + '</p></div>' +
+          '<a href="' + href + '" style="flex-shrink:0;height:32px;padding:0 16px;font-size:13px;font-weight:500;text-decoration:none;display:flex;align-items:center;border-radius:3px;background:#347645;color:white;">Jouer</a>' +
+        '</div>';
+      }).join('');
+
+    } else if (activeTab === 'amis') {
+      if (!amis.length) { el.innerHTML = empty('Aucun ami invité.'); return; }
+      var samList   = amis.filter(function (a) { return samIds.indexOf(a.id) >= 0; });
+      var otherList = amis.filter(function (a) { return samIds.indexOf(a.id) < 0; });
+      var html = '';
+      if (samList.length) {
+        html += '<p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#72c073;margin:0 0 8px;">SAM</p>';
+        html += samList.map(function (a) { return amiCard(a, true); }).join('');
+        if (otherList.length) html += '<div style="height:1px;background:rgba(255,255,255,0.1);margin:12px 0;"></div>';
+      }
+      html += otherList.map(function (a) { return amiCard(a, false); }).join('');
+      el.innerHTML = html;
+
+    } else {
+      // params en_cours
+      el.innerHTML = '<div style="display:flex;flex-direction:column;gap:16px;">' +
+        param('Nom',             session.nom || '—') +
+        param('Date',            session.date || '—') +
+        param('Heure de départ', session.heure_debut || '—') +
+        (session.description ? param('Description', session.description) : '') +
+        (isHoteOrSam ? '<div style="margin-top:8px;"><button id="btn-stop-session" style="background:#f59e0b;border:none;color:white;font-size:13px;font-weight:600;height:36px;padding:0 18px;border-radius:3px;cursor:pointer;">⏹ Arrêter la session</button></div>' : '') +
+      '</div>';
+      document.getElementById('btn-stop-session')?.addEventListener('click', function () {
+        document.getElementById('stop-modal').style.display = 'flex';
+      });
+    }
+  }
+
   function editParam(label, id, type, value) {
     return '<div><p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(247,241,237,0.5);margin:0 0 4px;">' + esc(label) + '</p>' +
       '<input id="' + id + '" type="' + type + '" value="' + esc(value) + '" style="width:100%;background:#2c2c2c;border:1px solid rgba(255,255,255,0.15);border-radius:3px;padding:7px 12px;color:white;font-size:14px;font-weight:500;outline:none;box-sizing:border-box;" /></div>';
@@ -299,20 +485,6 @@ const pageData = JSON.stringify({
   function editParamArea(label, id, value) {
     return '<div><p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(247,241,237,0.5);margin:0 0 4px;">' + esc(label) + '</p>' +
       '<textarea id="' + id + '" rows="3" style="width:100%;background:#2c2c2c;border:1px solid rgba(255,255,255,0.15);border-radius:3px;padding:7px 12px;color:white;font-size:14px;font-weight:500;outline:none;resize:none;box-sizing:border-box;">' + esc(value) + '</textarea></div>';
-  }
-
-  function card(url, title, sub) {
-    return '<div style="display:flex;align-items:center;gap:14px;background:#2c2c2c;border-radius:5px;padding:12px;margin-bottom:10px;">' +
-      '<div style="width:50px;height:50px;flex-shrink:0;border-radius:3px;overflow:hidden;">' + thumb(url, title) + '</div>' +
-      '<div style="flex:1;min-width:0;"><p style="color:white;font-size:14px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(title) + '</p>' +
-        (sub ? '<p style="color:rgba(247,241,237,0.5);font-size:12px;margin:2px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(sub) + '</p>' : '') +
-      '</div></div>';
-  }
-  function empty(msg) {
-    return '<p style="color:rgba(247,241,237,0.5);font-size:14px;font-weight:500;margin:0;">' + esc(msg) + '</p>';
-  }
-  function param(label, value) {
-    return '<div><p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(247,241,237,0.5);margin:0 0 4px;">' + esc(label) + '</p><p style="color:white;font-size:15px;font-weight:500;margin:0;">' + esc(value) + '</p></div>';
   }
 
   // ── Session delete / patch params ───────────────────────────────
@@ -341,6 +513,130 @@ const pageData = JSON.stringify({
         body: JSON.stringify({ nom: nom, date_session: date, heur_depart: heure_debut, description: description }),
       });
     } catch (_) {}
+  }
+
+  async function lancerSession() {
+    var btn = document.getElementById('btn-launch-session');
+    if (btn) { btn.disabled = true; btn.textContent = 'Lancement…'; }
+    try {
+      await fetch(PB_URL + '/api/collections/session_barathon/records/' + session.id, {
+        method:  'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
+        body:    JSON.stringify({ etat_session: 'en_cours' }),
+      });
+    } catch (_) {}
+    isEnCours = true;
+    var bottomBar = document.getElementById('bottom-bar');
+    if (bottomBar) bottomBar.style.display = 'none';
+    renderTab();
+  }
+
+  async function passerProchainBar() {
+    barActuel = Math.min(barActuel + 1, bars.length - 1);
+    try {
+      await fetch(PB_URL + '/api/collections/session_barathon/records/' + session.id, {
+        method:  'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
+        body:    JSON.stringify({ bar_actuel: barActuel }),
+      });
+    } catch (_) {}
+    renderTab();
+    refreshMapMarkers();
+  }
+
+  async function confirmStopSession() {
+    var btn = document.getElementById('stop-modal-confirm');
+    btn.disabled    = true;
+    btn.textContent = 'Arrêt…';
+
+    // 1. Marquer la session comme terminée
+    try {
+      await fetch(PB_URL + '/api/collections/session_barathon/records/' + session.id, {
+        method:  'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
+        body:    JSON.stringify({ etat_session: 'fini' }),
+      });
+    } catch (_) {}
+
+    // 2. Calculer les bonus de fin de session
+    var barsVisited = barActuel + 1;
+    var barsBonus   = barsVisited * 5;
+    var samBonus    = isSam  ? 50 : 0;
+    var hoteBonus   = isHote ? 30 : 0;
+    var totalBonus  = barsBonus + samBonus + hoteBonus;
+
+    // 3. Sauvegarder les bonus sur le compte de l'utilisateur courant
+    if (totalBonus > 0) {
+      try {
+        var userRes  = await fetch(PB_URL + '/api/collections/users/records/' + d.userId, {
+          headers: { Authorization: 'Bearer ' + TOKEN }
+        });
+        var userData = await userRes.json();
+        await fetch(PB_URL + '/api/collections/users/records/' + d.userId, {
+          method:  'PATCH',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
+          body:    JSON.stringify({ points: (userData.points ?? 0) + totalBonus }),
+        });
+      } catch (_) {}
+    }
+
+    // 4. Récupérer les points de chaque membre (à titre info)
+    var memberPoints = [];
+    for (var i = 0; i < amis.length; i++) {
+      try {
+        var r = await fetch(PB_URL + '/api/collections/users/records/' + amis[i].id, {
+          headers: { Authorization: 'Bearer ' + TOKEN }
+        });
+        var u = await r.json();
+        memberPoints.push({ ami: amis[i], points: u.points ?? 0 });
+      } catch (_) {
+        memberPoints.push({ ami: amis[i], points: 0 });
+      }
+    }
+    memberPoints.sort(function(a, b) { return b.points - a.points; });
+
+    // 5. Afficher l'écran de fin
+    document.getElementById('stop-modal').style.display = 'none';
+    showEndScreen(barsBonus, samBonus, hoteBonus, totalBonus, memberPoints);
+  }
+
+  function bonusRow(label, value) {
+    return '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">' +
+      '<p style="color:rgba(247,241,237,0.7);font-size:14px;font-weight:500;margin:0;">' + esc(label) + '</p>' +
+      '<p style="color:white;font-size:14px;font-weight:600;margin:0;">' + esc(value) + '</p>' +
+    '</div>';
+  }
+
+  function showEndScreen(barsBonus, samBonus, hoteBonus, totalBonus, memberPoints) {
+    var bonusHtml =
+      '<div style="background:#252525;border-radius:5px;padding:20px 24px;margin-bottom:28px;">' +
+        '<p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#72c073;margin:0 0 16px;">Vos bonus de fin de session</p>' +
+        bonusRow('Bars visités (' + (barActuel + 1) + ')', '+' + barsBonus + ' pts') +
+        (samBonus  ? bonusRow('Bonus SAM',  '+' + samBonus  + ' pts') : '') +
+        (hoteBonus ? bonusRow('Bonus Hôte', '+' + hoteBonus + ' pts') : '') +
+        '<div style="height:1px;background:rgba(255,255,255,0.1);margin:14px 0;"></div>' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+          '<p style="color:white;font-size:15px;font-weight:600;margin:0;">Total bonus</p>' +
+          '<p style="color:#72c073;font-size:22px;font-weight:700;margin:0;">+' + totalBonus + ' pts</p>' +
+        '</div>' +
+      '</div>';
+
+    var membersHtml = '';
+    if (memberPoints.length) {
+      membersHtml += '<p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:rgba(247,241,237,0.4);margin:0 0 12px;">Classement des membres</p>';
+      membersHtml += memberPoints.map(function(mp, i) {
+        return '<div style="display:flex;align-items:center;gap:12px;background:#2c2c2c;border-radius:5px;padding:12px;margin-bottom:8px;">' +
+          '<span style="color:rgba(247,241,237,0.35);font-size:12px;font-weight:700;width:20px;text-align:center;flex-shrink:0;">' + (i + 1) + '</span>' +
+          '<div style="width:36px;height:36px;flex-shrink:0;border-radius:50%;overflow:hidden;">' + avatarHtml(mp.ami, 36) + '</div>' +
+          '<p style="color:white;font-size:14px;font-weight:500;margin:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(mp.ami.pseudo || (mp.ami.prenom + ' ' + mp.ami.nom).trim() || 'Utilisateur') + '</p>' +
+          '<p style="color:#72c073;font-size:15px;font-weight:700;margin:0;flex-shrink:0;">' + mp.points + ' pts</p>' +
+        '</div>';
+      }).join('');
+    }
+
+    document.getElementById('end-bonus-card').innerHTML  = bonusHtml;
+    document.getElementById('end-members-list').innerHTML = membersHtml;
+    document.getElementById('end-screen').style.display   = 'block';
   }
 
   // ── Modal ────────────────────────────────────────────────────────
@@ -465,10 +761,20 @@ const pageData = JSON.stringify({
     if (!map) return;
     leafletMarkers.forEach(function (m) { m.remove(); });
     leafletMarkers = [];
-    var withCoords = bars.filter(function (b) { return b.lat && b.lon; });
-    withCoords.forEach(function (bar) {
+
+    var barsToShow;
+    if (isEnCours) {
+      var cur = Math.min(barActuel, bars.length - 1);
+      barsToShow = bars.slice(cur, cur + 2);
+    } else {
+      barsToShow = bars;
+    }
+
+    var withCoords = barsToShow.filter(function (b) { return b.lat && b.lon; });
+    withCoords.forEach(function (bar, idx) {
+      var isCurrent = isEnCours && idx === 0;
       var m = L.marker([bar.lat, bar.lon]).addTo(map)
-        .bindPopup('<strong style="color:#347645">' + esc(bar.nom) + '</strong><br>' + esc(bar.adresse));
+        .bindPopup('<strong style="color:' + (isCurrent ? '#72c073' : '#347645') + '">' + esc(bar.nom) + '</strong><br>' + esc(bar.adresse));
       leafletMarkers.push(m);
     });
     if (withCoords.length > 0) {
@@ -486,7 +792,7 @@ const pageData = JSON.stringify({
     btn.addEventListener('click', function () { switchTab(btn.dataset.tab); });
   });
 
-  document.getElementById('btn-add-more').addEventListener('click', function () {
+  document.getElementById('btn-add-more')?.addEventListener('click', function () {
     if (activeTab === 'params') {
       if (!isHote) return;
       if (!paramsEditing) {
@@ -512,6 +818,7 @@ const pageData = JSON.stringify({
     if (activeTab === 'jeux' && !isHote) return;
     openModal(activeTab);
   });
+
   document.getElementById('modal-close').addEventListener('click', closeModal);
   document.getElementById('modal-confirm').addEventListener('click', closeModal);
   document.getElementById('add-modal').addEventListener('click', function (e) { if (e.target === this) closeModal(); });
@@ -522,6 +829,16 @@ const pageData = JSON.stringify({
     document.getElementById('delete-modal').style.display = 'none';
   });
   document.getElementById('delete-modal').addEventListener('click', function (e) {
+    if (e.target === this) this.style.display = 'none';
+  });
+
+  document.getElementById('btn-launch-session')?.addEventListener('click', lancerSession);
+
+  document.getElementById('stop-modal-confirm')?.addEventListener('click', confirmStopSession);
+  document.getElementById('stop-modal-cancel')?.addEventListener('click', function () {
+    document.getElementById('stop-modal').style.display = 'none';
+  });
+  document.getElementById('stop-modal')?.addEventListener('click', function (e) {
     if (e.target === this) this.style.display = 'none';
   });
 
