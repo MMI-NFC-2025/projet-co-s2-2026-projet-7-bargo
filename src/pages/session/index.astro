@@ -46,7 +46,18 @@ const users = usersRaw
     avatar: u.avatar ?? null,
   }));
 
-const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
+let barFavori = [];
+if (userId && token) {
+  const userRes = await fetch(`${PB_URL}/api/collections/users/records/${userId}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  if (userRes.ok) {
+    const user = await userRes.json();
+    barFavori = Array.isArray(user.bar_favori) ? user.bar_favori : [];
+  }
+}
+
+const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId, barFavori });
 ---
 
 <Layout title="Créer un barathon — Bargo">
@@ -200,7 +211,7 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
             style="background:transparent; flex:1; font-size:14px; font-weight:500; outline:none; border:none; color:#1e1e1e;"
             class="placeholder-neutral-500" />
         </div>
-        <button style="background:#347645; height:52px; width:120px; color:white; font-size:14px; font-weight:500; border:none; cursor:pointer; border-radius:2px; flex-shrink:0;">Favoris</button>
+        <button id="btn-favoris-bars" style="background:#347645; height:52px; width:120px; color:white; font-size:14px; font-weight:500; border:none; cursor:pointer; border-radius:2px; flex-shrink:0;">Favoris</button>
       </div>
 
       <div id="bars-list" class="flex flex-col gap-2.5 flex-1"></div>
@@ -290,11 +301,13 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
   var PB_URL   = d.PB_URL;
   var TOKEN    = d.token;
   var USER_ID  = d.userId;
+  var barFavori = d.barFavori || [];
 
   var currentStep  = 1;
   var selectedBars = [];
   var selectedJeux = [];
   var selectedAmis = [];
+  var showFavsOnly = false;
 
   var stepMeta = {
     1: { title: 'Informations<br>de la soiree', progress: 0 },
@@ -385,7 +398,8 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
   function renderBars(q) {
     q = (q || '').toLowerCase();
     var list = document.getElementById('bars-list');
-    var filtered = allBars.filter(function (b) { return !q || b.nom.toLowerCase().includes(q) || b.adresse.toLowerCase().includes(q); });
+    var base = showFavsOnly ? allBars.filter(function (b) { return barFavori.indexOf(b.id) >= 0; }) : allBars;
+    var filtered = base.filter(function (b) { return !q || b.nom.toLowerCase().includes(q) || b.adresse.toLowerCase().includes(q); });
     list.innerHTML = filtered.map(function (bar) {
       var sel = selectedBars.some(function (b) { return b.id === bar.id; });
       return '<div style="display:flex;align-items:center;background:white;border:2px solid #dfdfdf;border-radius:5px;box-shadow:0 4px 4px rgba(0,0,0,0.25);padding:10px;gap:8px;">' +
@@ -545,6 +559,11 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId });
   document.getElementById('search-bars').addEventListener('input',  function () { renderBars(this.value); });
   document.getElementById('search-jeux').addEventListener('input',  function () { renderJeux(this.value); });
   document.getElementById('search-users').addEventListener('input', function () { renderUsers(this.value); });
+  document.getElementById('btn-favoris-bars').addEventListener('click', function () {
+    showFavsOnly = !showFavsOnly;
+    this.style.background = showFavsOnly ? '#094736' : '#347645';
+    renderBars(document.getElementById('search-bars').value);
+  });
 
   refreshCircles();
 })();

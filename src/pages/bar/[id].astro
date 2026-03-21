@@ -3,7 +3,8 @@
 import Layout from '../../layouts/Layout.astro';
 import PbImage from '../../components/PbImage.astro';
 import { getRecord, getImageUrl } from '../../js/backend.js';
-import heartIcon    from '../../assets/icon/heart.svg';
+import heartIcon     from '../../assets/icon/heart.svg';
+import likeFillIcon  from '../../assets/icon/like_fill.svg';
 import partageIcon  from '../../assets/icon/partage.svg';
 import notifIcon    from '../../assets/icon/notifcation.svg';
 import instaIcon    from '../../assets/icon/insta.svg';
@@ -11,10 +12,14 @@ import linkedinIcon from '../../assets/icon/linkedin.svg';
 import discordIcon  from '../../assets/icon/discord.svg';
 import fbIcon       from '../../assets/icon/facebook.svg';
 
+const token  = Astro.cookies.get('pb_token')?.value;
+const userId = Astro.cookies.get('pb_user_id')?.value;
+const isAuth = !!(token && userId);
+
 const { id } = Astro.params;
 if (!id) return Astro.redirect('/bar');
 
-const bar = await getRecord('bar', id);
+const bar = await getRecord('bar', id + '?expand=boison');
 if (!bar || bar.code === 404) return Astro.redirect('/bar');
 
 const jours = [
@@ -54,15 +59,20 @@ const hasMap = lat !== 0 && lon !== 0;
   <!-- Icônes réseaux + actions -->
   <div class="bg-neutral-800 flex items-center justify-between px-5 py-3">
     <div class="flex gap-4">
-      <img src={instaIcon.src}    alt="Instagram" width="22" height="22" class="invert" />
-      <img src={linkedinIcon.src} alt="LinkedIn"  width="22" height="22" class="invert" />
-      <img src={discordIcon.src}  alt="Discord"   width="22" height="22" class="invert" />
-      <img src={fbIcon.src}       alt="Facebook"  width="22" height="22" class="invert" />
+      <img src={instaIcon.src}    alt="Instagram" width="22" height="22" class="brightness-0 invert" />
+      <img src={linkedinIcon.src} alt="LinkedIn"  width="22" height="22" class="brightness-0 invert" />
+      <img src={discordIcon.src}  alt="Discord"   width="22" height="22" class="brightness-0 invert" />
+      <img src={fbIcon.src}       alt="Facebook"  width="22" height="22" class="brightness-0 invert" />
     </div>
     <div class="flex gap-4">
-      <img src={notifIcon.src}   alt="Notifier" width="22" height="22" class="invert" />
-      <img src={partageIcon.src} alt="Partager" width="22" height="22" class="invert" />
-      <img src={heartIcon.src}   alt="Favori"   width="22" height="22" class="invert" />
+      <img src={notifIcon.src}   alt="Notifier" width="22" height="22" class="brightness-0 invert" />
+      <img src={partageIcon.src} alt="Partager" width="22" height="22" class="brightness-0 invert" />
+      {isAuth && (
+        <button class="like-btn-bar p-0 border-0 bg-transparent cursor-pointer" data-id={bar.id} type="button" aria-label="Favori">
+          <img src={heartIcon.src}   alt="" width="22" height="22" class="brightness-0 invert like-empty" />
+          <img src={likeFillIcon.src ?? heartIcon.src} alt="" width="22" height="22" class="hidden like-filled" />
+        </button>
+      )}
     </div>
   </div>
 
@@ -87,12 +97,7 @@ const hasMap = lat !== 0 && lon !== 0;
     </div>
     <div>
       <h3 class="text-white m-0 mb-2">Contact</h3>
-      <p class="text-neutral-300 text-4 font-medium leading-[1.4] m-0">
-        {bar.liens
-          ? <a href={bar.liens} target="_blank" rel="noopener" class="text-primary-500 hover:underline">{bar.liens}</a>
-          : '—'
-        }
-      </p>
+      <p class="text-neutral-300 text-4 font-medium leading-[1.4] m-0">{bar.contact ?? '—'}</p>
     </div>
   </div>
 
@@ -130,17 +135,32 @@ const hasMap = lat !== 0 && lon !== 0;
     )}
   </div>
 
-  <!-- Galerie -->
+  <!-- Galerie photos -->
   {galerie.length > 0 && (
     <div class="px-5 py-6 bg-neutral-200">
       <h2 class="text-black m-0 mb-4 text-7">Galerie</h2>
-      <p class="text-neutral-500 text-3.5 font-medium leading-[1.4] m-0 mb-5">
-        Explorez une sélection variée de cocktails et de bières, idéale pour partager un moment entre amis.
-      </p>
       <div class="grid grid-cols-2 gap-3">
         {galerie.slice(0, 6).map((img) => (
           <div class="h-35 rounded-1.25 overflow-hidden">
             <img src={getImageUrl(bar, img)} alt={bar.nom}
+              class="w-full h-full object-cover" loading="lazy" />
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+
+  <!-- Boissons -->
+  {(bar.expand?.boison ?? []).length > 0 && (
+    <div class="px-5 py-6 bg-neutral-200">
+      <h2 class="text-black m-0 mb-4 text-7">Boissons</h2>
+      <p class="text-neutral-500 text-3.5 font-medium leading-[1.4] m-0 mb-5">
+        Explorez une sélection variée de cocktails et de bières, idéale pour partager un moment entre amis.
+      </p>
+      <div class="grid grid-cols-2 gap-3">
+        {(bar.expand.boison ?? []).map((boisson) => (
+          <div class="h-35 rounded-1.25 overflow-hidden">
+            <img src={getImageUrl(boisson, boisson.img)} alt={boisson.nom}
               class="w-full h-full object-cover" loading="lazy" />
           </div>
         ))}
@@ -171,16 +191,16 @@ const hasMap = lat !== 0 && lon !== 0;
 
   <!-- Icônes réseaux sociaux -->
   <div class="absolute top-112.25 z-2" style="left: calc(83.33% - 17px)">
-    <img src={instaIcon.src}   alt="Instagram" width="24" height="24" class="invert" />
+    <img src={instaIcon.src}   alt="Instagram" width="24" height="24" class="brightness-0 invert" />
   </div>
   <div class="absolute top-112.25 z-2" style="left: calc(83.33% + 32px)">
-    <img src={linkedinIcon.src} alt="LinkedIn" width="24" height="24" class="invert" />
+    <img src={linkedinIcon.src} alt="LinkedIn" width="24" height="24" class="brightness-0 invert" />
   </div>
   <div class="absolute top-112.25 z-2" style="left: calc(91.67% - 39px)">
-    <img src={discordIcon.src}  alt="Discord"   width="24" height="24" class="invert" />
+    <img src={discordIcon.src}  alt="Discord"   width="24" height="24" class="brightness-0 invert" />
   </div>
   <div class="absolute top-112.25 z-2" style="left: calc(91.67% + 10px)">
-    <img src={fbIcon.src}       alt="Facebook"  width="24" height="24" class="invert" />
+    <img src={fbIcon.src}       alt="Facebook"  width="24" height="24" class="brightness-0 invert" />
   </div>
 
   <!-- Actions -->
@@ -196,9 +216,14 @@ const hasMap = lat !== 0 && lon !== 0;
         stroke="#1e1e1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </div>
-  <div class="absolute top-150.5 z-2" style="left: calc(91.67% + 10px)">
-    <img src={heartIcon.src} alt="Favori" width="24" height="24" />
-  </div>
+  {isAuth && (
+    <div class="absolute top-150.5 z-2" style="left: calc(91.67% + 10px)">
+      <button class="like-btn-bar p-0 border-0 bg-transparent cursor-pointer" data-id={bar.id} type="button" aria-label="Favori">
+        <img src={heartIcon.src}    alt="" width="24" height="24" class="like-empty" />
+        <img src={likeFillIcon.src} alt="" width="24" height="24" class="hidden like-filled" />
+      </button>
+    </div>
+  )}
 
   <!-- Description -->
   <p class="absolute top-152.25 left-20 w-183.25 text-neutral-500 text-4 font-medium leading-[1.4] m-0 z-2">
@@ -225,10 +250,7 @@ const hasMap = lat !== 0 && lon !== 0;
   </p>
   <h3 class="absolute top-316.5 left-20 text-white m-0 z-2">Contact</h3>
   <p class="absolute top-330.75 left-20 text-neutral-300 text-4 font-medium leading-[1.4] m-0 z-2">
-    {bar.liens
-      ? <a href={bar.liens} target="_blank" rel="noopener" class="text-primary-500 hover:underline">{bar.liens}</a>
-      : '—'
-    }
+    {bar.contact ?? '—'}
   </p>
 
   <!-- HORAIRES (droite) -->
@@ -271,9 +293,6 @@ const hasMap = lat !== 0 && lon !== 0;
 
   <!-- GALERIE -->
   <h2 class="absolute left-20 text-black m-0 z-2" style="top: 2136px;">Galerie</h2>
-  <p class="absolute left-20 w-101.25 text-neutral-500 text-4 font-medium leading-[1.4] m-0 z-2" style="top: 2223px;">
-    Explorez une sélection variée de cocktails et de bières, idéale pour partager un moment entre amis.
-  </p>
 
   {landscapePhotos.length > 0 ? (
     <>
@@ -321,10 +340,43 @@ const hasMap = lat !== 0 && lon !== 0;
     );
   })}
 
+  <!-- BOISSONS desktop -->
+  {(bar.expand?.boison ?? []).length > 0 && (
+    <>
+      <h2 class="absolute left-20 text-black m-0 z-2" style="top: 3220px;">Boissons</h2>
+      <p class="absolute left-20 w-101.25 text-neutral-500 text-4 font-medium leading-[1.4] m-0 z-2" style="top: 3307px;">
+        Explorez une sélection variée de cocktails et de bières, idéale pour partager un moment entre amis.
+      </p>
+      {(bar.expand.boison ?? []).map((boisson, i) => {
+        const positions = [
+          'left: 80px',
+          'left: calc(25% + 48px)',
+          'left: calc(50% + 16px)',
+          'left: calc(75% - 16px)',
+        ];
+        if (i >= 4) return null;
+        return (
+          <div class="absolute overflow-hidden rounded-1.25 z-2"
+            style={`top: 3407px; ${positions[i]}; width: 296px; height: 310px;`}>
+            <img src={getImageUrl(boisson, boisson.img)} alt={boisson.nom}
+              class="w-full h-full object-cover" loading="lazy" />
+          </div>
+        );
+      })}
+    </>
+  )}
+
 </div><!-- /desktop wrapper -->
 
-</Layout>
+  <script is:inline define:vars={{ token, userId, isAuth }}>
+    if (isAuth) {
+      window.__AUTH__ = { token, userId };
+    }
+  </script>
 
-<script>
-  import '../../js/leaflet-map.js';
-</script>
+  <script>
+    import '../../js/leaflet-map.js';
+    import '../../js/like.js';
+  </script>
+
+</Layout>

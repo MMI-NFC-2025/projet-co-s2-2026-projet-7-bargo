@@ -1,12 +1,8 @@
 (function () {
-  function getCookie(name) {
-    var v = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/([.*+?^=!:${}()|[\]/\\])/g, '\\$1') + '=([^;]*)'));
-    return v ? decodeURIComponent(v[1]) : null;
-  }
-
   var PB_URL = 'https://pbbargo.pierre-mouilleseaux-lhuillier.fr';
-  var token  = getCookie('pb_token');
-  var userId = getCookie('pb_user_id');
+  var auth   = window.__AUTH__ || {};
+  var token  = auth.token  || null;
+  var userId = auth.userId || null;
 
   // Cache des favoris en mémoire pour éviter des fetch répétés
   var favs = { bar_favori: [], jeux_favori: [] };

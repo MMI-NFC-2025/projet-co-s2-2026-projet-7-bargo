@@ -1,9 +1,29 @@
 // @ts-nocheck
 // Landing page — formulaire d'inscription section "Intéressé ?"
 
-var btn = document.getElementById('lp-reg-btn');
-var msg = document.getElementById('lp-reg-msg');
+var btn    = document.getElementById('lp-reg-btn');
+var msg    = document.getElementById('lp-reg-msg');
+var inputs = ['lp-reg-pseudo', 'lp-reg-email', 'lp-reg-password', 'lp-reg-confirm'].map(id => document.getElementById(id));
+var cguEl  = document.getElementById('lp-reg-cgu');
 if (!btn) throw new Error('lp-reg-btn not found');
+
+function checkReady() {
+  var allFilled = inputs.every(function(el) { return el && el.value.trim().length > 0; });
+  var pwdMatch  = inputs[2] && inputs[3] && inputs[2].value === inputs[3].value && inputs[2].value.length >= 8;
+  var cguOk     = cguEl && cguEl.checked;
+  if (allFilled && pwdMatch && cguOk) {
+    btn.style.background  = '#72C073';
+    btn.style.borderColor = '#72C073';
+    btn.style.color       = '#fff';
+  } else {
+    btn.style.background  = '';
+    btn.style.borderColor = '';
+    btn.style.color       = '';
+  }
+}
+
+inputs.forEach(function(el) { if (el) el.addEventListener('input', checkReady); });
+if (cguEl) cguEl.addEventListener('change', checkReady);
 
 function showMsg(text, ok) {
   msg.textContent = text;

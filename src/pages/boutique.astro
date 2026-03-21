@@ -20,7 +20,9 @@ const totalPages  = Math.ceil((data.totalItems ?? 0) / perPage);
 // Points utilisateur (si connecté)
 const userId = Astro.cookies.get('pb_user_id')?.value;
 const token  = Astro.cookies.get('pb_token')?.value;
+const isAuth = !!(userId && token);
 let userPoints = null;
+let userItemsFavori = [];
 if (userId && token) {
   const userRes = await fetch(`${PB_URL}/api/collections/users/records/${userId}`, {
     headers: { Authorization: `Bearer ${token}` }
@@ -28,6 +30,7 @@ if (userId && token) {
   if (userRes.ok) {
     const user = await userRes.json();
     userPoints = user.points ?? 0;
+    userItemsFavori = Array.isArray(user.items_favori) ? user.items_favori : [];
   }
 }
 
@@ -114,10 +117,12 @@ function pageUrl(p) {
                 <!-- Ligne points + like -->
                 <div class="absolute top-48.75 lg:top-59.75 left-4 lg:left-7.25 right-4 lg:right-6.75 flex items-center justify-between">
                   <h3 class="m-0 text-black text-4 lg:text-6.25">{produit.prix} pts</h3>
-                  <button class="like-btn" data-id={produit.id} type="button">
-                    <img src={likeIcon.src} alt="Ajouter aux favoris" class="like-empty size-5 lg:size-6" />
-                    <img src={likeFillIcon.src} alt="Retirer des favoris" class="like-filled size-5 lg:size-6 hidden" />
-                  </button>
+                  {isAuth && (
+                    <button class="like-btn-item p-0 border-0 bg-transparent cursor-pointer" data-id={produit.id} type="button" aria-label="Favori">
+                      <img src={likeIcon.src}     alt="" class={`like-empty size-5 lg:size-6 ${userItemsFavori.includes(produit.id) ? 'hidden' : ''}`} />
+                      <img src={likeFillIcon.src} alt="" class={`like-filled size-5 lg:size-6 ${userItemsFavori.includes(produit.id) ? '' : 'hidden'}`} />
+                    </button>
+                  )}
                 </div>
 
                 <!-- Bouton Acheter -->
@@ -170,6 +175,11 @@ function pageUrl(p) {
 
   </div>
 
+  <script is:inline define:vars={{ token, userId, isAuth }}>
+    if (isAuth) {
+      window.__AUTH__ = { token, userId };
+    }
+  </script>
   <script>
     import '../js/boutique.js';
   </script>

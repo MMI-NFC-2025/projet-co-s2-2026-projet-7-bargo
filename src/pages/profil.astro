@@ -3,6 +3,7 @@
 import Layout from '../layouts/Layout.astro';
 import { getUserAuth, updateUser, deleteUser, getCollection, getImageUrl } from '../js/backend.js';
 import PbImage from '../components/PbImage.astro';
+import heartIcon    from '../assets/icon/like.svg';
 import likeFillIcon from '../assets/icon/like_fill.svg';
 
 // Auth guard
@@ -101,13 +102,13 @@ try {
   });
 } catch {}
 
-// Bar favori
-let barFavori = null;
+// Bars favoris (tous)
+let barsFavori = [];
 try {
-  const barFavoriId = Array.isArray(user.bar_favori) ? user.bar_favori[0] : user.bar_favori;
-  if (barFavoriId) {
-    const bars = await getCollection('bar', { filter: `id = "${barFavoriId}"`, perPage: 1 });
-    if (bars.length > 0) barFavori = bars[0];
+  const favIds = Array.isArray(user.bar_favori) ? user.bar_favori : [];
+  if (favIds.length > 0) {
+    const filterStr = favIds.map(id => `id="${id}"`).join('||');
+    barsFavori = await getCollection('bar', { filter: filterStr, perPage: 200 });
   }
 } catch {}
 
@@ -390,21 +391,24 @@ const displayName = user.prenom
             </div>
 
             <!-- Grille favoris -->
-            {barFavori ? (
+            {barsFavori.length > 0 ? (
               <div class="grid grid-cols-1 lg:grid-cols-3 gap-8.25">
-                <div class="relative bg-white rounded-0.5 h-87.75 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
-                  <div class="absolute top-0 left-0 right-0 h-50 overflow-hidden rounded-tl-0.5 rounded-tr-0.5">
-                    <PbImage record={barFavori} recordImage={barFavori.img?.[0]} width={280} height={200} class="w-full h-full object-cover" />
+                {barsFavori.map(bar => (
+                  <div class="relative bg-white rounded-0.5 h-87.75 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
+                    <div class="absolute top-0 left-0 right-0 h-50 overflow-hidden rounded-tl-0.5 rounded-tr-0.5">
+                      <PbImage record={bar} recordImage={bar.img?.[0]} width={280} height={200} class="w-full h-full object-cover" />
+                    </div>
+                    <h3 class="absolute top-52.5 left-4.75 right-4.75 m-0 text-black">{bar.nom}</h3>
+                    <button class="like-btn-bar absolute bottom-5.25 right-5.25 w-6 h-6 flex items-center justify-center bg-transparent border-0 cursor-pointer p-0" data-id={bar.id} type="button" aria-label="Retirer des favoris">
+                      <img src={heartIcon.src}    alt="" width="24" height="24" class="like-empty hidden" />
+                      <img src={likeFillIcon.src} alt="" width="24" height="24" class="like-filled" />
+                    </button>
+                    <a href={`/bar/${bar.id}`}
+                      class="absolute bottom-5.25 left-4.75 w-37.5 h-11 bg-neutral-800 flex items-center justify-center text-white text-4 font-medium hover:opacity-80 transition-opacity">
+                      En savoir plus
+                    </a>
                   </div>
-                  <h3 class="absolute top-52.5 left-4.75 right-4.75 m-0 text-black">{barFavori.nom}</h3>
-                  <div class="absolute bottom-5.25 right-5.25 w-6 h-6 flex items-center justify-center">
-                    <img src={heartIcon.src} alt="" width="24" height="24" />
-                  </div>
-                  <a href={`/bar/${barFavori.id}`}
-                    class="absolute bottom-5.25 left-4.75 w-37.5 h-11 bg-neutral-800 flex items-center justify-center text-white text-4 font-medium hover:opacity-80 transition-opacity">
-                    En savoir plus
-                  </a>
-                </div>
+                ))}
               </div>
             ) : (
               <p class="text-neutral-500 text-4 font-medium m-0">Aucun favori pour l'instant.</p>
@@ -564,7 +568,14 @@ const displayName = user.prenom
 
   </section>
 
+  <script is:inline define:vars={{ token, userId }}>
+    if (token && userId) {
+      window.__AUTH__ = { token, userId };
+    }
+  </script>
+
   <script>
     import '../js/profil.js';
+    import '../js/like.js';
   </script>
 </Layout>

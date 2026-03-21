@@ -1,27 +1,65 @@
 // @ts-nocheck
-// Boutique — toggle like (persisté en localStorage)
+// Boutique — toggle like items_favori dans PocketBase
 
-document.querySelectorAll('.like-btn').forEach(btn => {
-  const id = btn.dataset.id;
-  const emptyIcon  = btn.querySelector('.like-empty');
-  const filledIcon = btn.querySelector('.like-filled');
+(function () {
+  var PB_URL = 'https://pbbargo.pierre-mouilleseaux-lhuillier.fr';
+  var auth   = window.__AUTH__ || {};
+  var token  = auth.token  || null;
+  var userId = auth.userId || null;
 
-  // Restaurer l'état sauvegardé
-  if (localStorage.getItem(`like_boutique_${id}`) === '1') {
-    emptyIcon?.classList.add('hidden');
-    filledIcon?.classList.remove('hidden');
+  var favs = [];
+
+  function initBtns() {
+    document.querySelectorAll('.like-btn-item').forEach(function (btn) {
+      var id       = btn.dataset.id;
+      var emptyEl  = btn.querySelector('.like-empty');
+      var filledEl = btn.querySelector('.like-filled');
+
+      if (favs.indexOf(id) >= 0) {
+        emptyEl  && emptyEl.classList.add('hidden');
+        filledEl && filledEl.classList.remove('hidden');
+      }
+
+      btn.addEventListener('click', function () {
+        toggleLike(id, emptyEl, filledEl);
+      });
+    });
   }
 
-  btn.addEventListener('click', () => {
-    const isLiked = localStorage.getItem(`like_boutique_${id}`) === '1';
-    if (isLiked) {
-      localStorage.removeItem(`like_boutique_${id}`);
-      emptyIcon?.classList.remove('hidden');
-      filledIcon?.classList.add('hidden');
+  function toggleLike(itemId, emptyEl, filledEl) {
+    var idx     = favs.indexOf(itemId);
+    var updated;
+    if (idx >= 0) {
+      updated = favs.filter(function (id) { return id !== itemId; });
+      emptyEl  && emptyEl.classList.remove('hidden');
+      filledEl && filledEl.classList.add('hidden');
     } else {
-      localStorage.setItem(`like_boutique_${id}`, '1');
-      emptyIcon?.classList.add('hidden');
-      filledIcon?.classList.remove('hidden');
+      updated = favs.concat([itemId]);
+      emptyEl  && emptyEl.classList.add('hidden');
+      filledEl && filledEl.classList.remove('hidden');
     }
-  });
-});
+    favs = updated;
+
+    if (!token || !userId) return;
+
+    fetch(PB_URL + '/api/collections/users/records/' + userId, {
+      method:  'PATCH',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body:    JSON.stringify({ items_favori: updated }),
+    }).catch(function () {
+      favs = idx >= 0 ? favs.concat([itemId]) : favs.filter(function(id) { return id !== itemId; });
+    });
+  }
+
+  if (token && userId) {
+    fetch(PB_URL + '/api/collections/users/records/' + userId, {
+      headers: { Authorization: 'Bearer ' + token },
+    })
+    .then(function (r) { return r.ok ? r.json() : {}; })
+    .then(function (user) {
+      favs = Array.isArray(user.items_favori) ? user.items_favori : [];
+      initBtns();
+    })
+    .catch(initBtns);
+  }
+})();
