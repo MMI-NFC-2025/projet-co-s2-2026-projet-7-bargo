@@ -4,8 +4,7 @@
   var token  = auth.token  || null;
   var userId = auth.userId || null;
 
-  // Cache des favoris en mémoire pour éviter des fetch répétés
-  var favs = { bar_favori: [], jeux_favori: [] };
+  var favs = { bar_favori: [], jeux_favori: [], items_favori: [] };
 
   // ── Init tous les boutons ───────────────────────────────────────
   function initBtns() {
@@ -32,6 +31,19 @@
       }
       btn.addEventListener('click', function () {
         toggleLike('jeux_favori', id, emptyEl, filledEl);
+      });
+    });
+
+    document.querySelectorAll('.like-btn-item').forEach(function (btn) {
+      var id       = btn.dataset.id;
+      var emptyEl  = btn.querySelector('.like-empty');
+      var filledEl = btn.querySelector('.like-filled');
+      if (favs.items_favori.indexOf(id) >= 0) {
+        emptyEl  && emptyEl.classList.add('hidden');
+        filledEl && filledEl.classList.remove('hidden');
+      }
+      btn.addEventListener('click', function () {
+        toggleLike('items_favori', id, emptyEl, filledEl);
       });
     });
   }
@@ -82,8 +94,9 @@
     })
     .then(function (r) { return r.ok ? r.json() : {}; })
     .then(function (user) {
-      favs.bar_favori  = Array.isArray(user.bar_favori)  ? user.bar_favori  : [];
-      favs.jeux_favori = Array.isArray(user.jeux_favori) ? user.jeux_favori : [];
+      favs.bar_favori   = Array.isArray(user.bar_favori)   ? user.bar_favori   : [];
+      favs.jeux_favori  = Array.isArray(user.jeux_favori)  ? user.jeux_favori  : [];
+      favs.items_favori = Array.isArray(user.items_favori) ? user.items_favori : [];
       initBtns();
     })
     .catch(initBtns);
