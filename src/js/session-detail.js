@@ -294,15 +294,21 @@
         body: JSON.stringify({ etat_session: 'fini' }),
       });
     } catch (_) {}
-    var barsVisited = barActuel + 1;
-    var barsBonus   = barsVisited * 5;
-    var samBonus    = isSam  ? 50 : 0;
-    var hoteBonus   = isHote ? 30 : 0;
-    var totalBonus  = barsBonus + samBonus + hoteBonus;
-    if (totalBonus > 0) {
+    var barsVisited  = barActuel + 1;
+    var barsBonus    = barsVisited * 5;
+    var samBonus     = isSam  ? 50 : 0;
+    var hoteBonus    = isHote ? 30 : 0;
+    var baseBonus    = barsBonus + samBonus + hoteBonus;
+    var abonnements  = 'Gratuit';
+    var multiplier   = 1;
+    var totalBonus   = baseBonus;
+    if (baseBonus > 0) {
       try {
         var userRes  = await fetch(PB_URL + '/api/collections/users/records/' + d.userId, { headers: { Authorization: 'Bearer ' + TOKEN } });
         var userData = await userRes.json();
+        abonnements  = userData.abonnements ?? 'Gratuit';
+        multiplier   = abonnements === 'Premium' ? 5 : abonnements === 'VIP' ? 2 : 1;
+        totalBonus   = baseBonus * multiplier;
         await fetch(PB_URL + '/api/collections/users/records/' + d.userId, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
@@ -320,16 +326,16 @@
     }
     memberPoints.sort(function(a, b) { return b.points - a.points; });
     document.getElementById('stop-modal').style.display = 'none';
-    showEndScreen(barsBonus, samBonus, hoteBonus, totalBonus, memberPoints);
+    var abonnLabel = abonnements !== 'Gratuit' ? abonnements : null;
+    showEndScreen(baseBonus, totalBonus, memberPoints, abonnLabel, multiplier);
   }
 
-  function showEndScreen(barsBonus, samBonus, hoteBonus, totalBonus, memberPoints) {
+  function showEndScreen(baseBonus, totalBonus, memberPoints, abonnLabel, multiplier) {
     var bonusHtml =
       '<div style="background:#252525;border-radius:5px;padding:20px 24px;margin-bottom:28px;">' +
         '<p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#72c073;margin:0 0 16px;">Vos bonus de fin de session</p>' +
-        bonusRow('Bars visités (' + (barActuel + 1) + ')', '+' + barsBonus + ' pts') +
-        (samBonus  ? bonusRow('Bonus SAM',  '+' + samBonus  + ' pts') : '') +
-        (hoteBonus ? bonusRow('Bonus Hôte', '+' + hoteBonus + ' pts') : '') +
+        bonusRow('Bars visités (' + (barActuel + 1) + ')', '+' + baseBonus + ' pts') +
+        (abonnLabel ? bonusRow('Multiplicateur ' + abonnLabel + ' (×' + multiplier + ')', '×' + multiplier) : '') +
         '<div style="height:1px;background:rgba(255,255,255,0.1);margin:14px 0;"></div>' +
         '<div style="display:flex;justify-content:space-between;align-items:center;">' +
           '<p style="color:white;font-size:15px;font-weight:600;margin:0;">Total bonus</p>' +

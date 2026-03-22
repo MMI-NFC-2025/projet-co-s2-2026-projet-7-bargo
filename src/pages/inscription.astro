@@ -32,7 +32,7 @@ if (Astro.request.method === 'POST') {
     error = 'Le mot de passe doit contenir au moins 8 caractères.';
   } else {
     const { record, error: pbError } = await registerUser({
-      nom, prenom, pseudo, email, password, passwordConfirm
+      nom, prenom, pseudo, email, password, passwordConfirm, abonnements: 'Gratuit'
     });
 
     if (record) {

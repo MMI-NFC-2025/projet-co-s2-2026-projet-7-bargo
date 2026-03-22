@@ -8,6 +8,8 @@ import likeFillIcon from '../../assets/icon/like_fill.svg';
 import instaIcon    from '../../assets/icon/insta.svg';
 import facebookIcon from '../../assets/icon/facebook.svg';
 import discordIcon  from '../../assets/icon/discord.svg';
+import badgeVip     from '../../assets/icon/badge_vip.svg';
+import badgePremium from '../../assets/icon/badge_pernuim.svg';
 
 // Auth guard
 const token  = Astro.cookies.get('pb_token')?.value;
@@ -147,7 +149,7 @@ const amiesIds    = Array.isArray(user.amies) ? user.amies : [];
 const amiesExpand = (user.expand?.amies ?? []).map(u => ({
   id: u.id, collectionName: u.collectionName,
   pseudo: u.pseudo ?? '', prenom: u.prenom ?? '', nom: u.nom ?? '',
-  avatar: u.avatar ?? null,
+  avatar: u.avatar ?? null, abonnements: u.abonnements ?? 'Gratuit',
 }));
 
 // Tous les utilisateurs pour le modal ami (exclure soi-même)
@@ -201,7 +203,11 @@ const displayName = user.prenom
         }
       </div>
       <h2 class="text-black m-0 mt-4 text-center text-7">{displayName}</h2>
-      <h3 class="m-0 mt-1 text-primary-500 text-center">{user.pseudo ?? ''}</h3>
+      <div class="flex items-center justify-center gap-2 mt-1">
+        <h3 class="m-0 text-primary-500">{user.pseudo ?? ''}</h3>
+        {user.abonnements === 'VIP'     && <img src={badgeVip.src}     alt="VIP"     width="24" height="24" />}
+        {user.abonnements === 'Premium' && <img src={badgePremium.src} alt="Premium" width="24" height="24" />}
+      </div>
       <p class="m-0 mt-2 text-center text-neutral-800 text-4 font-medium">{amiesIds.length} ami(e)s</p>
       <div class="mt-3 h-12.5 bg-primary-900 rounded-1.25 flex items-center justify-center gap-4">
         <h3 class="text-white m-0">Points :</h3>
@@ -235,10 +241,11 @@ const displayName = user.prenom
         {displayName}
       </h2>
       <!-- Pseudo -->
-      <h3 class="absolute m-0 text-primary-500"
-        style="left: calc(16.67% + 59px); top: 185px;">
-        {user.pseudo ?? ''}
-      </h3>
+      <div class="absolute flex items-center gap-2" style="left: calc(16.67% + 59px); top: 185px;">
+        <h3 class="m-0 text-primary-500">{user.pseudo ?? ''}</h3>
+        {user.abonnements === 'VIP'     && <img src={badgeVip.src}     alt="VIP"     width="28" height="28" />}
+        {user.abonnements === 'Premium' && <img src={badgePremium.src} alt="Premium" width="28" height="28" />}
+      </div>
       <!-- Ami(e)s -->
       <p class="absolute m-0 text-neutral-800 text-4 font-medium leading-[1.4]"
         style="left: calc(33.33% + 79px); top: 198px;">
@@ -298,7 +305,11 @@ const displayName = user.prenom
                     }
                   </div>
                   <div class="min-w-0">
-                    <p class="text-white font-bold text-4 m-0 truncate">{ami.pseudo || ''}</p>
+                    <div class="flex items-center gap-1.5">
+                      <p class="text-white font-bold text-4 m-0 truncate">{ami.pseudo || ''}</p>
+                      {ami.abonnements === 'VIP'     && <img src={badgeVip.src}     alt="VIP"     width="18" height="18" class="shrink-0" />}
+                      {ami.abonnements === 'Premium' && <img src={badgePremium.src} alt="Premium" width="18" height="18" class="shrink-0" />}
+                    </div>
                     <p class="text-neutral-300 text-3.5 font-medium m-0 truncate">{`${ami.prenom ?? ''} ${ami.nom ?? ''}`.trim()}</p>
                   </div>
                 </a>

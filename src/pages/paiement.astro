@@ -3,8 +3,14 @@
 import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import bgImg from '../assets/img/fond_connextion_inscription.avif';
+import { PB_URL } from '../js/backend.js';
 
 const planId = Astro.url.searchParams.get('plan') ?? 'vip';
+const token  = Astro.cookies.get('pb_token')?.value ?? null;
+const userId = Astro.cookies.get('pb_user_id')?.value ?? null;
+
+// Correspondance plan → valeur PocketBase
+const planPbValue = { vip: 'VIP', premium: 'Premium' };
 
 const plans = {
   vip: {
@@ -313,7 +319,7 @@ const plan = plans[planId] ?? plans.vip;
 
 </Layout>
 
-<script is:inline>
+<script is:inline define:vars={{ PB_URL, token, userId, planPbValue, planId }}>
 (function () {
   document.getElementById('demo-close').addEventListener('click', function () {
     document.getElementById('demo-overlay').style.display = 'none';
@@ -341,11 +347,24 @@ const plan = plans[planId] ?? plans.vip;
   ['card-expiry','card-expiry-m'].forEach(function(id) { var el = document.getElementById(id); if (el) fmtExpiry(el); });
   ['card-cvv','card-cvv-m'].forEach(function(id)    { var el = document.getElementById(id); if (el) fmtCvv(el); });
 
+  async function updateAbonnement() {
+    var newPlan = planPbValue[planId];
+    if (!newPlan || !token || !userId) return;
+    try {
+      await fetch(PB_URL + '/api/collections/users/records/' + userId, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+        body: JSON.stringify({ abonnements: newPlan }),
+      });
+    } catch (_) {}
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     var btn = document.getElementById('btn-pay');
     if (btn) { btn.disabled = true; btn.textContent = 'Traitement…'; }
-    setTimeout(function () {
+    setTimeout(async function () {
+      await updateAbonnement();
       document.getElementById('success-overlay').style.display = 'flex';
     }, 1500);
   }
