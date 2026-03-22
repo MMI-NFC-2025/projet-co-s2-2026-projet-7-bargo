@@ -1,13 +1,13 @@
 ---
 // @ts-nocheck
-import Layout from '../layouts/Layout.astro';
-import { getUserAuth, updateUser, deleteUser, getCollection, getImageUrl, PB_URL } from '../js/backend.js';
-import PbImage from '../components/PbImage.astro';
-import heartIcon    from '../assets/icon/like.svg';
-import likeFillIcon from '../assets/icon/like_fill.svg';
-import instaIcon    from '../assets/icon/insta.svg';
-import facebookIcon from '../assets/icon/facebook.svg';
-import discordIcon  from '../assets/icon/discord.svg';
+import Layout from '../../layouts/Layout.astro';
+import { getUserAuth, updateUser, deleteUser, getCollection, getImageUrl, PB_URL } from '../../js/backend.js';
+import PbImage from '../../components/PbImage.astro';
+import heartIcon    from '../../assets/icon/like.svg';
+import likeFillIcon from '../../assets/icon/like_fill.svg';
+import instaIcon    from '../../assets/icon/insta.svg';
+import facebookIcon from '../../assets/icon/facebook.svg';
+import discordIcon  from '../../assets/icon/discord.svg';
 
 // Auth guard
 const token  = Astro.cookies.get('pb_token')?.value;
@@ -122,6 +122,20 @@ try {
     barsFavori = await getCollection('bar', { filter: filterStr, perPage: 200 });
   }
 } catch {}
+
+// Jeux favoris (expand via getUserAuth)
+const jeuxFavori = (user.expand?.jeux_favori ?? []);
+
+// Boissons favorites (expand via getUserAuth)
+const boissonsFavori = (user.expand?.boisson_favori ?? []);
+
+// Invitations de session entrantes
+const demandeSession = (user.expand?.demande_session ?? []).map(s => ({
+  id: s.id,
+  nom: s.nom ?? 'Session sans nom',
+  date: s.date_session ?? null,
+  hote: s.id_hote ?? null,
+}));
 
 // Demandes d'amis entrantes (expand already done in getUserAuth)
 const demandeAmies = (user.expand?.demande_amies ?? []).map(u => ({
@@ -274,7 +288,7 @@ const displayName = user.prenom
           {amiesExpand.length > 0 && (
             <div class="flex flex-col gap-5 mt-3">
               {amiesExpand.map(ami => (
-                <div class="flex items-center gap-4">
+                <a href={`/profil/${ami.id}`} class="flex items-center gap-4 no-underline hover:opacity-80 transition-opacity">
                   <div class="w-16 h-16 rounded-full overflow-hidden shrink-0">
                     {ami.avatar
                       ? <img src={getImageUrl(ami, ami.avatar)} alt={ami.pseudo} class="w-full h-full object-cover" />
@@ -287,7 +301,7 @@ const displayName = user.prenom
                     <p class="text-white font-bold text-4 m-0 truncate">{ami.pseudo || ''}</p>
                     <p class="text-neutral-300 text-3.5 font-medium m-0 truncate">{`${ami.prenom ?? ''} ${ami.nom ?? ''}`.trim()}</p>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
           )}
@@ -299,25 +313,24 @@ const displayName = user.prenom
 
         <!-- BARRE D'ONGLETS BLANCHE -->
         <div class="bg-white flex flex-wrap items-stretch px-4 lg:px-20 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] min-h-16 lg:h-25">
-          <div class="flex items-stretch overflow-x-auto">
+          <div id="tab-list" class="relative flex items-stretch h-full overflow-x-auto">
             <button data-tab="profil"
-              class="tab-btn px-4 lg:px-6.25 text-3.5 lg:text-4 font-medium text-black border-b-1.75 border-transparent hover:border-neutral-300 transition-colors cursor-pointer bg-transparent whitespace-nowrap"
-              style={activeTab === 'profil' ? 'border-bottom-color: #72c073;' : ''}>
+              class="tab-btn px-4 lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap">
               Mon profil
             </button>
             <button data-tab="notifications"
-              class="tab-btn px-4 lg:px-6.25 text-3.5 lg:text-4 font-medium text-black border-b-1.75 border-transparent hover:border-neutral-300 transition-colors cursor-pointer bg-transparent inline-flex items-center gap-2 whitespace-nowrap"
-              style={activeTab === 'notifications' ? 'border-bottom-color: #72c073;' : ''}>
+              class="tab-btn px-4 lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 inline-flex items-center gap-2 whitespace-nowrap">
               Notifications
-              {(unreadNotifs + demandeAmies.length) > 0 && (
-                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white text-2.75 font-bold">{unreadNotifs + demandeAmies.length}</span>
+              {(unreadNotifs + demandeAmies.length + demandeSession.length) > 0 && (
+                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white text-2.75 font-bold">{unreadNotifs + demandeAmies.length + demandeSession.length}</span>
               )}
             </button>
             <button data-tab="parametres"
-              class="tab-btn px-4 lg:px-6.25 text-3.5 lg:text-4 font-medium text-black border-b-1.75 border-transparent hover:border-neutral-300 transition-colors cursor-pointer bg-transparent whitespace-nowrap"
-              style={activeTab === 'parametres' ? 'border-bottom-color: #72c073;' : ''}>
+              class="tab-btn px-4 lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap">
               Paramètres
             </button>
+            <!-- Trait animé -->
+            <div id="tab-indicator" class="absolute bottom-0 h-1 rounded-full" style="background:#72c073; transition: left 0.3s cubic-bezier(.4,0,.2,1), width 0.3s cubic-bezier(.4,0,.2,1); left:0; width:0;"></div>
           </div>
 
           <!-- Editer / Annuler (desktop only) -->
@@ -472,6 +485,7 @@ const displayName = user.prenom
             </div>
 
             <!-- Grille favoris -->
+            <!-- Bars favoris -->
             {barsFavori.length > 0 ? (
               <div class="grid grid-cols-1 lg:grid-cols-3 gap-8.25">
                 {barsFavori.map(bar => (
@@ -492,7 +506,60 @@ const displayName = user.prenom
                 ))}
               </div>
             ) : (
-              <p class="text-neutral-500 text-4 font-medium m-0">Aucun favori pour l'instant.</p>
+              <p class="text-neutral-500 text-4 font-medium m-0">Aucun bar favori pour l'instant.</p>
+            )}
+
+            <!-- H2 Jeux favoris + ligne décorative -->
+            <div class="flex items-center gap-7.5 mt-20 mb-14">
+              <h2 class="text-black m-0 shrink-0">Jeux favoris</h2>
+              <div class="flex-1 h-0.5 bg-neutral-300"></div>
+            </div>
+
+            {jeuxFavori.length > 0 ? (
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-8.25">
+                {jeuxFavori.map(jeu => {
+                  const imgFile = Array.isArray(jeu.img) ? jeu.img[0] : jeu.img;
+                  return (
+                    <div class="relative bg-white rounded-0.5 h-87.75 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
+                      <div class="absolute top-0 left-0 right-0 h-50 overflow-hidden rounded-tl-0.5 rounded-tr-0.5">
+                        <PbImage record={jeu} recordImage={imgFile} width={280} height={200} class="w-full h-full object-cover" />
+                      </div>
+                      <h3 class="absolute top-52.5 left-4.75 right-4.75 m-0 text-black">{jeu.nom}</h3>
+                      <button class="like-btn-jeux absolute bottom-5.25 right-5.25 w-6 h-6 flex items-center justify-center bg-transparent border-0 cursor-pointer p-0" data-id={jeu.id} type="button" aria-label="Retirer des favoris">
+                        <img src={heartIcon.src}    alt="" width="24" height="24" class="like-empty hidden" />
+                        <img src={likeFillIcon.src} alt="" width="24" height="24" class="like-filled" />
+                      </button>
+                      <a href="/jeux"
+                        class="absolute bottom-5.25 left-4.75 w-37.5 h-11 bg-neutral-800 flex items-center justify-center text-white text-4 font-medium hover:opacity-80 transition-opacity">
+                        Voir les jeux
+                      </a>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p class="text-neutral-500 text-4 font-medium m-0">Aucun jeu favori pour l'instant.</p>
+            )}
+
+            <!-- H2 Boissons favorites + ligne décorative -->
+            <div class="flex items-center gap-7.5 mt-20 mb-14">
+              <h2 class="text-black m-0 shrink-0">Boissons favorites</h2>
+              <div class="flex-1 h-0.5 bg-neutral-300"></div>
+            </div>
+
+            {boissonsFavori.length > 0 ? (
+              <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
+                {boissonsFavori.map(b => (
+                  <div class="flex flex-col gap-2">
+                    <div class="h-40 lg:h-50 rounded-1.25 overflow-hidden shadow-[0px_4px_4px_0px_rgba(0,0,0,0.15)]">
+                      <img src={getImageUrl(b, b.img)} alt={b.nom} class="w-full h-full object-cover" loading="lazy" />
+                    </div>
+                    <p class="text-black text-4 font-medium m-0 text-center">{b.nom}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p class="text-neutral-500 text-4 font-medium m-0">Aucune boisson favorite pour l'instant.</p>
             )}
 
           </div>
@@ -529,6 +596,38 @@ const displayName = user.prenom
                       <div class="flex gap-2 shrink-0">
                         <button class="friend-accept bg-primary-600 text-white text-3.5 font-medium px-4 py-2 cursor-pointer border-0 rounded hover:opacity-90 transition-opacity">Accepter</button>
                         <button class="friend-refuse border-2 border-neutral-300 text-neutral-500 text-3.5 font-medium px-4 py-2 cursor-pointer bg-transparent rounded hover:border-neutral-500 transition-colors">Refuser</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {demandeSession.length > 0 && (
+              <div id="session-requests-section" class="mb-8">
+                <h3 class="text-black m-0 mb-5">Invitations de session ({demandeSession.length})</h3>
+                <div class="flex flex-col gap-3">
+                  {demandeSession.map(s => (
+                    <div class="session-invite-item flex items-center gap-4 p-5 bg-white rounded-2.5 border-0.75 border-primary-500" data-session-id={s.id}>
+                      <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 bg-primary-900">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round">
+                          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                          <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+                        </svg>
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <p class="text-4 font-medium text-black m-0">
+                          Invitation au barathon <strong>{s.nom}</strong>
+                        </p>
+                        {s.date && (
+                          <p class="text-sm text-neutral-500 m-0 mt-0.5">
+                            {new Date(s.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                          </p>
+                        )}
+                      </div>
+                      <div class="flex gap-2 shrink-0">
+                        <button class="session-invite-accept bg-primary-600 text-white text-3.5 font-medium px-4 py-2 cursor-pointer border-0 rounded hover:opacity-90 transition-opacity" data-session-href={`/session/${s.id}`}>Accepter</button>
+                        <button class="session-invite-refuse border-2 border-neutral-300 text-neutral-500 text-3.5 font-medium px-4 py-2 cursor-pointer bg-transparent rounded hover:border-neutral-500 transition-colors">Refuser</button>
                       </div>
                     </div>
                   ))}
@@ -695,15 +794,16 @@ const displayName = user.prenom
 
   <script id="friend-data" type="application/json" set:html={JSON.stringify({ allUsers, amiesIds, userId, token, PB_URL })}></script>
 
-  <script is:inline define:vars={{ token, userId }}>
+  <script is:inline define:vars={{ token, userId, activeTab }}>
     if (token && userId) {
       window.__AUTH__ = { token, userId };
     }
+    window.__ACTIVE_TAB__ = activeTab;
   </script>
 
   <script>
-    import '../js/profil.js';
-    import '../js/like.js';
-    import '../js/amis.js';
+    import '../../js/profil.js';
+    import '../../js/like.js';
+    import '../../js/amis.js';
   </script>
 </Layout>

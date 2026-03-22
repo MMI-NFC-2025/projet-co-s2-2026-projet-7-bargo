@@ -1,0 +1,44 @@
+---
+// @ts-nocheck
+const { session, isHote, isEnCours } = Astro.props;
+---
+
+<div class="w-full lg:w-115 lg:shrink-0 flex flex-col lg:h-[calc(100vh-92px)] overflow-hidden" style="background:#1e1e1e;">
+
+  <!-- Session info -->
+  <div class="px-7 pt-6 pb-4.5" style="border-bottom:1px solid rgba(255,255,255,0.1); flex-shrink:0;">
+    <p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:#72c073; margin:0 0 6px 0;">Barathon</p>
+    <h3 class="text-white m-0">{session.nom}</h3>
+    {(session.date || session.heure_debut) && (
+      <p style="font-size:13px; font-weight:500; color:rgba(247,241,237,0.5); margin:6px 0 0 0;">
+        {session.date ?? ''}{session.date && session.heure_debut ? ' · ' : ''}{session.heure_debut ?? ''}{session.heure_debut && session.heure_fin ? ' → ' + session.heure_fin : ''}
+      </p>
+    )}
+  </div>
+
+  <!-- Tabs -->
+  <div class="flex" style="border-bottom:1px solid rgba(255,255,255,0.1); flex-shrink:0;">
+    <button class="final-tab flex-1 h-12 font-medium border-0 bg-transparent cursor-pointer" data-tab="bars"
+      style="font-size:13px; color:#72c073; border-bottom:2px solid #72c073;">Bars</button>
+    <button class="final-tab flex-1 h-12 font-medium border-0 bg-transparent cursor-pointer" data-tab="jeux"
+      style="font-size:13px; color:rgba(247,241,237,0.5); border-bottom:2px solid transparent;">Jeux</button>
+    <button class="final-tab flex-1 h-12 font-medium border-0 bg-transparent cursor-pointer" data-tab="amis"
+      style="font-size:13px; color:rgba(247,241,237,0.5); border-bottom:2px solid transparent;">Amis</button>
+    <button class="final-tab flex-1 h-12 font-medium border-0 bg-transparent cursor-pointer" data-tab="params"
+      style="font-size:13px; color:rgba(247,241,237,0.5); border-bottom:2px solid transparent;">Paramètres</button>
+  </div>
+
+  <!-- Tab content -->
+  <div id="tab-content" class="overflow-y-auto flex-1 px-6 py-5"></div>
+
+  <!-- Bottom bar – visible uniquement avant le lancement -->
+  <div id="bottom-bar" class="px-6 py-4.5" style={`border-top:1px solid rgba(255,255,255,0.1); flex-shrink:0; display:${isEnCours ? 'none' : 'block'};`}>
+    {isHote && (
+      <button id="btn-launch-session" style="width:100%; height:42px; background:#347645; border:none; color:white; font-size:14px; font-weight:500; cursor:pointer; border-radius:3px; margin-bottom:10px;">
+        ▶ Lancer la session
+      </button>
+    )}
+    <button id="btn-add-more" style="width:100%; height:42px; background:transparent; border:1px solid rgba(255,255,255,0.25); color:white; font-size:14px; font-weight:500; cursor:pointer; border-radius:3px;">+ Ajouter</button>
+  </div>
+
+</div>

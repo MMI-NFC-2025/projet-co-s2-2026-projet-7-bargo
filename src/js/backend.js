@@ -58,7 +58,7 @@ export async function registerUser(data) {
 /** Récupère un utilisateur authentifié (expand bar_favori, boisson_favori). */
 export async function getUserAuth(userId, token) {
   const res = await fetch(
-    `${PB_URL}/api/collections/users/records/${userId}?expand=bar_favori,boisson_favori,demande_amies,amies`,
+    `${PB_URL}/api/collections/users/records/${userId}?expand=bar_favori,boisson_favori,jeux_favori,demande_amies,amies,demande_session`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
   if (!res.ok) return null;

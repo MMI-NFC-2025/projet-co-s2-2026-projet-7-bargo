@@ -127,4 +127,50 @@
       } catch (_) { btn.disabled = false; }
     });
   });
+  // ── Accepter une invitation de session ───────────────────────────
+  document.querySelectorAll('.session-invite-accept').forEach(function (btn) {
+    var item      = btn.closest('.session-invite-item');
+    var sessionId = item && item.dataset.sessionId;
+    var href      = btn.dataset.sessionHref;
+    if (!sessionId) return;
+    btn.addEventListener('click', async function () {
+      btn.disabled = true;
+      try {
+        // Retirer de demande_session
+        await fetch(PB_URL + '/api/collections/users/records/' + userId, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
+          body: JSON.stringify({ 'demande_session-': [sessionId] }),
+        });
+        // Ajouter l'utilisateur dans id_inviter de la session
+        await fetch(PB_URL + '/api/collections/session_barathon/records/' + sessionId, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
+          body: JSON.stringify({ 'id_inviter+': [userId] }),
+        });
+        window.location.href = href;
+      } catch (_) { btn.disabled = false; }
+    });
+  });
+
+  // ── Refuser une invitation de session ────────────────────────────
+  document.querySelectorAll('.session-invite-refuse').forEach(function (btn) {
+    var item      = btn.closest('.session-invite-item');
+    var sessionId = item && item.dataset.sessionId;
+    if (!sessionId) return;
+    btn.addEventListener('click', async function () {
+      btn.disabled = true;
+      try {
+        await fetch(PB_URL + '/api/collections/users/records/' + userId, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
+          body: JSON.stringify({ 'demande_session-': [sessionId] }),
+        });
+        item.remove();
+        if (!document.querySelector('.session-invite-item')) {
+          document.getElementById('session-requests-section')?.remove();
+        }
+      } catch (_) { btn.disabled = false; }
+    });
+  });
 })();

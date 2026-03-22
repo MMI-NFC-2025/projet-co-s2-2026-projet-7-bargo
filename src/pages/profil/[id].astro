@@ -1,0 +1,720 @@
+---
+// @ts-nocheck
+import Layout from '../../layouts/Layout.astro';
+import { PB_URL, getImageUrl, getCollection } from '../../js/backend.js';
+import PbImage from '../../components/PbImage.astro';
+import instaIcon    from '../../assets/icon/insta.svg';
+import facebookIcon from '../../assets/icon/facebook.svg';
+import discordIcon  from '../../assets/icon/discord.svg';
+
+const token  = Astro.cookies.get('pb_token')?.value;
+const userId = Astro.cookies.get('pb_user_id')?.value;
+if (!token || !userId) return Astro.redirect('/connexion');
+
+const { id } = Astro.params;
+if (id === userId) return Astro.redirect('/profil');
+
+// Charger le profil cible
+const res = await fetch(
+  `${PB_URL}/api/collections/users/records/${id}?expand=amies`,
+  { headers: { Authorization: `Bearer ${token}` } }
+);
+if (!res.ok) return Astro.redirect('/profil');
+const u = await res.json();
+
+// Charger mon propre profil
+const meRes = await fetch(
+  `${PB_URL}/api/collections/users/records/${userId}`,
+  { headers: { Authorization: `Bearer ${token}` } }
+);
+const me = meRes.ok ? await meRes.json() : {};
+
+const myAmies       = Array.isArray(me.amies)         ? me.amies         : [];
+const myDemandes    = Array.isArray(me.demande_amies)  ? me.demande_amies  : [];
+const theirDemandes = Array.isArray(u.demande_amies)   ? u.demande_amies   : [];
+
+const isAlreadyFriend         = myAmies.includes(id);
+const requestSentByMe         = theirDemandes.includes(userId);
+const requestReceivedFromThem = myDemandes.includes(id);
+
+const amiesCount  = Array.isArray(u.amies) ? u.amies.length : 0;
+const avatarUrl   = u.avatar ? getImageUrl(u, u.avatar) : null;
+const displayName = [u.prenom, u.nom].filter(Boolean).join(' ') || u.pseudo || 'Utilisateur';
+const createdAt   = u.created
+  ? new Date(u.created).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })
+  : '—';
+
+// Bars favoris de l'utilisateur cible
+let barsFavori = [];
+try {
+  const favIds = Array.isArray(u.bar_favori) ? u.bar_favori : [];
+  if (favIds.length > 0) {
+    const filterStr = favIds.map(bid => `id="${bid}"`).join('||');
+    barsFavori = await getCollection('bar', { filter: filterStr, perPage: 200 });
+  }
+} catch {}
+
+// Jeux favoris de l'utilisateur cible
+let jeuxFavori = [];
+try {
+  const jeuxIds = Array.isArray(u.jeux_favori) ? u.jeux_favori : [];
+  if (jeuxIds.length > 0) {
+    const filterStr = jeuxIds.map(jid => `id="${jid}"`).join('||');
+    jeuxFavori = await getCollection('jeux', { filter: filterStr, perPage: 200 });
+  }
+} catch {}
+
+// Boissons favorites de l'utilisateur cible
+let boissonsFavori = [];
+try {
+  const boissonIds = Array.isArray(u.boisson_favori) ? u.boisson_favori : [];
+  if (boissonIds.length > 0) {
+    const filterStr = boissonIds.map(bid => `id="${bid}"`).join('||');
+    boissonsFavori = await getCollection('boison', { filter: filterStr, perPage: 200 });
+  }
+} catch {}
+
+// Tab actif
+const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
+---
+
+<Layout title={`${displayName} — Bargo`}>
+  <section class="bg-neutral-200 overflow-x-hidden">
+
+    <!-- ===== MOBILE PROFILE HEADER ===== -->
+    <div class="block lg:hidden px-5 pt-8 pb-6">
+      <!-- Retour -->
+      <a href="/profil" class="inline-flex items-center gap-2 text-neutral-500 text-3.5 font-medium no-underline hover:opacity-70 transition-opacity mb-5">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Retour
+      </a>
+      <!-- Avatar -->
+      <div class="mx-auto w-25 h-25 rounded-full overflow-hidden" style="border: 8px solid #dfdfdf;">
+        {avatarUrl
+          ? <img src={avatarUrl} alt="Avatar" class="w-full h-full object-cover" />
+          : <div class="w-full h-full bg-neutral-800 flex items-center justify-center">
+              <span class="text-white font-bold" style="font-size: 36px;">{displayName[0].toUpperCase()}</span>
+            </div>
+        }
+      </div>
+      <h2 class="text-black m-0 mt-4 text-center text-7">{displayName}</h2>
+      {u.pseudo && <h3 class="m-0 mt-1 text-primary-500 text-center">{u.pseudo}</h3>}
+      <p class="m-0 mt-2 text-center text-neutral-800 text-4 font-medium">{amiesCount} ami(e)s</p>
+      <div class="mt-3 h-12.5 bg-primary-900 rounded-1.25 flex items-center justify-center gap-4">
+        <h3 class="text-white m-0">Points :</h3>
+        <h3 class="text-white m-0">{u.points ?? 0}</h3>
+      </div>
+      {u.description && (
+        <div class="mt-4">
+          <p class="m-0 text-4 font-medium text-black uppercase">DESCRIPTION</p>
+          <p class="m-0 mt-1 text-neutral-500 text-4 font-medium leading-[1.4]">{u.description}</p>
+        </div>
+      )}
+    </div>
+
+    <!-- ===== DESKTOP PROFILE HEADER ===== -->
+    <div class="hidden lg:block relative" style="height: 420px;">
+      <!-- Photo de profil -->
+      <div class="absolute left-20 top-29.75 size-46.75 rounded-full overflow-hidden z-2" style="border: 15px solid #dfdfdf;">
+        {avatarUrl
+          ? <img src={avatarUrl} alt="Avatar" class="w-full h-full object-cover" />
+          : <div class="w-full h-full bg-neutral-800 flex items-center justify-center">
+              <span class="text-white font-bold" style="font-size: 60px;">{displayName[0].toUpperCase()}</span>
+            </div>
+        }
+      </div>
+      <!-- Retour -->
+      <a href="/profil" class="absolute top-8 left-20 inline-flex items-center gap-2 text-neutral-500 text-3.5 font-medium no-underline hover:opacity-70 transition-opacity">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Retour
+      </a>
+      <!-- Nom -->
+      <h2 class="absolute m-0 text-black overflow-hidden text-ellipsis whitespace-nowrap w-86"
+        style="left: calc(16.67% + 59px); top: 119px;">
+        {displayName}
+      </h2>
+      <!-- Pseudo -->
+      {u.pseudo && (
+        <h3 class="absolute m-0 text-primary-500"
+          style="left: calc(16.67% + 59px); top: 185px;">
+          {u.pseudo}
+        </h3>
+      )}
+      <!-- Ami(e)s -->
+      <p class="absolute m-0 text-neutral-800 text-4 font-medium leading-[1.4]"
+        style="left: calc(33.33% + 79px); top: 198px;">
+        {amiesCount} ami(e)s
+      </p>
+      <!-- Points badge -->
+      <div class="absolute h-16.25 w-86 bg-primary-900 rounded-1.25 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25)] flex items-center pl-4 gap-4"
+        style="left: calc(16.67% + 59px); top: 241px;">
+        <h3 class="text-white m-0">Points :</h3>
+        <h3 class="text-white m-0">{u.points ?? 0}</h3>
+      </div>
+      <!-- DESCRIPTION label -->
+      <p class="absolute m-0 text-4 font-medium text-black uppercase leading-[1.4]"
+        style="left: calc(50% + 17px); top: 127px;">
+        DESCRIPTION
+      </p>
+      <!-- Description text -->
+      <p class="absolute m-0 text-neutral-500 text-4 font-medium leading-[1.4] w-155.75"
+        style="left: calc(50% + 16px); top: 174px;">
+        {u.description || '—'}
+      </p>
+    </div>
+
+    <!-- Séparateur shadow (desktop only) -->
+    <div class="hidden lg:block h-4.5 bg-neutral-200 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] z-3"></div>
+
+    <!-- ===== DEUX COLONNES ===== -->
+    <div class="flex flex-col lg:flex-row">
+
+      <!-- SIDEBAR SOMBRE (desktop only) -->
+      <div class="hidden lg:block lg:w-94 lg:shrink-0 bg-neutral-800 overflow-y-auto">
+        <div class="px-8 pt-6 pb-10 flex flex-col gap-5">
+
+          <!-- Bouton relation -->
+          {isAlreadyFriend ? (
+            <div class="flex flex-col gap-3">
+              <div class="flex items-center justify-center gap-2 border-2 text-3.5 font-medium leading-[1.4] h-15 w-59.25 shrink-0" style="border-color:#72c073; color:#72c073;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+                Amis
+              </div>
+              <button id="remove-friend-btn"
+                class="flex items-center justify-center gap-2 border-2 border-neutral-500 text-neutral-400 text-3.5 font-medium leading-[1.4] h-15 w-59.25 hover:border-red-400 hover:text-red-400 transition-colors cursor-pointer bg-transparent shrink-0">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                Supprimer l'ami
+              </button>
+            </div>
+          ) : requestReceivedFromThem ? (
+            <div class="flex flex-col gap-3">
+              <p class="text-neutral-400 text-3 font-medium m-0">Demande reçue</p>
+              <button id="accept-btn"
+                class="flex items-center justify-center gap-2 text-white text-3.5 font-medium leading-[1.4] h-15 w-59.25 cursor-pointer border-0 hover:opacity-90 transition-opacity shrink-0"
+                style="background:#347645;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+                Accepter
+              </button>
+              <button id="refuse-btn"
+                class="flex items-center justify-center gap-2 border-2 border-neutral-500 text-neutral-400 text-3.5 font-medium leading-[1.4] h-15 w-59.25 hover:border-red-400 hover:text-red-400 transition-colors cursor-pointer bg-transparent shrink-0">
+                Refuser
+              </button>
+            </div>
+          ) : requestSentByMe ? (
+            <div class="flex items-center justify-center gap-2 text-3.5 font-medium leading-[1.4] h-15 w-59.25 shrink-0" style="background:#2c2c2c; color:#646262; border:1px solid #3a3a3a;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#646262" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              Demande envoyée
+            </div>
+          ) : (
+            <button id="send-request-btn"
+              class="flex items-center justify-center gap-2 text-white text-3.5 font-medium leading-[1.4] h-15 w-59.25 cursor-pointer border-0 hover:opacity-90 transition-opacity shrink-0"
+              style="background:#094736;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+              Envoyer une demande
+            </button>
+          )}
+
+          <!-- Réseaux sociaux -->
+          {(u.insta || u.facbook || u.discord) && (
+            <div class="mt-4 flex flex-col gap-4">
+              <p class="text-neutral-400 text-3 font-medium uppercase tracking-widest m-0">Réseaux sociaux</p>
+              {u.insta && (
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background:#2c2c2c;">
+                    <img src={instaIcon.src} alt="" width="16" height="16" class="invert opacity-70" />
+                  </div>
+                  <span class="text-neutral-300 text-3.5 font-medium">@{u.insta}</span>
+                </div>
+              )}
+              {u.facbook && (
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background:#2c2c2c;">
+                    <img src={facebookIcon.src} alt="" width="16" height="16" class="invert opacity-70" />
+                  </div>
+                  <span class="text-neutral-300 text-3.5 font-medium">{u.facbook}</span>
+                </div>
+              )}
+              {u.discord && (
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background:#2c2c2c;">
+                    <img src={discordIcon.src} alt="" width="16" height="16" class="invert opacity-70" />
+                  </div>
+                  <span class="text-neutral-300 text-3.5 font-medium">{u.discord}</span>
+                </div>
+              )}
+            </div>
+          )}
+
+        </div>
+      </div>
+
+      <!-- CONTENU PRINCIPAL -->
+      <div class="flex-1 bg-neutral-200">
+
+        <!-- BARRE D'ONGLETS BLANCHE -->
+        <div class="bg-white flex items-stretch px-4 lg:px-20 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] min-h-16 lg:h-25">
+          <div id="tab-list" class="relative flex items-stretch h-full overflow-x-auto">
+            <button data-tab="profil"
+              class="tab-btn px-4 lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap">
+              Profil
+            </button>
+            <button data-tab="favoris"
+              class="tab-btn px-4 lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap inline-flex items-center gap-2">
+              Bars favoris
+              {barsFavori.length > 0 && (
+                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary-600 text-white text-2.75 font-bold">{barsFavori.length}</span>
+              )}
+            </button>
+            <button data-tab="jeux"
+              class="tab-btn px-4 lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap inline-flex items-center gap-2">
+              Jeux favoris
+              {jeuxFavori.length > 0 && (
+                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary-600 text-white text-2.75 font-bold">{jeuxFavori.length}</span>
+              )}
+            </button>
+            <button data-tab="boissons"
+              class="tab-btn px-4 lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap inline-flex items-center gap-2">
+              Boissons favorites
+              {boissonsFavori.length > 0 && (
+                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary-600 text-white text-2.75 font-bold">{boissonsFavori.length}</span>
+              )}
+            </button>
+            <!-- Trait animé -->
+            <div id="tab-indicator" class="absolute bottom-0 h-1 rounded-full" style="background:#72c073; transition: left 0.3s cubic-bezier(.4,0,.2,1), width 0.3s cubic-bezier(.4,0,.2,1); left:0; width:0;"></div>
+          </div>
+        </div>
+
+        <!-- ============================= -->
+        <!-- PANEL : PROFIL               -->
+        <!-- ============================= -->
+        <div id="panel-profil" data-panel class={activeTab !== 'profil' ? 'hidden' : ''}>
+          <div class="px-4 lg:px-20 pt-8 lg:pt-11.25 pb-16 lg:pb-30">
+
+            <!-- H2 Informations + ligne décorative -->
+            <div class="flex items-center gap-7.5 mb-11.25">
+              <h2 class="text-black m-0 shrink-0">Informations</h2>
+              <div class="flex-1 h-0.5 bg-neutral-300"></div>
+            </div>
+
+            <!-- Box stats -->
+            <div class="bg-white border-0.75 border-neutral-300 rounded-2.5 px-4 lg:px-7.5 py-5.5 mb-4.5">
+              <h3 class="text-black m-0 mb-8.75">Statistiques</h3>
+              <div class="flex flex-col lg:flex-row gap-4 lg:gap-25">
+                <div class="flex flex-col gap-1">
+                  <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Points</span>
+                  <span class="text-black text-4 font-medium leading-[1.4]">{u.points ?? 0}</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Ami(e)s</span>
+                  <span class="text-black text-4 font-medium leading-[1.4]">{amiesCount}</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Âge</span>
+                  <span class="text-black text-4 font-medium leading-[1.4]">{u.age ? `${u.age} ans` : '—'}</span>
+                </div>
+                {u.ville && (
+                  <div class="flex flex-col gap-1">
+                    <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Ville</span>
+                    <span class="text-black text-4 font-medium leading-[1.4]">{u.ville}</span>
+                  </div>
+                )}
+                <div class="flex flex-col gap-1">
+                  <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Membre depuis</span>
+                  <span class="text-black text-4 font-medium leading-[1.4]">{createdAt}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Box activité -->
+            <div class="bg-white border-0.75 border-neutral-300 rounded-2.5 px-4 lg:px-7.5 py-5.5 mb-4.5">
+              <h3 class="text-black m-0 mb-8.75">Activité sur Bargo</h3>
+              <div class="flex flex-col lg:flex-row gap-4 lg:gap-25">
+                <div class="flex flex-col gap-1">
+                  <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Sorties organisées</span>
+                  <span class="text-black text-4 font-medium leading-[1.4]">
+                    {u.barathon_organiser ? `${u.barathon_organiser} sorties` : '—'}
+                  </span>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Barathons réalisés</span>
+                  <span class="text-black text-4 font-medium leading-[1.4]">
+                    {u.barathon_participer ? `${u.barathon_participer} parcours` : '—'}
+                  </span>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Bars favoris</span>
+                  <span class="text-black text-4 font-medium leading-[1.4]">{barsFavori.length}</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Jeux favoris</span>
+                  <span class="text-black text-4 font-medium leading-[1.4]">{jeuxFavori.length}</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Boissons favorites</span>
+                  <span class="text-black text-4 font-medium leading-[1.4]">{boissonsFavori.length}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Box réseaux (mobile) -->
+            {(u.insta || u.facbook || u.discord) && (
+              <div class="lg:hidden bg-white border-0.75 border-neutral-300 rounded-2.5 px-4 py-5.5 mb-4.5">
+                <h3 class="text-black m-0 mb-5">Réseaux sociaux</h3>
+                <div class="flex flex-col gap-3">
+                  {u.insta && (
+                    <div class="flex items-center gap-3">
+                      <img src={instaIcon.src} alt="" width="18" height="18" />
+                      <span class="text-black text-4 font-medium">@{u.insta}</span>
+                    </div>
+                  )}
+                  {u.facbook && (
+                    <div class="flex items-center gap-3">
+                      <img src={facebookIcon.src} alt="" width="18" height="18" />
+                      <span class="text-black text-4 font-medium">{u.facbook}</span>
+                    </div>
+                  )}
+                  {u.discord && (
+                    <div class="flex items-center gap-3">
+                      <img src={discordIcon.src} alt="" width="18" height="18" />
+                      <span class="text-black text-4 font-medium">{u.discord}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            <!-- Boutons relation (mobile) -->
+            <div class="lg:hidden flex flex-col gap-3 mt-4">
+              {isAlreadyFriend ? (
+                <>
+                  <div class="flex items-center justify-center gap-2 h-13 rounded-1.25 text-3.5 font-medium" style="background:rgba(114,192,115,0.1); color:#72c073; border:1.5px solid #72c073;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+                    Amis
+                  </div>
+                  <button id="remove-friend-btn-mobile"
+                    class="flex items-center justify-center gap-2 h-13 rounded-1.25 border-2 border-neutral-400 text-neutral-500 text-3.5 font-medium cursor-pointer bg-transparent hover:border-red-400 hover:text-red-400 transition-colors">
+                    Supprimer l'ami
+                  </button>
+                </>
+              ) : requestReceivedFromThem ? (
+                <>
+                  <button id="accept-btn-mobile" class="flex items-center justify-center gap-2 h-13 rounded-1.25 text-white text-3.5 font-medium cursor-pointer border-0 hover:opacity-90 transition-opacity" style="background:#347645;">
+                    Accepter la demande
+                  </button>
+                  <button id="refuse-btn-mobile" class="flex items-center justify-center gap-2 h-13 rounded-1.25 border-2 border-neutral-400 text-neutral-500 text-3.5 font-medium cursor-pointer bg-transparent hover:border-red-400 hover:text-red-400 transition-colors">
+                    Refuser
+                  </button>
+                </>
+              ) : requestSentByMe ? (
+                <div class="flex items-center justify-center gap-2 h-13 rounded-1.25 text-3.5 font-medium" style="background:#2c2c2c; color:#646262; border:1px solid #3a3a3a;">
+                  Demande envoyée
+                </div>
+              ) : (
+                <button id="send-request-btn-mobile" class="flex items-center justify-center gap-2 h-13 rounded-1.25 text-white text-3.5 font-medium cursor-pointer border-0 hover:opacity-90 transition-opacity" style="background:#094736;">
+                  Envoyer une demande
+                </button>
+              )}
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ============================= -->
+        <!-- PANEL : BARS FAVORIS         -->
+        <!-- ============================= -->
+        <div id="panel-favoris" data-panel class={activeTab !== 'favoris' ? 'hidden' : ''}>
+          <div class="px-4 lg:px-20 pt-8 lg:pt-11.25 pb-16 lg:pb-30">
+
+            <div class="flex items-center gap-7.5 mb-11.25">
+              <h2 class="text-black m-0 shrink-0">Bars favoris</h2>
+              <div class="flex-1 h-0.5 bg-neutral-300"></div>
+            </div>
+
+            {barsFavori.length > 0 ? (
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-8.25">
+                {barsFavori.map(bar => (
+                  <div class="relative bg-white rounded-0.5 h-87.75 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
+                    <div class="absolute top-0 left-0 right-0 h-50 overflow-hidden rounded-tl-0.5 rounded-tr-0.5">
+                      <PbImage record={bar} recordImage={bar.img?.[0]} width={280} height={200} class="w-full h-full object-cover" />
+                    </div>
+                    <h3 class="absolute top-52.5 left-4.75 right-4.75 m-0 text-black">{bar.nom}</h3>
+                    <a href={`/bar/${bar.id}`}
+                      class="absolute bottom-5.25 left-4.75 w-37.5 h-11 bg-neutral-800 flex items-center justify-center text-white text-4 font-medium hover:opacity-80 transition-opacity">
+                      En savoir plus
+                    </a>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div class="flex flex-col items-center justify-center py-24">
+                <div class="w-20 h-20 rounded-full bg-neutral-300 flex items-center justify-center mb-6">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="#646262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <p class="text-neutral-500 text-4 font-medium m-0">Aucun bar favori</p>
+                <p class="text-sm text-neutral-500 m-0 mt-2">Cet utilisateur n'a pas encore ajouté de favoris.</p>
+              </div>
+            )}
+
+          </div>
+        </div>
+
+        <!-- ============================= -->
+        <!-- PANEL : JEUX FAVORIS         -->
+        <!-- ============================= -->
+        <div id="panel-jeux" data-panel class={activeTab !== 'jeux' ? 'hidden' : ''}>
+          <div class="px-4 lg:px-20 pt-8 lg:pt-11.25 pb-16 lg:pb-30">
+
+            <div class="flex items-center gap-7.5 mb-11.25">
+              <h2 class="text-black m-0 shrink-0">Jeux favoris</h2>
+              <div class="flex-1 h-0.5 bg-neutral-300"></div>
+            </div>
+
+            {jeuxFavori.length > 0 ? (
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-8.25">
+                {jeuxFavori.map(jeu => {
+                  const imgFile = Array.isArray(jeu.img) ? jeu.img[0] : jeu.img;
+                  return (
+                    <div class="relative bg-white rounded-0.5 h-87.75 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
+                      <div class="absolute top-0 left-0 right-0 h-50 overflow-hidden rounded-tl-0.5 rounded-tr-0.5">
+                        <PbImage record={jeu} recordImage={imgFile} width={280} height={200} class="w-full h-full object-cover" />
+                      </div>
+                      <h3 class="absolute top-52.5 left-4.75 right-4.75 m-0 text-black">{jeu.nom}</h3>
+                      <a href="/jeux"
+                        class="absolute bottom-5.25 left-4.75 w-37.5 h-11 bg-neutral-800 flex items-center justify-center text-white text-4 font-medium hover:opacity-80 transition-opacity">
+                        Voir les jeux
+                      </a>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div class="flex flex-col items-center justify-center py-24">
+                <div class="w-20 h-20 rounded-full bg-neutral-300 flex items-center justify-center mb-6">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" stroke="#646262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <p class="text-neutral-500 text-4 font-medium m-0">Aucun jeu favori</p>
+                <p class="text-sm text-neutral-500 m-0 mt-2">Cet utilisateur n'a pas encore ajouté de jeux favoris.</p>
+              </div>
+            )}
+
+          </div>
+        </div>
+
+        <!-- ============================= -->
+        <!-- PANEL : BOISSONS FAVORITES   -->
+        <!-- ============================= -->
+        <div id="panel-boissons" data-panel class={activeTab !== 'boissons' ? 'hidden' : ''}>
+          <div class="px-4 lg:px-20 pt-8 lg:pt-11.25 pb-16 lg:pb-30">
+
+            <div class="flex items-center gap-7.5 mb-11.25">
+              <h2 class="text-black m-0 shrink-0">Boissons favorites</h2>
+              <div class="flex-1 h-0.5 bg-neutral-300"></div>
+            </div>
+
+            {boissonsFavori.length > 0 ? (
+              <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
+                {boissonsFavori.map(b => (
+                  <div class="flex flex-col gap-2">
+                    <div class="h-40 lg:h-50 rounded-1.25 overflow-hidden shadow-[0px_4px_4px_0px_rgba(0,0,0,0.15)]">
+                      <img src={getImageUrl(b, b.img)} alt={b.nom} class="w-full h-full object-cover" loading="lazy" />
+                    </div>
+                    <p class="text-black text-4 font-medium m-0 text-center">{b.nom}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div class="flex flex-col items-center justify-center py-24">
+                <div class="w-20 h-20 rounded-full bg-neutral-300 flex items-center justify-center mb-6">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                    <path d="M8 2h8l1 8H7L8 2zM7 10c0 5 2 8 5 8s5-3 5-8" stroke="#646262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <p class="text-neutral-500 text-4 font-medium m-0">Aucune boisson favorite</p>
+                <p class="text-sm text-neutral-500 m-0 mt-2">Cet utilisateur n'a pas encore ajouté de boissons favorites.</p>
+              </div>
+            )}
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+</Layout>
+
+<script is:inline define:vars={{ pbUrl: PB_URL, pbToken: token, pbUserId: userId, targetUserId: id, activeTab }}>
+(function () {
+
+  // ── Indicateur animé ──────────────────────────────────
+  function moveIndicator(btn) {
+    var indicator = document.getElementById('tab-indicator');
+    var list      = document.getElementById('tab-list');
+    if (!indicator || !list) return;
+    var listRect = list.getBoundingClientRect();
+    var btnRect  = btn.getBoundingClientRect();
+    indicator.style.left  = (btnRect.left - listRect.left + list.scrollLeft) + 'px';
+    indicator.style.width = btnRect.width + 'px';
+  }
+
+  // Position initiale
+  var initBtn = document.querySelector('.tab-btn[data-tab="' + (activeTab || 'profil') + '"]');
+  if (initBtn) moveIndicator(initBtn);
+
+  // ── Tabs ───────────────────────────────────────────────
+  document.querySelectorAll('.tab-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var tabId = btn.dataset.tab;
+      document.querySelectorAll('[data-panel]').forEach(function (p) { p.classList.add('hidden'); });
+      var panel = document.getElementById('panel-' + tabId);
+      if (panel) panel.classList.remove('hidden');
+      moveIndicator(btn);
+    });
+  });
+
+  // ── Envoyer une demande ────────────────────────────────
+  async function sendRequest(btn) {
+    if (!btn) return;
+    btn.disabled = true; btn.style.opacity = '0.6';
+    try {
+      var r = await fetch(pbUrl + '/api/collections/users/records/' + targetUserId, {
+        headers: { Authorization: 'Bearer ' + pbToken }
+      });
+      if (r.ok) {
+        var target = await r.json();
+        var existing = Array.isArray(target.demande_amies) ? target.demande_amies : [];
+        if (existing.indexOf(pbUserId) < 0) {
+          existing.push(pbUserId);
+          await fetch(pbUrl + '/api/collections/users/records/' + targetUserId, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + pbToken },
+            body: JSON.stringify({ demande_amies: existing }),
+          });
+        }
+        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg> Demande envoyée';
+        btn.style.background = '#347645';
+        btn.style.opacity = '1';
+        btn.disabled = true;
+      }
+    } catch (_) { btn.disabled = false; btn.style.opacity = '1'; }
+  }
+
+  var sendBtn = document.getElementById('send-request-btn');
+  if (sendBtn) sendBtn.addEventListener('click', function () { sendRequest(sendBtn); });
+  var sendBtnM = document.getElementById('send-request-btn-mobile');
+  if (sendBtnM) sendBtnM.addEventListener('click', function () { sendRequest(sendBtnM); });
+
+  // ── Accepter une demande ───────────────────────────────
+  async function acceptRequest(btn) {
+    if (!btn) return;
+    btn.disabled = true; btn.style.opacity = '0.6';
+    try {
+      var meRes = await fetch(pbUrl + '/api/collections/users/records/' + pbUserId, {
+        headers: { Authorization: 'Bearer ' + pbToken }
+      });
+      if (meRes.ok) {
+        var me = await meRes.json();
+        var myAmies = Array.isArray(me.amies) ? me.amies : [];
+        var myDemandes = Array.isArray(me.demande_amies) ? me.demande_amies : [];
+        if (myAmies.indexOf(targetUserId) < 0) myAmies.push(targetUserId);
+        myDemandes = myDemandes.filter(function (i) { return i !== targetUserId; });
+        await fetch(pbUrl + '/api/collections/users/records/' + pbUserId, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + pbToken },
+          body: JSON.stringify({ amies: myAmies, demande_amies: myDemandes }),
+        });
+      }
+      var theirRes = await fetch(pbUrl + '/api/collections/users/records/' + targetUserId, {
+        headers: { Authorization: 'Bearer ' + pbToken }
+      });
+      if (theirRes.ok) {
+        var them = await theirRes.json();
+        var theirAmies = Array.isArray(them.amies) ? them.amies : [];
+        if (theirAmies.indexOf(pbUserId) < 0) theirAmies.push(pbUserId);
+        await fetch(pbUrl + '/api/collections/users/records/' + targetUserId, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + pbToken },
+          body: JSON.stringify({ amies: theirAmies }),
+        });
+      }
+      window.location.reload();
+    } catch (_) { btn.disabled = false; btn.style.opacity = '1'; }
+  }
+
+  var acceptBtn = document.getElementById('accept-btn');
+  if (acceptBtn) acceptBtn.addEventListener('click', function () { acceptRequest(acceptBtn); });
+  var acceptBtnM = document.getElementById('accept-btn-mobile');
+  if (acceptBtnM) acceptBtnM.addEventListener('click', function () { acceptRequest(acceptBtnM); });
+
+  // ── Refuser une demande ────────────────────────────────
+  async function refuseRequest(btn) {
+    if (!btn) return;
+    btn.disabled = true;
+    try {
+      var meRes = await fetch(pbUrl + '/api/collections/users/records/' + pbUserId, {
+        headers: { Authorization: 'Bearer ' + pbToken }
+      });
+      if (meRes.ok) {
+        var me = await meRes.json();
+        var myDemandes = Array.isArray(me.demande_amies) ? me.demande_amies : [];
+        myDemandes = myDemandes.filter(function (i) { return i !== targetUserId; });
+        await fetch(pbUrl + '/api/collections/users/records/' + pbUserId, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + pbToken },
+          body: JSON.stringify({ demande_amies: myDemandes }),
+        });
+      }
+      window.location.reload();
+    } catch (_) { btn.disabled = false; }
+  }
+
+  var refuseBtn = document.getElementById('refuse-btn');
+  if (refuseBtn) refuseBtn.addEventListener('click', function () { refuseRequest(refuseBtn); });
+  var refuseBtnM = document.getElementById('refuse-btn-mobile');
+  if (refuseBtnM) refuseBtnM.addEventListener('click', function () { refuseRequest(refuseBtnM); });
+
+  // ── Supprimer l'ami ────────────────────────────────────
+  async function removeFriend(btn) {
+    if (!btn) return;
+    btn.disabled = true; btn.style.opacity = '0.6';
+    try {
+      // Retirer des deux côtés
+      var meRes = await fetch(pbUrl + '/api/collections/users/records/' + pbUserId, {
+        headers: { Authorization: 'Bearer ' + pbToken }
+      });
+      if (meRes.ok) {
+        var me = await meRes.json();
+        var myAmies = (Array.isArray(me.amies) ? me.amies : []).filter(function (i) { return i !== targetUserId; });
+        await fetch(pbUrl + '/api/collections/users/records/' + pbUserId, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + pbToken },
+          body: JSON.stringify({ amies: myAmies }),
+        });
+      }
+      var theirRes = await fetch(pbUrl + '/api/collections/users/records/' + targetUserId, {
+        headers: { Authorization: 'Bearer ' + pbToken }
+      });
+      if (theirRes.ok) {
+        var them = await theirRes.json();
+        var theirAmies = (Array.isArray(them.amies) ? them.amies : []).filter(function (i) { return i !== pbUserId; });
+        await fetch(pbUrl + '/api/collections/users/records/' + targetUserId, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + pbToken },
+          body: JSON.stringify({ amies: theirAmies }),
+        });
+      }
+      window.location.reload();
+    } catch (_) { btn.disabled = false; btn.style.opacity = '1'; }
+  }
+
+  var removeBtn = document.getElementById('remove-friend-btn');
+  if (removeBtn) removeBtn.addEventListener('click', function () { removeFriend(removeBtn); });
+  var removeBtnM = document.getElementById('remove-friend-btn-mobile');
+  if (removeBtnM) removeBtnM.addEventListener('click', function () { removeFriend(removeBtnM); });
+
+})();
+</script>

@@ -1,0 +1,80 @@
+---
+// @ts-nocheck
+// Modals et écran de fin pour la page session/[id]
+---
+
+<!-- ── Modal : Ajouter bars / jeux / amis ─────────────────────── -->
+<div id="add-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:50; align-items:center; justify-content:center;">
+  <div style="background:#1e1e1e; width:600px; max-height:80vh; display:flex; flex-direction:column; border-radius:5px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+    <div class="flex justify-between items-center px-7 py-5" style="border-bottom:1px solid rgba(255,255,255,0.1);">
+      <h3 id="modal-title" class="text-white m-0"></h3>
+      <button id="modal-close" style="background:transparent; border:none; color:white; font-size:26px; line-height:1; cursor:pointer; opacity:0.6;">×</button>
+    </div>
+    <div class="px-7 py-3.5" style="border-bottom:1px solid rgba(255,255,255,0.1);">
+      <div class="flex items-center gap-3 rounded-1.25 px-3.5" style="background:#2c2c2c; height:42px;">
+        <svg width="14" height="14" viewBox="0 0 18 18" fill="none">
+          <circle cx="7.5" cy="7.5" r="5.5" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5"/>
+          <path d="M12 12L16 16" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <input id="modal-search" type="text" placeholder="Rechercher…"
+          style="background:transparent; flex:1; font-size:14px; font-weight:500; outline:none; border:none; color:#f7f1ed;"
+          class="placeholder-neutral-200/40" />
+      </div>
+    </div>
+    <div id="modal-list" class="overflow-y-auto flex-1 px-7 py-5"></div>
+    <div class="px-7 py-4.5 flex justify-end" style="border-top:1px solid rgba(255,255,255,0.1);">
+      <button id="modal-confirm" style="background:#347645; height:42px; padding:0 36px; color:white; font-size:14px; font-weight:500; border:none; cursor:pointer; border-radius:3px;">Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Modal : Supprimer la session ───────────────────────────── -->
+<div id="delete-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:60; align-items:center; justify-content:center;">
+  <div style="background:#1e1e1e; width:min(440px,92vw); border-radius:5px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.6);">
+    <div style="background:#ef4444; padding:20px 28px;">
+      <p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:rgba(255,255,255,0.75); margin:0 0 6px;">Action irréversible</p>
+      <h3 style="color:white; margin:0; font-size:25px; font-weight:500; letter-spacing:-1px;">Supprimer la session</h3>
+    </div>
+    <div style="padding:24px 28px;">
+      <p style="color:rgba(247,241,237,0.7); font-size:14px; font-weight:500; margin:0; line-height:1.5;">
+        Cette action est irréversible. La session et toutes ses données (bars, jeux, invités) seront définitivement supprimées.
+      </p>
+    </div>
+    <div style="display:flex; gap:12px; padding:0 28px 24px; justify-content:flex-end;">
+      <button id="delete-modal-cancel" style="height:42px; padding:0 24px; background:transparent; border:1px solid rgba(255,255,255,0.25); color:rgba(247,241,237,0.7); font-size:14px; font-weight:500; cursor:pointer; border-radius:3px;">Annuler</button>
+      <button id="delete-modal-confirm" style="height:42px; padding:0 24px; background:#ef4444; border:none; color:white; font-size:14px; font-weight:500; cursor:pointer; border-radius:3px;">Supprimer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Modal : Arrêter la session ─────────────────────────────── -->
+<div id="stop-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:60; align-items:center; justify-content:center;">
+  <div style="background:#1e1e1e; width:min(440px,92vw); border-radius:5px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.6);">
+    <div style="background:#f59e0b; padding:20px 28px;">
+      <p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:rgba(255,255,255,0.75); margin:0 0 6px;">Confirmation</p>
+      <h3 style="color:white; margin:0; font-size:25px; font-weight:500; letter-spacing:-1px;">Arrêter la session</h3>
+    </div>
+    <div style="padding:24px 28px;">
+      <p style="color:rgba(247,241,237,0.7); font-size:14px; font-weight:500; margin:0; line-height:1.5;">
+        La session sera marquée comme terminée. Tous les participants perdront l'accès à la session en cours.
+      </p>
+    </div>
+    <div style="display:flex; gap:12px; padding:0 28px 24px; justify-content:flex-end;">
+      <button id="stop-modal-cancel" style="height:42px; padding:0 24px; background:transparent; border:1px solid rgba(255,255,255,0.25); color:rgba(247,241,237,0.7); font-size:14px; font-weight:500; cursor:pointer; border-radius:3px;">Annuler</button>
+      <button id="stop-modal-confirm" style="height:42px; padding:0 24px; background:#f59e0b; border:none; color:white; font-size:14px; font-weight:500; cursor:pointer; border-radius:3px;">Arrêter</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Écran de fin ────────────────────────────────────────────── -->
+<div id="end-screen" style="display:none; position:fixed; inset:0; background:#1e1e1e; z-index:70; overflow-y:auto;">
+  <div style="max-width:520px; margin:0 auto; padding:48px 24px 60px;">
+    <p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:#72c073; margin:0 0 8px;">Barathon terminé</p>
+    <h2 style="color:white; margin:0 0 36px; letter-spacing:-1px;">Résumé de la session</h2>
+    <div id="end-bonus-card"></div>
+    <div id="end-members-list"></div>
+    <a href="/session" style="display:flex; align-items:center; justify-content:center; height:50px; background:#347645; color:white; font-size:15px; font-weight:500; text-decoration:none; border-radius:3px; margin-top:32px;">
+      Terminer
+    </a>
+  </div>
+</div>

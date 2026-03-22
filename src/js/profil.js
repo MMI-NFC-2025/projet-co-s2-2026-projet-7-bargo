@@ -1,12 +1,21 @@
 // @ts-nocheck
 // Profil — onglets + mode édition
 
+function moveIndicator(btn) {
+  const indicator = document.getElementById('tab-indicator');
+  const list      = document.getElementById('tab-list');
+  if (!indicator || !list) return;
+  const listRect = list.getBoundingClientRect();
+  const btnRect  = btn.getBoundingClientRect();
+  indicator.style.left  = (btnRect.left - listRect.left + list.scrollLeft) + 'px';
+  indicator.style.width = btnRect.width + 'px';
+}
+
 function switchTab(name) {
   document.querySelectorAll('[data-panel]').forEach(p => p.classList.add('hidden'));
   document.getElementById('panel-' + name)?.classList.remove('hidden');
-  document.querySelectorAll('[data-tab]').forEach(t => {
-    t.style.borderBottomColor = t.dataset.tab === name ? '#72c073' : 'transparent';
-  });
+  const btn = document.querySelector(`.tab-btn[data-tab="${name}"]`);
+  if (btn) moveIndicator(btn);
   if (name !== 'profil') resetEdit();
 }
 
@@ -46,6 +55,11 @@ function confirmDelete() {
 document.querySelectorAll('[data-tab]').forEach(btn => {
   btn.addEventListener('click', () => switchTab(btn.dataset.tab));
 });
+
+// Position initiale de l'indicateur
+const initTab   = (window.__ACTIVE_TAB__ || 'profil');
+const initBtn   = document.querySelector(`.tab-btn[data-tab="${initTab}"]`);
+if (initBtn) moveIndicator(initBtn);
 document.getElementById('edit-btn')?.addEventListener('click', toggleEdit);
 document.getElementById('cancel-btn')?.addEventListener('click', toggleEdit);
 document.getElementById('delete-btn')?.addEventListener('click', confirmDelete);

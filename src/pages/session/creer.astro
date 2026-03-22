@@ -46,7 +46,9 @@ if (userId && token) {
   }
 }
 
-const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId, barFavori, amiesIds });
+const amieUsers = users.filter(u => amiesIds.includes(u.id));
+
+const appData = JSON.stringify({ bars, jeux, users: amieUsers, PB_URL, token, userId, barFavori, amiesIds });
 ---
 
 <Layout title="Créer un barathon — Bargo">
@@ -574,6 +576,28 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId, barFa
       });
       if (!res.ok) throw new Error('Erreur ' + res.status);
       var session = await res.json();
+
+      // Envoyer une invitation de session à chaque ami invité
+      for (var i = 0; i < selectedAmis.length; i++) {
+        try {
+          var uRes = await fetch(PB_URL + '/api/collections/users/records/' + selectedAmis[i].id, {
+            headers: { Authorization: 'Bearer ' + TOKEN }
+          });
+          if (uRes.ok) {
+            var uData = await uRes.json();
+            var existing = Array.isArray(uData.demande_session) ? uData.demande_session : [];
+            if (existing.indexOf(session.id) < 0) {
+              existing.push(session.id);
+              await fetch(PB_URL + '/api/collections/users/records/' + selectedAmis[i].id, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
+                body: JSON.stringify({ demande_session: existing }),
+              });
+            }
+          }
+        } catch(_) {}
+      }
+
       window.location.href = '/session/' + session.id;
     } catch (err) {
       showError('Impossible de créer la session. Vérifiez votre connexion.');
@@ -634,10 +658,10 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId, barFa
     var h = '';
     // Header
     h += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">';
-    h += '<button type="button" onclick="window.calNav(-1)" style="background:none;border:none;cursor:pointer;padding:4px;border-radius:50%;color:#1e1e1e;line-height:1;">';
+    h += '<button type="button" onclick="window.calNav(event,-1)" style="background:none;border:none;cursor:pointer;padding:4px;border-radius:50%;color:#1e1e1e;line-height:1;">';
     h += '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="#1e1e1e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
     h += '<span style="font-size:14px;font-weight:700;color:#1e1e1e;">' + MONTHS_FR[calMonth] + ' ' + calYear + '</span>';
-    h += '<button type="button" onclick="window.calNav(1)" style="background:none;border:none;cursor:pointer;padding:4px;border-radius:50%;color:#1e1e1e;line-height:1;">';
+    h += '<button type="button" onclick="window.calNav(event,1)" style="background:none;border:none;cursor:pointer;padding:4px;border-radius:50%;color:#1e1e1e;line-height:1;">';
     h += '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="#1e1e1e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
     h += '</div>';
     // Day headers
@@ -660,7 +684,8 @@ const appData = JSON.stringify({ bars, jeux, users, PB_URL, token, userId, barFa
     h += '</div>';
     popup.innerHTML = h;
   }
-  window.calNav = function(dir) {
+  window.calNav = function(e, dir) {
+    e.stopPropagation();
     calMonth += dir;
     if (calMonth < 0)  { calMonth = 11; calYear--; }
     if (calMonth > 11) { calMonth = 0;  calYear++; }
