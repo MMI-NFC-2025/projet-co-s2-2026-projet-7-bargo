@@ -128,13 +128,19 @@ const plans = [
             <div class="flex-1"></div>
 
             <!-- Bouton -->
-            <button
-              type="button"
-              class="mt-6 w-full h-13 flex items-center justify-center text-white text-4 font-medium hover:opacity-90 transition-opacity cursor-pointer border-0 rounded-0.75"
-              style={`background-color: ${plan.couleurBtn};`}
-            >
-              {plan.cta}
-            </button>
+            {plan.id === 'gratuit' ? (
+              <a href="/"
+                class="mt-6 w-full h-13 flex items-center justify-center text-white text-4 font-medium hover:opacity-90 transition-opacity no-underline rounded-0.75"
+                style={`background-color: ${plan.couleurBtn};`}>
+                {plan.cta}
+              </a>
+            ) : (
+              <a href={`/paiement?plan=${plan.id}`}
+                class="mt-6 w-full h-13 flex items-center justify-center text-white text-4 font-medium hover:opacity-90 transition-opacity no-underline rounded-0.75"
+                style={`background-color: ${plan.couleurBtn};`}>
+                {plan.cta}
+              </a>
+            )}
 
           </div>
         </div>

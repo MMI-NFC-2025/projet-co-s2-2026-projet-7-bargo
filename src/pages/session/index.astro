@@ -194,4 +194,92 @@ const sessions = (data.items ?? []).map(s => {
     </div>
   </div>
 
+  <!-- ===== POPUP VÉRIFICATION ÂGE ===== -->
+  <div id="age-overlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;">
+    <div style="background:white;border-radius:10px;width:100%;max-width:420px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.3);">
+
+      <!-- Header -->
+      <div style="background:#094736;padding:24px 28px;">
+        <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:#72c073;margin:0 0 8px 0;">Vérification</p>
+        <h3 style="color:white;margin:0;font-size:22px;font-weight:500;letter-spacing:-0.5px;">Confirmation d'âge</h3>
+      </div>
+
+      <!-- Corps -->
+      <div style="padding:28px;">
+        <p style="color:#646262;font-size:14px;font-weight:500;line-height:1.6;margin:0 0 24px 0;">
+          Les barathons impliquent la consommation de boissons alcoolisées. L'accès est strictement réservé aux personnes majeures.
+        </p>
+
+        <!-- Checkbox -->
+        <label style="display:flex;align-items:flex-start;gap:14px;cursor:pointer;">
+          <div style="position:relative;width:22px;height:22px;flex-shrink:0;margin-top:1px;">
+            <input type="checkbox" id="age-checkbox"
+              style="position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;" />
+            <div id="age-box" style="width:22px;height:22px;border:2px solid #DFDFDF;border-radius:4px;background:white;transition:all 0.15s;display:flex;align-items:center;justify-content:center;">
+              <svg id="age-check-icon" style="display:none;" width="13" height="13" viewBox="0 0 16 16" fill="none">
+                <path d="M2 8l4 4 8-8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <span style="color:#1e1e1e;font-size:14px;font-weight:600;line-height:1.5;">Je certifie avoir <strong>18 ans ou plus</strong> et accepte de participer à un événement impliquant de l'alcool.</span>
+        </label>
+
+      </div>
+
+      <!-- Footer -->
+      <div style="padding:0 28px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+        <a href="/" style="color:#646262;font-size:14px;font-weight:500;text-decoration:none;border:none;background:transparent;cursor:pointer;padding:0;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
+          ← Retour
+        </a>
+        <button id="age-confirm-btn"
+          onclick="window.confirmAge()"
+          style="height:46px;padding:0 28px;font-size:14px;font-weight:600;color:white;border:none;cursor:not-allowed;border-radius:4px;background:#DFDFDF;transition:all 0.2s;"
+          disabled>
+          Confirmer
+        </button>
+      </div>
+
+    </div>
+  </div>
+
 </Layout>
+
+<script is:inline>
+(function () {
+  var overlay  = document.getElementById('age-overlay');
+  var checkbox = document.getElementById('age-checkbox');
+  var box      = document.getElementById('age-box');
+  var icon     = document.getElementById('age-check-icon');
+  var btn      = document.getElementById('age-confirm-btn');
+
+  // Vérifier si déjà confirmé en session
+  if (sessionStorage.getItem('age_confirmed') === '1') {
+    if (overlay) overlay.style.display = 'none';
+    return;
+  }
+
+  checkbox.addEventListener('change', function () {
+    if (this.checked) {
+      box.style.background = '#094736';
+      box.style.borderColor = '#094736';
+      icon.style.display = 'block';
+      btn.disabled = false;
+      btn.style.background = '#094736';
+      btn.style.cursor = 'pointer';
+    } else {
+      box.style.background = 'white';
+      box.style.borderColor = '#DFDFDF';
+      icon.style.display = 'none';
+      btn.disabled = true;
+      btn.style.background = '#DFDFDF';
+      btn.style.cursor = 'not-allowed';
+    }
+  });
+
+  window.confirmAge = function () {
+    if (!checkbox.checked) return;
+    sessionStorage.setItem('age_confirmed', '1');
+    overlay.style.display = 'none';
+  };
+})();
+</script>

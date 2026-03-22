@@ -40,7 +40,7 @@ if (Astro.request.method === 'POST') {
       if (loginResult?.token) {
         Astro.cookies.set('pb_token',   loginResult.token,     { httpOnly: true, path: '/', maxAge: 60 * 60 * 24 * 7, sameSite: 'lax' });
         Astro.cookies.set('pb_user_id', loginResult.record.id, { httpOnly: true, path: '/', maxAge: 60 * 60 * 24 * 7, sameSite: 'lax' });
-        return Astro.redirect('/profil');
+        return Astro.redirect('/onboarding');
       }
     }
     error = pbError?.message ?? 'Une erreur est survenue lors de la création du compte.';
