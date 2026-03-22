@@ -79,6 +79,16 @@ export async function updateUser(userId, token, data) {
   return await res.json();
 }
 
+/** Récupère une liste d'enregistrements avec authentification (token requis). */
+export async function getCollectionAuth(collection, token, params = {}) {
+  const query = new URLSearchParams({ perPage: 50, ...params });
+  const res = await fetch(`${PB_URL}/api/collections/${collection}/records?${query}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  const data = res.ok ? await res.json() : { items: [] };
+  return data.items ?? [];
+}
+
 /** Supprime le compte utilisateur. */
 export async function deleteUser(userId, token) {
   const res = await fetch(`${PB_URL}/api/collections/users/records/${userId}`, {

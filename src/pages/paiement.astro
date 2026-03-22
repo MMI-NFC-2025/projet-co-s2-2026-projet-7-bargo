@@ -157,11 +157,10 @@ const plan = plans[planId] ?? plans.vip;
       <label class="flex items-center gap-4 cursor-pointer mt-1">
         <div class="relative w-6.25 h-6.25 shrink-0">
           <input type="checkbox" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer peer" />
-          <div class="w-6.25 h-6.25 border-2 border-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] peer-checked:bg-primary-600 peer-checked:border-primary-600 transition-colors">
-            <svg class="hidden peer-checked:block w-full h-full p-0.5" viewBox="0 0 16 16" fill="none">
-              <path d="M2 8l4 4 8-8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
+          <div class="absolute inset-0 border-2 border-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] peer-checked:bg-primary-600 peer-checked:border-primary-600 transition-colors"></div>
+          <svg class="absolute inset-0 hidden peer-checked:block w-full h-full p-0.5" viewBox="0 0 16 16" fill="none">
+            <path d="M2 8l4 4 8-8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </div>
         <span class="text-white text-3.5 font-medium leading-[1.4]">J'accepte les <a href="/mention_legal" class="underline hover:opacity-70">conditions d'utilisation</a></span>
       </label>
@@ -225,14 +224,15 @@ const plan = plans[planId] ?? plans.vip;
     <h2 class="absolute text-white m-0 uppercase" style="top:96px;left:80px;">
       Paiement
     </h2>
-    <p class="absolute text-3.5 font-medium leading-[1.1] text-neutral-300 m-0" style="top:172px;left:80px;">
-      Finalisez votre abonnement en toute sécurité.
-    </p>
-
-    <!-- SSL badge -->
-    <div class="absolute flex items-center gap-2" style="top:172px;left:416px;">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#72C073" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-      <span class="text-[#72C073] text-3 font-bold">Paiement SSL sécurisé</span>
+    <div class="absolute flex flex-col gap-1.5" style="top:172px;left:80px;">
+      <p class="text-3.5 font-medium leading-[1.1] text-neutral-300 m-0">
+        Finalisez votre abonnement en toute sécurité.
+      </p>
+      <!-- SSL badge -->
+      <div class="flex items-center gap-1.5">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#72C073" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <span class="text-[#72C073] text-3 font-bold">Paiement SSL sécurisé</span>
+      </div>
     </div>
 
     <form id="payment-form" novalidate>
@@ -288,11 +288,10 @@ const plan = plans[planId] ?? plans.vip;
       <label class="absolute flex items-center gap-5.5 cursor-pointer" style="top:710px;left:80px;">
         <div class="relative w-6.25 h-6.25 shrink-0">
           <input type="checkbox" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer peer" />
-          <div class="w-6.25 h-6.25 border-2 border-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] peer-checked:bg-primary-600 peer-checked:border-primary-600 transition-colors">
-            <svg class="hidden peer-checked:block w-full h-full p-0.5" viewBox="0 0 16 16" fill="none">
-              <path d="M2 8l4 4 8-8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
+          <div class="absolute inset-0 border-2 border-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] peer-checked:bg-primary-600 peer-checked:border-primary-600 transition-colors"></div>
+          <svg class="absolute inset-0 hidden peer-checked:block w-full h-full p-0.5" viewBox="0 0 16 16" fill="none">
+            <path d="M2 8l4 4 8-8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </div>
         <span class="text-white text-4 font-medium leading-[1.4]">J'accepte les <a href="/mention_legal" class="underline hover:opacity-70 transition-opacity">conditions d'utilisation</a></span>
       </label>

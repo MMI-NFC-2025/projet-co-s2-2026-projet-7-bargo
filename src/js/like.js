@@ -87,6 +87,8 @@
     });
   }
 
+  window.__initLikes__ = initBtns;
+
   // ── Charge les favoris existants si connecté ───────────────────
   if (token && userId) {
     fetch(PB_URL + '/api/collections/users/records/' + userId, {

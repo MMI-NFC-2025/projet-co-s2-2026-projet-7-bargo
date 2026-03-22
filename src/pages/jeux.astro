@@ -6,6 +6,9 @@ import LikeButton from '../components/LikeButton.astro';
 import Pagination from '../components/Pagination.astro';
 
 const PB_URL  = 'https://pbbargo.pierre-mouilleseaux-lhuillier.fr';
+const token   = Astro.cookies.get('pb_token')?.value;
+const userId  = Astro.cookies.get('pb_user_id')?.value;
+const isAuth  = !!(token && userId);
 const page    = parseInt(Astro.url.searchParams.get('page') ?? '1');
 const perPage = 9; // 3 colonnes × 3 lignes
 
@@ -67,7 +70,9 @@ const totalPages = Math.ceil((data.totalItems ?? 0) / perPage);
                     );
                   })()}
                   <!-- Like -->
-                  <LikeButton id={jeu.id} variant="jeux" class="lg:absolute lg:top-37.75 lg:right-5.25 bg-transparent border-0 cursor-pointer p-0 shrink-0" ariaLabel="Ajouter aux favoris" />
+                  {isAuth && (
+                    <LikeButton id={jeu.id} variant="jeux" class="lg:absolute lg:top-37.75 lg:right-5.25 w-10.25 h-10.25 flex items-center justify-center shrink-0 bg-transparent border-0 cursor-pointer p-0" ariaLabel="Ajouter aux favoris" />
+                  )}
                 </div>
 
               </div>
@@ -83,6 +88,12 @@ const totalPages = Math.ceil((data.totalItems ?? 0) / perPage);
 
   <!-- ===== PAGINATION ===== -->
   <Pagination page={page} totalPages={totalPages} currentUrl={Astro.url.href} />
+
+  <script is:inline define:vars={{ token, userId, isAuth }}>
+    if (isAuth) {
+      window.__AUTH__ = { token, userId };
+    }
+  </script>
 
   <script>
     import '../js/like.js';
