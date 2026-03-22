@@ -9,7 +9,7 @@ const imageURL = recordImage ? getImageUrl(record, recordImage) : null;
 {imageURL ? (
   <img
     src={imageURL}
-    alt={record.nomMaison || "Image"}
+    alt={record.nom || ""}
     width={width}
     height={height}
     class="w-full h-full object-cover"

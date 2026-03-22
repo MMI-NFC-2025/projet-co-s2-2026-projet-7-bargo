@@ -323,25 +323,25 @@ const displayName = user.prenom
       <div class="flex-1 bg-neutral-200">
 
         <!-- BARRE D'ONGLETS BLANCHE -->
-        <div class="bg-white flex flex-wrap items-stretch px-4 lg:px-20 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] min-h-16 lg:h-25">
-          <div id="tab-list" class="relative flex items-stretch h-full overflow-x-auto">
+        <div class="bg-white flex items-stretch lg:px-20 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] h-14 lg:h-25">
+          <div id="tab-list" class="relative flex items-stretch flex-1 lg:flex-none h-full overflow-x-auto">
             <button data-tab="profil"
-              class="tab-btn px-4 lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap">
+              class="tab-btn flex-1 lg:flex-none lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap flex items-center justify-center">
               Mon profil
             </button>
             <button data-tab="notifications"
-              class="tab-btn px-4 lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 inline-flex items-center gap-2 whitespace-nowrap">
+              class="tab-btn flex-1 lg:flex-none lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 inline-flex items-center justify-center gap-2 whitespace-nowrap">
               Notifications
               {(unreadNotifs + demandeAmies.length + demandeSession.length) > 0 && (
                 <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white text-2.75 font-bold">{unreadNotifs + demandeAmies.length + demandeSession.length}</span>
               )}
             </button>
             <button data-tab="parametres"
-              class="tab-btn px-4 lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap">
+              class="tab-btn flex-1 lg:flex-none lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap flex items-center justify-center">
               Paramètres
             </button>
             <!-- Trait animé -->
-            <div id="tab-indicator" class="absolute bottom-0 h-1 rounded-full" style="background:#72c073; transition: left 0.3s cubic-bezier(.4,0,.2,1), width 0.3s cubic-bezier(.4,0,.2,1); left:0; width:0;"></div>
+            <div id="tab-indicator" class="absolute bottom-0 h-1.5 rounded-full" style="background:#72c073; transition: left 0.3s cubic-bezier(.4,0,.2,1), width 0.3s cubic-bezier(.4,0,.2,1); left:0; width:0;"></div>
           </div>
 
           <!-- Editer / Annuler (desktop only) -->

@@ -6,6 +6,7 @@ if (btn && menu) {
     const isOpen = menu.classList.toggle('is-open');
     btn.classList.toggle('is-open', isOpen);
     btn.setAttribute('aria-label', isOpen ? 'Fermer le menu' : 'Ouvrir le menu');
+    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     document.body.style.overflow = isOpen ? 'hidden' : '';
   });
 

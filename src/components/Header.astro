@@ -2,6 +2,7 @@
 import logoDark from '../assets/icon/logo-dark.svg';
 import userIcon  from '../assets/icon/user.svg';
 import { getImageUrl } from '../js/backend.js';
+import '../styles/header.css';
 
 const token  = Astro.cookies.get('pb_token')?.value;
 const userId = Astro.cookies.get('pb_user_id')?.value;
@@ -84,7 +85,7 @@ if (isLoggedIn) {
       </a>
 
       <!-- Bouton hamburger / croix -->
-      <button id="nav-hamburger" aria-label="Ouvrir le menu"
+      <button id="nav-hamburger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-mobile-menu"
         class="relative w-6.5 h-5 bg-transparent border-0 cursor-pointer p-0 shrink-0">
         <span class="ham-bar absolute left-0 w-full h-0.5 bg-black top-0 origin-center"></span>
         <span class="ham-bar absolute left-0 w-full h-0.5 bg-black top-2.25 origin-center"></span>
@@ -107,7 +108,7 @@ if (isLoggedIn) {
   <div class="absolute inset-0 bg-neutral-800"></div>
 
   <!-- Contenu du menu -->
-  <nav class="relative z-10 flex flex-col justify-between h-full px-6 py-8">
+  <nav aria-label="Menu principal mobile" class="relative z-10 flex flex-col justify-between h-full px-6 py-8">
 
     <!-- Liens nav -->
     <div class="flex flex-col gap-0">
@@ -170,34 +171,6 @@ if (isLoggedIn) {
   </nav>
 </div>
 
-<style>
-  .ham-bar {
-    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;
-  }
-  #nav-hamburger.is-open .ham-bar:nth-child(1) { transform: translateY(9px) rotate(45deg); }
-  #nav-hamburger.is-open .ham-bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
-  #nav-hamburger.is-open .ham-bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
-
-  #nav-mobile-menu {
-    opacity: 0;
-    transform: translateY(-12px);
-    pointer-events: none;
-    transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.4,0,0.2,1);
-  }
-  #nav-mobile-menu.is-open { opacity: 1; transform: translateY(0); pointer-events: auto; }
-
-  .nav-link {
-    opacity: 0;
-    transform: translateX(-16px);
-    transition: opacity 0.3s ease, transform 0.3s ease, color 0.2s ease;
-  }
-  #nav-mobile-menu.is-open .nav-link:nth-child(1) { opacity: 1; transform: translateX(0); transition-delay: 0.05s; }
-  #nav-mobile-menu.is-open .nav-link:nth-child(2) { opacity: 1; transform: translateX(0); transition-delay: 0.1s; }
-  #nav-mobile-menu.is-open .nav-link:nth-child(3) { opacity: 1; transform: translateX(0); transition-delay: 0.15s; }
-  #nav-mobile-menu.is-open .nav-link:nth-child(4) { opacity: 1; transform: translateX(0); transition-delay: 0.2s; }
-  #nav-mobile-menu.is-open .nav-link:nth-child(5) { opacity: 1; transform: translateX(0); transition-delay: 0.25s; }
-  #nav-mobile-menu.is-open .nav-link:nth-child(6) { opacity: 1; transform: translateX(0); transition-delay: 0.3s; }
-</style>
 
 <script>
   import '../js/header.js';

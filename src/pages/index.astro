@@ -31,11 +31,30 @@ const bars = await getCollection('bar', { sort: 'created' });
 <Layout>
 
   <!-- ==================== HERO ==================== -->
-  <section class="relative w-full h-100 lg:h-175 overflow-hidden">
+  <section class="relative w-full h-115 lg:h-175 overflow-hidden">
     <Image src={heroBg} alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
-    <h1 class="absolute text-white left-5 lg:left-20 top-35 lg:top-66.75 uppercase m-0 text-10 lg:text-22.5">
+
+    <!-- Dégradé mobile uniquement -->
+    <div class="flex lg:hidden absolute inset-0 bg-linear-to-t from-[rgba(0,0,0,0.55)] via-[rgba(0,0,0,0.15)] to-transparent"></div>
+
+    <!-- Mobile : contenu en bas -->
+    <div class="flex lg:hidden absolute bottom-0 left-0 right-0 flex-col px-5 pb-10">
+      <h1 class="text-white uppercase m-0 text-10 leading-none">
+        <span class="block">"Le barathon</span>
+        <span class="block mt-4">Autrement"</span>
+      </h1>
+      <p class="text-neutral-300 m-0 mt-4 text-3.5 font-medium leading-[1.4]">
+        Une soirée. Un groupe. Un parcours.
+      </p>
+      <a href="/session" class="mt-6 inline-flex items-center justify-center h-12 px-8 bg-primary-600 text-white text-4 font-medium no-underline hover:opacity-90 transition-opacity w-fit">
+        Mes barathons
+      </a>
+    </div>
+
+    <!-- Desktop : positions absolues d'origine -->
+    <h1 class="hidden lg:block absolute text-white left-20 top-66.75 uppercase m-0 text-22.5">
       <span class="block whitespace-nowrap">"Le barathon</span>
-      <span class="block whitespace-nowrap mt-5 lg:mt-12.25">Autrement"</span>
+      <span class="block whitespace-nowrap mt-12.25">Autrement"</span>
     </h1>
     <p class="hidden lg:block absolute text-neutral-300 right-20 top-156 w-114.25 text-right m-0">
       Une soirée. Un groupe. Un parcours.
@@ -259,9 +278,10 @@ const bars = await getCollection('bar', { sort: 'created' });
 
       <!-- CTA -->
       <div class="flex justify-end">
-        <a href="/Apropos" class="inline-flex items-center gap-4 px-12 py-2 bg-neutral-800 text-white font-medium text-4 leading-[1.4] hover:opacity-80 transition-opacity">
+        <a href="/Apropos" class="inline-flex items-center gap-3 lg:gap-4 px-8 lg:px-12 py-3 lg:py-2 bg-neutral-800 text-white font-medium text-4 leading-[1.4] hover:opacity-80 transition-opacity">
           En savoir plus
-          <img src={arrowRight.src} alt="" width="35" height="35" />
+          <img src={arrowRight.src} alt="" width="24" height="24" class="block lg:hidden" />
+          <img src={arrowRight.src} alt="" width="35" height="35" class="hidden lg:block" />
         </a>
       </div>
 

@@ -2,20 +2,27 @@
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import CookieBanner from "../components/CookieBanner.astro";
+import Seo from "../components/Seo.astro";
 
 import "../styles/global.css";
 
 interface Props {
   title?: string;
   description?: string;
+  image?: string;
   noFooter?: boolean;
+  noindex?: boolean;
 }
 
 const {
   title = 'Bargo — Organisez votre barathon',
   description = 'Bargo vous aide à organiser et vivre des barathons inoubliables. Découvrez nos bars partenaires, nos jeux et créez votre parcours.',
+  image,
   noFooter = false,
+  noindex = false,
 } = Astro.props;
+
+const url = Astro.url.href;
 ---
 
 <!doctype html>
@@ -23,17 +30,10 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content="#1e1e1e" />
 
-    <!-- Open Graph -->
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="fr_FR" />
-
-    <title>{title}</title>
+    <Seo title={title} description={description} image={image} url={url} noindex={noindex} />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -45,9 +45,13 @@ const {
   </head>
 
   <body class="min-h-full m-0 w-full bg-black text-white antialiased">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:px-4 focus:py-2 focus:bg-white focus:text-black focus:font-medium focus:rounded">
+      Aller au contenu principal
+    </a>
+
     <Header />
 
-    <main class="w-full pt-23">
+    <main id="main-content" class="w-full pt-23">
       <slot />
     </main>
 

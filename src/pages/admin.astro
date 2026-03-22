@@ -2,6 +2,7 @@
 // @ts-nocheck
 import Layout from '../layouts/Layout.astro';
 import { PB_URL } from '../js/backend.js';
+import '../styles/admin.css';
 
 // ── Auth guard ────────────────────────────────────────────────────────────────
 const token  = Astro.cookies.get('pb_token')?.value;
@@ -70,19 +71,20 @@ const pageData = JSON.stringify({
 
 <Layout title="Administration — Bargo">
 
-<div style="display:flex; min-height:calc(100vh - 92px); background:#f4f5f7;">
+
+<div class="admin-root" style="display:flex; min-height:calc(100vh - 92px); background:#f4f5f7;">
 
   <!-- ══════════════════════════════════════════════════════════════════════ -->
   <!-- SIDEBAR                                                               -->
   <!-- ══════════════════════════════════════════════════════════════════════ -->
-  <aside style="width:240px; flex-shrink:0; background:#1e1e1e; display:flex; flex-direction:column; padding:28px 16px;">
+  <aside class="admin-sidebar" style="width:240px; flex-shrink:0; background:#1e1e1e; display:flex; flex-direction:column; padding:28px 16px;">
 
-    <div style="padding:0 8px 24px; border-bottom:1px solid rgba(255,255,255,0.08);">
+    <div class="admin-sidebar-header" style="padding:0 8px 24px; border-bottom:1px solid rgba(255,255,255,0.08);">
       <p style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:#72c073; margin:0 0 2px;">Bargo</p>
       <p style="font-size:16px; font-weight:600; color:white; margin:0;">Administration</p>
     </div>
 
-    <nav style="margin-top:16px; flex:1;">
+    <nav class="admin-sidebar-nav" style="margin-top:16px; flex:1;">
       {[
         { id: 'dashboard', label: 'Tableau de bord' },
         { id: 'users',     label: 'Utilisateurs',  count: allUsers.length },
@@ -101,7 +103,7 @@ const pageData = JSON.stringify({
       ))}
     </nav>
 
-    <div style="padding:16px 8px 0; border-top:1px solid rgba(255,255,255,0.08);">
+    <div class="admin-sidebar-footer" style="padding:16px 8px 0; border-top:1px solid rgba(255,255,255,0.08);">
       <p style="font-size:12px; font-weight:500; color:rgba(247,241,237,0.35); margin:0 0 2px;">Connecté en tant que</p>
       <p style="font-size:13px; font-weight:600; color:rgba(247,241,237,0.7); margin:0;">{me.pseudo || me.prenom || me.email}</p>
     </div>
@@ -110,14 +112,14 @@ const pageData = JSON.stringify({
   <!-- ══════════════════════════════════════════════════════════════════════ -->
   <!-- MAIN                                                                  -->
   <!-- ══════════════════════════════════════════════════════════════════════ -->
-  <main style="flex:1; overflow-y:auto; padding:36px 40px;">
+  <main class="admin-main" style="flex:1; overflow-y:auto; padding:36px 40px;">
 
     <!-- ── Section : Tableau de bord ──────────────────────────────────────── -->
     <section id="section-dashboard" class="admin-section">
       <h3 style="color:#111; margin:0 0 6px;">Tableau de bord</h3>
       <p style="color:#888; font-size:14px; font-weight:500; margin:0 0 28px;">Vue d'ensemble de la plateforme.</p>
 
-      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:36px;">
+      <div class="admin-stats-grid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:36px;">
         {[
           { label: 'Utilisateurs', value: allUsers.length,    color: '#347645', bg: '#edf7ee' },
           { label: 'Bars',         value: allBars.length,     color: '#2563eb', bg: '#eff6ff' },
@@ -131,7 +133,7 @@ const pageData = JSON.stringify({
         ))}
       </div>
 
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+      <div class="admin-2col" style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
         <!-- Sessions récentes -->
         <div style="background:white; border-radius:10px; padding:22px 24px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
           <p style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#aaa; margin:0 0 16px;">Sessions récentes</p>
@@ -176,7 +178,7 @@ const pageData = JSON.stringify({
         </div>
       </div>
 
-      <div style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
+      <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
         <div style="display:grid; grid-template-columns:1fr 200px 80px 90px 80px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
           <p class="th">Utilisateur</p><p class="th">Email</p><p class="th">Points</p><p class="th">Rôle</p><p class="th"></p>
         </div>
@@ -222,7 +224,7 @@ const pageData = JSON.stringify({
         <button data-action="open-bar-form" data-id="" class="btn-primary">+ Ajouter un bar</button>
       </div>
 
-      <div style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
+      <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
         <div style="display:grid; grid-template-columns:1fr 220px 100px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
           <p class="th">Nom</p><p class="th">Adresse</p><p class="th"></p>
         </div>
@@ -250,7 +252,7 @@ const pageData = JSON.stringify({
         <p style="color:#888; font-size:14px; font-weight:500; margin:0;">{allSessions.length} session{allSessions.length > 1 ? 's' : ''} créée{allSessions.length > 1 ? 's' : ''}</p>
       </div>
 
-      <div style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
+      <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
         <div style="display:grid; grid-template-columns:1fr 130px 140px 80px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
           <p class="th">Nom</p><p class="th">Date</p><p class="th">État</p><p class="th"></p>
         </div>
@@ -287,7 +289,7 @@ const pageData = JSON.stringify({
         <p style="color:#888; font-size:14px; font-weight:500; margin:0;">{allJeux.length} jeu{allJeux.length > 1 ? 'x' : ''} disponible{allJeux.length > 1 ? 's' : ''}</p>
       </div>
 
-      <div style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
+      <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
         <div style="display:grid; grid-template-columns:1fr 150px 130px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
           <p class="th">Nom</p><p class="th">Type</p><p class="th"></p>
         </div>
@@ -373,7 +375,7 @@ const pageData = JSON.stringify({
         <button data-action="open-boison-form" data-id="" class="btn-primary">+ Ajouter une boisson</button>
       </div>
 
-      <div style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
+      <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
         <div style="display:grid; grid-template-columns:1fr 100px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
           <p class="th">Nom</p><p class="th"></p>
         </div>

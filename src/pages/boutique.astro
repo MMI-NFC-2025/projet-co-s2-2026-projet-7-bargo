@@ -55,6 +55,9 @@ function tabUrl(id) {
   <!-- ===== HERO ===== -->
   <section class="bg-primary-900 h-70 lg:h-112.5 relative">
     <h1 class="absolute top-15 left-5 lg:top-35.25 lg:left-20 text-white m-0 uppercase text-10 lg:text-22.5">Boutique</h1>
+    <p class="block lg:hidden absolute bottom-6 left-5 right-5 text-neutral-300 text-3.5 font-medium m-0 leading-[1.4]">
+      Débloquez des avatars, des thèmes et des titres exclusifs grâce à vos points de barathon.
+    </p>
     <p class="hidden lg:block absolute top-67 left-20 text-neutral-200 text-3.5 font-medium w-136.75 m-0 leading-[1.6]">
       Personnalisez votre profil et affirmez votre style au sein du groupe. Débloquez des avatars,
       des cadres et des thèmes exclusifs grâce à votre participation et à vos succès.
@@ -68,25 +71,25 @@ function tabUrl(id) {
     <!-- Tab bar -->
     <div class="pt-5.75">
       <div class="border-b-2 border-neutral-350 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25)]">
-        <div class="px-4 lg:px-20 flex items-center justify-between h-13">
+        <div class="lg:px-20 flex items-center justify-between h-14 lg:h-13">
 
           <!-- Onglets -->
-          <div id="tab-list" class="relative flex items-center h-full overflow-x-auto">
+          <div id="tab-list" class="relative flex items-center flex-1 lg:flex-none h-full overflow-x-auto">
             {tabs.map(tab => (
               <button
                 data-tab={tab.id}
-                class={`tab-btn flex items-center justify-center px-4 lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black bg-transparent border-0 cursor-pointer whitespace-nowrap`}
+                class={`tab-btn flex-1 lg:flex-none flex items-center justify-center lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black bg-transparent border-0 cursor-pointer whitespace-nowrap`}
               >
                 {tab.label}
               </button>
             ))}
             <!-- Trait animé -->
-            <div id="tab-indicator" class="absolute bottom-0 h-1 rounded-full" style="background:#72c073; transition: left 0.3s cubic-bezier(.4,0,.2,1), width 0.3s cubic-bezier(.4,0,.2,1); left:0; width:0;"></div>
+            <div id="tab-indicator" class="absolute bottom-0 h-1.5 rounded-full" style="background:#72c073; transition: left 0.3s cubic-bezier(.4,0,.2,1), width 0.3s cubic-bezier(.4,0,.2,1); left:0; width:0;"></div>
           </div>
 
           <!-- Points utilisateur -->
           {userPoints !== null && (
-            <div class="flex items-center gap-2 lg:gap-3 shrink-0 ml-4">
+            <div class="flex items-center gap-2 lg:gap-3 shrink-0 px-3 lg:px-0 lg:ml-4">
               <span class="hidden lg:block text-black text-4 font-medium">Vos points :</span>
               <h3 class="m-0 text-black text-3.5 lg:text-6.25">{userPoints} pts</h3>
             </div>
