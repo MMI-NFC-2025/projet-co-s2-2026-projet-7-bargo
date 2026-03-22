@@ -48,31 +48,32 @@ const hasMap = lat !== 0 && lon !== 0;
 ===================================================== -->
 <div class="block lg:hidden bg-neutral-200">
 
-  <!-- Photo hero -->
+  <!-- Photo hero avec titre + icônes -->
   <div class="relative w-full h-90 overflow-hidden">
     <PbImage record={bar} recordImage={bar.img?.[0]} width={800} height={400} />
+    <!-- Gradient sombre en bas -->
     <div class="absolute inset-0 pointer-events-none"
-      style="background: linear-gradient(to bottom, rgba(30,30,30,0) 30%, rgba(30,30,30,0.85) 100%);"></div>
-    <h1 class="absolute bottom-4 left-4 text-white uppercase m-0 text-8 leading-tight">{bar.nom}</h1>
-  </div>
-
-  <!-- Icônes réseaux + actions -->
-  <div class="bg-neutral-800 flex items-center justify-between px-5 py-3">
-    <div class="flex gap-4">
-      <img src={instaIcon.src}    alt="Instagram" width="22" height="22" class="brightness-0 invert" />
-      <img src={linkedinIcon.src} alt="LinkedIn"  width="22" height="22" class="brightness-0 invert" />
-      <img src={discordIcon.src}  alt="Discord"   width="22" height="22" class="brightness-0 invert" />
-      <img src={fbIcon.src}       alt="Facebook"  width="22" height="22" class="brightness-0 invert" />
-    </div>
-    <div class="flex gap-4">
-      <img src={notifIcon.src}   alt="Notifier" width="22" height="22" class="brightness-0 invert" />
-      <img src={partageIcon.src} alt="Partager" width="22" height="22" class="brightness-0 invert" />
-      {isAuth && (
-        <button class="like-btn-bar p-0 border-0 bg-transparent cursor-pointer" data-id={bar.id} type="button" aria-label="Favori">
-          <img src={heartIcon.src}   alt="" width="22" height="22" class="brightness-0 invert like-empty" />
-          <img src={likeFillIcon.src ?? heartIcon.src} alt="" width="22" height="22" class="hidden like-filled" />
-        </button>
-      )}
+      style="background: linear-gradient(to bottom, rgba(30,30,30,0) 40%, rgba(30,30,30,0.9) 100%);"></div>
+    <!-- Titre -->
+    <h1 class="absolute left-5 text-white uppercase m-0 text-8 leading-tight" style="bottom: 68px;">{bar.nom}</h1>
+    <!-- Icônes réseaux (gauche) + actions (droite) -->
+    <div class="absolute bottom-4 left-5 right-5 flex items-center justify-between">
+      <div class="flex gap-4">
+        <img src={instaIcon.src}    alt="Instagram" width="22" height="22" class="brightness-0 invert" />
+        <img src={linkedinIcon.src} alt="LinkedIn"  width="22" height="22" class="brightness-0 invert" />
+        <img src={discordIcon.src}  alt="Discord"   width="22" height="22" class="brightness-0 invert" />
+        <img src={fbIcon.src}       alt="Facebook"  width="22" height="22" class="brightness-0 invert" />
+      </div>
+      <div class="flex gap-4">
+        <img src={notifIcon.src}   alt="Notifier" width="22" height="22" class="brightness-0 invert" />
+        <img src={partageIcon.src} alt="Partager" width="22" height="22" class="brightness-0 invert" />
+        {isAuth && (
+          <button class="like-btn-bar p-0 border-0 bg-transparent cursor-pointer" data-id={bar.id} type="button" aria-label="Favori">
+            <img src={heartIcon.src}   alt="" width="22" height="22" class="brightness-0 invert like-empty" />
+            <img src={likeFillIcon.src ?? heartIcon.src} alt="" width="22" height="22" class="hidden like-filled" />
+          </button>
+        )}
+      </div>
     </div>
   </div>
 

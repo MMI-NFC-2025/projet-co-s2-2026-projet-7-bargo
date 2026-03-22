@@ -115,7 +115,7 @@ const appData = JSON.stringify({ bars, jeux, users: amieUsers, PB_URL, token, us
   </div>
 
   <!-- ===== RIGHT PANEL ===== -->
-  <div id="step-view" class="flex-1 bg-neutral-800 overflow-y-auto">
+  <div id="step-view" class="flex-1 bg-neutral-800 overflow-y-auto overflow-x-hidden">
 
     <!-- ─── STEP 1: Informations ─── -->
     <div id="panel-1" class="flex flex-col px-5 lg:px-17.5 py-10 lg:py-14" style="min-height: calc(100vh - 92px);">
@@ -214,7 +214,7 @@ const appData = JSON.stringify({ bars, jeux, users: amieUsers, PB_URL, token, us
             style="background:transparent; flex:1; font-size:14px; font-weight:500; outline:none; border:none; color:#1e1e1e;"
             class="placeholder-neutral-500" />
         </div>
-        <button id="btn-favoris-bars" style="background:#347645; height:52px; width:120px; color:white; font-size:14px; font-weight:500; border:none; cursor:pointer; border-radius:2px; flex-shrink:0;">Favoris</button>
+        <button id="btn-favoris-bars" style="background:#347645; height:52px; padding:0 16px; color:white; font-size:14px; font-weight:500; border:none; cursor:pointer; border-radius:2px; white-space:nowrap; flex-shrink:0;">Favoris</button>
       </div>
 
       <div id="bars-list" class="flex flex-col gap-2.5 flex-1"></div>
@@ -225,9 +225,9 @@ const appData = JSON.stringify({ bars, jeux, users: amieUsers, PB_URL, token, us
         <p id="bars-names" style="color:#646262; font-size:14px; font-weight:500; margin:4px 0 0;"></p>
       </div>
 
-      <div class="flex justify-between items-center mt-5">
-        <button onclick="goToStep(1)" style="height:60px; width:237px; color:white; font-size:16px; font-weight:500; border:2px solid white; background:transparent; cursor:pointer;">Retour</button>
-        <button onclick="goToStep(3)" style="background:#347645; height:60px; width:237px; color:white; font-size:16px; font-weight:500; border:none; cursor:pointer;">Continuer</button>
+      <div class="flex items-center gap-3 mt-5">
+        <button onclick="goToStep(1)" style="flex:1; height:60px; color:white; font-size:16px; font-weight:500; border:2px solid white; background:transparent; cursor:pointer;">Retour</button>
+        <button onclick="goToStep(3)" style="flex:1; background:#347645; height:60px; color:white; font-size:16px; font-weight:500; border:none; cursor:pointer;">Continuer</button>
       </div>
     </div>
 
@@ -243,7 +243,7 @@ const appData = JSON.stringify({ bars, jeux, users: amieUsers, PB_URL, token, us
             style="background:transparent; flex:1; font-size:14px; font-weight:500; outline:none; border:none; color:#1e1e1e;"
             class="placeholder-neutral-500" />
         </div>
-        <button style="background:#347645; height:52px; width:120px; color:white; font-size:14px; font-weight:500; border:none; cursor:pointer; border-radius:2px; flex-shrink:0;">Favoris</button>
+        <button style="background:#347645; height:52px; padding:0 16px; color:white; font-size:14px; font-weight:500; border:none; cursor:pointer; border-radius:2px; white-space:nowrap; flex-shrink:0;">Favoris</button>
       </div>
 
       <div id="jeux-list" class="flex flex-col gap-2.5 flex-1"></div>
@@ -254,9 +254,9 @@ const appData = JSON.stringify({ bars, jeux, users: amieUsers, PB_URL, token, us
         <p id="jeux-names" style="color:#646262; font-size:14px; font-weight:500; margin:4px 0 0;"></p>
       </div>
 
-      <div class="flex justify-between items-center mt-5">
-        <button onclick="goToStep(2)" style="height:60px; width:237px; color:white; font-size:16px; font-weight:500; border:2px solid white; background:transparent; cursor:pointer;">Retour</button>
-        <button onclick="goToStep(4)" style="background:#347645; height:60px; width:237px; color:white; font-size:16px; font-weight:500; border:none; cursor:pointer;">Continuer</button>
+      <div class="flex items-center gap-3 mt-5">
+        <button onclick="goToStep(2)" style="flex:1; height:60px; color:white; font-size:16px; font-weight:500; border:2px solid white; background:transparent; cursor:pointer;">Retour</button>
+        <button onclick="goToStep(4)" style="flex:1; background:#347645; height:60px; color:white; font-size:16px; font-weight:500; border:none; cursor:pointer;">Continuer</button>
       </div>
     </div>
 
@@ -280,9 +280,9 @@ const appData = JSON.stringify({ bars, jeux, users: amieUsers, PB_URL, token, us
         <p id="users-names" style="color:#646262; font-size:14px; font-weight:500; margin:4px 0 0;"></p>
       </div>
 
-      <div class="flex justify-between items-center mt-5">
-        <button onclick="goToStep(3)" style="height:60px; width:237px; color:white; font-size:16px; font-weight:500; border:2px solid white; background:transparent; cursor:pointer;">Retour</button>
-        <button id="btn-lancer" style="background:#347645; height:60px; width:237px; color:white; font-size:16px; font-weight:700; border:none; cursor:pointer;">Lancer</button>
+      <div class="flex items-center gap-3 mt-5">
+        <button onclick="goToStep(3)" style="flex:1; height:60px; color:white; font-size:16px; font-weight:500; border:2px solid white; background:transparent; cursor:pointer;">Retour</button>
+        <button id="btn-lancer" style="flex:1; background:#347645; height:60px; color:white; font-size:16px; font-weight:700; border:none; cursor:pointer;">Lancer</button>
       </div>
     </div>
 
@@ -410,7 +410,7 @@ const appData = JSON.stringify({ bars, jeux, users: amieUsers, PB_URL, token, us
       return '<div style="display:flex;align-items:center;background:white;border:2px solid #dfdfdf;border-radius:5px;box-shadow:0 4px 4px rgba(0,0,0,0.25);padding:10px;gap:8px;">' +
         '<div style="width:120px;height:75px;flex-shrink:0;border-radius:5px 0 0 5px;overflow:hidden;">' + thumb(imgUrl(bar, bar.img), bar.nom) + '</div>' +
         '<div style="flex:1;min-width:0;"><p style="color:#000;font-size:16px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(bar.nom) + '</p><p style="color:#646262;font-size:14px;font-weight:500;margin:4px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(bar.adresse) + '</p></div>' +
-        '<button data-action="toggle-bar" data-id="' + bar.id + '" style="flex-shrink:0;width:141px;height:37px;background:white;border:2px solid ' + (sel ? '#72c073' : '#dfdfdf') + ';border-radius:5px;box-shadow:0 4px 4px rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-size:14px;font-weight:500;color:#1e1e1e;">Ajouter ' + (sel ? iconCheck : iconPlus) + '</button>' +
+        '<button data-action="toggle-bar" data-id="' + bar.id + '" style="flex-shrink:0;padding:0 12px;height:37px;background:white;border:2px solid ' + (sel ? '#72c073' : '#dfdfdf') + ';border-radius:5px;box-shadow:0 4px 4px rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;font-size:13px;font-weight:500;color:#1e1e1e;">Ajouter ' + (sel ? iconCheck : iconPlus) + '</button>' +
       '</div>';
     }).join('');
     list.querySelectorAll('[data-action="toggle-bar"]').forEach(function (btn) {
@@ -444,7 +444,7 @@ const appData = JSON.stringify({ bars, jeux, users: amieUsers, PB_URL, token, us
       var sel = selectedJeux.length > 0 && selectedJeux[0].id === jeu.id;
       return '<div style="display:flex;align-items:center;background:white;border:2px solid #dfdfdf;border-radius:5px;box-shadow:0 4px 4px rgba(0,0,0,0.25);padding:10px;gap:8px;">' +
         '<div style="width:120px;height:75px;flex-shrink:0;border-radius:5px 0 0 5px;overflow:hidden;">' + thumb(imgUrl(jeu, jeu.img), jeu.nom) + '</div>' +
-        '<div style="flex:1;min-width:0;"><p style="color:#000;font-size:16px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(jeu.nom) + '</p><p style="color:#646262;font-size:14px;font-weight:500;margin:4px 0 0;overflow:hidden;text-overflow:ellipsis;">' + esc(jeu.description) + '</p></div>' +
+        '<div style="flex:1;min-width:0;"><p style="color:#000;font-size:16px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(jeu.nom) + '</p></div>' +
         '<button data-action="toggle-jeu" data-id="' + jeu.id + '" style="flex-shrink:0;width:141px;height:37px;background:white;border:2px solid ' + (sel ? '#72c073' : '#dfdfdf') + ';border-radius:5px;box-shadow:0 4px 4px rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-size:14px;font-weight:500;color:#1e1e1e;">Ajouter ' + (sel ? iconCheck : iconPlus) + '</button>' +
       '</div>';
     }).join('');
@@ -488,14 +488,34 @@ const appData = JSON.stringify({ bars, jeux, users: amieUsers, PB_URL, token, us
         : isSent
         ? '<span style="font-size:12px;font-weight:500;color:#646262;padding:0 8px;">Demandé</span>'
         : '<button data-action="add-friend" data-id="'+user.id+'" style="height:37px;padding:0 14px;font-size:13px;font-weight:500;cursor:pointer;border-radius:5px;background:white;color:#347645;border:2px solid #347645;box-shadow:0 4px 4px rgba(0,0,0,0.25);">+ Ami</button>';
-      return '<div style="display:flex;align-items:center;gap:14px;background:white;border:2px solid #dfdfdf;border-radius:5px;box-shadow:0 4px 4px rgba(0,0,0,0.25);padding:14px;">' +
-        '<div style="width:55px;height:55px;flex-shrink:0;border-radius:50%;overflow:hidden;">' + avatarHtml(user) + '</div>' +
-        '<div style="flex:1;min-width:0;"><p style="color:#000;font-size:16px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + name + '</p>' +
-        (user.pseudo && (user.prenom || user.nom) ? '<p style="color:#646262;font-size:14px;font-weight:500;margin:2px 0 0;">' + esc((user.prenom + ' ' + user.nom).trim()) + '</p>' : '') + '</div>' +
-        '<div style="display:flex;gap:8px;flex-shrink:0;align-items:center;">' +
-          '<button data-action="toggle-ami" data-id="' + user.id + '" style="width:141px;height:37px;background:white;border:2px solid ' + (sel ? '#72c073' : '#dfdfdf') + ';border-radius:5px;box-shadow:0 4px 4px rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-size:14px;font-weight:500;color:#1e1e1e;">Ajouter ' + (sel ? iconCheck : iconPlus) + '</button>' +
-          '<button data-action="toggle-sam" data-id="' + user.id + '" style="height:37px;padding:0 18px;font-size:14px;font-weight:500;cursor:pointer;border-radius:5px;background:white;color:#1e1e1e;border:2px solid ' + (isSam ? '#347645' : '#dfdfdf') + ';box-shadow:0 4px 4px rgba(0,0,0,0.25);">SAM</button>' +
-          friendBtn +
+      return '<div style="background:white;border:2px solid #dfdfdf;border-radius:5px;box-shadow:0 4px 4px rgba(0,0,0,0.25);">' +
+        // MOBILE
+        '<div class="block lg:hidden" style="padding:12px;">' +
+          '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">' +
+            '<div style="width:44px;height:44px;flex-shrink:0;border-radius:50%;overflow:hidden;">' + avatarHtml(user) + '</div>' +
+            '<div style="flex:1;min-width:0;">' +
+              '<p style="color:#000;font-size:15px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + name + '</p>' +
+              (user.pseudo && (user.prenom || user.nom) ? '<p style="color:#646262;font-size:13px;font-weight:500;margin:2px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc((user.prenom + ' ' + user.nom).trim()) + '</p>' : '') +
+            '</div>' +
+          '</div>' +
+          '<div style="display:flex;gap:8px;align-items:center;">' +
+            '<button data-action="toggle-ami" data-id="' + user.id + '" style="flex:1;height:36px;background:white;border:2px solid ' + (sel ? '#72c073' : '#dfdfdf') + ';border-radius:5px;box-shadow:0 2px 4px rgba(0,0,0,0.15);display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;font-size:13px;font-weight:500;color:#1e1e1e;">Ajouter ' + (sel ? iconCheck : iconPlus) + '</button>' +
+            '<button data-action="toggle-sam" data-id="' + user.id + '" style="height:36px;padding:0 16px;font-size:13px;font-weight:500;cursor:pointer;border-radius:5px;background:white;color:#1e1e1e;border:2px solid ' + (isSam ? '#347645' : '#dfdfdf') + ';box-shadow:0 2px 4px rgba(0,0,0,0.15);">SAM</button>' +
+            friendBtn +
+          '</div>' +
+        '</div>' +
+        // DESKTOP (original)
+        '<div class="hidden lg:block" style="padding:14px;">' +
+          '<div style="display:flex;align-items:center;gap:14px;">' +
+            '<div style="width:55px;height:55px;flex-shrink:0;border-radius:50%;overflow:hidden;">' + avatarHtml(user) + '</div>' +
+            '<div style="flex:1;min-width:0;"><p style="color:#000;font-size:16px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + name + '</p>' +
+            (user.pseudo && (user.prenom || user.nom) ? '<p style="color:#646262;font-size:14px;font-weight:500;margin:2px 0 0;">' + esc((user.prenom + ' ' + user.nom).trim()) + '</p>' : '') + '</div>' +
+            '<div style="display:flex;gap:8px;flex-shrink:0;align-items:center;">' +
+              '<button data-action="toggle-ami" data-id="' + user.id + '" style="width:141px;height:37px;background:white;border:2px solid ' + (sel ? '#72c073' : '#dfdfdf') + ';border-radius:5px;box-shadow:0 4px 4px rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-size:14px;font-weight:500;color:#1e1e1e;">Ajouter ' + (sel ? iconCheck : iconPlus) + '</button>' +
+              '<button data-action="toggle-sam" data-id="' + user.id + '" style="height:37px;padding:0 18px;font-size:14px;font-weight:500;cursor:pointer;border-radius:5px;background:white;color:#1e1e1e;border:2px solid ' + (isSam ? '#347645' : '#dfdfdf') + ';box-shadow:0 4px 4px rgba(0,0,0,0.25);">SAM</button>' +
+              friendBtn +
+            '</div>' +
+          '</div>' +
         '</div>' +
       '</div>';
     }).join('');
