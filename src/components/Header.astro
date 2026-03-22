@@ -17,9 +17,7 @@ if (isLoggedIn) {
   });
   if (res.ok) {
     const user = await res.json();
-    if (user.avatar) {
-      avatarUrl = getImageUrl(user, user.avatar);
-    }
+    if (user.avatar) avatarUrl = getImageUrl(user, user.avatar);
   }
 }
 ---
@@ -59,7 +57,7 @@ if (isLoggedIn) {
     <!-- Spacer -->
     <div class="flex-1"></div>
 
-    <!-- Actions desktop — inchangées -->
+    <!-- Actions desktop -->
     <div class="hidden lg:flex items-center gap-6.5">
       <a href={profileHref} aria-label="Mon profil" class="hover:opacity-70 transition-opacity">
         {avatarUrl ? (
@@ -162,10 +160,12 @@ if (isLoggedIn) {
     </div>
 
     <!-- CTA session -->
-    <a href="/session"
-      class="nav-link flex items-center justify-center w-full h-14 bg-primary-500 text-primary-900 font-bold text-4 uppercase tracking-widest hover:bg-primary-550 transition-colors">
-      Crée un barathon
-    </a>
+    <div class="flex gap-3">
+      <a href="/session"
+        class="nav-link flex flex-1 items-center justify-center h-14 bg-primary-500 text-primary-900 font-bold text-4 uppercase tracking-widest hover:bg-primary-550 transition-colors">
+        Crée un barathon
+      </a>
+    </div>
 
   </nav>
 </div>

@@ -1,0 +1,460 @@
+---
+// @ts-nocheck
+import Layout from '../layouts/Layout.astro';
+import { PB_URL } from '../js/backend.js';
+
+// ── Auth guard ────────────────────────────────────────────────────────────────
+const token  = Astro.cookies.get('pb_token')?.value;
+const userId = Astro.cookies.get('pb_user_id')?.value;
+if (!token || !userId) return Astro.redirect('/connexion');
+
+const meRes = await fetch(`${PB_URL}/api/collections/users/records/${userId}`, {
+  headers: { Authorization: `Bearer ${token}` }
+});
+if (!meRes.ok) return Astro.redirect('/connexion');
+const me = await meRes.json();
+if (!me.admin) return Astro.redirect('/');
+
+// ── Fetch all data ────────────────────────────────────────────────────────────
+const [usersRes, barsRes, sessionsRes, jeuxRes, boisonsRes] = await Promise.all([
+  fetch(`${PB_URL}/api/collections/users/records?perPage=200&sort=created`,
+    { headers: { Authorization: `Bearer ${token}` } }),
+  fetch(`${PB_URL}/api/collections/bar/records?perPage=200&sort=nom`),
+  fetch(`${PB_URL}/api/collections/session_barathon/records?perPage=200&sort=-created`,
+    { headers: { Authorization: `Bearer ${token}` } }),
+  fetch(`${PB_URL}/api/collections/jeux/records?perPage=200&sort=nom`),
+  fetch(`${PB_URL}/api/collections/boison/records?perPage=200&sort=nom`),
+]);
+
+const allUsers    = ((await usersRes.json()).items    ?? []);
+const allBars     = ((await barsRes.json()).items     ?? []);
+const allSessions = ((await sessionsRes.json()).items ?? []);
+const allJeux     = ((await jeuxRes.json()).items     ?? []);
+const allBoisons  = ((await boisonsRes.json()).items  ?? []);
+
+const questionsRes = await fetch(`${PB_URL}/api/collections/jeux_questionaire/records?perPage=500&sort=theme`,
+  { headers: { Authorization: `Bearer ${token}` } });
+const allQuestions = ((await questionsRes.json()).items ?? []).map(q => ({
+  id: q.id, question: q.question ?? '',
+  choix_1: q.choix_1 ?? '', choix_2: q.choix_2 ?? '',
+  choix_3: q.choix_3 ?? '', choix_4: q.choix_4 ?? '',
+  reponse: [q.reponse_1, q.reponse_2, q.reponse_3, q.reponse_4].findIndex(v => v === true),
+  theme: q.theme ?? '',
+}));
+
+const pageData = JSON.stringify({
+  PB_URL, token, userId,
+  allJeux: allJeux.map(j => ({
+    id: j.id, collectionName: j.collectionName,
+    nom: j.nom ?? '', description: j.description ?? '',
+    type_du_jeux: j.type_du_jeux ?? '',
+    img: Array.isArray(j.img) ? (j.img[0] ?? null) : (j.img ?? null),
+  })),
+  allQuestions,
+  allBars: allBars.map(b => ({
+    id: b.id, collectionName: b.collectionName,
+    nom: b.nom ?? '', adresse: b.adresse ?? '', description: b.description ?? '',
+    lat: b.localisation?.lat ?? '', lon: b.localisation?.lon ?? '',
+    img: b.img?.[0] ?? null,
+    h_lundi:    b.horaires_lundi    ?? '', h_mardi:    b.horaires_mardi    ?? '',
+    h_mercredi: b.horaires_mercredi ?? '', h_jeudi:    b.horaires_jeudi    ?? '',
+    h_vendredi: b.horaires_vendredi ?? '', h_samedi:   b.horaires_samedi   ?? '',
+    h_dimanche: b.horaires_dimanche ?? '',
+  })),
+  allBoisons: allBoisons.map(b => ({
+    id: b.id, collectionName: b.collectionName,
+    nom: b.nom ?? '', img: b.img ?? null,
+  })),
+});
+---
+
+<Layout title="Administration — Bargo">
+
+<div style="display:flex; min-height:calc(100vh - 92px); background:#f4f5f7;">
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- SIDEBAR                                                               -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <aside style="width:240px; flex-shrink:0; background:#1e1e1e; display:flex; flex-direction:column; padding:28px 16px;">
+
+    <div style="padding:0 8px 24px; border-bottom:1px solid rgba(255,255,255,0.08);">
+      <p style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:#72c073; margin:0 0 2px;">Bargo</p>
+      <p style="font-size:16px; font-weight:600; color:white; margin:0;">Administration</p>
+    </div>
+
+    <nav style="margin-top:16px; flex:1;">
+      {[
+        { id: 'dashboard', label: 'Tableau de bord' },
+        { id: 'users',     label: 'Utilisateurs',  count: allUsers.length },
+        { id: 'bars',      label: 'Bars',          count: allBars.length },
+        { id: 'sessions',  label: 'Sessions',      count: allSessions.length },
+        { id: 'jeux',      label: 'Jeux',          count: allJeux.length },
+        { id: 'boisons',   label: 'Boissons',      count: allBoisons.length },
+      ].map((item, i) => (
+        <button class="nav-item" data-section={item.id}
+          style={`display:flex; align-items:center; gap:10px; width:100%; padding:10px 12px; border:none; border-radius:6px; cursor:pointer; text-align:left; margin-bottom:2px; background:${i === 0 ? 'rgba(114,192,115,0.15)' : 'transparent'}; color:${i === 0 ? '#72c073' : 'rgba(247,241,237,0.55)'};`}>
+          <span style="font-size:13px; font-weight:500; flex:1;">{item.label}</span>
+          {item.count !== undefined && (
+            <span style={`font-size:11px; font-weight:700; padding:1px 7px; border-radius:20px; background:${i === 0 ? 'rgba(114,192,115,0.2)' : 'rgba(255,255,255,0.08)'}; color:${i === 0 ? '#72c073' : 'rgba(247,241,237,0.4)'};`}>{item.count}</span>
+          )}
+        </button>
+      ))}
+    </nav>
+
+    <div style="padding:16px 8px 0; border-top:1px solid rgba(255,255,255,0.08);">
+      <p style="font-size:12px; font-weight:500; color:rgba(247,241,237,0.35); margin:0 0 2px;">Connecté en tant que</p>
+      <p style="font-size:13px; font-weight:600; color:rgba(247,241,237,0.7); margin:0;">{me.pseudo || me.prenom || me.email}</p>
+    </div>
+  </aside>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- MAIN                                                                  -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <main style="flex:1; overflow-y:auto; padding:36px 40px;">
+
+    <!-- ── Section : Tableau de bord ──────────────────────────────────────── -->
+    <section id="section-dashboard" class="admin-section">
+      <h3 style="color:#111; margin:0 0 6px;">Tableau de bord</h3>
+      <p style="color:#888; font-size:14px; font-weight:500; margin:0 0 28px;">Vue d'ensemble de la plateforme.</p>
+
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:36px;">
+        {[
+          { label: 'Utilisateurs', value: allUsers.length,    color: '#347645', bg: '#edf7ee' },
+          { label: 'Bars',         value: allBars.length,     color: '#2563eb', bg: '#eff6ff' },
+          { label: 'Sessions',     value: allSessions.length, color: '#d97706', bg: '#fffbeb' },
+          { label: 'Jeux',         value: allJeux.length,     color: '#7c3aed', bg: '#f5f3ff' },
+        ].map(s => (
+          <div style={`background:white; border-radius:10px; padding:22px 24px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06);`}>
+            <p style={`font-size:36px; font-weight:700; color:${s.color}; margin:0 0 6px; line-height:1;`}>{s.value}</p>
+            <p style="font-size:13px; font-weight:500; color:#888; margin:0;">{s.label}</p>
+          </div>
+        ))}
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        <!-- Sessions récentes -->
+        <div style="background:white; border-radius:10px; padding:22px 24px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+          <p style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#aaa; margin:0 0 16px;">Sessions récentes</p>
+          {allSessions.slice(0, 5).map(s => {
+            const etat = s.etat_session ?? 'pas_commencer';
+            const map = { pas_commencer: ['En attente', '#d97706', '#fffbeb'], en_cours: ['En cours', '#16a34a', '#f0fdf4'], fini: ['Terminée', '#9ca3af', '#f9fafb'] };
+            const [label, color, bg] = map[etat] ?? ['—', '#aaa', '#f9fafb'];
+            return (
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:9px 0; border-bottom:1px solid #f3f4f6;">
+                <p style="font-size:14px; font-weight:500; color:#222; margin:0;">{s.nom ?? '—'}</p>
+                <span style={`font-size:11px; font-weight:700; color:${color}; background:${bg}; padding:3px 9px; border-radius:20px;`}>{label}</span>
+              </div>
+            );
+          })}
+          {allSessions.length === 0 && <p style="color:#bbb; font-size:14px;">Aucune session.</p>}
+        </div>
+        <!-- Derniers inscrits -->
+        <div style="background:white; border-radius:10px; padding:22px 24px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+          <p style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#aaa; margin:0 0 16px;">Derniers inscrits</p>
+          {allUsers.slice(-5).reverse().map(u => (
+            <div style="display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid #f3f4f6;">
+              <div style="width:32px; height:32px; border-radius:50%; background:#347645; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <span style="color:white; font-size:13px; font-weight:700;">{(u.pseudo || u.prenom || '?').charAt(0).toUpperCase()}</span>
+              </div>
+              <div style="flex:1; min-width:0;">
+                <p style="font-size:13px; font-weight:600; color:#222; margin:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{u.pseudo || `${u.prenom ?? ''} ${u.nom ?? ''}`.trim() || '—'}</p>
+                <p style="font-size:11px; color:#aaa; margin:0;">{u.email}</p>
+              </div>
+              {u.admin && <span style="font-size:10px; font-weight:700; color:#347645; background:#edf7ee; padding:2px 7px; border-radius:20px;">Admin</span>}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Section : Utilisateurs ──────────────────────────────────────────── -->
+    <section id="section-users" class="admin-section hidden">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px;">
+        <div>
+          <h3 style="color:#111; margin:0 0 4px;">Utilisateurs</h3>
+          <p style="color:#888; font-size:14px; font-weight:500; margin:0;">{allUsers.length} compte{allUsers.length > 1 ? 's' : ''} enregistré{allUsers.length > 1 ? 's' : ''}</p>
+        </div>
+      </div>
+
+      <div style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
+        <div style="display:grid; grid-template-columns:1fr 200px 80px 90px 80px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
+          <p class="th">Utilisateur</p><p class="th">Email</p><p class="th">Points</p><p class="th">Rôle</p><p class="th"></p>
+        </div>
+        {allUsers.map(u => (
+          <div data-row-user={u.id} style="display:grid; grid-template-columns:1fr 200px 80px 90px 80px; align-items:center; padding:14px 20px; border-bottom:1px solid #f3f4f6;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="width:34px; height:34px; border-radius:50%; background:#347645; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <span style="color:white; font-size:13px; font-weight:700;">{(u.pseudo || u.prenom || '?').charAt(0).toUpperCase()}</span>
+              </div>
+              <div>
+                <p style="font-size:14px; font-weight:600; color:#222; margin:0;">{u.pseudo || `${u.prenom ?? ''} ${u.nom ?? ''}`.trim() || '—'}</p>
+                <p style="font-size:11px; color:#aaa; margin:0;">ID: {u.id.slice(0,8)}…</p>
+              </div>
+            </div>
+            <p style="font-size:13px; color:#555; margin:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding-right:16px;">{u.email}</p>
+            <p style="font-size:13px; font-weight:600; color:#222; margin:0;">{u.points ?? 0}</p>
+            <div>
+              {u.id === userId
+                ? <span style="font-size:11px; font-weight:700; color:#347645; background:#edf7ee; padding:3px 10px; border-radius:20px;">Vous</span>
+                : <button data-action="toggle-admin" data-id={u.id} data-admin={String(u.admin ?? false)}
+                    style={`height:26px; padding:0 12px; font-size:11px; font-weight:700; border:none; cursor:pointer; border-radius:20px; background:${u.admin ? '#edf7ee' : '#f3f4f6'}; color:${u.admin ? '#347645' : '#888'};`}>
+                    {u.admin ? 'Admin' : 'User'}
+                  </button>
+              }
+            </div>
+            <div class="flex justify-end">
+              {u.id !== userId && (
+                <button data-action="delete-user" data-id={u.id} class="btn-del-light">Supprimer</button>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ── Section : Bars ──────────────────────────────────────────────────── -->
+    <section id="section-bars" class="admin-section hidden">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px;">
+        <div>
+          <h3 style="color:#111; margin:0 0 4px;">Bars</h3>
+          <p style="color:#888; font-size:14px; font-weight:500; margin:0;">{allBars.length} bar{allBars.length > 1 ? 's' : ''} dans la base</p>
+        </div>
+        <button data-action="open-bar-form" data-id="" class="btn-primary">+ Ajouter un bar</button>
+      </div>
+
+      <div style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
+        <div style="display:grid; grid-template-columns:1fr 220px 100px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
+          <p class="th">Nom</p><p class="th">Adresse</p><p class="th"></p>
+        </div>
+        {allBars.map(b => (
+          <div data-row-bar={b.id} style="display:grid; grid-template-columns:1fr 220px 100px; align-items:center; padding:14px 20px; border-bottom:1px solid #f3f4f6;">
+            <div>
+              <p style="font-size:14px; font-weight:600; color:#222; margin:0;">{b.nom}</p>
+              <p style="font-size:11px; color:#aaa; margin:0;">ID: {b.id.slice(0,8)}…</p>
+            </div>
+            <p style="font-size:13px; color:#555; margin:0;">{b.adresse ?? '—'}</p>
+            <div class="flex justify-end gap-2">
+              <button data-action="open-bar-form" data-id={b.id} class="btn-edit">Modifier</button>
+              <button data-action="delete-bar" data-id={b.id} class="btn-del-light">Supp.</button>
+            </div>
+          </div>
+        ))}
+        {allBars.length === 0 && <p style="color:#bbb; font-size:14px; padding:20px;">Aucun bar.</p>}
+      </div>
+    </section>
+
+    <!-- ── Section : Sessions ─────────────────────────────────────────────── -->
+    <section id="section-sessions" class="admin-section hidden">
+      <div style="margin-bottom:24px;">
+        <h3 style="color:#111; margin:0 0 4px;">Sessions</h3>
+        <p style="color:#888; font-size:14px; font-weight:500; margin:0;">{allSessions.length} session{allSessions.length > 1 ? 's' : ''} créée{allSessions.length > 1 ? 's' : ''}</p>
+      </div>
+
+      <div style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
+        <div style="display:grid; grid-template-columns:1fr 130px 140px 80px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
+          <p class="th">Nom</p><p class="th">Date</p><p class="th">État</p><p class="th"></p>
+        </div>
+        {allSessions.map(s => {
+          const etat = s.etat_session ?? 'pas_commencer';
+          const map = {
+            pas_commencer: ['En attente', '#d97706', '#fffbeb'],
+            en_cours:      ['En cours',   '#16a34a', '#f0fdf4'],
+            fini:          ['Terminée',   '#9ca3af', '#f9fafb'],
+          };
+          const [label, color, bg] = map[etat] ?? ['—', '#aaa', '#f9fafb'];
+          return (
+            <div data-row-session={s.id} style="display:grid; grid-template-columns:1fr 130px 140px 80px; align-items:center; padding:14px 20px; border-bottom:1px solid #f3f4f6;">
+              <div>
+                <p style="font-size:14px; font-weight:600; color:#222; margin:0;">{s.nom ?? '—'}</p>
+                <p style="font-size:11px; color:#aaa; margin:0;">ID: {s.id.slice(0,8)}…</p>
+              </div>
+              <p style="font-size:13px; color:#555; margin:0;">{s.date_session ?? '—'}</p>
+              <span style={`font-size:11px; font-weight:700; color:${color}; background:${bg}; padding:4px 11px; border-radius:20px; width:fit-content;`}>{label}</span>
+              <div class="flex justify-end">
+                <button data-action="delete-session" data-id={s.id} class="btn-del-light">Supp.</button>
+              </div>
+            </div>
+          );
+        })}
+        {allSessions.length === 0 && <p style="color:#bbb; font-size:14px; padding:20px;">Aucune session.</p>}
+      </div>
+    </section>
+
+    <!-- ── Section : Jeux ─────────────────────────────────────────────────── -->
+    <section id="section-jeux" class="admin-section hidden">
+      <div style="margin-bottom:24px;">
+        <h3 style="color:#111; margin:0 0 4px;">Jeux</h3>
+        <p style="color:#888; font-size:14px; font-weight:500; margin:0;">{allJeux.length} jeu{allJeux.length > 1 ? 'x' : ''} disponible{allJeux.length > 1 ? 's' : ''}</p>
+      </div>
+
+      <div style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
+        <div style="display:grid; grid-template-columns:1fr 150px 130px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
+          <p class="th">Nom</p><p class="th">Type</p><p class="th"></p>
+        </div>
+        {allJeux.map(j => (
+          <div data-row-jeu={j.id} style="display:grid; grid-template-columns:1fr 150px 130px; align-items:center; padding:14px 20px; border-bottom:1px solid #f3f4f6;">
+            <p style="font-size:14px; font-weight:600; color:#222; margin:0;">{j.nom ?? '—'}</p>
+            <span style="font-size:12px; font-weight:600; color:#7c3aed; background:#f5f3ff; padding:3px 10px; border-radius:20px; width:fit-content;">{j.type_du_jeux ?? '—'}</span>
+            <div class="flex justify-end gap-2">
+              <button data-action="open-jeu-form" data-id={j.id} class="btn-edit">Modifier</button>
+              <button data-action="open-jeu-questions" data-id={j.id} class="btn-primary" style="height:28px; padding:0 12px; font-size:12px;">Questions</button>
+            </div>
+          </div>
+        ))}
+        {allJeux.length === 0 && <p style="color:#bbb; font-size:14px; padding:20px;">Aucun jeu.</p>}
+      </div>
+    </section>
+
+    <!-- ── Section : Questions d'un jeu ───────────────────────────────────── -->
+    <section id="section-jeu-questions" class="admin-section hidden">
+      <!-- Header avec retour -->
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">
+        <button data-action="back-to-jeux" style="height:36px; padding:0 14px; background:white; border:1px solid #e0e0e0; color:#555; font-size:13px; font-weight:600; cursor:pointer; border-radius:7px;">← Retour</button>
+        <div>
+          <h3 id="jeu-questions-title" style="color:#111; margin:0 0 2px;"></h3>
+          <p id="jeu-questions-count" style="color:#888; font-size:14px; font-weight:500; margin:0;"></p>
+        </div>
+      </div>
+
+      <!-- Liste des questions -->
+      <div id="questions-list" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); margin-bottom:24px; overflow:hidden;"></div>
+
+      <!-- Formulaire ajout question -->
+      <div style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); padding:24px;">
+        <p style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#aaa; margin:0 0 20px; padding-bottom:12px; border-bottom:1px solid #f0f0f0;">Ajouter une question</p>
+
+        <div id="add-question-error" style="display:none; background:#fef2f2; border-radius:7px; padding:10px 14px; color:#ef4444; font-size:13px; font-weight:500; margin-bottom:16px;"></div>
+
+        <div style="margin-bottom:16px;">
+          <label style="font-size:12px; font-weight:700; color:#444; display:block; margin-bottom:6px;">Question *</label>
+          <input id="q-question" type="text" placeholder="ex : Quelle est la capitale de la France ?" style="width:100%; background:#f9fafb; border:1.5px solid #e5e7eb; border-radius:8px; padding:10px 14px; color:#111; font-size:14px; outline:none; box-sizing:border-box;" />
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+          {[1,2,3,4].map(n => (
+            <div>
+              <label style="font-size:12px; font-weight:700; color:#444; display:block; margin-bottom:6px;">Choix {n}</label>
+              <input id={`q-choix-${n}`} type="text" placeholder={`Réponse ${n}`} style="width:100%; background:#f9fafb; border:1.5px solid #e5e7eb; border-radius:8px; padding:10px 14px; color:#111; font-size:14px; outline:none; box-sizing:border-box;" />
+            </div>
+          ))}
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
+          <div>
+            <label style="font-size:12px; font-weight:700; color:#444; display:block; margin-bottom:6px;">Bonne réponse *</label>
+            <select id="q-reponse" style="width:100%; background:#f9fafb; border:1.5px solid #e5e7eb; border-radius:8px; padding:10px 14px; color:#111; font-size:14px; outline:none; box-sizing:border-box;">
+              <option value="1">Choix 1</option>
+              <option value="2">Choix 2</option>
+              <option value="3">Choix 3</option>
+              <option value="4">Choix 4</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:700; color:#444; display:block; margin-bottom:6px;">Thème *</label>
+            <select id="q-theme" style="width:100%; background:#f9fafb; border:1.5px solid #e5e7eb; border-radius:8px; padding:10px 14px; color:#111; font-size:14px; outline:none; box-sizing:border-box;">
+              <option value="cultrue_g">Culture générale</option>
+              <option value="jeux_video">Jeux vidéo</option>
+              <option value="histoire">Histoire</option>
+            </select>
+          </div>
+        </div>
+
+        <button id="btn-add-question" style="height:42px; padding:0 24px; background:#347645; border:none; color:white; font-size:14px; font-weight:700; cursor:pointer; border-radius:8px;">Ajouter la question</button>
+      </div>
+    </section>
+
+    <!-- ── Section : Boissons ─────────────────────────────────────────────── -->
+    <section id="section-boisons" class="admin-section hidden">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px;">
+        <div>
+          <h3 style="color:#111; margin:0 0 4px;">Boissons</h3>
+          <p style="color:#888; font-size:14px; font-weight:500; margin:0;">{allBoisons.length} boisson{allBoisons.length > 1 ? 's' : ''} dans la base</p>
+        </div>
+        <button data-action="open-boison-form" data-id="" class="btn-primary">+ Ajouter une boisson</button>
+      </div>
+
+      <div style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
+        <div style="display:grid; grid-template-columns:1fr 100px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
+          <p class="th">Nom</p><p class="th"></p>
+        </div>
+        {allBoisons.map(b => (
+          <div data-row-boison={b.id} style="display:grid; grid-template-columns:1fr 100px; align-items:center; padding:14px 20px; border-bottom:1px solid #f3f4f6;">
+            <p style="font-size:14px; font-weight:600; color:#222; margin:0;">{b.nom ?? b.name ?? '—'}</p>
+            <div class="flex justify-end gap-2">
+              <button data-action="open-boison-form" data-id={b.id} class="btn-edit">Modifier</button>
+              <button data-action="delete-boison" data-id={b.id} class="btn-del-light">Supp.</button>
+            </div>
+          </div>
+        ))}
+        {allBoisons.length === 0 && <p style="color:#bbb; font-size:14px; padding:20px;">Aucune boisson.</p>}
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<!-- CONFIRM MODAL                                                             -->
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<div id="confirm-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:60; align-items:center; justify-content:center;">
+  <div style="background:white; width:min(420px,92vw); border-radius:12px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+    <div style="padding:24px 28px; border-bottom:1px solid #f0f0f0;">
+      <p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:#ef4444; margin:0 0 4px;">Action irréversible</p>
+      <h3 id="confirm-title" style="color:#111; margin:0; font-size:20px;"></h3>
+    </div>
+    <div style="padding:20px 28px;">
+      <p id="confirm-body" style="color:#555; font-size:14px; font-weight:500; margin:0; line-height:1.6;"></p>
+    </div>
+    <div style="display:flex; gap:10px; padding:0 28px 24px; justify-content:flex-end;">
+      <button id="confirm-cancel" style="height:38px; padding:0 20px; background:white; border:1px solid #e0e0e0; color:#555; font-size:13px; font-weight:600; cursor:pointer; border-radius:7px;">Annuler</button>
+      <button id="confirm-ok" style="height:38px; padding:0 20px; background:#ef4444; border:none; color:white; font-size:13px; font-weight:600; cursor:pointer; border-radius:7px;">Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<!-- DRAWER                                                                    -->
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<div id="drawer-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.3); z-index:70;"></div>
+<div id="drawer" style="position:fixed; top:0; right:0; height:100%; width:min(500px,100vw); background:white; z-index:80; transform:translateX(100%); transition:transform 0.3s cubic-bezier(.4,0,.2,1); overflow-y:auto; display:flex; flex-direction:column; box-shadow:-8px 0 40px rgba(0,0,0,0.12);">
+
+  <!-- Header -->
+  <div style="display:flex; justify-content:space-between; align-items:center; padding:24px 28px; border-bottom:1px solid #f0f0f0; flex-shrink:0;">
+    <div>
+      <p id="drawer-label" style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:#347645; margin:0 0 3px;"></p>
+      <h3 id="drawer-title" style="color:#111; margin:0; font-size:20px;"></h3>
+    </div>
+    <button id="drawer-close" style="background:#f4f5f7; border:none; color:#555; font-size:20px; line-height:1; cursor:pointer; width:34px; height:34px; border-radius:7px; display:flex; align-items:center; justify-content:center;">×</button>
+  </div>
+
+  <!-- Body -->
+  <div id="drawer-body" class="flex-1" style="padding:28px;"></div>
+
+  <!-- Footer -->
+  <div style="padding:20px 28px; border-top:1px solid #f0f0f0; flex-shrink:0;">
+    <p id="drawer-error" style="color:#ef4444; font-size:13px; font-weight:500; margin:0 0 12px; display:none; background:#fef2f2; padding:10px 14px; border-radius:7px;"></p>
+    <button id="drawer-submit" style="width:100%; height:44px; background:#347645; border:none; color:white; font-size:14px; font-weight:700; cursor:pointer; border-radius:8px; letter-spacing:0.3px;">Enregistrer</button>
+  </div>
+</div>
+
+<script id="page-data" type="application/json" set:html={pageData}></script>
+<script>
+import '../js/admin.js';
+</script>
+
+<style>
+  .th { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#aaa; margin:0; }
+
+  .btn-primary { height:38px; padding:0 18px; background:#347645; border:none; color:white; font-size:13px; font-weight:700; cursor:pointer; border-radius:7px; }
+  .btn-primary:hover { background:#2a5e38; }
+
+  .btn-edit { height:28px; padding:0 12px; background:#f0fdf4; border:1px solid #d1fae5; color:#347645; font-size:12px; font-weight:600; cursor:pointer; border-radius:6px; }
+  .btn-edit:hover { background:#d1fae5; }
+
+  .btn-del-light { height:28px; padding:0 12px; background:#fff5f5; border:1px solid #fecaca; color:#ef4444; font-size:12px; font-weight:600; cursor:pointer; border-radius:6px; }
+  .btn-del-light:hover { background:#fee2e2; }
+
+  .nav-item:hover { background:rgba(255,255,255,0.07) !important; color:rgba(247,241,237,0.85) !important; }
+</style>
+
+</Layout>
