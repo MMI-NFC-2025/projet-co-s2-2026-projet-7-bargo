@@ -5,7 +5,7 @@
 
 - [ ] Nom du projet : bargo
 - [ ] URL de la landing page :
-- [ ] URL de l'application finale :
+- [ ] URL de l'application finale : https://bargo.pierre-mouilleseaux-lhuillier.fr/
 - [ ] URL de connexion au back office :
 - [ ] Identifiant de connexion au backoffice : 
 - [ ] Mot de passe de connexion au backoffice : 
