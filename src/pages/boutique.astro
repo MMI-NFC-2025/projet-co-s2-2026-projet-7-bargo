@@ -9,44 +9,70 @@ import likeFillIcon from '../assets/icon/like_fill.svg';
 
 const PB_URL = 'https://pbbargo.pierre-mouilleseaux-lhuillier.fr';
 
-const page     = parseInt(Astro.url.searchParams.get('page') ?? '1');
-const activeTab = Astro.url.searchParams.get('tab') ?? 'avatar';
-const perPage  = 12;
+const page      = parseInt(Astro.url.searchParams.get('page') ?? '1');
+const activeTab = Astro.url.searchParams.get('tab') ?? 'decoration_avatar';
+const perPage   = 12;
 
 const filter = encodeURIComponent(`type="${activeTab}"`);
 const res  = await fetch(`${PB_URL}/api/collections/boutique/records?page=${page}&perPage=${perPage}&sort=created&filter=${filter}`);
 const data = await res.json();
-const produits    = data.items ?? [];
-const totalPages  = Math.ceil((data.totalItems ?? 0) / perPage);
+const produits   = data.items ?? [];
+const totalPages = Math.ceil((data.totalItems ?? 0) / perPage);
 
-// Points utilisateur (si connecté)
+// Auth + user data
 const userId = Astro.cookies.get('pb_user_id')?.value;
 const token  = Astro.cookies.get('pb_token')?.value;
 const isAuth = !!(userId && token);
-let userPoints = null;
-let userItemsFavori = [];
-if (userId && token) {
+
+let userPoints       = null;
+let userItemsFavori  = [];
+let possedDecoration = [];
+let possedTitre      = [];
+let possedTheme      = [];
+let equipedDecoration = null;
+let equipedTitre      = null;
+let equipedTheme      = null;
+
+if (isAuth) {
   const userRes = await fetch(`${PB_URL}/api/collections/users/records/${userId}`, {
     headers: { Authorization: `Bearer ${token}` }
   });
   if (userRes.ok) {
     const user = await userRes.json();
-    userPoints = user.points ?? 0;
-    userItemsFavori = Array.isArray(user.items_favori) ? user.items_favori : [];
+    userPoints        = user.points ?? 0;
+    userItemsFavori   = Array.isArray(user.items_favori)            ? user.items_favori            : [];
+    possedDecoration  = Array.isArray(user.possed_avatar_decoration) ? user.possed_avatar_decoration : [];
+    possedTitre       = Array.isArray(user.possed_titre)             ? user.possed_titre             : [];
+    possedTheme       = Array.isArray(user.possed_theme)             ? user.possed_theme             : [];
+    equipedDecoration = user.equiper_avatar_decoration ?? null;
+    equipedTitre      = user.equiper_titre             ?? null;
+    equipedTheme      = user.equiper_theme             ?? null;
   }
 }
 
 const tabs = [
-  { id: 'avatar', label: 'Avatar' },
-  { id: 'theme',  label: 'Thème du profil' },
-  { id: 'titre',  label: 'Titre' },
+  { id: 'decoration_avatar', label: 'Décoration avatar' },
+  { id: 'theme',             label: 'Thème du profil' },
+  { id: 'titre',             label: 'Titre' },
 ];
 
-function tabUrl(id) {
-  const u = new URL(Astro.url.href);
-  u.searchParams.set('tab', id);
-  u.searchParams.set('page', '1');
-  return u.pathname + u.search;
+function getImageFile(produit) {
+  if (produit.type === 'decoration_avatar') return produit.type_decoration_avatar ?? null;
+  if (produit.type === 'theme')             return produit.type_them              ?? null;
+  return null;
+}
+
+// 'equipe' | 'equiper' | 'acheter' | 'insuffisant' | 'connexion'
+function getButtonState(produit) {
+  if (!isAuth) return 'connexion';
+  const possed   = produit.type === 'decoration_avatar' ? possedDecoration :
+                   produit.type === 'theme'              ? possedTheme      : possedTitre;
+  const equipped = produit.type === 'decoration_avatar' ? equipedDecoration :
+                   produit.type === 'theme'              ? equipedTheme      : equipedTitre;
+  if (equipped === produit.id)         return 'equipe';
+  if (possed.includes(produit.id))     return 'equiper';
+  if ((userPoints ?? 0) >= produit.prix) return 'acheter';
+  return 'insuffisant';
 }
 ---
 
@@ -83,7 +109,6 @@ function tabUrl(id) {
                 {tab.label}
               </button>
             ))}
-            <!-- Trait animé -->
             <div id="tab-indicator" class="absolute bottom-0 h-1.5 rounded-full" style="background:#72c073; transition: left 0.3s cubic-bezier(.4,0,.2,1), width 0.3s cubic-bezier(.4,0,.2,1); left:0; width:0;"></div>
           </div>
 
@@ -91,7 +116,7 @@ function tabUrl(id) {
           {userPoints !== null && (
             <div class="flex items-center gap-2 lg:gap-3 shrink-0 px-3 lg:px-0 lg:ml-4">
               <span class="hidden lg:block text-black text-4 font-medium">Vos points :</span>
-              <h3 class="m-0 text-black text-3.5 lg:text-6.25">{userPoints} pts</h3>
+              <h3 id="user-points-display" class="m-0 text-black text-3.5 lg:text-6.25">{userPoints} pts</h3>
             </div>
           )}
 
@@ -104,45 +129,106 @@ function tabUrl(id) {
       {produits.length > 0 ? (
         <div id="boutique-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
           {produits.map(produit => {
-            const imageFile = Array.isArray(produit.item) ? produit.item[0] : produit.item;
+            const imageFile = getImageFile(produit);
+            const state     = getButtonState(produit);
+
+            const btnLabel = state === 'equipe'       ? 'Équipé'     :
+                             state === 'equiper'      ? 'Équiper'    :
+                             state === 'acheter'      ? `Acheter — ${produit.prix} pts` :
+                             state === 'insuffisant'  ? `${produit.prix} pts requis` :
+                                                        'Se connecter';
+
+            const btnClass   = state === 'equipe'      ? 'bg-primary-600 cursor-default' :
+                               state === 'equiper'     ? 'bg-primary-900 cursor-pointer hover:opacity-90' :
+                               state === 'acheter'     ? 'bg-neutral-800 cursor-pointer hover:opacity-90' :
+                               state === 'insuffisant' ? 'bg-neutral-300 cursor-not-allowed' :
+                                                         'bg-neutral-800 cursor-pointer hover:opacity-90';
+            const btnDisabled = state === 'equipe' || state === 'insuffisant';
+
             return (
               <div>
-
                 <!-- MOBILE -->
                 <div class="block lg:hidden bg-white rounded-0.5 shadow-[0px_7px_4px_0px_rgba(0,0,0,0.25)] overflow-hidden">
                   <div class="h-40 bg-neutral-500 flex items-center justify-center">
-                    <div class="size-27.5 rounded-full overflow-hidden">
-                      <PbImage record={produit} recordImage={imageFile} width={150} height={150} />
-                    </div>
+                    {produit.type === 'titre' ? (
+                      <div class="flex items-center justify-center px-4">
+                        <p class="text-white font-bold text-5 text-center m-0">{produit.type_titre ?? produit.nom}</p>
+                      </div>
+                    ) : imageFile ? (
+                      <div class="size-27.5 rounded-full overflow-hidden">
+                        <PbImage record={produit} recordImage={imageFile} width={150} height={150} />
+                      </div>
+                    ) : (
+                      <div class="size-27.5 rounded-full bg-neutral-600"></div>
+                    )}
                   </div>
                   <div class="p-4">
                     <div class="flex items-center justify-between mb-3">
-                      <h3 class="m-0 text-black">{produit.prix} pts</h3>
+                      <h3 class="m-0 text-black text-sm">{produit.nom}</h3>
                       {isAuth && (
                         <LikeButton id={produit.id} liked={userItemsFavori.includes(produit.id)} variant="item" class="p-0 border-0 bg-transparent cursor-pointer" ariaLabel="Favori" />
                       )}
                     </div>
-                    <button type="button" class="w-full h-12 bg-neutral-800 flex items-center justify-center hover:opacity-90 transition-opacity cursor-pointer border-0">
-                      <span class="text-white text-4 font-medium">Acheter</span>
-                    </button>
+                    {state === 'connexion' ? (
+                      <a href="/connexion" class="w-full h-12 bg-neutral-800 flex items-center justify-center hover:opacity-90 transition-opacity no-underline">
+                        <span class="text-white text-3.5 font-medium">Se connecter</span>
+                      </a>
+                    ) : (
+                      <button
+                        type="button"
+                        class={`boutique-action-btn w-full h-12 flex items-center justify-center transition-opacity border-0 text-white text-3.5 font-medium ${btnClass}`}
+                        data-item-id={produit.id}
+                        data-item-type={produit.type}
+                        data-item-prix={produit.prix}
+                        data-state={state}
+                        disabled={btnDisabled}
+                      >
+                        {btnLabel}
+                      </button>
+                    )}
                   </div>
                 </div>
 
                 <!-- DESKTOP -->
                 <div class="hidden lg:block h-91.75 rounded-0.5 shadow-[0px_4px_6px_0px_rgba(0,0,0,0.25)] relative overflow-hidden bg-neutral-500">
                   <div class="absolute bottom-0 left-0 right-0 h-35.75 bg-white rounded-bl-0.5 rounded-br-0.5"></div>
-                  <div class="absolute top-10.5 left-1/2 -translate-x-1/2 size-37.5 rounded-full overflow-hidden">
-                    <PbImage record={produit} recordImage={imageFile} width={150} height={150} />
-                  </div>
+
+                  {produit.type === 'titre' ? (
+                    <div class="absolute top-10.5 left-1/2 -translate-x-1/2 w-37.5 h-37.5 rounded-full bg-neutral-600 flex items-center justify-center px-3">
+                      <p class="text-white font-bold text-5 text-center m-0 leading-snug">{produit.type_titre ?? produit.nom}</p>
+                    </div>
+                  ) : imageFile ? (
+                    <div class="absolute top-10.5 left-1/2 -translate-x-1/2 size-37.5 rounded-full overflow-hidden">
+                      <PbImage record={produit} recordImage={imageFile} width={150} height={150} />
+                    </div>
+                  ) : (
+                    <div class="absolute top-10.5 left-1/2 -translate-x-1/2 size-37.5 rounded-full bg-neutral-600"></div>
+                  )}
+
                   <div class="absolute top-59.75 left-7.25 right-6.75 flex items-center justify-between">
-                    <h3 class="m-0 text-black text-6.25">{produit.prix} pts</h3>
+                    <h3 class="m-0 text-black text-5 truncate">{produit.nom}</h3>
                     {isAuth && (
-                      <LikeButton id={produit.id} liked={userItemsFavori.includes(produit.id)} variant="item" class="p-0 border-0 bg-transparent cursor-pointer" ariaLabel="Favori" />
+                      <LikeButton id={produit.id} liked={userItemsFavori.includes(produit.id)} variant="item" class="p-0 border-0 bg-transparent cursor-pointer shrink-0" ariaLabel="Favori" />
                     )}
                   </div>
-                  <button type="button" class="absolute top-73.75 bottom-3 left-7.25 right-7.5 bg-neutral-800 flex items-center justify-center hover:opacity-90 transition-opacity cursor-pointer border-0">
-                    <span class="text-white text-4 font-medium">Acheter</span>
-                  </button>
+
+                  {state === 'connexion' ? (
+                    <a href="/connexion" class="absolute top-73.75 bottom-3 left-7.25 right-7.5 bg-neutral-800 flex items-center justify-center hover:opacity-90 transition-opacity no-underline">
+                      <span class="text-white text-4 font-medium">Se connecter</span>
+                    </a>
+                  ) : (
+                    <button
+                      type="button"
+                      class={`boutique-action-btn absolute top-73.75 bottom-3 left-7.25 right-7.5 flex items-center justify-center transition-opacity border-0 text-white text-4 font-medium ${btnClass}`}
+                      data-item-id={produit.id}
+                      data-item-type={produit.type}
+                      data-item-prix={produit.prix}
+                      data-state={state}
+                      disabled={btnDisabled}
+                    >
+                      {btnLabel}
+                    </button>
+                  )}
                 </div>
 
               </div>
@@ -159,9 +245,22 @@ function tabUrl(id) {
 
   </div>
 
-  <script is:inline define:vars={{ token, userId, isAuth, PB_URL, perPage, activeTab, likeIconSrc: likeIcon.src, likeFillIconSrc: likeFillIcon.src }}>
+  <!-- Toast feedback -->
+  <div id="boutique-toast" style="position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(20px); background:#1E1E1E; color:white; padding:12px 24px; border-radius:8px; font-size:14px; font-family:'Inter',sans-serif; font-weight:500; opacity:0; transition:opacity 0.25s,transform 0.25s; pointer-events:none; z-index:300; white-space:nowrap;"></div>
+
+  <script is:inline define:vars={{ token, userId, isAuth, PB_URL, perPage, activeTab,
+    possedDecoration, possedTitre, possedTheme,
+    equipedDecoration, equipedTitre, equipedTheme,
+    userPoints,
+    likeIconSrc: likeIcon.src, likeFillIconSrc: likeFillIcon.src }}>
     if (isAuth) window.__AUTH__ = { token, userId };
-    window.__BOUTIQUE__ = { PB_URL, perPage, activeTab, likeIconSrc, likeFillIconSrc };
+    window.__BOUTIQUE__ = {
+      PB_URL, perPage, activeTab,
+      likeIconSrc, likeFillIconSrc,
+      possed:   { decoration_avatar: possedDecoration, titre: possedTitre, theme: possedTheme },
+      equipped: { decoration_avatar: equipedDecoration, titre: equipedTitre, theme: equipedTheme },
+      points: userPoints ?? 0,
+    };
   </script>
   <script>
     import '../js/boutique-tabs.js';

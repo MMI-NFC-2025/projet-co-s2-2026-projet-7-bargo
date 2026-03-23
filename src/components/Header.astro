@@ -67,8 +67,8 @@ if (isLoggedIn) {
           <img src={userIcon.src} alt="" width="31" height="31" />
         )}
       </a>
-      <a href="/session" class="inline-flex items-center justify-center px-12.5 h-11.25 bg-black text-white font-medium text-3.5 leading-[1.1] whitespace-nowrap hover:opacity-80 transition-opacity">
-        Crée un barathon
+      <a href={isLoggedIn ? '/session' : '/inscription'} class="inline-flex items-center justify-center px-12.5 h-11.25 bg-black text-white font-medium text-3.5 leading-[1.1] whitespace-nowrap hover:opacity-80 transition-opacity">
+        {isLoggedIn ? 'Crée un barathon' : "S'inscrire"}
       </a>
     </div>
 
@@ -162,9 +162,9 @@ if (isLoggedIn) {
 
     <!-- CTA session -->
     <div class="flex gap-3">
-      <a href="/session"
+      <a href={isLoggedIn ? '/session' : '/inscription'}
         class="nav-link flex flex-1 items-center justify-center h-14 bg-primary-500 text-primary-900 font-bold text-4 uppercase tracking-widest hover:bg-primary-550 transition-colors">
-        Crée un barathon
+        {isLoggedIn ? 'Crée un barathon' : "S'inscrire"}
       </a>
     </div>
 
