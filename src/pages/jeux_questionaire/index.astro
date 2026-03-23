@@ -149,45 +149,7 @@ const timeOptions = [
   </div>
 
   <script>
-    // @ts-nocheck
-    const form = document.getElementById('quiz-form');
-    form?.addEventListener('submit', function(e) {
-      e.preventDefault();
-      const checked = form.querySelectorAll('input[name="themes"]:checked');
-      if (checked.length === 0) {
-        document.getElementById('theme-error')?.classList.remove('hidden');
-        return;
-      }
-      document.getElementById('theme-error')?.classList.add('hidden');
-      const themes    = Array.from(checked).map(cb => cb.value).join(',');
-      const time      = form.querySelector('input[name="time"]:checked')?.value ?? '20';
-      const sessionId = new URL(window.location.href).searchParams.get('session') ?? '';
-      const sessionParam = sessionId ? `&session=${encodeURIComponent(sessionId)}` : '';
-      window.location.href = `/jeux_questionaire/jouer?themes=${encodeURIComponent(themes)}&time=${time}${sessionParam}`;
-    });
-
-    const checkboxes = document.querySelectorAll('input[name="themes"]');
-    const btnAll     = document.getElementById('btn-all-themes');
-
-    function syncAllBtn() {
-      const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-      btnAll.style.background = allChecked ? '#1E1E1E' : '';
-      btnAll.style.color      = allChecked ? 'white'   : '';
-    }
-
-    btnAll?.addEventListener('click', () => {
-      const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-      checkboxes.forEach(cb => { cb.checked = !allChecked; });
-      syncAllBtn();
-      document.getElementById('theme-error')?.classList.add('hidden');
-    });
-
-    checkboxes.forEach(cb => {
-      cb.addEventListener('change', () => {
-        syncAllBtn();
-        document.getElementById('theme-error')?.classList.add('hidden');
-      });
-    });
+    import '../../js/quiz-form.js';
   </script>
 
 </Layout>
