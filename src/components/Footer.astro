@@ -62,7 +62,7 @@ import iconDiscord from '../assets/icon/discord.svg';
   <Image src={footerBg} alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
 
   <!-- Overlay dégradé -->
-  <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(30,30,30,0.7), #1e1e1e);"></div>
+  <div class="absolute inset-0 footer-overlay"></div>
 
   <!-- Logo -->
   <div class="absolute top-8.75 left-20 z-10 h-11 w-45.5">
@@ -129,3 +129,9 @@ import iconDiscord from '../assets/icon/discord.svg';
   </div>
 
 </footer>
+
+<style>
+  .footer-overlay {
+    background: linear-gradient(to bottom, rgba(30, 30, 30, 0.7), #1e1e1e);
+  }
+</style>

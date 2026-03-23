@@ -8,6 +8,7 @@
   var allBars      = d.allBars;
   var allBoisons   = d.allBoisons;
   var allJeux      = d.allJeux;
+  var allBoutique  = d.allBoutique;
   var allQuestions = d.allQuestions; // cache local, mis à jour après ajout/suppression
 
   // ── Sidebar navigation ────────────────────────────────────────────────────
@@ -94,7 +95,7 @@
   // ── Drawer ────────────────────────────────────────────────────────────────
   var drawer        = document.getElementById('drawer');
   var drawerOverlay = document.getElementById('drawer-overlay');
-  var drawerMode    = null; // 'bar' | 'boison'
+  var drawerMode    = null; // 'bar' | 'boison' | 'boutique'
   var editingId     = null;
 
   function openDrawer() {
@@ -229,6 +230,7 @@
     try {
       if (drawerMode === 'bar')      await submitBar();
       if (drawerMode === 'boison')   await submitBoison();
+      if (drawerMode === 'boutique') await submitBoutique();
       if (drawerMode === 'jeu')      { await submitJeu(); closeDrawer(); return; }
       if (drawerMode === 'question') { await submitQuestion(); closeDrawer(); return; }
       closeDrawer();
@@ -282,6 +284,105 @@
 
     var res = await fetch(
       PB_URL + '/api/collections/boison/records' + (editingId ? '/' + editingId : ''),
+      { method: editingId ? 'PATCH' : 'POST', headers: { Authorization: 'Bearer ' + TOKEN }, body: fd }
+    );
+    if (!res.ok) throw new Error((await res.json()).message || 'Erreur PocketBase.');
+  }
+
+  // ── Form: boutique ────────────────────────────────────────────────────────
+  var TYPE_OPTIONS = [
+    { value: 'decoration_avatar', label: 'Décoration avatar' },
+    { value: 'theme',             label: 'Thème du profil'   },
+    { value: 'titre',             label: 'Titre'             },
+  ];
+
+  function boutiqueTypeSelect(current) {
+    return '<select id="f-type" style="' + S.input + '">' +
+      TYPE_OPTIONS.map(function (t) {
+        return '<option value="' + t.value + '"' + (current === t.value ? ' selected' : '') + '>' + t.label + '</option>';
+      }).join('') +
+    '</select>';
+  }
+
+  function boutiqueConditionalField(item) {
+    var type = item ? item.type : 'decoration_avatar';
+    if (type === 'titre') {
+      return '<div id="f-conditional" style="' + S.group + '">' +
+        '<label style="' + S.label + '">Texte du titre *</label>' +
+        '<input id="f-type-titre" type="text" value="' + escAttr(item ? item.type_titre : '') + '" placeholder="ex : Barathonien élite" style="' + S.input + '" />' +
+      '</div>';
+    }
+    var label = type === 'theme' ? 'Image du thème' : 'Image de la décoration';
+    var imgFieldName = type === 'theme' ? 'type_them' : 'type_decoration_avatar';
+    var existingImg  = item ? (type === 'theme' ? item.type_them : item.type_decoration_avatar) : null;
+    var preview = existingImg
+      ? '<img src="' + PB_URL + '/api/files/' + item.collectionName + '/' + item.id + '/' + existingImg + '" style="width:100%; height:120px; object-fit:cover; border-radius:8px; margin-bottom:8px; display:block;" />'
+      : '';
+    return '<div id="f-conditional" style="' + S.group + '">' +
+      '<label style="' + S.label + '">' + label + (item && existingImg ? ' (remplacer)' : ' *') + '</label>' +
+      preview +
+      '<input id="f-img-boutique" type="file" accept="image/*" data-pb-field="' + imgFieldName + '" style="font-size:13px; color:#555;" />' +
+    '</div>';
+  }
+
+  function openBoutiqueForm(id) {
+    drawerMode = 'boutique';
+    editingId  = id || null;
+    var item   = id ? allBoutique.find(function (b) { return b.id === id; }) : null;
+
+    document.getElementById('drawer-label').textContent = 'Boutique';
+    document.getElementById('drawer-title').textContent = item ? 'Modifier l\'article' : 'Nouvel article';
+    document.getElementById('drawer-error').style.display = 'none';
+
+    document.getElementById('drawer-body').innerHTML =
+      '<p style="' + S.section + '">Informations</p>' +
+      field('nom', 'Nom de l\'article *', 'text', item ? item.nom : '', 'ex : Couronne de champion') +
+      field('prix', 'Prix en points *', 'number', item ? item.prix : '', 'ex : 500') +
+      '<div style="' + S.group + '">' +
+        '<label for="f-type" style="' + S.label + '">Type *</label>' +
+        boutiqueTypeSelect(item ? item.type : 'decoration_avatar') +
+      '</div>' +
+      '<p style="' + S.section + '">Contenu</p>' +
+      boutiqueConditionalField(item);
+
+    // Mise à jour dynamique du champ conditionnel au changement de type
+    var typeSelect = document.getElementById('f-type');
+    typeSelect.addEventListener('change', function () {
+      var fakeItem = item ? Object.assign({}, item, { type: this.value }) : { type: this.value };
+      document.getElementById('f-conditional').outerHTML = boutiqueConditionalField(fakeItem);
+    });
+
+    openDrawer();
+  }
+
+  async function submitBoutique() {
+    var nom  = val('nom');
+    var prix = val('prix');
+    var type = document.getElementById('f-type').value;
+    if (!nom)  throw new Error('Le nom est obligatoire.');
+    if (!prix) throw new Error('Le prix est obligatoire.');
+
+    var fd = new FormData();
+    fd.append('nom',  nom);
+    fd.append('prix', prix);
+    fd.append('type', type);
+
+    if (type === 'titre') {
+      var titreTxt = document.getElementById('f-type-titre');
+      if (!titreTxt || !titreTxt.value.trim()) throw new Error('Le texte du titre est obligatoire.');
+      fd.append('type_titre', titreTxt.value.trim());
+    } else {
+      var imgInput = document.getElementById('f-img-boutique');
+      var pbField  = imgInput ? imgInput.dataset.pbField : null;
+      if (imgInput && imgInput.files && imgInput.files[0] && pbField) {
+        fd.append(pbField, imgInput.files[0]);
+      } else if (!editingId) {
+        throw new Error('Une image est obligatoire pour ce type d\'article.');
+      }
+    }
+
+    var res = await fetch(
+      PB_URL + '/api/collections/boutique/records' + (editingId ? '/' + editingId : ''),
       { method: editingId ? 'PATCH' : 'POST', headers: { Authorization: 'Bearer ' + TOKEN }, body: fd }
     );
     if (!res.ok) throw new Error((await res.json()).message || 'Erreur PocketBase.');
@@ -613,6 +714,12 @@
       openConfirm('Supprimer la boisson',
         'Cette boisson sera définitivement supprimée.',
         function () { return deleteRecord('boison', id, 'data-row-boison'); });
+    } else if (action === 'open-boutique-form') {
+      openBoutiqueForm(id);
+    } else if (action === 'delete-boutique') {
+      openConfirm('Supprimer l\'article',
+        'Cet article de boutique sera définitivement supprimé.',
+        function () { return deleteRecord('boutique', id, 'data-row-boutique'); });
     }
   });
 })();

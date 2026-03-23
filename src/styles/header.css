@@ -17,6 +17,7 @@
 
 /* Menu overlay transition */
 #nav-mobile-menu {
+  top: 92px;
   opacity: 0;
   transform: translateY(-12px);
   pointer-events: none;

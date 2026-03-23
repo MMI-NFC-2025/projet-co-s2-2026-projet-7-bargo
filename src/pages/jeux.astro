@@ -4,6 +4,7 @@ import Layout from '../layouts/Layout.astro';
 import PbImage from '../components/PbImage.astro';
 import LikeButton from '../components/LikeButton.astro';
 import Pagination from '../components/Pagination.astro';
+import HeroSection from '../components/HeroSection.astro';
 
 const PB_URL  = 'https://pbbargo.pierre-mouilleseaux-lhuillier.fr';
 const token   = Astro.cookies.get('pb_token')?.value;
@@ -21,18 +22,11 @@ const totalPages = Math.ceil((data.totalItems ?? 0) / perPage);
 
 <Layout title="Nos jeux — Bargo">
 
-  <!-- ===== HERO ===== -->
-  <section class="bg-primary-900 h-70 lg:h-112.5 relative">
-    <h1 class="absolute top-15 left-5 lg:top-35.25 lg:left-20 text-white m-0 uppercase text-10 lg:text-22.5">Nos jeux</h1>
-    <p class="block lg:hidden absolute bottom-6 left-5 right-5 text-neutral-300 text-3.5 font-medium m-0 leading-[1.4]">
-      Des défis et jeux à relever tout au long de votre soirée barathon.
-    </p>
-    <p class="hidden lg:block absolute top-67 left-20 text-neutral-200 text-3.5 font-medium w-136.75 m-0 leading-[1.6]">
-      Ici vous pourrez tester des jeux à faire tout au long de votre soirée. Si vous voulez donner
-      votre avis sur les jeux ou si vous avez d'autres idées, n'hésitez pas à nous en parler via
-      mail ou via le <a href="/contact" class="underline hover:opacity-70 transition-opacity">formulaire de contact</a>.
-    </p>
-  </section>
+  <HeroSection title="Nos jeux" descMobile="Des défis et jeux à relever tout au long de votre soirée barathon.">
+    Ici vous pourrez tester des jeux à faire tout au long de votre soirée. Si vous voulez donner
+    votre avis sur les jeux ou si vous avez d'autres idées, n'hésitez pas à nous en parler via
+    mail ou via le <a href="/contact" class="underline hover:opacity-70 transition-opacity">formulaire de contact</a>.
+  </HeroSection>
 
   <!-- ===== GRILLE ===== -->
   <div class="bg-neutral-200 px-4 lg:px-20 pt-8 lg:pt-14.5 pb-10 lg:pb-20">

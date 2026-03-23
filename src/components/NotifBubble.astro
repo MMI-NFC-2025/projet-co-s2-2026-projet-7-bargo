@@ -13,20 +13,18 @@ let notifications  = [];
 
 if (isLoggedIn) {
   try {
-    // Données user avec expand demande_amies + demande_session
     const userRes = await fetch(
       `${PB_URL}/api/collections/users/records/${userId}?expand=demande_amies,demande_session`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
     if (userRes.ok) {
       const user = await userRes.json();
-      demandeAmies   = (user.expand?.demande_amies   ?? []);
-      demandeSession = (user.expand?.demande_session  ?? []);
+      demandeAmies   = user.expand?.demande_amies  ?? [];
+      demandeSession = user.expand?.demande_session ?? [];
     }
   } catch {}
 
   try {
-    // Notifications non lues
     const filter = encodeURIComponent(`user = "${userId}" && lu = false`);
     const notifRes = await fetch(
       `${PB_URL}/api/collections/notifications/records?perPage=10&sort=-created&filter=${filter}`,
@@ -53,83 +51,67 @@ function timeAgo(dateStr) {
 ---
 
 {isLoggedIn && totalCount > 0 && (
-  <div id="notif-widget" style="position:fixed; bottom:24px; right:24px; z-index:200; display:flex; flex-direction:column; align-items:flex-end; gap:12px;">
+  <div id="notif-widget" class="notif-widget">
 
-    <!-- Panneau (caché par défaut) -->
-    <div
-      id="notif-panel"
-      style="display:none; width:320px; max-height:440px; background:white; border-radius:12px; box-shadow:0 8px 32px rgba(0,0,0,0.18); flex-direction:column; overflow:hidden;"
-    >
+    <!-- Panneau -->
+    <div id="notif-panel" class="notif-panel" role="dialog" aria-label="Notifications" aria-modal="false">
+
       <!-- Header -->
-      <div style="padding:14px 16px; background:#1E1E1E; display:flex; align-items:center; justify-content:space-between; flex-shrink:0;">
-        <span style="color:white; font-family:'Manrope',sans-serif; font-weight:700; font-size:15px;">Notifications</span>
-        {totalCount > 0 && (
-          <span style="background:#ef4444; color:white; font-size:10px; font-weight:700; font-family:'Inter',sans-serif; padding:2px 7px; border-radius:20px;">{totalCount} nouvelle{totalCount > 1 ? 's' : ''}</span>
-        )}
+      <div class="notif-panel__header">
+        <span class="notif-panel__title">Notifications</span>
+        <span class="notif-panel__badge">{totalCount} nouvelle{totalCount > 1 ? 's' : ''}</span>
       </div>
 
       <!-- Liste -->
-      <div style="overflow-y:auto; flex:1; display:flex; flex-direction:column;">
+      <div class="notif-panel__list">
 
-        {totalCount === 0 ? (
-          <div style="padding:28px 16px; text-align:center;">
-            <p style="color:#646262; font-size:13px; font-family:'Inter',sans-serif; font-weight:500; margin:0;">Aucune nouvelle notification</p>
+        {demandeAmies.map(u => (
+          <div class="notif-item notif-item--unread">
+            <div class="notif-item__avatar notif-item__avatar--dark" aria-hidden="true">
+              {(u.pseudo || u.prenom || '?')[0].toUpperCase()}
+            </div>
+            <p class="notif-item__text">
+              <strong class="notif-item__name">{u.pseudo || `${u.prenom ?? ''} ${u.nom ?? ''}`.trim() || 'Utilisateur'}</strong> vous a envoyé une demande d'ami
+            </p>
+            <div class="notif-item__dot" aria-hidden="true"></div>
           </div>
-        ) : (
-          <>
-            {/* Demandes d'amis */}
-            {demandeAmies.map(u => (
-              <div style="display:flex; align-items:center; gap:10px; padding:12px 16px; border-bottom:1px solid #F7F1ED; background:#f0faf0;">
-                <div style="width:32px; height:32px; border-radius:50%; background:#094736; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:13px; font-weight:700; color:white; font-family:'Inter',sans-serif;">
-                  {(u.pseudo || u.prenom || '?')[0].toUpperCase()}
-                </div>
-                <p style="flex:1; font-size:12px; font-family:'Inter',sans-serif; font-weight:600; color:#1E1E1E; margin:0; line-height:1.4;">
-                  <span style="color:#094736;">{u.pseudo || `${u.prenom ?? ''} ${u.nom ?? ''}`.trim() || 'Utilisateur'}</span> vous a envoyé une demande d'ami
-                </p>
-                <div style="width:8px; height:8px; border-radius:50%; background:#ef4444; flex-shrink:0;"></div>
-              </div>
-            ))}
+        ))}
 
-            {/* Invitations de session */}
-            {demandeSession.map(s => (
-              <div style="display:flex; align-items:center; gap:10px; padding:12px 16px; border-bottom:1px solid #F7F1ED; background:#f0faf0;">
-                <div style="width:32px; height:32px; border-radius:50%; background:#094736; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round">
-                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
-                    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
-                  </svg>
-                </div>
-                <p style="flex:1; font-size:12px; font-family:'Inter',sans-serif; font-weight:600; color:#1E1E1E; margin:0; line-height:1.4;">
-                  Invitation au barathon <span style="color:#094736;">{s.nom ?? 'Session sans nom'}</span>
-                </p>
-                <div style="width:8px; height:8px; border-radius:50%; background:#ef4444; flex-shrink:0;"></div>
-              </div>
-            ))}
+        {demandeSession.map(s => (
+          <div class="notif-item notif-item--unread">
+            <div class="notif-item__avatar notif-item__avatar--dark" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+              </svg>
+            </div>
+            <p class="notif-item__text">
+              Invitation au barathon <strong class="notif-item__name">{s.nom ?? 'Session sans nom'}</strong>
+            </p>
+            <div class="notif-item__dot" aria-hidden="true"></div>
+          </div>
+        ))}
 
-            {/* Notifications non lues */}
-            {notifications.map(notif => (
-              <div style="display:flex; align-items:flex-start; gap:10px; padding:12px 16px; border-bottom:1px solid #F7F1ED; background:#f0faf0;">
-                <div style="width:32px; height:32px; border-radius:50%; background:#347645; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </div>
-                <div style="flex:1; min-width:0;">
-                  <p style="font-size:12px; font-family:'Inter',sans-serif; font-weight:700; color:#1E1E1E; margin:0; line-height:1.4;">
-                    {notif.message ?? notif.texte ?? notif.contenu ?? 'Notification'}
-                  </p>
-                  <p style="font-size:11px; font-family:'Inter',sans-serif; color:#646262; margin:3px 0 0 0;">{timeAgo(notif.created)}</p>
-                </div>
-                <div style="width:8px; height:8px; border-radius:50%; background:#ef4444; flex-shrink:0; margin-top:4px;"></div>
-              </div>
-            ))}
-          </>
-        )}
+        {notifications.map(notif => (
+          <div class="notif-item notif-item--unread">
+            <div class="notif-item__avatar notif-item__avatar--green" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="notif-item__body">
+              <p class="notif-item__text">{notif.message ?? notif.texte ?? notif.contenu ?? 'Notification'}</p>
+              <p class="notif-item__time">{timeAgo(notif.created)}</p>
+            </div>
+            <div class="notif-item__dot" aria-hidden="true"></div>
+          </div>
+        ))}
+
       </div>
 
       <!-- Footer -->
-      <a href="/profil?tab=notifications" style="display:block; padding:11px 16px; text-align:center; font-size:13px; font-family:'Inter',sans-serif; font-weight:600; color:#094736; text-decoration:none; border-top:1px solid #DFDFDF; background:white; flex-shrink:0;">
+      <a href="/profil?tab=notifications" class="notif-panel__footer">
         Voir toutes les notifications →
       </a>
     </div>
@@ -137,38 +119,189 @@ function timeAgo(dateStr) {
     <!-- Bouton cloche -->
     <button
       id="notif-btn"
-      aria-label={`Notifications${totalCount > 0 ? ` (${totalCount})` : ''}`}
-      style="width:52px; height:52px; border-radius:50%; background:#1E1E1E; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 16px rgba(0,0,0,0.3); transition:transform 0.18s ease, box-shadow 0.18s ease; position:relative; flex-shrink:0;"
-      onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 6px 24px rgba(0,0,0,0.4)';"
-      onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 16px rgba(0,0,0,0.3)';"
+      class="notif-btn"
+      aria-label={`Notifications — ${totalCount} non lue${totalCount > 1 ? 's' : ''}`}
+      aria-haspopup="dialog"
+      aria-expanded="false"
     >
-      <img src={notifIcon.src} alt="" width="22" height="22" style="filter:brightness(0) invert(1); flex-shrink:0; pointer-events:none;" />
-      {totalCount > 0 && (
-        <span style="position:absolute; top:-3px; right:-3px; min-width:18px; height:18px; padding:0 4px; background:#ef4444; color:white; border-radius:18px; font-size:10px; font-weight:700; font-family:'Inter',sans-serif; display:flex; align-items:center; justify-content:center; border:2px solid white; box-sizing:border-box; line-height:1; pointer-events:none;">
-          {totalCount > 99 ? '99+' : totalCount}
-        </span>
-      )}
+      <img src={notifIcon.src} alt="" width="22" height="22" class="notif-btn__icon" aria-hidden="true" />
+      <span class="notif-btn__badge" aria-hidden="true">{totalCount > 99 ? '99+' : totalCount}</span>
     </button>
 
   </div>
 )}
 
 <script>
-  const btn   = document.getElementById('notif-btn');
-  const panel = document.getElementById('notif-panel');
-
-  if (btn && panel) {
-    btn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      const isOpen = panel.style.display === 'flex';
-      panel.style.display = isOpen ? 'none' : 'flex';
-    });
-
-    document.addEventListener('click', function (e) {
-      const widget = document.getElementById('notif-widget');
-      if (widget && !widget.contains(e.target instanceof Node ? e.target : null)) {
-        panel.style.display = 'none';
-      }
-    });
-  }
+  import '../js/notif-bubble.js';
 </script>
+
+<style>
+  .notif-widget {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+  }
+
+  /* ── Bouton ── */
+  .notif-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #1e1e1e;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .notif-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+  }
+  .notif-btn__icon {
+    filter: brightness(0) invert(1);
+    flex-shrink: 0;
+    pointer-events: none;
+  }
+  .notif-btn__badge {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    background: #ef4444;
+    color: white;
+    border-radius: 18px;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    box-sizing: border-box;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  /* ── Panneau ── */
+  .notif-panel {
+    display: none;
+    width: 320px;
+    max-height: 440px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .notif-panel--open {
+    display: flex;
+  }
+  .notif-panel__header {
+    padding: 14px 16px;
+    background: #1e1e1e;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .notif-panel__title {
+    color: white;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .notif-panel__badge {
+    background: #ef4444;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    padding: 2px 7px;
+    border-radius: 20px;
+  }
+  .notif-panel__list {
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .notif-panel__footer {
+    display: block;
+    padding: 11px 16px;
+    text-align: center;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    color: #094736;
+    text-decoration: none;
+    border-top: 1px solid #dfdfdf;
+    background: white;
+    flex-shrink: 0;
+  }
+  .notif-panel__footer:hover {
+    opacity: 0.8;
+  }
+
+  /* ── Items ── */
+  .notif-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #f7f1ed;
+  }
+  .notif-item--unread {
+    background: #f0faf0;
+  }
+  .notif-item__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+    font-family: 'Inter', sans-serif;
+  }
+  .notif-item__avatar--dark  { background: #094736; }
+  .notif-item__avatar--green { background: #347645; }
+  .notif-item__text {
+    flex: 1;
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    color: #1e1e1e;
+    margin: 0;
+    line-height: 1.4;
+  }
+  .notif-item__name { color: #094736; }
+  .notif-item__body { flex: 1; min-width: 0; }
+  .notif-item__time {
+    font-size: 11px;
+    font-family: 'Inter', sans-serif;
+    color: #646262;
+    margin: 3px 0 0;
+  }
+  .notif-item__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ef4444;
+    flex-shrink: 0;
+  }
+</style>

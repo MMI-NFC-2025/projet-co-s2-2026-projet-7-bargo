@@ -17,7 +17,7 @@ const me = await meRes.json();
 if (!me.admin) return Astro.redirect('/');
 
 // ── Fetch all data ────────────────────────────────────────────────────────────
-const [usersRes, barsRes, sessionsRes, jeuxRes, boisonsRes] = await Promise.all([
+const [usersRes, barsRes, sessionsRes, jeuxRes, boisonsRes, boutiqueRes] = await Promise.all([
   fetch(`${PB_URL}/api/collections/users/records?perPage=200&sort=created`,
     { headers: { Authorization: `Bearer ${token}` } }),
   fetch(`${PB_URL}/api/collections/bar/records?perPage=200&sort=nom`),
@@ -25,6 +25,8 @@ const [usersRes, barsRes, sessionsRes, jeuxRes, boisonsRes] = await Promise.all(
     { headers: { Authorization: `Bearer ${token}` } }),
   fetch(`${PB_URL}/api/collections/jeux/records?perPage=200&sort=nom`),
   fetch(`${PB_URL}/api/collections/boison/records?perPage=200&sort=nom`),
+  fetch(`${PB_URL}/api/collections/boutique/records?perPage=200&sort=nom`,
+    { headers: { Authorization: `Bearer ${token}` } }),
 ]);
 
 const allUsers    = ((await usersRes.json()).items    ?? []);
@@ -32,6 +34,7 @@ const allBars     = ((await barsRes.json()).items     ?? []);
 const allSessions = ((await sessionsRes.json()).items ?? []);
 const allJeux     = ((await jeuxRes.json()).items     ?? []);
 const allBoisons  = ((await boisonsRes.json()).items  ?? []);
+const allBoutique = ((await boutiqueRes.json()).items ?? []);
 
 const vipCount      = allUsers.filter(u => u.abonnements === 'VIP').length;
 const premiumCount  = allUsers.filter(u => u.abonnements === 'Premium').length;
@@ -71,6 +74,13 @@ const pageData = JSON.stringify({
   allBoisons: allBoisons.map(b => ({
     id: b.id, collectionName: b.collectionName,
     nom: b.nom ?? '', img: b.img ?? null,
+  })),
+  allBoutique: allBoutique.map(b => ({
+    id: b.id, collectionName: b.collectionName,
+    nom: b.nom ?? '', prix: b.prix ?? 0, type: b.type ?? '',
+    type_decoration_avatar: b.type_decoration_avatar ?? null,
+    type_titre: b.type_titre ?? '',
+    type_them:  b.type_them  ?? null,
   })),
 });
 ---
@@ -116,6 +126,7 @@ const pageData = JSON.stringify({
         { id: 'sessions',  label: 'Sessions',      count: allSessions.length },
         { id: 'jeux',      label: 'Jeux',          count: allJeux.length },
         { id: 'boisons',   label: 'Boissons',      count: allBoisons.length },
+        { id: 'boutique',  label: 'Boutique',      count: allBoutique.length },
       ].map((item, i) => (
         <button class="nav-item" data-section={item.id}
           style={`display:flex; align-items:center; gap:10px; width:100%; padding:10px 12px; border:none; border-radius:6px; cursor:pointer; text-align:left; margin-bottom:2px; background:${i === 0 ? 'rgba(114,192,115,0.15)' : 'transparent'}; color:${i === 0 ? '#72c073' : 'rgba(247,241,237,0.55)'};`}>
@@ -437,6 +448,66 @@ const pageData = JSON.stringify({
           </div>
         ))}
         {allBoisons.length === 0 && <p style="color:#bbb; font-size:14px; padding:20px;">Aucune boisson.</p>}
+      </div>
+    </section>
+
+    <!-- ── Section : Boutique ────────────────────────────────────────────── -->
+    <section id="section-boutique" class="admin-section hidden">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px;">
+        <div>
+          <h3 style="color:#111; margin:0 0 4px;">Boutique</h3>
+          <p style="color:#888; font-size:14px; font-weight:500; margin:0;">{allBoutique.length} article{allBoutique.length > 1 ? 's' : ''} disponible{allBoutique.length > 1 ? 's' : ''}</p>
+        </div>
+        <button data-action="open-boutique-form" data-id="" class="btn-primary">+ Ajouter un article</button>
+      </div>
+
+      <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
+        <div style="display:grid; grid-template-columns:56px 1fr 160px 80px 110px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
+          <p class="th"></p><p class="th">Nom</p><p class="th">Type</p><p class="th">Prix</p><p class="th"></p>
+        </div>
+        {allBoutique.map(b => {
+          const typeLabels = { decoration_avatar: 'Décoration', theme: 'Thème', titre: 'Titre' };
+          const typeColors = { decoration_avatar: ['#7c3aed','#f5f3ff'], theme: ['#0891b2','#ecfeff'], titre: ['#d97706','#fffbeb'] };
+          const [color, bg] = typeColors[b.type] ?? ['#888','#f9fafb'];
+          const imgFile = b.type === 'decoration_avatar' ? b.type_decoration_avatar :
+                          b.type === 'theme'             ? b.type_them              : null;
+          const imgSrc = imgFile
+            ? `${PB_URL}/api/files/${b.collectionName}/${b.id}/${imgFile}`
+            : null;
+          return (
+            <div data-row-boutique={b.id} style="display:grid; grid-template-columns:56px 1fr 160px 80px 110px; align-items:center; padding:12px 20px; border-bottom:1px solid #f3f4f6;">
+              <!-- Aperçu image -->
+              <div style="width:40px; height:40px; border-radius:6px; overflow:hidden; background:#f0f0f0; flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+                {imgSrc ? (
+                  <img src={imgSrc} alt="" style="width:100%; height:100%; object-fit:cover;" />
+                ) : b.type === 'titre' ? (
+                  <span style="font-size:10px; font-weight:700; color:#888;">T</span>
+                ) : (
+                  <span style="font-size:16px;">🖼</span>
+                )}
+              </div>
+              <!-- Nom -->
+              <div>
+                <p style="font-size:14px; font-weight:600; color:#222; margin:0;">{b.nom}</p>
+                {b.type === 'titre' && b.type_titre && (
+                  <p style="font-size:11px; color:#aaa; margin:0;">"{b.type_titre}"</p>
+                )}
+              </div>
+              <!-- Type badge -->
+              <span style={`font-size:11px; font-weight:700; color:${color}; background:${bg}; padding:3px 10px; border-radius:20px; width:fit-content;`}>
+                {typeLabels[b.type] ?? b.type}
+              </span>
+              <!-- Prix -->
+              <p style="font-size:13px; font-weight:700; color:#222; margin:0;">{b.prix} pts</p>
+              <!-- Actions -->
+              <div class="flex justify-end gap-2">
+                <button data-action="open-boutique-form" data-id={b.id} class="btn-edit">Modifier</button>
+                <button data-action="delete-boutique" data-id={b.id} class="btn-del-light">Supp.</button>
+              </div>
+            </div>
+          );
+        })}
+        {allBoutique.length === 0 && <p style="color:#bbb; font-size:14px; padding:20px;">Aucun article.</p>}
       </div>
     </section>
 

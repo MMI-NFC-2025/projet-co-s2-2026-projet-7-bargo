@@ -52,8 +52,7 @@ const hasMap = lat !== 0 && lon !== 0;
   <div class="relative w-full h-90 overflow-hidden">
     <PbImage record={bar} recordImage={bar.img?.[0]} width={800} height={400} />
     <!-- Gradient sombre en bas -->
-    <div class="absolute inset-0 pointer-events-none"
-      style="background: linear-gradient(to bottom, rgba(30,30,30,0) 40%, rgba(30,30,30,0.9) 100%);"></div>
+    <div class="absolute inset-0 pointer-events-none bar-hero-gradient-mobile"></div>
     <!-- Titre -->
     <h1 class="absolute left-5 text-white uppercase m-0 text-8 leading-tight" style="bottom: 68px;">{bar.nom}</h1>
     <!-- Icônes réseaux (gauche) + actions (droite) -->
@@ -182,8 +181,7 @@ const hasMap = lat !== 0 && lon !== 0;
   </div>
 
   <!-- Gradient overlay -->
-  <div class="absolute top-17.5 left-0 w-full h-115 pointer-events-none"
-    style="background: linear-gradient(to bottom, rgba(30,30,30,0) 0%, rgba(30,30,30,0.9) 100%);"></div>
+  <div class="absolute top-17.5 left-0 w-full h-115 pointer-events-none bar-hero-gradient-desktop"></div>
 
   <!-- Nom du bar -->
   <h1 class="absolute top-95.5 left-20 text-white uppercase m-0 z-2">
@@ -350,6 +348,15 @@ const hasMap = lat !== 0 && lon !== 0;
   })}
 
 </div><!-- /desktop wrapper -->
+
+  <style>
+    .bar-hero-gradient-mobile {
+      background: linear-gradient(to bottom, rgba(30,30,30,0) 40%, rgba(30,30,30,0.9) 100%);
+    }
+    .bar-hero-gradient-desktop {
+      background: linear-gradient(to bottom, rgba(30,30,30,0) 0%, rgba(30,30,30,0.9) 100%);
+    }
+  </style>
 
   <script is:inline define:vars={{ token, userId, isAuth }}>
     if (isAuth) {

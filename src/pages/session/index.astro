@@ -2,6 +2,7 @@
 // @ts-nocheck
 import Layout from '../../layouts/Layout.astro';
 import PbImage from '../../components/PbImage.astro';
+import HeroSection from '../../components/HeroSection.astro';
 import { PB_URL } from '../../js/backend.js';
 
 const token  = Astro.cookies.get('pb_token')?.value;
@@ -42,17 +43,10 @@ const sessions = (data.items ?? []).map(s => {
 
 <Layout title="Mes sessions — Bargo">
 
-  <!-- ===== HERO ===== -->
-  <section class="bg-primary-900 h-70 lg:h-112.5 relative overflow-hidden">
-    <h1 class="absolute top-15 left-5 lg:top-35.25 lg:left-20 text-white m-0 uppercase text-10 lg:text-22.5">Barathons</h1>
-    <p class="block lg:hidden absolute bottom-6 left-5 right-5 text-neutral-300 text-3.5 font-medium m-0 leading-[1.4]">
-      Planifiez votre tournée des bars, invitez vos amis et jouez ensemble tout au long de la soirée.
-    </p>
-    <p class="hidden lg:block absolute top-67 left-20 text-neutral-200 text-3.5 font-medium w-136.75 m-0 leading-[1.6]">
-      Planifiez votre tournée des bars, invitez vos amis et jouez ensemble tout au long de la soirée.
-      Créez un barathon ou rejoignez une session déjà en cours.
-    </p>
-  </section>
+  <HeroSection title="Barathons" descMobile="Planifiez votre tournée des bars, invitez vos amis et jouez ensemble tout au long de la soirée." overflow>
+    Planifiez votre tournée des bars, invitez vos amis et jouez ensemble tout au long de la soirée.
+    Créez un barathon ou rejoignez une session déjà en cours.
+  </HeroSection>
 
   <!-- ===== CONTENU ===== -->
   <div class="bg-neutral-200 px-4 lg:px-20 py-10 lg:py-20">
@@ -136,7 +130,7 @@ const sessions = (data.items ?? []).map(s => {
                           class="w-full h-full object-cover"
                         />
                       ) : (
-                        <div class="w-full h-full flex items-center justify-center" style="background:linear-gradient(135deg,#094736,#347645);">
+                        <div class="w-full h-full flex items-center justify-center session-bar-placeholder">
                           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                         </div>
                       )}
@@ -250,3 +244,9 @@ const sessions = (data.items ?? []).map(s => {
 <script>
   import '../../js/age-verification.js';
 </script>
+
+<style>
+  .session-bar-placeholder {
+    background: linear-gradient(135deg, #094736, #347645);
+  }
+</style>
