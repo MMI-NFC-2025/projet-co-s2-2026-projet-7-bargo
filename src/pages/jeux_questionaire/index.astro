@@ -2,6 +2,10 @@
 // @ts-nocheck
 import Layout from '../../layouts/Layout.astro';
 
+const token  = Astro.cookies.get('pb_token')?.value;
+const userId = Astro.cookies.get('pb_user_id')?.value;
+if (!token || !userId) return Astro.redirect('/connexion');
+
 const sessionId = Astro.url.searchParams.get('session') ?? '';
 
 const themes = [

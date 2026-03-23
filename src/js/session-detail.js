@@ -18,9 +18,11 @@
   var jeux     = d.jeux.slice();
   var amis     = d.amis.map(function (u) { return Object.assign({}, u, { sam: samIds.indexOf(u.id) >= 0 }); });
 
-  var allBars  = d.allBars;
-  var allJeux  = d.allJeux;
-  var allUsers = d.allUsers;
+  var allBars   = d.allBars;
+  var allJeux   = d.allJeux;
+  var allAmies  = d.allAmies || [];
+  // pendingInvites: amis qu'on vient d'inviter (pas encore membres), avec leur statut SAM
+  var pendingInvites = [];
 
   var activeTab     = 'bars';
   var modalMode     = null;
@@ -109,21 +111,20 @@
       btn.style.borderBottomColor = active ? '#72c073' : 'transparent';
     });
     var bottomBar = document.getElementById('bottom-bar');
-    if (bottomBar) bottomBar.style.display = isEnCours ? 'none' : 'block';
-    if (!isEnCours) {
+    if (bottomBar) bottomBar.style.display = (isEnCours || !isHote) ? 'none' : 'block';
+    if (!isEnCours && isHote) {
       var addBtn = document.getElementById('btn-add-more');
       if (addBtn) {
         if (tab === 'params') {
           addBtn.textContent   = 'Modifier';
-          addBtn.style.opacity = isHote ? '1' : '0.3';
-          addBtn.style.cursor  = isHote ? 'pointer' : 'not-allowed';
-          addBtn.title         = isHote ? '' : "Seul l'hôte peut modifier les paramètres";
+          addBtn.style.opacity = '1';
+          addBtn.style.cursor  = 'pointer';
+          addBtn.title         = '';
         } else {
           addBtn.textContent   = '+ Ajouter';
-          var blocked = !isHote;
-          addBtn.style.opacity = blocked ? '0.3' : '1';
-          addBtn.style.cursor  = blocked ? 'not-allowed' : 'pointer';
-          addBtn.title         = blocked ? "Seul l'hôte peut modifier la session" : '';
+          addBtn.style.opacity = '1';
+          addBtn.style.cursor  = 'pointer';
+          addBtn.title         = '';
         }
       }
     }
@@ -152,16 +153,23 @@
           param('Nom',             session.nom || '—') +
           param('Date',            session.date || '—') +
           param('Heure de départ', session.heure_debut || '—') +
+          param('Heure de fin',    session.heure_fin || '—') +
+          param('Lancement auto',  session.automatique ? '✓ Activé' : 'Désactivé') +
           (session.description ? param('Description', session.description) : '') +
           (isHote ? '<div style="margin-top:8px;"><button id="btn-delete-session" style="background:#ef4444;border:none;color:white;font-size:13px;font-weight:500;height:36px;padding:0 18px;border-radius:3px;cursor:pointer;">Supprimer la session</button></div>' : '') +
         '</div>';
         if (isHote) document.getElementById('btn-delete-session')?.addEventListener('click', deleteSession);
       } else {
         el.innerHTML = '<div style="display:flex;flex-direction:column;gap:14px;">' +
-          editParam('Nom',             'p-nom',   'text', session.nom || '') +
-          editParam('Date',            'p-date',  'date', session.date || '') +
-          editParam('Heure de départ', 'p-heure', 'time', session.heure_debut || '') +
+          editParam('Nom',             'p-nom',       'text', session.nom || '') +
+          editParam('Date',            'p-date',      'date', session.date || '') +
+          editParam('Heure de départ', 'p-heure',     'time', session.heure_debut || '') +
+          editParam('Heure de fin',    'p-heure-fin', 'time', session.heure_fin || '') +
           editParamArea('Description', 'p-desc', session.description || '') +
+          '<label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px 0;">' +
+          '<input type="checkbox" id="p-automatique"' + (session.automatique ? ' checked' : '') + ' style="width:16px;height:16px;accent-color:#72c073;cursor:pointer;" />' +
+          '<span style="font-size:13px;font-weight:500;color:rgba(247,241,237,0.85);">Lancement automatique</span>' +
+          '</label>' +
         '</div>';
       }
     }
@@ -220,8 +228,10 @@
         param('Nom',             session.nom || '—') +
         param('Date',            session.date || '—') +
         param('Heure de départ', session.heure_debut || '—') +
+        param('Heure de fin',    session.heure_fin || '—') +
+        param('Lancement auto',  session.automatique ? '✓ Activé' : 'Désactivé') +
         (session.description ? param('Description', session.description) : '') +
-        (isHoteOrSam ? '<div style="margin-top:8px;"><button id="btn-stop-session" style="background:#f59e0b;border:none;color:white;font-size:13px;font-weight:600;height:36px;padding:0 18px;border-radius:3px;cursor:pointer;">⏹ Arrêter la session</button></div>' : '') +
+        (isHote ? '<div style="margin-top:8px;"><button id="btn-stop-session" style="background:#f59e0b;border:none;color:white;font-size:13px;font-weight:600;height:36px;padding:0 18px;border-radius:3px;cursor:pointer;">⏹ Arrêter la session</button></div>' : '') +
       '</div>';
       document.getElementById('btn-stop-session')?.addEventListener('click', function () {
         document.getElementById('stop-modal').style.display = 'flex';
@@ -245,17 +255,43 @@
     window.location.href = '/session';
   }
 
-  async function patchSessionParams(nom, date, heure_debut, description) {
+  async function patchSessionParams(nom, date, heure_debut, heure_fin, description, automatique) {
     try {
+      var dtDepart = (date && heure_debut) ? date + ' ' + heure_debut + ':00' : null;
+      var dtArriver = null;
+      if (date && heure_fin) {
+        var toMin = function(t) { var p = (t || '').split(':'); return parseInt(p[0] || 0) * 60 + parseInt(p[1] || 0); };
+        var finDay = (heure_debut && toMin(heure_fin) < toMin(heure_debut)) ? 1 : 0;
+        if (finDay) {
+          var d = new Date(date + 'T00:00:00');
+          d.setDate(d.getDate() + 1);
+          var dd = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+          dtArriver = dd + ' ' + heure_fin + ':00';
+        } else {
+          dtArriver = date + ' ' + heure_fin + ':00';
+        }
+      }
       await fetch(PB_URL + '/api/collections/session_barathon/records/' + session.id, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
-        body: JSON.stringify({ nom: nom, date_session: date, heur_depart: heure_debut, description: description }),
+        body: JSON.stringify({ nom: nom, date_heur_depart: dtDepart, date_heur_arriver: dtArriver, description: description, automatique: !!automatique }),
       });
     } catch (_) {}
   }
 
   async function lancerSession() {
+    if (samIds.length === 0) {
+      var btn = document.getElementById('btn-launch-session');
+      if (btn) {
+        btn.textContent = '⚠ Ajoutez au moins un SAM';
+        btn.style.background = '#ef4444';
+        setTimeout(function () {
+          btn.textContent = '▶ Lancer la session';
+          btn.style.background = '#347645';
+        }, 3000);
+      }
+      return;
+    }
     var btn = document.getElementById('btn-launch-session');
     if (btn) { btn.disabled = true; btn.textContent = 'Lancement…'; }
     try {
@@ -362,6 +398,7 @@
   // ── Modal ─────────────────────────────────────────────────────────
   function openModal(mode) {
     modalMode = mode;
+    if (mode === 'amis') pendingInvites = [];
     var titles = { bars: 'Ajouter des bars', jeux: 'Ajouter des jeux', amis: 'Ajouter des amis' };
     document.getElementById('modal-title').textContent = titles[mode] || 'Ajouter';
     document.getElementById('modal-search').value      = '';
@@ -375,25 +412,75 @@
   function renderModal(q) {
     q = (q || '').toLowerCase();
     var list = document.getElementById('modal-list');
-    var src  = modalMode === 'bars' ? allBars : modalMode === 'jeux' ? allJeux : allUsers;
+
+    if (modalMode === 'amis') {
+      var iconPlus  = '<svg width="18" height="18" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="10" stroke="white" stroke-width="1.5"/><path d="M11 7v8M7 11h8" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>';
+      var iconCheck = '<svg width="18" height="18" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="11" fill="#72c073"/><path d="M6 11l4 4 6-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      var filtered = allAmies.filter(function (u) {
+        return !q || (u.pseudo + ' ' + u.prenom + ' ' + u.nom).toLowerCase().includes(q);
+      });
+      if (!filtered.length) { list.innerHTML = empty('Aucun ami trouvé.'); return; }
+      list.innerHTML = filtered.map(function (user) {
+        var isMembre  = amis.some(function (a) { return a.id === user.id; });
+        var isPending = pendingInvites.some(function (p) { return p.id === user.id; });
+        var isSamPend = pendingInvites.some(function (p) { return p.id === user.id && p.sam; });
+        var name = esc(user.pseudo || (user.prenom + ' ' + user.nom).trim() || 'Utilisateur');
+        var addBg = isMembre ? '#ef4444' : (isPending ? '#646262' : '#347645');
+        var addLabel = isMembre ? '✕ Retirer' : (isPending ? '✓ Invité' : iconPlus + ' Inviter');
+        var samBorder = isSamPend ? '#72c073' : 'rgba(255,255,255,0.2)';
+        return '<div style="display:flex;align-items:center;gap:12px;background:#2c2c2c;border-radius:5px;padding:12px;margin-bottom:8px;">' +
+          '<div style="width:44px;height:44px;flex-shrink:0;border-radius:50%;overflow:hidden;">' + avatarHtml(user, 44) + '</div>' +
+          '<div style="flex:1;min-width:0;"><p style="color:white;font-size:14px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + name + '</p></div>' +
+          '<div style="display:flex;gap:6px;flex-shrink:0;">' +
+            '<button data-action="modal-toggle-ami" data-id="' + user.id + '" style="height:32px;padding:0 12px;font-size:12px;font-weight:500;border:none;cursor:pointer;border-radius:3px;background:' + addBg + ';color:white;display:flex;align-items:center;gap:4px;">' + addLabel + '</button>' +
+            (!isMembre ? '<button data-action="modal-toggle-sam" data-id="' + user.id + '" style="height:32px;padding:0 10px;font-size:12px;font-weight:600;cursor:pointer;border-radius:3px;background:transparent;color:white;border:2px solid ' + samBorder + ';">SAM</button>' : '') +
+          '</div>' +
+        '</div>';
+      }).join('');
+      list.querySelectorAll('[data-action="modal-toggle-ami"]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var id = btn.dataset.id;
+          if (amis.some(function (a) { return a.id === id; })) {
+            amis = amis.filter(function (a) { return a.id !== id; });
+            patchSession();
+          } else if (!pendingInvites.some(function (p) { return p.id === id; })) {
+            var isSamVal = pendingInvites.some(function (p) { return p.id === id && p.sam; });
+            pendingInvites.push({ id: id, sam: isSamVal });
+            inviteUser(id, isSamVal);
+          }
+          renderModal(document.getElementById('modal-search').value);
+        });
+      });
+      list.querySelectorAll('[data-action="modal-toggle-sam"]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var id = btn.dataset.id;
+          var p  = pendingInvites.find(function (p) { return p.id === id; });
+          if (p) {
+            p.sam = !p.sam;
+          } else {
+            pendingInvites.push({ id: id, sam: true });
+            inviteUser(id, true);
+          }
+          renderModal(document.getElementById('modal-search').value);
+        });
+      });
+      return;
+    }
+
+    var src  = modalMode === 'bars' ? allBars : allJeux;
     var selFn = function (id) {
       if (modalMode === 'bars') return bars.some(function (b) { return b.id === id; });
-      if (modalMode === 'jeux') return jeux.some(function (j) { return j.id === id; });
-      return amis.some(function (a) { return a.id === id; });
+      return jeux.some(function (j) { return j.id === id; });
     };
     var filtered = src.filter(function (item) {
-      var txt = (item.nom || item.pseudo || '') + ' ' + (item.adresse || item.description || item.prenom || '');
+      var txt = (item.nom || '') + ' ' + (item.adresse || item.description || '');
       return !q || txt.toLowerCase().includes(q);
     });
     list.innerHTML = filtered.map(function (item) {
-      var s      = selFn(item.id);
-      var name   = esc(item.nom || item.pseudo || (item.prenom + ' ' + (item.nom || '')).trim() || 'Item');
-      var sub    = esc(item.adresse || item.description || '');
-      var file   = item.img || item.avatar || null;
-      var isUser = modalMode === 'amis';
-      var thumbEl = isUser
-        ? '<div style="width:44px;height:44px;flex-shrink:0;border-radius:50%;overflow:hidden;">' + avatarHtml(item, 44) + '</div>'
-        : '<div style="width:50px;height:50px;flex-shrink:0;border-radius:3px;overflow:hidden;">' + thumb(imgUrl(item, file), name) + '</div>';
+      var s    = selFn(item.id);
+      var name = esc(item.nom || 'Item');
+      var sub  = esc(item.adresse || item.description || '');
+      var thumbEl = '<div style="width:50px;height:50px;flex-shrink:0;border-radius:3px;overflow:hidden;">' + thumb(imgUrl(item, item.img), name) + '</div>';
       return '<div style="display:flex;align-items:center;gap:14px;background:#2c2c2c;border-radius:5px;padding:12px;margin-bottom:8px;">' +
         thumbEl +
         '<div style="flex:1;min-width:0;"><p style="color:white;font-size:14px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + name + '</p>' +
@@ -414,17 +501,42 @@
       var idx = bars.findIndex(function (b) { return b.id === id; });
       if (idx >= 0) bars.splice(idx, 1);
       else { var b = allBars.find(function (b) { return b.id === id; }); if (b) bars.push(b); }
+      patchSession();
+      refreshMapMarkers();
     } else if (modalMode === 'jeux') {
       var idx = jeux.findIndex(function (j) { return j.id === id; });
       if (idx >= 0) jeux.splice(idx, 1);
       else { var j = allJeux.find(function (j) { return j.id === id; }); if (j) jeux.push(j); }
-    } else {
-      var idx = amis.findIndex(function (a) { return a.id === id; });
-      if (idx >= 0) amis.splice(idx, 1);
-      else { var u = allUsers.find(function (u) { return u.id === id; }); if (u) amis.push(Object.assign({}, u, { sam: false })); }
+      patchSession();
     }
-    patchSession();
-    if (modalMode === 'bars') refreshMapMarkers();
+  }
+  async function inviteUser(targetUserId, asSam) {
+    try {
+      var uRes = await fetch(PB_URL + '/api/collections/users/records/' + targetUserId, {
+        headers: { Authorization: 'Bearer ' + TOKEN },
+      });
+      if (uRes.ok) {
+        var uData    = await uRes.json();
+        var existing = Array.isArray(uData.demande_session) ? uData.demande_session : [];
+        if (existing.indexOf(session.id) < 0) {
+          existing.push(session.id);
+          await fetch(PB_URL + '/api/collections/users/records/' + targetUserId, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
+            body: JSON.stringify({ demande_session: existing }),
+          });
+        }
+      }
+      // Si marqué SAM, l'ajouter directement dans id_sam de la session
+      if (asSam) {
+        await fetch(PB_URL + '/api/collections/session_barathon/records/' + session.id, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
+          body: JSON.stringify({ 'id_sam+': [targetUserId] }),
+        });
+        if (samIds.indexOf(targetUserId) < 0) samIds.push(targetUserId);
+      }
+    } catch (_) {}
   }
   async function patchSession() {
     try {
@@ -432,10 +544,10 @@
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
         body: JSON.stringify({
-          id_bar:     bars.map(function (b) { return b.id; }),
-          id_jeux:    jeux.length > 0 ? jeux[0].id : null,
-          id_inviter: amis.map(function (a) { return a.id; }),
-          id_sam:     amis.filter(function (a) { return a.sam; }).map(function (a) { return a.id; }),
+          id_bar:    bars.map(function (b) { return b.id; }),
+          id_jeux:   jeux.length > 0 ? jeux[0].id : null,
+          id_menbre: amis.map(function (a) { return a.id; }),
+          id_sam:    amis.filter(function (a) { return a.sam; }).map(function (a) { return a.id; }),
         }),
       });
     } catch (_) {}
@@ -496,12 +608,14 @@
         this.textContent = 'Confirmer';
         renderTab();
       } else {
-        var nom   = document.getElementById('p-nom')?.value   ?? session.nom;
-        var date  = document.getElementById('p-date')?.value  ?? session.date;
-        var heure = document.getElementById('p-heure')?.value ?? session.heure_debut;
-        var desc  = document.getElementById('p-desc')?.value  ?? session.description;
-        session.nom = nom; session.date = date; session.heure_debut = heure; session.description = desc;
-        patchSessionParams(nom, date, heure, desc);
+        var nom        = document.getElementById('p-nom')?.value            ?? session.nom;
+        var date       = document.getElementById('p-date')?.value           ?? session.date;
+        var heure      = document.getElementById('p-heure')?.value          ?? session.heure_debut;
+        var heureFin   = document.getElementById('p-heure-fin')?.value      ?? session.heure_fin;
+        var desc       = document.getElementById('p-desc')?.value           ?? session.description;
+        var auto       = !!(document.getElementById('p-automatique')?.checked);
+        session.nom = nom; session.date = date; session.heure_debut = heure; session.heure_fin = heureFin; session.description = desc; session.automatique = auto;
+        patchSessionParams(nom, date, heure, heureFin, desc, auto);
         paramsEditing    = false;
         this.textContent = 'Modifier';
         renderTab();
@@ -526,6 +640,39 @@
   document.getElementById('stop-modal-confirm')?.addEventListener('click', confirmStopSession);
   document.getElementById('stop-modal-cancel')?.addEventListener('click', function () { document.getElementById('stop-modal').style.display = 'none'; });
   document.getElementById('stop-modal')?.addEventListener('click', function (e) { if (e.target === this) this.style.display = 'none'; });
+
+  // ── Auto-transition client-side (vérification toutes les 30s) ───
+  if (session.automatique) {
+    setInterval(function () {
+      var now = new Date();
+      if (!isEnCours && session.date_heur_depart) {
+        var dtDepart = new Date(session.date_heur_depart.replace(' ', 'T'));
+        if (!isNaN(dtDepart.getTime()) && now >= dtDepart) {
+          fetch(PB_URL + '/api/collections/session_barathon/records/' + session.id, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
+            body: JSON.stringify({ etat_session: 'en_cours' }),
+          }).then(function () {
+            isEnCours = true;
+            var bottomBar = document.getElementById('bottom-bar');
+            if (bottomBar) bottomBar.style.display = 'none';
+            renderTab();
+          }).catch(function () {});
+        }
+      } else if (isEnCours && session.date_heur_arriver) {
+        var dtArriver = new Date(session.date_heur_arriver.replace(' ', 'T'));
+        if (!isNaN(dtArriver.getTime()) && now >= dtArriver) {
+          fetch(PB_URL + '/api/collections/session_barathon/records/' + session.id, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
+            body: JSON.stringify({ etat_session: 'fini' }),
+          }).then(function () {
+            window.location.href = '/session';
+          }).catch(function () {});
+        }
+      }
+    }, 30000);
+  }
 
   // ── Init ─────────────────────────────────────────────────────────
   renderTab();

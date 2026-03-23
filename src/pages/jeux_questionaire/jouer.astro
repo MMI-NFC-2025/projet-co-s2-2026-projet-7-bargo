@@ -2,14 +2,16 @@
 // @ts-nocheck
 import Layout from '../../layouts/Layout.astro';
 
+const token  = Astro.cookies.get('pb_token')?.value ?? '';
+const userId = Astro.cookies.get('pb_user_id')?.value ?? '';
+if (!token || !userId) return Astro.redirect('/connexion');
+
 const PB_URL = 'https://pbbargo.pierre-mouilleseaux-lhuillier.fr';
 
 const rawThemes = Astro.url.searchParams.get('themes') ?? '';
 const themes    = rawThemes.split(',').filter(Boolean);
 const time      = Math.max(5, Math.min(60, parseInt(Astro.url.searchParams.get('time') ?? '20')));
 const sessionId = Astro.url.searchParams.get('session') ?? '';
-const token     = Astro.cookies.get('pb_token')?.value ?? '';
-const userId    = Astro.cookies.get('pb_user_id')?.value ?? '';
 const inSession = !!(sessionId && token && userId);
 
 if (themes.length === 0) {

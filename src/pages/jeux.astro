@@ -58,11 +58,13 @@ const totalPages = Math.ceil((data.totalItems ?? 0) / perPage);
                 <div class="mt-3 lg:mt-0 flex items-center gap-3 lg:block">
                   <!-- Bouton Jouer -->
                   {(() => {
-                    const href = jeu.type_du_jeux === 'questionaire' ? '/jeux_questionaire' : '#';
+                    const href = !isAuth
+                      ? '/connexion'
+                      : jeu.type_du_jeux === 'questionaire' ? '/jeux_questionaire' : '#';
                     return (
                       <a href={href}
                         class="flex-1 lg:flex-none lg:absolute lg:top-35.5 lg:bottom-7.5 lg:left-4.75 lg:w-59.25 h-12 lg:h-auto bg-neutral-800 flex items-center justify-center text-white text-4 font-medium hover:opacity-90 transition-opacity no-underline">
-                        Jouer
+                        {isAuth ? 'Jouer' : 'Se connecter'}
                       </a>
                     );
                   })()}

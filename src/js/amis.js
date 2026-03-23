@@ -144,11 +144,11 @@
           headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
           body: JSON.stringify({ 'demande_session-': [sessionId] }),
         });
-        // Ajouter l'utilisateur dans id_inviter de la session
+        // Ajouter l'utilisateur dans id_menbre de la session
         await fetch(PB_URL + '/api/collections/session_barathon/records/' + sessionId, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
-          body: JSON.stringify({ 'id_inviter+': [userId] }),
+          body: JSON.stringify({ 'id_menbre+': [userId] }),
         });
         window.location.href = href;
       } catch (_) { btn.disabled = false; }

@@ -14,7 +14,7 @@ if (!id) return Astro.redirect('/session');
 
 // Fetch session with expanded relations
 const res = await fetch(
-  `${PB_URL}/api/collections/session_barathon/records/${id}?expand=id_bar,id_jeux,id_inviter,id_sam`,
+  `${PB_URL}/api/collections/session_barathon/records/${id}?expand=id_bar,id_jeux,id_menbre,id_sam`,
   { headers: { Authorization: `Bearer ${token}` } }
 );
 if (!res.ok) return Astro.redirect('/session');
@@ -35,7 +35,7 @@ const jeux = jeuxRaw
   ? [{ id: jeuxRaw.id, collectionName: jeuxRaw.collectionName, nom: jeuxRaw.nom ?? '', description: jeuxRaw.description ?? '', img: Array.isArray(jeuxRaw.img) ? (jeuxRaw.img[0] ?? null) : (jeuxRaw.img ?? null), type_du_jeux: jeuxRaw.type_du_jeux ?? '' }]
   : [];
 
-const amis  = (session.expand?.id_inviter ?? []).map(u => ({
+const amis  = (session.expand?.id_menbre ?? []).map(u => ({
   id: u.id, collectionName: u.collectionName,
   pseudo: u.pseudo ?? '', prenom: u.prenom ?? '', nom: u.nom ?? '',
   avatar: u.avatar ?? null,
@@ -43,16 +43,14 @@ const amis  = (session.expand?.id_inviter ?? []).map(u => ({
 
 const samIds = (session.expand?.id_sam ?? []).map(u => u.id);
 
-// All users for "Ajouter" modal (re-fetch a light list)
-const usersRes  = await fetch(`${PB_URL}/api/collections/users/records?perPage=200&sort=pseudo`);
-const usersData = await usersRes.json();
-const allUsers  = (usersData.items ?? [])
-  .filter(u => u.id !== userId)
-  .map(u => ({
-    id: u.id, collectionName: u.collectionName,
-    pseudo: u.pseudo ?? '', prenom: u.prenom ?? '', nom: u.nom ?? '',
-    avatar: u.avatar ?? null,
-  }));
+// Amis de l'hôte pour la modale "Ajouter des amis"
+const hostRes  = await fetch(`${PB_URL}/api/collections/users/records/${userId}?expand=amies`, { headers: { Authorization: `Bearer ${token}` } });
+const hostData = hostRes.ok ? await hostRes.json() : {};
+const allAmies = (hostData.expand?.amies ?? []).map(u => ({
+  id: u.id, collectionName: u.collectionName,
+  pseudo: u.pseudo ?? '', prenom: u.prenom ?? '', nom: u.nom ?? '',
+  avatar: u.avatar ?? null,
+}));
 
 // All bars & jeux for "Ajouter" modal
 const barsRes  = await fetch(`${PB_URL}/api/collections/bar/records?perPage=200&sort=nom`);
@@ -79,20 +77,44 @@ const isSam     = (session.expand?.id_sam ?? []).some(u => u.id === userId);
 const barActuel = session.bar_actuel ?? 0;
 
 // Determine session state: pas_commencer | en_cours | fini
-const statut = session.etat_session ?? 'pas_commencer';
-if (statut === 'fini') return Astro.redirect('/session');
-let isEnCours = statut === 'en_cours';
-if (!isEnCours && session.date_session && session.heur_depart) {
+const automatique = !!(session.automatique);
+let statut = session.etat_session ?? 'pas_commencer';
+
+// Auto-transition SSR si lancement automatique activé
+if (automatique && statut === 'pas_commencer' && session.date_heur_depart) {
   try {
-    const dt = new Date(`${session.date_session}T${session.heur_depart}`);
-    if (!isNaN(dt.getTime())) isEnCours = new Date() >= dt;
+    const dtDepart = new Date(session.date_heur_depart.replace(' ', 'T'));
+    if (!isNaN(dtDepart.getTime()) && new Date() >= dtDepart) {
+      await fetch(`${PB_URL}/api/collections/session_barathon/records/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ etat_session: 'en_cours' }),
+      });
+      statut = 'en_cours';
+    }
+  } catch(_) {}
+}
+if (automatique && statut === 'en_cours' && session.date_heur_arriver) {
+  try {
+    const dtArriver = new Date(session.date_heur_arriver.replace(' ', 'T'));
+    if (!isNaN(dtArriver.getTime()) && new Date() >= dtArriver) {
+      await fetch(`${PB_URL}/api/collections/session_barathon/records/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ etat_session: 'fini' }),
+      });
+      statut = 'fini';
+    }
   } catch(_) {}
 }
 
+if (statut === 'fini') return Astro.redirect('/session');
+let isEnCours = statut === 'en_cours';
+
 const pageData = JSON.stringify({
-  session: { id: session.id, nom: session.nom, date: session.date_session, heure_debut: session.heur_depart, description: session.description },
+  session: { id: session.id, nom: session.nom, date: session.date_heur_depart?.split(' ')[0] ?? '', heure_debut: session.date_heur_depart?.split(' ')[1]?.substring(0, 5) ?? '', heure_fin: session.date_heur_arriver?.split(' ')[1]?.substring(0, 5) ?? '', description: session.description, automatique, date_heur_depart: session.date_heur_depart ?? null, date_heur_arriver: session.date_heur_arriver ?? null },
   bars, jeux, amis, samIds,
-  allBars, allJeux, allUsers,
+  allBars, allJeux, allAmies,
   PB_URL, token, isHote, isSam, userId, isEnCours, barActuel,
 });
 ---
@@ -101,7 +123,7 @@ const pageData = JSON.stringify({
 
 <div class="flex flex-col lg:flex-row" style="min-height: calc(100vh - 92px);">
   <div id="session-map" class="flex-1 h-70 lg:h-auto" style="background:#dfdfdf; position:relative; z-index:0;"></div>
-  <SessionPanel session={{ nom: session.nom, date: session.date_session, heure_debut: session.heur_depart }} isHote={isHote} isEnCours={isEnCours} />
+  <SessionPanel session={{ nom: session.nom, date: session.date_heur_depart?.split(' ')[0] ?? '', heure_debut: session.date_heur_depart?.split(' ')[1]?.substring(0, 5) ?? '' }} isHote={isHote} isEnCours={isEnCours} />
 </div>
 
 <SessionModals />

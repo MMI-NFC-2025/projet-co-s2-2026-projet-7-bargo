@@ -135,7 +135,7 @@ const boissonsFavori = (user.expand?.boisson_favori ?? []);
 const demandeSession = (user.expand?.demande_session ?? []).map(s => ({
   id: s.id,
   nom: s.nom ?? 'Session sans nom',
-  date: s.date_session ?? null,
+  date: s.date_heur_depart?.split(' ')[0] ?? null,
   hote: s.id_hote ?? null,
 }));
 
@@ -634,13 +634,13 @@ const displayName = user.prenom
             </div>
 
             {boissonsFavori.length > 0 ? (
-              <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
+              <div class="grid grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-8.25">
                 {boissonsFavori.map(b => (
-                  <div class="flex flex-col gap-2">
-                    <div class="h-40 lg:h-50 rounded-1.25 overflow-hidden shadow-[0px_4px_4px_0px_rgba(0,0,0,0.15)]">
+                  <div class="relative bg-white rounded-0.5 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]" style="height: 270px;">
+                    <div class="absolute top-0 left-0 right-0 h-44 overflow-hidden rounded-tl-0.5 rounded-tr-0.5 bg-neutral-500">
                       <img src={getImageUrl(b, b.img)} alt={b.nom} class="w-full h-full object-cover" loading="lazy" />
                     </div>
-                    <p class="text-black text-4 font-medium m-0 text-center">{b.nom}</p>
+                    <h3 class="absolute left-4.75 right-4.75 m-0 text-black truncate" style="top: 190px;">{b.nom}</h3>
                   </div>
                 ))}
               </div>
@@ -759,11 +759,24 @@ const displayName = user.prenom
         <!-- PANEL : INVENTAIRE           -->
         <!-- ============================= -->
         <div id="panel-inventaire" data-panel class={activeTab !== 'inventaire' ? 'hidden' : ''}>
-          <div class="px-4 lg:px-0 pt-8 pb-16">
+          <div class="px-4 lg:px-20 pt-8 lg:pt-11.25 pb-16 lg:pb-30">
+
+            <div class="flex items-center gap-7.5 mb-11.25">
+              <h2 class="text-black m-0 shrink-0">Inventaire</h2>
+              <div class="flex-1 h-0.5 bg-neutral-300"></div>
+            </div>
 
             {(possedDecorations.length + possedTitres.length + possedThemes.length) === 0 && itemsFavori.length === 0 ? (
-              <div class="flex flex-col items-center justify-center py-20 gap-4">
-                <p class="text-neutral-500 text-4 font-medium m-0 text-center">Votre inventaire est vide.</p>
+              <div class="flex flex-col items-center justify-center py-16 gap-5">
+                <div class="w-20 h-20 rounded-full bg-neutral-300 flex items-center justify-center">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#646262" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-4 0v2M8 7V5a2 2 0 014 0"/>
+                  </svg>
+                </div>
+                <div class="text-center">
+                  <p class="text-black text-4 font-bold m-0 mb-1">Votre inventaire est vide</p>
+                  <p class="text-neutral-500 text-sm m-0">Visitez la boutique pour obtenir des articles.</p>
+                </div>
                 <a href="/boutique" class="inline-flex items-center justify-center h-12 px-8 bg-neutral-800 text-white text-4 font-medium hover:opacity-90 transition-opacity no-underline">
                   Visiter la boutique →
                 </a>
@@ -773,15 +786,13 @@ const displayName = user.prenom
 
                 {/* ── Favoris ── */}
                 {itemsFavori.length > 0 && (() => {
-                  const count = itemsFavori.length;
                   return (
                     <div>
-                      <div class="flex items-center gap-3 mb-6">
-                        <h3 class="m-0 text-black shrink-0">Favoris</h3>
-                        <span class="text-neutral-500 text-3.5 font-medium shrink-0">({count})</span>
-                        <div class="flex-1 h-px bg-neutral-300"></div>
+                      <div class="flex items-center gap-7.5 mb-8">
+                        <h3 class="text-black m-0 shrink-0">Favoris <span class="text-neutral-500 font-medium">({itemsFavori.length})</span></h3>
+                        <div class="flex-1 h-0.5 bg-neutral-300"></div>
                       </div>
-                      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                      <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
                         {itemsFavori.map(item => {
                           const isPossessed =
                             item.type === 'decoration_avatar' ? possedDecorations.some(d => d.id === item.id)
@@ -792,37 +803,40 @@ const displayName = user.prenom
                             : item.type === 'titre'           ? titreRecord?.id === item.id
                                                               : themeRecord?.id === item.id;
                           return (
-                            <div data-inv-card={item.id} class={`bg-white rounded-0.5 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.15)] overflow-hidden${isEquipped ? ' ring-2 ring-[#72C073]' : ''}`}>
-                              <div class="h-32 bg-neutral-300 flex items-center justify-center relative">
+                            <div data-inv-card={item.id} class={`bg-white rounded-0.5 shadow-[0px_4px_6px_0px_rgba(0,0,0,0.15)] overflow-hidden relative${isEquipped ? ' ring-2 ring-[#72C073]' : ''}`}>
+                              <div class="h-36 lg:h-44 bg-neutral-500 flex items-center justify-center relative">
                                 {item.type === 'titre' ? (
-                                  <div class="size-16 rounded-full bg-[#094736] flex items-center justify-center px-2">
+                                  <div class="size-20 rounded-full bg-[#094736] flex items-center justify-center px-2">
                                     <p class="text-white font-bold text-3 text-center m-0 leading-snug">{item.type_titre || item.nom}</p>
                                   </div>
                                 ) : item.imageUrl ? (
-                                  <div class="size-16 rounded-full overflow-hidden">
+                                  <div class="size-20 rounded-full overflow-hidden">
                                     <img src={item.imageUrl} alt={item.nom} class="w-full h-full object-cover" />
                                   </div>
                                 ) : (
-                                  <div class="size-16 rounded-full bg-neutral-400"></div>
+                                  <div class="size-20 rounded-full bg-neutral-600"></div>
                                 )}
-                                <span class={`inv-equipped-badge absolute top-2 left-2 bg-[#72C073] text-[#094736] text-[10px] font-bold px-2 py-0.5 leading-none${isEquipped ? '' : ' hidden'}`}>Équipé</span>
+                                <span class={`inv-equipped-badge absolute top-2 left-2 bg-[#72C073] text-[#094736] text-[10px] font-bold px-2 py-0.5${isEquipped ? '' : ' hidden'}`}>Équipé</span>
                                 {!isPossessed && (
-                                  <span class="absolute top-2 right-2 bg-neutral-500 text-white text-[10px] font-medium px-2 py-0.5 leading-none">Non possédé</span>
+                                  <span class="absolute top-2 right-2 bg-black/50 text-white text-[10px] font-medium px-2 py-0.5">Non possédé</span>
                                 )}
                               </div>
-                              <div class="px-3 pt-3 pb-3">
-                                <p class="text-black text-sm font-bold m-0 mb-3 truncate">{item.nom}</p>
+                              <div class="p-4">
+                                <h3 class="m-0 text-black text-sm mb-3 truncate">{item.nom}</h3>
                                 {isPossessed ? (
-                                  isEquipped ? (
-                                    <div class="w-full h-10 bg-[#347645] flex items-center justify-center">
-                                      <span class="text-white text-3.5 font-medium">✓ Équipé</span>
+                                  <>
+                                    <div class={`inv-equipped-state${isEquipped ? '' : ' hidden'}`}>
+                                      <div class="w-full h-8 bg-primary-600 flex items-center justify-center mb-2">
+                                        <span class="text-white text-3.5 font-medium">✓ Équipé</span>
+                                      </div>
+                                      <button class="inv-unequip-btn w-full h-9 border border-neutral-300 text-neutral-500 text-3.5 font-medium bg-transparent cursor-pointer hover:border-neutral-800 hover:text-neutral-800 transition-colors"
+                                        data-item-id={item.id} data-item-type={item.type}>Déséquiper</button>
                                     </div>
-                                  ) : (
-                                    <button class="inv-equip-btn w-full h-10 bg-[#1E1E1E] text-white text-3.5 font-medium border-0 cursor-pointer hover:opacity-90 transition-opacity"
+                                    <button class={`inv-equip-btn w-full h-12 bg-primary-900 text-white text-4 font-medium border-0 cursor-pointer hover:opacity-90 transition-opacity${isEquipped ? ' hidden' : ''}`}
                                       data-item-id={item.id} data-item-type={item.type}>Équiper</button>
-                                  )
+                                  </>
                                 ) : (
-                                  <a href="/boutique" class="w-full h-10 bg-neutral-300 text-neutral-500 text-3.5 font-medium flex items-center justify-center no-underline hover:bg-neutral-400 transition-colors">
+                                  <a href="/boutique" class="w-full h-12 bg-neutral-800 text-white text-4 font-medium flex items-center justify-center no-underline hover:opacity-90 transition-opacity">
                                     Voir en boutique
                                   </a>
                                 )}
@@ -836,123 +850,114 @@ const displayName = user.prenom
                 })()}
 
                 {/* ── Décorations possédées ── */}
-                {possedDecorations.length > 0 && (() => {
-                  const count = possedDecorations.length;
-                  return (
-                    <div>
-                      <div class="flex items-center gap-3 mb-6">
-                        <h3 class="m-0 text-black shrink-0">Décorations</h3>
-                        <span class="text-neutral-500 text-3.5 font-medium shrink-0">({count})</span>
-                        <div class="flex-1 h-px bg-neutral-300"></div>
-                      </div>
-                      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                        {possedDecorations.map(item => (
-                          <div data-inv-card={item.id} class={`bg-white rounded-0.5 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.15)] overflow-hidden${item.isEquipped ? ' ring-2 ring-[#72C073]' : ''}`}>
-                            <div class="h-32 bg-neutral-300 flex items-center justify-center relative">
-                              {item.imageUrl ? (
-                                <div class="size-16 rounded-full overflow-hidden">
-                                  <img src={item.imageUrl} alt={item.nom} class="w-full h-full object-cover" />
-                                </div>
-                              ) : (
-                                <div class="size-16 rounded-full bg-neutral-400"></div>
-                              )}
-                              <span class={`inv-equipped-badge absolute top-2 left-2 bg-[#72C073] text-[#094736] text-[10px] font-bold px-2 py-0.5 leading-none${item.isEquipped ? '' : ' hidden'}`}>Équipé</span>
-                            </div>
-                            <div class="px-3 pt-3 pb-3">
-                              <p class="text-black text-sm font-bold m-0 mb-3 truncate">{item.nom}</p>
-                              {item.isEquipped ? (
-                                <div class="w-full h-10 bg-[#347645] flex items-center justify-center">
-                                  <span class="text-white text-3.5 font-medium">✓ Équipé</span>
-                                </div>
-                              ) : (
-                                <button class="inv-equip-btn w-full h-10 bg-[#1E1E1E] text-white text-3.5 font-medium border-0 cursor-pointer hover:opacity-90 transition-opacity"
-                                  data-item-id={item.id} data-item-type="decoration_avatar">Équiper</button>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                {possedDecorations.length > 0 && (
+                  <div>
+                    <div class="flex items-center gap-7.5 mb-8">
+                      <h3 class="text-black m-0 shrink-0">Décorations <span class="text-neutral-500 font-medium">({possedDecorations.length})</span></h3>
+                      <div class="flex-1 h-0.5 bg-neutral-300"></div>
                     </div>
-                  );
-                })()}
+                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
+                      {possedDecorations.map(item => (
+                        <div data-inv-card={item.id} class={`bg-white rounded-0.5 shadow-[0px_4px_6px_0px_rgba(0,0,0,0.15)] overflow-hidden relative${item.isEquipped ? ' ring-2 ring-[#72C073]' : ''}`}>
+                          <div class="h-36 lg:h-44 bg-neutral-500 flex items-center justify-center relative">
+                            {item.imageUrl ? (
+                              <div class="size-20 rounded-full overflow-hidden">
+                                <img src={item.imageUrl} alt={item.nom} class="w-full h-full object-cover" />
+                              </div>
+                            ) : (
+                              <div class="size-20 rounded-full bg-neutral-600"></div>
+                            )}
+                            <span class={`inv-equipped-badge absolute top-2 left-2 bg-[#72C073] text-[#094736] text-[10px] font-bold px-2 py-0.5${item.isEquipped ? '' : ' hidden'}`}>Équipé</span>
+                          </div>
+                          <div class="p-4">
+                            <h3 class="m-0 text-black text-sm mb-3 truncate">{item.nom}</h3>
+                            <div class={`inv-equipped-state${item.isEquipped ? '' : ' hidden'}`}>
+                              <div class="w-full h-8 bg-primary-600 flex items-center justify-center mb-2">
+                                <span class="text-white text-3.5 font-medium">✓ Équipé</span>
+                              </div>
+                              <button class="inv-unequip-btn w-full h-9 border border-neutral-300 text-neutral-500 text-3.5 font-medium bg-transparent cursor-pointer hover:border-neutral-800 hover:text-neutral-800 transition-colors"
+                                data-item-id={item.id} data-item-type="decoration_avatar">Déséquiper</button>
+                            </div>
+                            <button class={`inv-equip-btn w-full h-12 bg-primary-900 text-white text-4 font-medium border-0 cursor-pointer hover:opacity-90 transition-opacity${item.isEquipped ? ' hidden' : ''}`}
+                              data-item-id={item.id} data-item-type="decoration_avatar">Équiper</button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* ── Titres possédés ── */}
-                {possedTitres.length > 0 && (() => {
-                  const count = possedTitres.length;
-                  return (
-                    <div>
-                      <div class="flex items-center gap-3 mb-6">
-                        <h3 class="m-0 text-black shrink-0">Titres</h3>
-                        <span class="text-neutral-500 text-3.5 font-medium shrink-0">({count})</span>
-                        <div class="flex-1 h-px bg-neutral-300"></div>
-                      </div>
-                      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                        {possedTitres.map(item => (
-                          <div data-inv-card={item.id} class={`bg-white rounded-0.5 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.15)] overflow-hidden${item.isEquipped ? ' ring-2 ring-[#72C073]' : ''}`}>
-                            <div class="h-32 bg-neutral-300 flex items-center justify-center relative">
-                              <div class="size-16 rounded-full bg-[#094736] flex items-center justify-center px-2">
-                                <p class="text-white font-bold text-3 text-center m-0 leading-snug">{item.type_titre || item.nom}</p>
-                              </div>
-                              <span class={`inv-equipped-badge absolute top-2 left-2 bg-[#72C073] text-[#094736] text-[10px] font-bold px-2 py-0.5 leading-none${item.isEquipped ? '' : ' hidden'}`}>Équipé</span>
-                            </div>
-                            <div class="px-3 pt-3 pb-3">
-                              <p class="text-black text-sm font-bold m-0 mb-3 truncate">{item.nom}</p>
-                              {item.isEquipped ? (
-                                <div class="w-full h-10 bg-[#347645] flex items-center justify-center">
-                                  <span class="text-white text-3.5 font-medium">✓ Équipé</span>
-                                </div>
-                              ) : (
-                                <button class="inv-equip-btn w-full h-10 bg-[#1E1E1E] text-white text-3.5 font-medium border-0 cursor-pointer hover:opacity-90 transition-opacity"
-                                  data-item-id={item.id} data-item-type="titre">Équiper</button>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                {possedTitres.length > 0 && (
+                  <div>
+                    <div class="flex items-center gap-7.5 mb-8">
+                      <h3 class="text-black m-0 shrink-0">Titres <span class="text-neutral-500 font-medium">({possedTitres.length})</span></h3>
+                      <div class="flex-1 h-0.5 bg-neutral-300"></div>
                     </div>
-                  );
-                })()}
+                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
+                      {possedTitres.map(item => (
+                        <div data-inv-card={item.id} class={`bg-white rounded-0.5 shadow-[0px_4px_6px_0px_rgba(0,0,0,0.15)] overflow-hidden relative${item.isEquipped ? ' ring-2 ring-[#72C073]' : ''}`}>
+                          <div class="h-36 lg:h-44 bg-neutral-500 flex items-center justify-center relative">
+                            <div class="size-20 rounded-full bg-[#094736] flex items-center justify-center px-2">
+                              <p class="text-white font-bold text-3 text-center m-0 leading-snug">{item.type_titre || item.nom}</p>
+                            </div>
+                            <span class={`inv-equipped-badge absolute top-2 left-2 bg-[#72C073] text-[#094736] text-[10px] font-bold px-2 py-0.5${item.isEquipped ? '' : ' hidden'}`}>Équipé</span>
+                          </div>
+                          <div class="p-4">
+                            <h3 class="m-0 text-black text-sm mb-3 truncate">{item.nom}</h3>
+                            <div class={`inv-equipped-state${item.isEquipped ? '' : ' hidden'}`}>
+                              <div class="w-full h-8 bg-primary-600 flex items-center justify-center mb-2">
+                                <span class="text-white text-3.5 font-medium">✓ Équipé</span>
+                              </div>
+                              <button class="inv-unequip-btn w-full h-9 border border-neutral-300 text-neutral-500 text-3.5 font-medium bg-transparent cursor-pointer hover:border-neutral-800 hover:text-neutral-800 transition-colors"
+                                data-item-id={item.id} data-item-type="titre">Déséquiper</button>
+                            </div>
+                            <button class={`inv-equip-btn w-full h-12 bg-primary-900 text-white text-4 font-medium border-0 cursor-pointer hover:opacity-90 transition-opacity${item.isEquipped ? ' hidden' : ''}`}
+                              data-item-id={item.id} data-item-type="titre">Équiper</button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* ── Thèmes possédés ── */}
-                {possedThemes.length > 0 && (() => {
-                  const count = possedThemes.length;
-                  return (
-                    <div>
-                      <div class="flex items-center gap-3 mb-6">
-                        <h3 class="m-0 text-black shrink-0">Thèmes</h3>
-                        <span class="text-neutral-500 text-3.5 font-medium shrink-0">({count})</span>
-                        <div class="flex-1 h-px bg-neutral-300"></div>
-                      </div>
-                      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                        {possedThemes.map(item => (
-                          <div data-inv-card={item.id} class={`bg-white rounded-0.5 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.15)] overflow-hidden${item.isEquipped ? ' ring-2 ring-[#72C073]' : ''}`}>
-                            <div class="h-32 bg-neutral-300 flex items-center justify-center relative">
-                              {item.imageUrl ? (
-                                <div class="size-16 rounded-full overflow-hidden">
-                                  <img src={item.imageUrl} alt={item.nom} class="w-full h-full object-cover" />
-                                </div>
-                              ) : (
-                                <div class="size-16 rounded-full bg-neutral-400"></div>
-                              )}
-                              <span class={`inv-equipped-badge absolute top-2 left-2 bg-[#72C073] text-[#094736] text-[10px] font-bold px-2 py-0.5 leading-none${item.isEquipped ? '' : ' hidden'}`}>Équipé</span>
-                            </div>
-                            <div class="px-3 pt-3 pb-3">
-                              <p class="text-black text-sm font-bold m-0 mb-3 truncate">{item.nom}</p>
-                              {item.isEquipped ? (
-                                <div class="w-full h-10 bg-[#347645] flex items-center justify-center">
-                                  <span class="text-white text-3.5 font-medium">✓ Équipé</span>
-                                </div>
-                              ) : (
-                                <button class="inv-equip-btn w-full h-10 bg-[#1E1E1E] text-white text-3.5 font-medium border-0 cursor-pointer hover:opacity-90 transition-opacity"
-                                  data-item-id={item.id} data-item-type="theme">Équiper</button>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                {possedThemes.length > 0 && (
+                  <div>
+                    <div class="flex items-center gap-7.5 mb-8">
+                      <h3 class="text-black m-0 shrink-0">Thèmes <span class="text-neutral-500 font-medium">({possedThemes.length})</span></h3>
+                      <div class="flex-1 h-0.5 bg-neutral-300"></div>
                     </div>
-                  );
-                })()}
+                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
+                      {possedThemes.map(item => (
+                        <div data-inv-card={item.id} class={`bg-white rounded-0.5 shadow-[0px_4px_6px_0px_rgba(0,0,0,0.15)] overflow-hidden relative${item.isEquipped ? ' ring-2 ring-[#72C073]' : ''}`}>
+                          <div class="h-36 lg:h-44 bg-neutral-500 flex items-center justify-center relative">
+                            {item.imageUrl ? (
+                              <div class="size-20 rounded-full overflow-hidden">
+                                <img src={item.imageUrl} alt={item.nom} class="w-full h-full object-cover" />
+                              </div>
+                            ) : (
+                              <div class="size-20 rounded-full bg-neutral-600"></div>
+                            )}
+                            <span class={`inv-equipped-badge absolute top-2 left-2 bg-[#72C073] text-[#094736] text-[10px] font-bold px-2 py-0.5${item.isEquipped ? '' : ' hidden'}`}>Équipé</span>
+                          </div>
+                          <div class="p-4">
+                            <h3 class="m-0 text-black text-sm mb-3 truncate">{item.nom}</h3>
+                            <div class={`inv-equipped-state${item.isEquipped ? '' : ' hidden'}`}>
+                              <div class="w-full h-8 bg-primary-600 flex items-center justify-center mb-2">
+                                <span class="text-white text-3.5 font-medium">✓ Équipé</span>
+                              </div>
+                              <button class="inv-unequip-btn w-full h-9 border border-neutral-300 text-neutral-500 text-3.5 font-medium bg-transparent cursor-pointer hover:border-neutral-800 hover:text-neutral-800 transition-colors"
+                                data-item-id={item.id} data-item-type="theme">Déséquiper</button>
+                            </div>
+                            <button class={`inv-equip-btn w-full h-12 bg-primary-900 text-white text-4 font-medium border-0 cursor-pointer hover:opacity-90 transition-opacity${item.isEquipped ? ' hidden' : ''}`}
+                              data-item-id={item.id} data-item-type="theme">Équiper</button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
               </div>
             )}

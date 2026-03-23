@@ -329,7 +329,7 @@ const pageData = JSON.stringify({
                 <p style="font-size:14px; font-weight:600; color:#222; margin:0;">{s.nom ?? '—'}</p>
                 <p style="font-size:11px; color:#aaa; margin:0;">ID: {s.id.slice(0,8)}…</p>
               </div>
-              <p style="font-size:13px; color:#555; margin:0;">{s.date_session ?? '—'}</p>
+              <p style="font-size:13px; color:#555; margin:0;">{s.date_heur_depart?.split(' ')[0] ?? '—'}</p>
               <span style={`font-size:11px; font-weight:700; color:${color}; background:${bg}; padding:4px 11px; border-radius:20px; width:fit-content;`}>{label}</span>
               <div class="flex justify-end">
                 <button data-action="delete-session" data-id={s.id} class="btn-del-light">Supp.</button>

@@ -269,6 +269,21 @@
     } catch(_) {}
   }
 
+  // ── Date/time helpers ─────────────────────────────────────────────
+  function toMinutes(timeStr) {
+    var p = (timeStr || '').split(':');
+    return parseInt(p[0] || 0) * 60 + parseInt(p[1] || 0);
+  }
+  function buildDatetime(dateStr, timeStr, extraDays) {
+    if (!dateStr || !timeStr) return null;
+    var d = new Date(dateStr + 'T00:00:00');
+    if (extraDays) d.setDate(d.getDate() + extraDays);
+    var y  = d.getFullYear();
+    var mo = String(d.getMonth() + 1).padStart(2, '0');
+    var da = String(d.getDate()).padStart(2, '0');
+    return y + '-' + mo + '-' + da + ' ' + timeStr + ':00';
+  }
+
   // ── Save & launch ─────────────────────────────────────────────────
   async function saveSession() {
     var nom = document.getElementById('s1-nom').value.trim();
@@ -278,17 +293,25 @@
     btn.disabled    = true;
     btn.textContent = 'Création…';
 
+    var dateStr    = document.getElementById('s1-date').value        || '';
+    var heureDebStr = document.getElementById('s1-heure-debut').value || '';
+    var heureFinStr = document.getElementById('s1-heure-fin').value   || '';
+
+    // Si l'heure de fin est avant l'heure de départ → la fin est le lendemain
+    var finAddDay = (dateStr && heureDebStr && heureFinStr && toMinutes(heureFinStr) < toMinutes(heureDebStr)) ? 1 : 0;
+
     var payload = {
-      nom:          nom,
-      date_session: document.getElementById('s1-date').value        || null,
-      heur_depart:  document.getElementById('s1-heure-debut').value || null,
-      heur_fin:     document.getElementById('s1-heure-fin').value   || null,
+      nom:               nom,
+      date_heur_depart:  buildDatetime(dateStr, heureDebStr, 0),
+      date_heur_arriver: buildDatetime(dateStr, heureFinStr, finAddDay),
       description:  document.getElementById('s1-desc').value        || null,
       id_hote:      USER_ID,
       id_bar:       selectedBars.map(function (b) { return b.id; }),
       id_jeux:      selectedJeux.length > 0 ? selectedJeux[0].id : null,
-      id_inviter:   selectedAmis.map(function (a) { return a.id; }),
+      id_menbre:    [],
       id_sam:       selectedAmis.filter(function (a) { return a.sam; }).map(function (a) { return a.id; }),
+      etat_session: 'pas_commencer',
+      automatique:  false,
     };
 
     try {

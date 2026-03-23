@@ -10,9 +10,9 @@ const userId = Astro.cookies.get('pb_user_id')?.value;
 if (!token || !userId) return Astro.redirect('/connexion');
 
 // Fetch user's active sessions with bars expanded for images
-const filter = encodeURIComponent(`(id_hote='${userId}'||id_inviter~'${userId}')&&etat_session!='fini'`);
+const filter = encodeURIComponent(`(id_hote='${userId}'||id_menbre~'${userId}')&&etat_session!='fini'`);
 const res = await fetch(
-  `${PB_URL}/api/collections/session_barathon/records?filter=${filter}&sort=-created&perPage=50&expand=id_bar,id_inviter`,
+  `${PB_URL}/api/collections/session_barathon/records?filter=${filter}&sort=-created&perPage=50&expand=id_bar,id_menbre`,
   { headers: { Authorization: `Bearer ${token}` } }
 );
 const data = res.ok ? await res.json() : { items: [] };
@@ -21,12 +21,12 @@ const sessions = (data.items ?? []).map(s => {
   const barsRaw = s.expand?.id_bar ?? [];
   const bars    = Array.isArray(barsRaw) ? barsRaw : [barsRaw];
   const firstBar = bars[0] ?? null;
-  const invites  = s.expand?.id_inviter ?? [];
+  const invites  = s.expand?.id_menbre ?? [];
   return {
     id:        s.id,
     nom:       s.nom ?? 'Session sans nom',
-    date:      s.date_session ?? '',
-    heure:     s.heur_depart ?? '',
+    date:      s.date_heur_depart?.split(' ')[0] ?? '',
+    heure:     s.date_heur_depart?.split(' ')[1]?.substring(0, 5) ?? '',
     etat:      s.etat_session ?? 'pas_commencer',
     isHote:    s.id_hote === userId,
     barCount:  bars.filter(Boolean).length,
