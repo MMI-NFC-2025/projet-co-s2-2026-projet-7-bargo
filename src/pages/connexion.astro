@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import { loginUser } from '../js/backend.js';
 import bgImg from '../assets/img/fond_connextion_inscription.avif';
+import '../styles/connexion.css';
 
 // Déjà connecté → profil (les deux cookies doivent exister, sinon on nettoie)
 const _token  = Astro.cookies.get('pb_token')?.value;
@@ -96,9 +97,4 @@ if (Astro.request.method === 'POST') {
     </form>
   </section>
 
-  <style>
-    @media (min-width: 1024px) {
-      #btn-connexion { left: max(20px, calc(25% + 107px)) !important; right: auto !important; }
-    }
-  </style>
 </Layout>
