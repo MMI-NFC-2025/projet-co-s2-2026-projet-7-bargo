@@ -58,7 +58,7 @@ export async function registerUser(data) {
 /** Récupère un utilisateur authentifié (expand bar_favori, boisson_favori). */
 export async function getUserAuth(userId, token) {
   const res = await fetch(
-    `${PB_URL}/api/collections/users/records/${userId}?expand=bar_favori,boisson_favori,jeux_favori,demande_amies,amies,demande_session,equiper_avatar_decoration,equiper_titre,equiper_theme`,
+    `${PB_URL}/api/collections/users/records/${userId}?expand=bar_favori,boisson_favori,jeux_favori,demande_amies,amies,amies.equiper_avatar_decoration,demande_session,equiper_avatar_decoration,equiper_titre,equiper_theme,possed_avatar_decoration,possed_titre,possed_theme,items_favori`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
   if (!res.ok) return null;
