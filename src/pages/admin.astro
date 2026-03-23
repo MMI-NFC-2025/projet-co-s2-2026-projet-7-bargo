@@ -33,6 +33,12 @@ const allSessions = ((await sessionsRes.json()).items ?? []);
 const allJeux     = ((await jeuxRes.json()).items     ?? []);
 const allBoisons  = ((await boisonsRes.json()).items  ?? []);
 
+const vipCount      = allUsers.filter(u => u.abonnements === 'VIP').length;
+const premiumCount  = allUsers.filter(u => u.abonnements === 'Premium').length;
+const monthlyRev    = (vipCount * 4.99 + premiumCount * 9.99);
+const weeklyRev     = monthlyRev / 4.33;
+const fmtEur = (n) => n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+
 const questionsRes = await fetch(`${PB_URL}/api/collections/jeux_questionaire/records?perPage=500&sort=theme`,
   { headers: { Authorization: `Bearer ${token}` } });
 const allQuestions = ((await questionsRes.json()).items ?? []).map(q => ({
@@ -149,6 +155,30 @@ const pageData = JSON.stringify({
             <p style="font-size:13px; font-weight:500; color:#888; margin:0;">{s.label}</p>
           </div>
         ))}
+      </div>
+
+      <!-- ── Abonnements & Revenus ─────────────────────────────────────────── -->
+      <div class="admin-stats-grid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:36px;">
+        <div style="background:white; border-radius:10px; padding:22px 24px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+          <p style="font-size:36px; font-weight:700; color:#7c3aed; margin:0 0 4px; line-height:1;">{vipCount}</p>
+          <p style="font-size:13px; font-weight:500; color:#888; margin:0 0 6px;">Abonnés VIP</p>
+          <span style="font-size:11px; font-weight:700; color:#7c3aed; background:#f5f3ff; padding:2px 8px; border-radius:20px;">4,99 € / mois</span>
+        </div>
+        <div style="background:white; border-radius:10px; padding:22px 24px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+          <p style="font-size:36px; font-weight:700; color:#0891b2; margin:0 0 4px; line-height:1;">{premiumCount}</p>
+          <p style="font-size:13px; font-weight:500; color:#888; margin:0 0 6px;">Abonnés Premium</p>
+          <span style="font-size:11px; font-weight:700; color:#0891b2; background:#ecfeff; padding:2px 8px; border-radius:20px;">9,99 € / mois</span>
+        </div>
+        <div style="background:white; border-radius:10px; padding:22px 24px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+          <p style="font-size:28px; font-weight:700; color:#16a34a; margin:0 0 4px; line-height:1;">{fmtEur(weeklyRev)}</p>
+          <p style="font-size:13px; font-weight:500; color:#888; margin:0 0 6px;">Revenus / semaine</p>
+          <span style="font-size:11px; font-weight:700; color:#16a34a; background:#f0fdf4; padding:2px 8px; border-radius:20px;">estimé</span>
+        </div>
+        <div style="background:white; border-radius:10px; padding:22px 24px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+          <p style="font-size:28px; font-weight:700; color:#d97706; margin:0 0 4px; line-height:1;">{fmtEur(monthlyRev)}</p>
+          <p style="font-size:13px; font-weight:500; color:#888; margin:0 0 6px;">Revenus / mois</p>
+          <span style="font-size:11px; font-weight:700; color:#d97706; background:#fffbeb; padding:2px 8px; border-radius:20px;">estimé</span>
+        </div>
       </div>
 
       <div class="admin-2col" style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
