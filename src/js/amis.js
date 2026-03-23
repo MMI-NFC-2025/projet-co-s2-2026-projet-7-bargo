@@ -67,10 +67,12 @@
   }
 
   // ── Modal open/close ──────────────────────────────────────────────
-  document.getElementById('btn-open-friends')?.addEventListener('click', function () {
+  function openFriendModal() {
     document.getElementById('friend-modal').style.display = 'flex';
     renderFriendList('');
-  });
+  }
+  document.getElementById('btn-open-friends')?.addEventListener('click', openFriendModal);
+  document.getElementById('btn-open-friends-mob')?.addEventListener('click', openFriendModal);
   document.getElementById('friend-modal-close')?.addEventListener('click', function () {
     document.getElementById('friend-modal').style.display = 'none';
   });

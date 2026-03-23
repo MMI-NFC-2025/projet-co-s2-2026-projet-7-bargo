@@ -1,33 +1,141 @@
+/* ── Desktop : barre mobile invisible ─────────────────────────────────────── */
+.admin-mob-bar { display: none; }
+
+
+/* ══════════════════════════════════════════════════════════════════════════ */
+/* MOBILE  (< 1024px)                                                        */
+/* ══════════════════════════════════════════════════════════════════════════ */
 @media (max-width: 1023px) {
-  .admin-root   { flex-direction: column !important; }
+
+  /* Barre mobile visible */
+  .admin-mob-bar { display: flex; }
+
+  /* Layout racine */
+  .admin-root { min-height: 0 !important; }
+
+  /* ── Sidebar : panneau glissant depuis la gauche ─────────────────────── */
   .admin-sidebar {
-    width: 100% !important;
+    position: fixed !important;
+    top: 148px !important;       /* sous le header principal (92px) + admin-mob-bar (56px) */
+    left: 0 !important;
+    bottom: 0 !important;
+    right: auto !important;
+    width: 280px !important;
     height: auto !important;
-    flex-direction: column !important;
+    z-index: 50 !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1) !important;
+    overflow-y: auto !important;
+    background: #1e1e1e !important;
     padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.4) !important;
   }
-  .admin-sidebar-header { padding: 12px 16px !important; }
-  .admin-sidebar-nav {
-    flex-direction: row !important;
-    overflow-x: auto;
-    margin-top: 0 !important;
-    padding: 8px 12px !important;
-    flex: none !important;
-    gap: 4px;
-    scrollbar-width: none;
+
+  .admin-sidebar.open {
+    transform: translateX(0) !important;
   }
-  .admin-sidebar-nav::-webkit-scrollbar { display: none; }
-  .nav-item {
-    flex-shrink: 0 !important;
-    width: auto !important;
-    white-space: nowrap;
-    padding: 8px 14px !important;
-    border-radius: 20px !important;
-    margin-bottom: 0 !important;
-  }
+
+  /* ── Entête et footer sidebar : masqués sur mobile (admin-mob-bar suffit) */
+  .admin-sidebar-header { display: none !important; }
   .admin-sidebar-footer { display: none !important; }
-  .admin-main   { padding: 20px 16px !important; overflow-y: visible !important; }
+
+  /* ── Nav items : style admin panel compact ─────────────────────────────── */
+  .admin-sidebar-nav {
+    margin-top: 8px !important;
+    flex: 1 !important;
+    padding: 0 8px !important;
+  }
+
+  .nav-item {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    width: 100% !important;
+    height: 52px !important;
+    padding: 0 12px !important;
+    border: none !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    text-align: left !important;
+    margin-bottom: 2px !important;
+    /* Réinitialiser l'animation de translation héritée de la session précédente */
+    opacity: 1 !important;
+    transform: none !important;
+    transition: background 0.15s ease, opacity 0.3s ease, transform 0.3s ease !important;
+  }
+
+  /* Icône-numéro à gauche */
+  .nav-item::before {
+    content: none !important; /* pas de pseudo numéro ici — géré par span */
+  }
+  .nav-item::after {
+    content: none !important;
+  }
+
+  /* Span label (1er enfant) */
+  .nav-item > span:first-child {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
+    line-height: 1.2 !important;
+    flex: 1 !important;
+    letter-spacing: 0 !important;
+    color: inherit !important;
+  }
+
+  /* Span badge compteur (2e enfant) — visible sur mobile */
+  .nav-item > span:last-child:not(:first-child) {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    padding: 2px 8px !important;
+    border-radius: 20px !important;
+    min-width: 28px !important;
+  }
+
+  /* Stagger animation à l'ouverture */
+  .admin-sidebar .nav-item {
+    opacity: 0 !important;
+    transform: translateX(-10px) !important;
+  }
+  .admin-sidebar.open .nav-item:nth-child(1) { opacity: 1 !important; transform: none !important; transition-delay: 0.05s !important; }
+  .admin-sidebar.open .nav-item:nth-child(2) { opacity: 1 !important; transform: none !important; transition-delay: 0.10s !important; }
+  .admin-sidebar.open .nav-item:nth-child(3) { opacity: 1 !important; transform: none !important; transition-delay: 0.15s !important; }
+  .admin-sidebar.open .nav-item:nth-child(4) { opacity: 1 !important; transform: none !important; transition-delay: 0.20s !important; }
+  .admin-sidebar.open .nav-item:nth-child(5) { opacity: 1 !important; transform: none !important; transition-delay: 0.25s !important; }
+  .admin-sidebar.open .nav-item:nth-child(6) { opacity: 1 !important; transform: none !important; transition-delay: 0.30s !important; }
+
+  /* ── Contenu principal ─────────────────────────────────────────────────── */
+  .admin-main {
+    padding: 16px !important;
+    overflow-y: visible !important;
+    width: 100% !important;
+  }
+
+  /* ── Grilles ───────────────────────────────────────────────────────────── */
   .admin-stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
-  .admin-2col   { grid-template-columns: 1fr !important; }
+  .admin-2col       { grid-template-columns: 1fr !important; }
   .admin-table-wrap { overflow-x: auto; }
+
+  /* ── Section Utilisateurs : layout mobile compact ──────────────────────── */
+  #section-users .admin-table-wrap > div:first-child { display: none !important; }
+  [data-row-user] { grid-template-columns: 1fr auto auto !important; }
+  [data-row-user] > p:nth-child(2),
+  [data-row-user] > p:nth-child(3) { display: none !important; }
+
+  /* ── Section Bars : layout mobile compact ───────────────────────────────── */
+  #section-bars .admin-table-wrap > div:first-child { display: none !important; }
+  [data-row-bar] { grid-template-columns: 1fr auto !important; }
+  /* Masquer adresse sur mobile */
+  [data-row-bar] > p:nth-child(2) { display: none !important; }
+
+  /* ── Burger → croix à l'ouverture ─────────────────────────────────────── */
+  #admin-burger.is-open .adm-bar:nth-child(1) { transform: translateY(9px) rotate(45deg) !important; }
+  #admin-burger.is-open .adm-bar:nth-child(2) { opacity: 0 !important; transform: scaleX(0) !important; }
+  #admin-burger.is-open .adm-bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg) !important; }
 }

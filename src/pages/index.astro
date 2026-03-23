@@ -128,7 +128,7 @@ const bars = await getCollection('bar', { sort: 'created' });
           <div class="bg-neutral-800 flex-1 flex flex-col pt-5 lg:pt-19 pl-5 lg:pl-27.25 pr-5 lg:pr-20 overflow-hidden">
             <h2 class="text-white m-0 mb-3 lg:mb-8.75 text-7 lg:text-12.5">{bar.nom}</h2>
             <p class="text-neutral-200 text-3.5 leading-[1.1] m-0 mb-2 lg:mb-13">{bar.adresse}</p>
-            <p class="text-white w-full lg:w-74.25 m-0 mb-4 lg:mb-25.75 line-clamp-2 lg:line-clamp-none">{bar.description}</p>
+            <p class="text-white w-full lg:w-74.25 m-0 mb-4 lg:mb-25.75 line-clamp-1 lg:line-clamp-none">{bar.description}</p>
             <a href={`/bar/${bar.id}`} class="inline-flex items-center gap-2 lg:gap-4 px-6 lg:px-12 py-2 border-2 border-white text-white leading-[1.4] w-fit hover:bg-white hover:text-neutral-800 transition-colors text-3.5 lg:text-4">
               Choisir mes bars
               <img src={arrowRight.src} alt="" width="24" height="24" class="lg:hidden" />
@@ -140,7 +140,7 @@ const bars = await getCollection('bar', { sort: 'created' });
     </div>
 
     <!-- Flèches navigation -->
-    <div class="absolute bottom-5 lg:bottom-24.25 right-5 lg:right-20 flex gap-4.25 z-10">
+    <div class="absolute bottom-5 lg:bottom-24.25 left-5 lg:left-auto lg:right-20 flex gap-4.25 z-10">
       <button id="bar-prev" class="w-10.75 h-10.75" aria-label="Bar précédent">
         <img src={carouselGauche.src} alt="" width="43" height="43" />
       </button>

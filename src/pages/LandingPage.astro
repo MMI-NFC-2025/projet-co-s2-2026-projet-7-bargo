@@ -17,23 +17,24 @@ if (token && userId) return Astro.redirect('/');
 
 const bars = await getCollection('bar', { sort: 'created' });
 
-function truncate15(text) {
+function truncate(text, n) {
   if (!text) return '';
   const words = text.trim().split(/\s+/);
-  if (words.length <= 15) return text;
-  return words.slice(0, 15).join(' ') + '\u2026';
+  if (words.length <= n) return text;
+  return words.slice(0, n).join(' ') + '\u2026';
 }
 
 const barsData = bars.map(bar => {
   const mainImg     = bar.img?.[0]     ? getImageUrl(bar, bar.img[0])     : '';
   const galerieImg  = bar.galerie?.[0] ? getImageUrl(bar, bar.galerie[0]) : '';
   return {
-    id:          bar.id,
-    nom:         bar.nom ?? '',
-    adresse:     bar.adresse ?? '',
-    description: truncate15(bar.description),
-    parallaxUrl: galerieImg || mainImg,
-    cardImgUrl:  mainImg    || galerieImg,
+    id:             bar.id,
+    nom:            bar.nom ?? '',
+    adresse:        bar.adresse ?? '',
+    description:    truncate(bar.description, 15),
+    descriptionMob: truncate(bar.description, 10),
+    parallaxUrl:    galerieImg || mainImg,
+    cardImgUrl:     mainImg    || galerieImg,
   };
 });
 
@@ -215,19 +216,19 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
       </div>
 
       <!-- Carte blanche -->
-      <div class="absolute top-6.75 left-6.25 w-86 h-104 bg-white rounded-1.25 shadow-[-7px_7px_15px_0px_rgba(0,0,0,0.25)] overflow-hidden">
+      <div id="lp-mob-card" class="absolute top-6.75 left-6.25 w-86 h-104 bg-white rounded-1.25 shadow-[-7px_7px_15px_0px_rgba(0,0,0,0.25)] overflow-hidden">
         <div class="w-full h-54.25 overflow-hidden rounded-t-1.25 shrink-0">
           <img id="lp-mob-img" src={barsData[0].cardImgUrl || undefined} alt="" class="w-full h-full object-cover block" />
         </div>
         <p id="lp-mob-adr"  class="absolute left-4.5 top-60 w-67.5 text-base font-medium leading-[1.4] text-neutral-800">{barsData[0].adresse}</p>
-        <p id="lp-mob-desc" class="absolute left-4.5 top-71.75 w-50 text-sm font-medium leading-[1.1] text-neutral-500">{barsData[0].description}</p>
+        <p id="lp-mob-desc" class="absolute left-4.5 top-71.75 w-50 text-sm font-medium leading-[1.1] text-neutral-500">{barsData[0].descriptionMob}</p>
         <button id="lp-mob-prev" aria-label="Précédent" class="absolute left-4.5 top-89.25 w-7.75 h-7.75 bg-black border-0 rounded-full cursor-pointer flex items-center justify-center">
           <svg width="10" height="10" viewBox="0 0 14 14" fill="none"><path d="M9 11L4 7L9 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <button id="lp-mob-next" aria-label="Suivant" class="absolute left-16 top-89.25 w-7.75 h-7.75 bg-neutral-500 border-0 rounded-full cursor-pointer flex items-center justify-center">
           <svg width="10" height="10" viewBox="0 0 14 14" fill="none"><path d="M5 3L10 7L5 11" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
-        <a id="lp-mob-link" href={`/bar/${barsData[0].id}`} class="absolute right-0 top-88.25 w-40.5 h-10 bg-neutral-800 inline-flex items-center justify-center text-white text-sm font-medium no-underline">En savoir plus</a>
+        <a id="lp-mob-link" href={`/bar/${barsData[0].id}`} class="absolute right-4.5 top-88.25 w-40.5 h-10 bg-neutral-800 inline-flex items-center justify-center text-white text-sm font-medium no-underline">En savoir plus</a>
       </div>
 
       <!-- Nom du bar -->

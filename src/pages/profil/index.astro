@@ -336,6 +336,10 @@ const displayName = user.prenom
                 <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white text-2.75 font-bold">{unreadNotifs + demandeAmies.length + demandeSession.length}</span>
               )}
             </button>
+            <button data-tab="amis"
+              class="tab-btn lg:hidden flex-1 h-full text-3.5 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap flex items-center justify-center">
+              Amis
+            </button>
             <button data-tab="parametres"
               class="tab-btn flex-1 lg:flex-none lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap flex items-center justify-center">
               Paramètres
@@ -686,11 +690,18 @@ const displayName = user.prenom
         <div id="panel-parametres" data-panel class={activeTab !== 'parametres' ? 'hidden' : ''}>
           <div class="px-4 lg:px-20 pt-8 lg:pt-11.25 pb-16 lg:pb-30">
 
-            <div class="flex items-center gap-7.5 mb-11.25">
-              <h2 class="text-black m-0 shrink-0">Paramètres</h2>
+            <div class="flex flex-col lg:flex-row lg:items-center lg:gap-7.5 mb-8 lg:mb-11.25 gap-3">
+              <div class="flex items-center gap-4 lg:contents">
+                <h2 class="text-black m-0 shrink-0">Paramètres</h2>
+                {user.admin && (
+                  <a href="/admin" class="lg:hidden shrink-0 inline-flex items-center justify-center h-10 px-5 bg-[#094736] text-white text-sm font-semibold rounded-sm hover:opacity-80 transition-opacity">
+                    Panneau admin
+                  </a>
+                )}
+              </div>
               <div class="flex-1 h-0.5 bg-neutral-300"></div>
               {user.admin && (
-                <a href="/admin" class="shrink-0 inline-flex items-center justify-center h-10 px-6 bg-[#094736] text-white text-sm font-semibold rounded-sm hover:opacity-80 transition-opacity">
+                <a href="/admin" class="hidden lg:inline-flex shrink-0 items-center justify-center h-10 px-6 bg-[#094736] text-white text-sm font-semibold rounded-sm hover:opacity-80 transition-opacity">
                   Panneau admin
                 </a>
               )}
@@ -699,9 +710,9 @@ const displayName = user.prenom
             <!-- Email -->
             <h3 class="text-black m-0 mb-5">Email</h3>
             <div class="bg-white border-0.75 border-neutral-300 rounded-2.5 px-7.5 py-5.5 mb-8">
-              <div class="flex items-center border-b-2 border-neutral-300 pb-4 mb-5">
-                <span class="text-4 font-medium text-black w-40 shrink-0">Email actuel</span>
-                <span class="text-4 font-medium text-neutral-500">{user.email ?? '—'}</span>
+              <div class="flex items-center border-b-2 border-neutral-300 pb-4 mb-5 min-w-0">
+                <span class="text-4 font-medium text-black w-28 lg:w-40 shrink-0">Email actuel</span>
+                <span class="text-4 font-medium text-neutral-500 truncate min-w-0">{user.email ?? '—'}</span>
               </div>
               {emailSuccess && <p class="text-primary-600 text-sm font-medium mb-4 m-0">Email mis à jour.</p>}
               {emailError   && <p class="text-red-500 text-sm font-medium mb-4 m-0">{emailError}</p>}
@@ -731,7 +742,7 @@ const displayName = user.prenom
                   <input type="password" name="old_password" placeholder="••••••••"
                     class="w-full max-w-100 text-4 font-medium bg-neutral-200 border-2 border-neutral-300 rounded px-4 py-2 outline-none" />
                 </div>
-                <div class="flex gap-4">
+                <div class="flex flex-col lg:flex-row gap-4">
                   <div class="flex-1">
                     <label class="block text-4 font-medium text-black mb-2">Nouveau mot de passe</label>
                     <input type="password" name="new_password" placeholder="••••••••"
@@ -782,6 +793,59 @@ const displayName = user.prenom
                 </form>
               </div>
             </div>
+
+          </div>
+        </div>
+
+        <!-- ============================= -->
+        <!-- PANEL : AMIS (mobile only)  -->
+        <!-- ============================= -->
+        <div id="panel-amis" data-panel class={activeTab !== 'amis' ? 'hidden' : ''}>
+          <div class="px-4 pt-8 pb-16">
+
+            <div class="flex items-center gap-4 mb-8">
+              <h2 class="text-black m-0 shrink-0">Amis</h2>
+              <div class="flex-1 h-0.5 bg-neutral-300"></div>
+            </div>
+
+            <!-- Boutons actions -->
+            <div class="flex flex-col gap-3 mb-8">
+              <a href="/boutique" class="flex items-center justify-center border-2 border-neutral-800 text-neutral-800 text-4 font-medium h-12 hover:bg-neutral-800 hover:text-white transition-colors no-underline">
+                Boutique
+              </a>
+              <button id="btn-open-friends-mob"
+                class="flex items-center justify-center border-2 border-neutral-800 text-neutral-800 text-4 font-medium h-12 hover:bg-neutral-800 hover:text-white transition-colors cursor-pointer bg-transparent">
+                Ajouter des amis
+              </button>
+            </div>
+
+            <!-- Liste des amis -->
+            {amiesExpand.length > 0 ? (
+              <div class="flex flex-col gap-5">
+                {amiesExpand.map(ami => (
+                  <a href={`/profil/${ami.id}`} class="flex items-center gap-4 no-underline hover:opacity-80 transition-opacity">
+                    <div class="w-14 h-14 rounded-full overflow-hidden shrink-0">
+                      {ami.avatar
+                        ? <img src={getImageUrl(ami, ami.avatar)} alt={ami.pseudo} class="w-full h-full object-cover" />
+                        : <div class="w-full h-full bg-primary-600 flex items-center justify-center">
+                            <span class="text-white font-bold text-5">{(ami.pseudo || ami.prenom || '?')[0].toUpperCase()}</span>
+                          </div>
+                      }
+                    </div>
+                    <div class="min-w-0">
+                      <div class="flex items-center gap-1.5">
+                        <p class="text-neutral-800 font-bold text-4 m-0 truncate">{ami.pseudo || ''}</p>
+                        {ami.abonnements === 'VIP'     && <img src={badgeVip.src}     alt="VIP"     width="18" height="18" class="shrink-0" />}
+                        {ami.abonnements === 'Premium' && <img src={badgePremium.src} alt="Premium" width="18" height="18" class="shrink-0" />}
+                      </div>
+                      <p class="text-neutral-500 text-3.5 font-medium m-0 truncate">{`${ami.prenom ?? ''} ${ami.nom ?? ''}`.trim()}</p>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <p class="text-neutral-500 text-4 font-medium m-0">Aucun ami pour l'instant.</p>
+            )}
 
           </div>
         </div>

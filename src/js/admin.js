@@ -30,8 +30,40 @@
   }
 
   document.querySelectorAll('.nav-item').forEach(function (btn) {
-    btn.addEventListener('click', function () { switchSection(btn.dataset.section); });
+    btn.addEventListener('click', function () {
+      switchSection(btn.dataset.section);
+      // Mettre à jour le label mobile + fermer sidebar
+      var mobLabel = document.getElementById('admin-mob-section');
+      if (mobLabel) mobLabel.textContent = btn.querySelector('span:first-child').textContent;
+      closeSidebar();
+    });
   });
+
+  // ── Mobile hamburger ───────────────────────────────────────────────────────
+  var sidebar  = document.querySelector('.admin-sidebar');
+  var burger   = document.getElementById('admin-burger');
+  var backdrop = document.getElementById('admin-backdrop');
+
+  function openSidebar() {
+    if (!sidebar) return;
+    sidebar.classList.add('open');
+    if (burger)   burger.classList.add('is-open');
+    if (backdrop) backdrop.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSidebar() {
+    if (!sidebar) return;
+    sidebar.classList.remove('open');
+    if (burger)   burger.classList.remove('is-open');
+    if (backdrop) backdrop.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  if (burger)   burger.addEventListener('click', function () {
+    sidebar && sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+  });
+  if (backdrop) backdrop.addEventListener('click', closeSidebar);
 
   // ── Confirm modal ─────────────────────────────────────────────────────────
   var pendingAction = null;

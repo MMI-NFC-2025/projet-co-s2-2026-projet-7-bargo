@@ -261,35 +261,39 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
       <div class="flex-1 bg-neutral-200">
 
         <!-- BARRE D'ONGLETS BLANCHE -->
-        <div class="bg-white flex items-stretch px-4 lg:px-20 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] min-h-16 lg:h-25">
-          <div id="tab-list" class="relative flex items-stretch h-full overflow-x-auto">
+        <div class="bg-white flex items-stretch lg:px-20 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] h-14 lg:h-25">
+          <div id="tab-list" class="relative flex items-stretch flex-1 lg:flex-none h-full overflow-x-auto">
             <button data-tab="profil"
-              class="tab-btn px-4 lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap">
-              Profil
+              class="tab-btn flex-1 lg:flex-none lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap flex items-center justify-center">
+              <span class="lg:hidden">Profil</span>
+              <span class="hidden lg:inline">Profil</span>
             </button>
             <button data-tab="favoris"
-              class="tab-btn px-4 lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap inline-flex items-center gap-2">
-              Bars favoris
+              class="tab-btn flex-1 lg:flex-none lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap inline-flex items-center justify-center gap-1.5 lg:gap-2">
+              <span class="lg:hidden">Bars</span>
+              <span class="hidden lg:inline">Bars favoris</span>
               {barsFavori.length > 0 && (
                 <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary-600 text-white text-2.75 font-bold">{barsFavori.length}</span>
               )}
             </button>
             <button data-tab="jeux"
-              class="tab-btn px-4 lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap inline-flex items-center gap-2">
-              Jeux favoris
+              class="tab-btn flex-1 lg:flex-none lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap inline-flex items-center justify-center gap-1.5 lg:gap-2">
+              <span class="lg:hidden">Jeux</span>
+              <span class="hidden lg:inline">Jeux favoris</span>
               {jeuxFavori.length > 0 && (
                 <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary-600 text-white text-2.75 font-bold">{jeuxFavori.length}</span>
               )}
             </button>
             <button data-tab="boissons"
-              class="tab-btn px-4 lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap inline-flex items-center gap-2">
-              Boissons favorites
+              class="tab-btn flex-1 lg:flex-none lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap inline-flex items-center justify-center gap-1.5 lg:gap-2">
+              <span class="lg:hidden">Boissons</span>
+              <span class="hidden lg:inline">Boissons favorites</span>
               {boissonsFavori.length > 0 && (
                 <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary-600 text-white text-2.75 font-bold">{boissonsFavori.length}</span>
               )}
             </button>
             <!-- Trait animé -->
-            <div id="tab-indicator" class="absolute bottom-0 h-1 rounded-full" style="background:#72c073; transition: left 0.3s cubic-bezier(.4,0,.2,1), width 0.3s cubic-bezier(.4,0,.2,1); left:0; width:0;"></div>
+            <div id="tab-indicator" class="absolute bottom-0 h-1.5 rounded-full" style="background:#72c073; transition: left 0.3s cubic-bezier(.4,0,.2,1), width 0.3s cubic-bezier(.4,0,.2,1); left:0; width:0;"></div>
           </div>
         </div>
 
@@ -300,8 +304,8 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
           <div class="px-4 lg:px-20 pt-8 lg:pt-11.25 pb-16 lg:pb-30">
 
             <!-- H2 Informations + ligne décorative -->
-            <div class="flex items-center gap-7.5 mb-11.25">
-              <h2 class="text-black m-0 shrink-0">Informations</h2>
+            <div class="flex items-center gap-4 lg:gap-7.5 mb-6 lg:mb-11.25">
+              <h2 class="text-black m-0 shrink-0 text-7.5 lg:text-12.5">Informations</h2>
               <div class="flex-1 h-0.5 bg-neutral-300"></div>
             </div>
 
@@ -434,24 +438,39 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
         <div id="panel-favoris" data-panel class={activeTab !== 'favoris' ? 'hidden' : ''}>
           <div class="px-4 lg:px-20 pt-8 lg:pt-11.25 pb-16 lg:pb-30">
 
-            <div class="flex items-center gap-7.5 mb-11.25">
-              <h2 class="text-black m-0 shrink-0">Bars favoris</h2>
+            <div class="flex items-center gap-4 lg:gap-7.5 mb-6 lg:mb-11.25">
+              <h2 class="text-black m-0 shrink-0 text-7.5 lg:text-12.5">Bars favoris</h2>
               <div class="flex-1 h-0.5 bg-neutral-300"></div>
             </div>
 
             {barsFavori.length > 0 ? (
-              <div class="grid grid-cols-1 lg:grid-cols-3 gap-8.25">
+              <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8.25">
                 {barsFavori.map(bar => (
-                  <div class="relative bg-white rounded-0.5 h-87.75 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
-                    <div class="absolute top-0 left-0 right-0 h-50 overflow-hidden rounded-tl-0.5 rounded-tr-0.5">
-                      <PbImage record={bar} recordImage={bar.img?.[0]} width={280} height={200} class="w-full h-full object-cover" />
+                  <>
+                    <!-- Mobile -->
+                    <div class="block lg:hidden bg-white rounded-0.5 overflow-hidden shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
+                      <div class="h-32 overflow-hidden">
+                        <PbImage record={bar} recordImage={bar.img?.[0]} width={280} height={128} class="w-full h-full object-cover" />
+                      </div>
+                      <div class="p-3">
+                        <h3 class="m-0 text-black text-4 mb-2 leading-tight">{bar.nom}</h3>
+                        <a href={`/bar/${bar.id}`} class="w-full h-9 bg-neutral-800 flex items-center justify-center text-white text-3.5 font-medium hover:opacity-80 transition-opacity">
+                          En savoir plus
+                        </a>
+                      </div>
                     </div>
-                    <h3 class="absolute top-52.5 left-4.75 right-4.75 m-0 text-black">{bar.nom}</h3>
-                    <a href={`/bar/${bar.id}`}
-                      class="absolute bottom-5.25 left-4.75 w-37.5 h-11 bg-neutral-800 flex items-center justify-center text-white text-4 font-medium hover:opacity-80 transition-opacity">
-                      En savoir plus
-                    </a>
-                  </div>
+                    <!-- Desktop -->
+                    <div class="hidden lg:block relative bg-white rounded-0.5 h-87.75 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
+                      <div class="absolute top-0 left-0 right-0 h-50 overflow-hidden rounded-tl-0.5 rounded-tr-0.5">
+                        <PbImage record={bar} recordImage={bar.img?.[0]} width={280} height={200} class="w-full h-full object-cover" />
+                      </div>
+                      <h3 class="absolute top-52.5 left-4.75 right-4.75 m-0 text-black">{bar.nom}</h3>
+                      <a href={`/bar/${bar.id}`}
+                        class="absolute bottom-5.25 left-4.75 w-37.5 h-11 bg-neutral-800 flex items-center justify-center text-white text-4 font-medium hover:opacity-80 transition-opacity">
+                        En savoir plus
+                      </a>
+                    </div>
+                  </>
                 ))}
               </div>
             ) : (
@@ -475,26 +494,41 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
         <div id="panel-jeux" data-panel class={activeTab !== 'jeux' ? 'hidden' : ''}>
           <div class="px-4 lg:px-20 pt-8 lg:pt-11.25 pb-16 lg:pb-30">
 
-            <div class="flex items-center gap-7.5 mb-11.25">
-              <h2 class="text-black m-0 shrink-0">Jeux favoris</h2>
+            <div class="flex items-center gap-4 lg:gap-7.5 mb-6 lg:mb-11.25">
+              <h2 class="text-black m-0 shrink-0 text-7.5 lg:text-12.5">Jeux favoris</h2>
               <div class="flex-1 h-0.5 bg-neutral-300"></div>
             </div>
 
             {jeuxFavori.length > 0 ? (
-              <div class="grid grid-cols-1 lg:grid-cols-3 gap-8.25">
+              <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8.25">
                 {jeuxFavori.map(jeu => {
                   const imgFile = Array.isArray(jeu.img) ? jeu.img[0] : jeu.img;
                   return (
-                    <div class="relative bg-white rounded-0.5 h-87.75 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
-                      <div class="absolute top-0 left-0 right-0 h-50 overflow-hidden rounded-tl-0.5 rounded-tr-0.5">
-                        <PbImage record={jeu} recordImage={imgFile} width={280} height={200} class="w-full h-full object-cover" />
+                    <>
+                      <!-- Mobile -->
+                      <div class="block lg:hidden bg-white rounded-0.5 overflow-hidden shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
+                        <div class="h-32 overflow-hidden">
+                          <PbImage record={jeu} recordImage={imgFile} width={280} height={128} class="w-full h-full object-cover" />
+                        </div>
+                        <div class="p-3">
+                          <h3 class="m-0 text-black text-4 mb-2 leading-tight">{jeu.nom}</h3>
+                          <a href="/jeux" class="w-full h-9 bg-neutral-800 flex items-center justify-center text-white text-3.5 font-medium hover:opacity-80 transition-opacity">
+                            Voir les jeux
+                          </a>
+                        </div>
                       </div>
-                      <h3 class="absolute top-52.5 left-4.75 right-4.75 m-0 text-black">{jeu.nom}</h3>
-                      <a href="/jeux"
-                        class="absolute bottom-5.25 left-4.75 w-37.5 h-11 bg-neutral-800 flex items-center justify-center text-white text-4 font-medium hover:opacity-80 transition-opacity">
-                        Voir les jeux
-                      </a>
-                    </div>
+                      <!-- Desktop -->
+                      <div class="hidden lg:block relative bg-white rounded-0.5 h-87.75 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
+                        <div class="absolute top-0 left-0 right-0 h-50 overflow-hidden rounded-tl-0.5 rounded-tr-0.5">
+                          <PbImage record={jeu} recordImage={imgFile} width={280} height={200} class="w-full h-full object-cover" />
+                        </div>
+                        <h3 class="absolute top-52.5 left-4.75 right-4.75 m-0 text-black">{jeu.nom}</h3>
+                        <a href="/jeux"
+                          class="absolute bottom-5.25 left-4.75 w-37.5 h-11 bg-neutral-800 flex items-center justify-center text-white text-4 font-medium hover:opacity-80 transition-opacity">
+                          Voir les jeux
+                        </a>
+                      </div>
+                    </>
                   );
                 })}
               </div>
@@ -519,8 +553,8 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
         <div id="panel-boissons" data-panel class={activeTab !== 'boissons' ? 'hidden' : ''}>
           <div class="px-4 lg:px-20 pt-8 lg:pt-11.25 pb-16 lg:pb-30">
 
-            <div class="flex items-center gap-7.5 mb-11.25">
-              <h2 class="text-black m-0 shrink-0">Boissons favorites</h2>
+            <div class="flex items-center gap-4 lg:gap-7.5 mb-6 lg:mb-11.25">
+              <h2 class="text-black m-0 shrink-0 text-7.5 lg:text-12.5">Boissons favorites</h2>
               <div class="flex-1 h-0.5 bg-neutral-300"></div>
             </div>
 
