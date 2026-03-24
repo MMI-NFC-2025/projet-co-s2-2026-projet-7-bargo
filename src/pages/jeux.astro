@@ -30,6 +30,7 @@ const totalPages = Math.ceil((data.totalItems ?? 0) / perPage);
 
   <!-- ===== GRILLE ===== -->
   <div class="bg-neutral-200 px-4 lg:px-20 pt-8 lg:pt-14.5 pb-10 lg:pb-20">
+    <div class="lg:max-w-7xl lg:mx-auto">
 
     {jeux.length > 0 ? (
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8">
@@ -83,6 +84,7 @@ const totalPages = Math.ceil((data.totalItems ?? 0) / perPage);
       <p class="text-neutral-500 text-4 font-medium">Aucun jeu disponible pour l'instant.</p>
     )}
 
+    </div><!-- /max-w-7xl -->
   </div>
 
   <!-- ===== PAGINATION ===== -->

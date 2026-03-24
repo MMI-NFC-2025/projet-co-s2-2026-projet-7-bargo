@@ -185,98 +185,12 @@ const hasMap = lat !== 0 && lon !== 0;
   <!-- Gradient overlay -->
   <div class="absolute top-17.5 left-0 w-full h-115 pointer-events-none bar-hero-gradient-desktop"></div>
 
-  <!-- Nom du bar -->
-  <h1 class="absolute top-95.5 left-20 text-white uppercase m-0 z-2">
-    {bar.nom}
-  </h1>
+  <!-- Fond sombre (gauche, pleine largeur jusqu'au centre) -->
+  <div class="absolute top-198.5 left-0 h-167.5 bg-neutral-800" style="width: calc(50% - 16px);"></div>
+  <!-- Fond vert (droite, du centre jusqu'au bord) -->
+  <div class="absolute top-198.5 right-0 h-167.5 bg-primary-900" style="left: calc(50% - 16px);"></div>
 
-  <!-- Icônes réseaux sociaux -->
-  <div class="absolute top-112.25 z-2" style="left: calc(83.33% - 17px)">
-    <Image src={instaIcon}   alt="Instagram" width={24} height={24} class="brightness-0 invert" />
-  </div>
-  <div class="absolute top-112.25 z-2" style="left: calc(83.33% + 32px)">
-    <Image src={linkedinIcon} alt="LinkedIn" width={24} height={24} class="brightness-0 invert" />
-  </div>
-  <div class="absolute top-112.25 z-2" style="left: calc(91.67% - 39px)">
-    <Image src={discordIcon}  alt="Discord"   width={24} height={24} class="brightness-0 invert" />
-  </div>
-  <div class="absolute top-112.25 z-2" style="left: calc(91.67% + 10px)">
-    <Image src={fbIcon}       alt="Facebook"  width={24} height={24} class="brightness-0 invert" />
-  </div>
-
-  <!-- Actions -->
-  <div class="absolute top-150.5 z-2" style="left: calc(83.33% - 17px)">
-    <Image src={notifIcon}   alt="Notifier" width={24} height={24} />
-  </div>
-  <div class="absolute top-150.5 z-2" style="left: calc(83.33% + 32px)">
-    <Image src={partageIcon} alt="Partager" width={24} height={24} />
-  </div>
-  <div class="absolute top-150.5 z-2" style="left: calc(91.67% - 39px)">
-    <Image src={bulleMessageIcon} alt="" width={24} height={24} class="brightness-0" />
-  </div>
-  {isAuth && (
-    <div class="absolute top-150.5 z-2" style="left: calc(91.67% + 10px)">
-      <button class="like-btn-bar p-0 border-0 bg-transparent cursor-pointer" data-id={bar.id} type="button" aria-label="Favori">
-        <Image src={heartIcon}    alt="" width={24} height={24} class="like-empty" />
-        <Image src={likeFillIcon} alt="" width={24} height={24} class="hidden like-filled" />
-      </button>
-    </div>
-  )}
-
-  <!-- Description -->
-  <p class="absolute top-152.25 left-20 w-183.25 text-neutral-500 text-4 font-medium leading-[1.4] m-0 z-2">
-    {bar.description ?? ''}
-  </p>
-
-  <!-- Fond sombre (gauche) -->
-  <div class="absolute top-198.5 left-0 w-176 h-167.5 bg-neutral-800"></div>
-  <!-- Fond vert (droite) -->
-  <div class="absolute top-198.5 w-184 h-167.5 bg-primary-900" style="left: calc(50% - 16px)"></div>
-
-  <!-- INFOS GAUCHE -->
-  <h3 class="absolute top-213 left-20 text-white m-0 z-2">Adresse</h3>
-  <p class="absolute top-227.25 left-20 text-neutral-300 text-4 font-medium leading-[1.4] m-0 z-2">
-    {bar.adresse ?? '—'}
-  </p>
-  <h3 class="absolute top-247.5 left-20 text-white m-0 z-2">Spécialités</h3>
-  <p class="absolute top-261.75 left-20 text-neutral-300 text-4 font-medium leading-[1.4] m-0 z-2 w-135">
-    {bar.specialites ?? '—'}
-  </p>
-  <h3 class="absolute top-282 left-20 text-white m-0 z-2">Disponibilité</h3>
-  <p class="absolute top-296.25 left-20 text-neutral-300 text-4 font-medium leading-[1.4] m-0 z-2 w-135">
-    {bar.disponibilite ?? '—'}
-  </p>
-  <h3 class="absolute top-316.5 left-20 text-white m-0 z-2">Contact</h3>
-  <p class="absolute top-330.75 left-20 text-neutral-300 text-4 font-medium leading-[1.4] m-0 z-2">
-    {bar.contact ?? '—'}
-  </p>
-
-  <!-- HORAIRES (droite) -->
-  <h3 class="absolute top-211 text-white m-0 z-2" style="left: calc(50% + 16px)">Horaires</h3>
-
-  {jours.map((jour, i) => {
-    const top = 909 + i * 64;
-    const isFerme = !jour.value || jour.value.toLowerCase().includes('ferm');
-    return (
-      <div class="absolute w-156 h-11.75 rounded-1.25 overflow-hidden z-2"
-        style={`top: ${top}px; left: calc(50% + 16px); box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.25);`}>
-        <div class="absolute top-0 left-0 h-full bg-primary-600 rounded-l-1.25 flex items-center justify-center"
-          style="width: 21.63%;">
-          <span class="text-neutral-200 text-4 font-medium leading-[1.4] text-center px-2">
-            {jour.label}
-          </span>
-        </div>
-        <div class="absolute top-0 right-0 h-full bg-neutral-200 rounded-r-1.25 flex items-center"
-          style="left: 21.63%; padding-left: 35px;">
-          <span class={`text-4 font-medium leading-[1.4] ${isFerme ? 'text-neutral-500' : 'text-black'}`}>
-            {jour.value || 'Fermé'}
-          </span>
-        </div>
-      </div>
-    );
-  })}
-
-  <!-- CARTE -->
+  <!-- CARTE pleine largeur -->
   <div id="bar-map"
     data-leaflet-map
     data-lat={lat}
@@ -289,62 +203,153 @@ const hasMap = lat !== 0 && lon !== 0;
     )}
   </div>
 
-  <!-- GALERIE -->
-  <h2 class="absolute left-20 text-black m-0 z-2" style="top: 2136px;">Galerie</h2>
+  <!-- Wrapper centré pour tout le contenu -->
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 h-full w-full max-w-360 z-2">
 
-  {(bar.expand?.boison ?? []).length > 0 && (
-    <p class="absolute left-20 w-101.25 text-neutral-500 text-4 font-medium leading-[1.4] m-0 z-2" style="top: 2223px;">
-      Explorez une sélection variée de cocktails et de bières, idéale pour partager un moment entre amis.
-    </p>
-  )}
+    <!-- Nom du bar -->
+    <h1 class="absolute top-95.5 left-20 text-white uppercase m-0">
+      {bar.nom}
+    </h1>
 
-  {landscapePhotos.length > 0 ? (
-    <>
-      {landscapePhotos[0] && (
-        <div class="absolute overflow-hidden rounded-tr-1.25 rounded-br-1.25 z-2"
-          style="top: 2363px; left: 0; width: 465px; height: 400px;">
-          <PbImage record={bar} recordImage={landscapePhotos[0]} alt={bar.nom}
-            class="w-full h-full object-cover" />
-        </div>
-      )}
-      {landscapePhotos[1] && (
-        <div class="absolute overflow-hidden rounded-1.25 z-2"
-          style="top: 2363px; left: calc(33.33% + 7px); width: 465px; height: 400px;">
-          <PbImage record={bar} recordImage={landscapePhotos[1]} alt={bar.nom}
-            class="w-full h-full object-cover" />
-        </div>
-      )}
-      {landscapePhotos[2] && (
-        <div class="absolute overflow-hidden rounded-tl-1.25 rounded-bl-1.25 z-2"
-          style="top: 2363px; left: calc(66.67% + 15px); width: 465px; height: 400px;">
-          <PbImage record={bar} recordImage={landscapePhotos[2]} alt={bar.nom}
-            class="w-full h-full object-cover" />
-        </div>
-      )}
-    </>
-  ) : (
-    <p class="absolute left-20 text-neutral-500 text-4 font-medium m-0 z-2" style="top: 2363px;">
-      Aucune photo disponible.
-    </p>
-  )}
+    <!-- Icônes réseaux sociaux -->
+    <div class="absolute top-112.25" style="left: calc(83.33% - 17px)">
+      <Image src={instaIcon}   alt="Instagram" width={24} height={24} class="brightness-0 invert" />
+    </div>
+    <div class="absolute top-112.25" style="left: calc(83.33% + 32px)">
+      <Image src={linkedinIcon} alt="LinkedIn" width={24} height={24} class="brightness-0 invert" />
+    </div>
+    <div class="absolute top-112.25" style="left: calc(91.67% - 39px)">
+      <Image src={discordIcon}  alt="Discord"   width={24} height={24} class="brightness-0 invert" />
+    </div>
+    <div class="absolute top-112.25" style="left: calc(91.67% + 10px)">
+      <Image src={fbIcon}       alt="Facebook"  width={24} height={24} class="brightness-0 invert" />
+    </div>
 
-  <!-- BOISSONS desktop (top: 2854px, même rangée que le Figma) -->
-  {(bar.expand?.boison ?? []).map((boisson, i) => {
-    const positions = [
-      'left: 80px',
-      'left: calc(25% + 48px)',
-      'left: calc(50% + 16px)',
-      'left: calc(75% - 16px)',
-    ];
-    if (i >= 4) return null;
-    return (
-      <div class="absolute overflow-hidden rounded-1.25 z-2"
-        style={`top: 2854px; ${positions[i]}; width: 296px; height: 310px;`}>
-        <PbImage record={boisson} recordImage={boisson.img} alt={boisson.nom}
-          class="w-full h-full object-cover" />
+    <!-- Actions -->
+    <div class="absolute top-150.5" style="left: calc(83.33% - 17px)">
+      <Image src={notifIcon}   alt="Notifier" width={24} height={24} />
+    </div>
+    <div class="absolute top-150.5" style="left: calc(83.33% + 32px)">
+      <Image src={partageIcon} alt="Partager" width={24} height={24} />
+    </div>
+    <div class="absolute top-150.5" style="left: calc(91.67% - 39px)">
+      <Image src={bulleMessageIcon} alt="" width={24} height={24} class="brightness-0" />
+    </div>
+    {isAuth && (
+      <div class="absolute top-150.5" style="left: calc(91.67% + 10px)">
+        <button class="like-btn-bar p-0 border-0 bg-transparent cursor-pointer" data-id={bar.id} type="button" aria-label="Favori">
+          <Image src={heartIcon}    alt="" width={24} height={24} class="like-empty" />
+          <Image src={likeFillIcon} alt="" width={24} height={24} class="hidden like-filled" />
+        </button>
       </div>
-    );
-  })}
+    )}
+
+    <!-- Description -->
+    <p class="absolute top-152.25 left-20 w-183.25 text-neutral-500 text-4 font-medium leading-[1.4] m-0">
+      {bar.description ?? ''}
+    </p>
+
+    <!-- INFOS GAUCHE -->
+    <h3 class="absolute top-213 left-20 text-white m-0">Adresse</h3>
+    <p class="absolute top-227.25 left-20 text-neutral-300 text-4 font-medium leading-[1.4] m-0">
+      {bar.adresse ?? '—'}
+    </p>
+    <h3 class="absolute top-247.5 left-20 text-white m-0">Spécialités</h3>
+    <p class="absolute top-261.75 left-20 text-neutral-300 text-4 font-medium leading-[1.4] m-0 w-135">
+      {bar.specialites ?? '—'}
+    </p>
+    <h3 class="absolute top-282 left-20 text-white m-0">Disponibilité</h3>
+    <p class="absolute top-296.25 left-20 text-neutral-300 text-4 font-medium leading-[1.4] m-0 w-135">
+      {bar.disponibilite ?? '—'}
+    </p>
+    <h3 class="absolute top-316.5 left-20 text-white m-0">Contact</h3>
+    <p class="absolute top-330.75 left-20 text-neutral-300 text-4 font-medium leading-[1.4] m-0">
+      {bar.contact ?? '—'}
+    </p>
+
+    <!-- HORAIRES (droite) -->
+    <h3 class="absolute top-211 text-white m-0" style="left: calc(50% + 16px)">Horaires</h3>
+
+    {jours.map((jour, i) => {
+      const top = 909 + i * 64;
+      const isFerme = !jour.value || jour.value.toLowerCase().includes('ferm');
+      return (
+        <div class="absolute w-156 h-11.75 rounded-1.25 overflow-hidden"
+          style={`top: ${top}px; left: calc(50% + 16px); box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.25);`}>
+          <div class="absolute top-0 left-0 h-full bg-primary-600 rounded-l-1.25 flex items-center justify-center"
+            style="width: 21.63%;">
+            <span class="text-neutral-200 text-4 font-medium leading-[1.4] text-center px-2">
+              {jour.label}
+            </span>
+          </div>
+          <div class="absolute top-0 right-0 h-full bg-neutral-200 rounded-r-1.25 flex items-center"
+            style="left: 21.63%; padding-left: 35px;">
+            <span class={`text-4 font-medium leading-[1.4] ${isFerme ? 'text-neutral-500' : 'text-black'}`}>
+              {jour.value || 'Fermé'}
+            </span>
+          </div>
+        </div>
+      );
+    })}
+
+    <!-- GALERIE -->
+    <h2 class="absolute left-20 text-black m-0" style="top: 2136px;">Galerie</h2>
+
+    {(bar.expand?.boison ?? []).length > 0 && (
+      <p class="absolute left-20 w-101.25 text-neutral-500 text-4 font-medium leading-[1.4] m-0" style="top: 2223px;">
+        Explorez une sélection variée de cocktails et de bières, idéale pour partager un moment entre amis.
+      </p>
+    )}
+
+    {landscapePhotos.length > 0 ? (
+      <>
+        {landscapePhotos[0] && (
+          <div class="absolute overflow-hidden rounded-tr-1.25 rounded-br-1.25"
+            style="top: 2363px; left: 0; width: 465px; height: 400px;">
+            <PbImage record={bar} recordImage={landscapePhotos[0]} alt={bar.nom}
+              class="w-full h-full object-cover" />
+          </div>
+        )}
+        {landscapePhotos[1] && (
+          <div class="absolute overflow-hidden rounded-1.25"
+            style="top: 2363px; left: calc(33.33% + 7px); width: 465px; height: 400px;">
+            <PbImage record={bar} recordImage={landscapePhotos[1]} alt={bar.nom}
+              class="w-full h-full object-cover" />
+          </div>
+        )}
+        {landscapePhotos[2] && (
+          <div class="absolute overflow-hidden rounded-tl-1.25 rounded-bl-1.25"
+            style="top: 2363px; left: calc(66.67% + 15px); width: 465px; height: 400px;">
+            <PbImage record={bar} recordImage={landscapePhotos[2]} alt={bar.nom}
+              class="w-full h-full object-cover" />
+          </div>
+        )}
+      </>
+    ) : (
+      <p class="absolute left-20 text-neutral-500 text-4 font-medium m-0" style="top: 2363px;">
+        Aucune photo disponible.
+      </p>
+    )}
+
+    <!-- BOISSONS desktop -->
+    {(bar.expand?.boison ?? []).map((boisson, i) => {
+      const positions = [
+        'left: 80px',
+        'left: calc(25% + 48px)',
+        'left: calc(50% + 16px)',
+        'left: calc(75% - 16px)',
+      ];
+      if (i >= 4) return null;
+      return (
+        <div class="absolute overflow-hidden rounded-1.25"
+          style={`top: 2854px; ${positions[i]}; width: 296px; height: 310px;`}>
+          <PbImage record={boisson} recordImage={boisson.img} alt={boisson.nom}
+            class="w-full h-full object-cover" />
+        </div>
+      );
+    })}
+
+  </div><!-- /wrapper centré -->
 
 </div><!-- /desktop wrapper -->
 

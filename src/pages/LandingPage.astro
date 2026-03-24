@@ -58,38 +58,34 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
   <Image src={heroImg} alt="" class="absolute inset-0 w-full h-full object-cover" />
   <div class="absolute inset-0 bg-linear-to-b from-[rgba(30,30,30,0.7)] to-neutral-800"></div>
 
-  <h1 class="absolute top-37.5 left-3.25 w-90 text-8.75 leading-[1.2] tracking-0.525
-             lg:top-77.25 lg:-translate-y-1/2 lg:left-20 lg:w-259.5 lg:text-22.5 lg:leading-none lg:tracking-1.35
-             text-white uppercase">
-    Sortez organisés rentrez en sécurité
-  </h1>
+  <!-- Wrapper centré -->
+  <div class="absolute top-0 left-0 h-full w-full lg:max-w-360 lg:left-1/2 lg:-translate-x-1/2">
+    <h1 class="absolute top-37.5 left-3.25 w-90 text-8.75 leading-[1.2] tracking-0.525
+               lg:top-77.25 lg:-translate-y-1/2 lg:left-20 lg:w-259.5 lg:text-22.5 lg:leading-none lg:tracking-1.35
+               text-white uppercase">
+      Sortez organisés rentrez en sécurité
+    </h1>
 
-  <p class="absolute top-93.75 left-3.25 w-66.25 text-3.5 leading-[1.1]
-            lg:top-130.25 lg:left-20 lg:w-128.75 lg:text-base lg:leading-[1.4]
-            text-white font-medium">
-    Bargo est la première plateforme qui simplifie l'organisation des soirées entre amis tout en garantissant un retour sécurisé à la maison.
-  </p>
+    <p class="absolute top-93.75 left-3.25 w-66.25 text-3.5 leading-[1.1]
+              lg:top-130.25 lg:left-20 lg:w-128.75 lg:text-base lg:leading-[1.4]
+              text-white font-medium">
+      Bargo est la première plateforme qui simplifie l'organisation des soirées entre amis tout en garantissant un retour sécurisé à la maison.
+    </p>
 
-  <a href="/connexion"
-     class="absolute top-134.25 left-3.25 w-50 h-10 text-3.5 font-medium
-            lg:top-136 lg:left-[calc(75%-16px)] lg:w-74 lg:h-15 lg:text-base lg:font-bold
-            bg-primary-600 inline-flex items-center justify-center text-white no-underline">
-    Découvrir Bargo
-  </a>
+    <a href="/connexion"
+       class="absolute top-134.25 left-3.25 w-50 h-10 text-3.5 font-medium
+              lg:top-136 lg:left-[calc(75%-16px)] lg:w-74 lg:h-15 lg:text-base lg:font-bold
+              bg-primary-600 inline-flex items-center justify-center text-white no-underline">
+      Découvrir Bargo
+    </a>
+  </div>
 </section>
 
 <!-- ========== CE QUE BARGO ========== -->
 <section id="produit" class="relative w-full bg-neutral-200 lg:bg-white overflow-hidden lg:h-288.25">
 
-  <!-- Desktop image (droite, cachée mobile) -->
-  <div class="hidden lg:block absolute top-39.25 left-184 w-176 h-215.5 rounded-b-2.5 overflow-hidden">
-    <Image src={cotelImg} alt="Soirée Bargo" class="w-full h-full object-cover block" />
-  </div>
-
-  <!-- Titre -->
-  <h2 class="px-4.75 pt-12 pb-6 text-6.25 font-medium tracking-[-1px] leading-[1.4]
-             lg:absolute lg:top-39.25 lg:left-20 lg:px-0 lg:pt-0 lg:pb-0 lg:w-127 lg:text-12.5 lg:font-bold lg:tracking-0.75 lg:leading-none
-             text-black">
+  <!-- Titre mobile -->
+  <h2 class="px-4.75 pt-12 pb-6 text-6.25 font-medium tracking-[-1px] leading-[1.4] text-black lg:hidden">
     Ce que Bargo permet de faire
   </h2>
 
@@ -122,95 +118,111 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
     </div>
   </div>
 
-  <!-- Feat 1-4 desktop (toutes les 4, absolues) -->
-  <div class="hidden lg:flex absolute top-83.5 left-20 w-129 flex-col gap-14.75">
-    <div class="flex flex-col gap-6.5">
-      <h3 class="text-black">Planifiez votre soirée facilement</h3>
-      <p class="text-neutral-500 text-base font-medium leading-[1.4]">Créez une sortie en quelques clics. Choisissez les bars, définissez l'ordre des étapes et préparez votre parcours pour la soirée.</p>
+  <!-- Desktop : wrapper centré -->
+  <div class="hidden lg:block absolute top-0 left-1/2 -translate-x-1/2 h-full w-full max-w-360">
+    <h2 class="absolute top-39.25 left-20 w-127 text-12.5 font-bold tracking-0.75 leading-none text-black">
+      Ce que Bargo permet de faire
+    </h2>
+    <div class="absolute top-39.25 left-184 w-176 h-215.5 rounded-b-2.5 overflow-hidden">
+      <Image src={cotelImg} alt="Soirée Bargo" class="w-full h-full object-cover block" />
     </div>
-    <div class="flex flex-col gap-6.5">
-      <h3 class="text-black">Invitez vos amis</h3>
-      <p class="text-neutral-500 text-base font-medium leading-[1.4]">Invitez facilement vos amis à rejoindre votre sortie. Chacun peut consulter les informations de la soirée et suivre le parcours prévu.</p>
-    </div>
-    <div class="flex flex-col gap-6.5">
-      <h3 class="text-black">Découvrez les bars autour de vous</h3>
-      <p class="text-neutral-500 text-base font-medium leading-[1.4]">Bargo intègre une sélection de bars disponibles. Consultez les informations essentielles et créez facilement votre parcours pour la soirée.</p>
-    </div>
-    <div class="flex flex-col gap-6.5">
-      <h3 class="text-black">Débloquez des récompenses</h3>
-      <p class="text-neutral-500 text-base font-medium leading-[1.4]">Bargo propose un système de badges et de récompenses pour encourager les sorties responsables. Participez à des barathons et débloquez des récompenses au fil de vos soirées.</p>
+    <div class="absolute top-83.5 left-20 w-129 flex flex-col gap-14.75">
+      <div class="flex flex-col gap-6.5">
+        <h3 class="text-black">Planifiez votre soirée facilement</h3>
+        <p class="text-neutral-500 text-base font-medium leading-[1.4]">Créez une sortie en quelques clics. Choisissez les bars, définissez l'ordre des étapes et préparez votre parcours pour la soirée.</p>
+      </div>
+      <div class="flex flex-col gap-6.5">
+        <h3 class="text-black">Invitez vos amis</h3>
+        <p class="text-neutral-500 text-base font-medium leading-[1.4]">Invitez facilement vos amis à rejoindre votre sortie. Chacun peut consulter les informations de la soirée et suivre le parcours prévu.</p>
+      </div>
+      <div class="flex flex-col gap-6.5">
+        <h3 class="text-black">Découvrez les bars autour de vous</h3>
+        <p class="text-neutral-500 text-base font-medium leading-[1.4]">Bargo intègre une sélection de bars disponibles. Consultez les informations essentielles et créez facilement votre parcours pour la soirée.</p>
+      </div>
+      <div class="flex flex-col gap-6.5">
+        <h3 class="text-black">Débloquez des récompenses</h3>
+        <p class="text-neutral-500 text-base font-medium leading-[1.4]">Bargo propose un système de badges et de récompenses pour encourager les sorties responsables. Participez à des barathons et débloquez des récompenses au fil de vos soirées.</p>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- ========== NOS BARS BANNER ========== -->
 <section id="bars" class="relative w-full h-50 lg:h-110 bg-primary-900">
-  <h1 class="absolute top-11 left-4.75 text-6.25 font-bold tracking-[-1px] leading-[1.4]
-             lg:top-28.25 lg:left-20 lg:text-22.5 lg:tracking-1.35 lg:leading-none
-             text-white uppercase whitespace-nowrap">
-    NOS BARS
-  </h1>
-  <p class="absolute top-25 left-6.25 w-83 text-3.5 leading-[1.1]
-            lg:top-32 lg:left-184 lg:w-136.75 lg:text-base lg:leading-[1.4]
-            text-neutral-200 font-medium">
-    Explorez les bars de Montbéliard et choisissez les étapes de votre prochaine tournée. Créez un parcours sur mesure pour une soirée organisée et conviviale.
-  </p>
+  <!-- Wrapper centré -->
+  <div class="absolute top-0 left-0 h-full w-full lg:max-w-360 lg:left-1/2 lg:-translate-x-1/2">
+    <h1 class="absolute top-11 left-4.75 text-6.25 font-bold tracking-[-1px] leading-[1.4]
+               lg:top-28.25 lg:left-20 lg:text-22.5 lg:tracking-1.35 lg:leading-none
+               text-white uppercase whitespace-nowrap">
+      NOS BARS
+    </h1>
+    <p class="absolute top-25 left-6.25 w-83 text-3.5 leading-[1.1]
+              lg:top-32 lg:left-184 lg:w-136.75 lg:text-base lg:leading-[1.4]
+              text-neutral-200 font-medium">
+      Explorez les bars de Montbéliard et choisissez les étapes de votre prochaine tournée. Créez un parcours sur mesure pour une soirée organisée et conviviale.
+    </p>
+  </div>
 </section>
 
 <!-- ========== BAR CAROUSEL ========== -->
 {barsData.length > 0 && (
   <section id="lp-bar-carousel" class="relative w-full h-200.5 lg:h-211 overflow-hidden bg-primary-900">
 
-    <!-- Desktop: parallax panel gauche -->
-    <div id="lp-bg-wrap" class="hidden lg:block absolute left-0 top-0 w-148.75 h-full overflow-hidden rounded-tr-1.25">
-      <div id="lp-bg-a" class="absolute left-0 top-0 w-full h-full">
-        <div id="lp-prlx-a" class="absolute inset-0 bg-cover bg-center" style={`background-image:url('${barsData[0].parallaxUrl}');`}></div>
-        <div class="absolute inset-0 bg-linear-to-t from-[rgba(30,30,30,0.65)] to-transparent pointer-events-none"></div>
-        <div class="absolute inset-0 bg-linear-to-b from-[rgba(30,30,30,0.35)] to-transparent pointer-events-none"></div>
-        <h2 id="lp-nom-a" class="absolute left-18.25 top-94.5 text-white w-102.75 m-0">{barsData[0].nom}</h2>
-      </div>
-      <div id="lp-bg-b" class="absolute left-0 top-0 w-full h-full" style="transform:translateY(100%)">
-        <div id="lp-prlx-b" class="absolute inset-0 bg-cover bg-center"></div>
-        <div class="absolute inset-0 bg-linear-to-t from-[rgba(30,30,30,0.65)] to-transparent pointer-events-none"></div>
-        <div class="absolute inset-0 bg-linear-to-b from-[rgba(30,30,30,0.35)] to-transparent pointer-events-none"></div>
-        <h2 id="lp-nom-b" class="absolute left-18.25 top-94.5 text-white w-102.75 m-0"></h2>
-      </div>
-    </div>
+    <!-- Desktop: wrapper centré -->
+    <div class="hidden lg:block absolute top-0 left-1/2 -translate-x-1/2 h-full w-full max-w-360">
 
-    <!-- Desktop: card droite -->
-    <div id="lp-card-wrap" class="hidden lg:block absolute left-129.25 top-0 right-0 h-full overflow-hidden">
-      <div id="lp-card-a" class="absolute left-0 top-0 w-full h-full">
-        <div class="absolute left-0 top-39 w-82 h-126.25 bg-white rounded-l-2.5 shadow-[-15px_15px_30px_0px_rgba(0,0,0,0.15)]"></div>
-        <p id="lp-adr-a"  class="absolute left-19.5 top-53.5 w-54.5 text-base font-medium leading-[1.4] text-black">{barsData[0].adresse}</p>
-        <p id="lp-desc-a" class="absolute left-19.5 top-85.75 w-44.25 text-sm font-medium leading-[1.1] text-neutral-500">{barsData[0].description}</p>
-        <a id="lp-link-a" href={`/bar/${barsData[0].id}`} class="absolute left-19.5 top-131.5 w-54.5 h-20 bg-neutral-800 inline-flex items-center justify-center text-white text-base font-medium no-underline">En savoir plus</a>
-        <div class="absolute left-82 top-39 w-109.5 h-126.25 rounded-r-2.5 overflow-hidden shadow-[-15px_15px_30px_0px_rgba(0,0,0,0.25)]">
-          <img id="lp-img-a" src={barsData[0].cardImgUrl || undefined} alt="" class="w-full h-full object-cover block" />
+      <!-- Parallax panel gauche -->
+      <div id="lp-bg-wrap" class="absolute left-0 top-0 w-148.75 h-full overflow-hidden rounded-tr-1.25">
+        <div id="lp-bg-a" class="absolute left-0 top-0 w-full h-full">
+          <div id="lp-prlx-a" class="absolute inset-0 bg-cover bg-center" style={`background-image:url('${barsData[0].parallaxUrl}');`}></div>
+          <div class="absolute inset-0 bg-linear-to-t from-[rgba(30,30,30,0.65)] to-transparent pointer-events-none"></div>
+          <div class="absolute inset-0 bg-linear-to-b from-[rgba(30,30,30,0.35)] to-transparent pointer-events-none"></div>
+          <h2 id="lp-nom-a" class="absolute left-18.25 top-94.5 text-white w-102.75 m-0">{barsData[0].nom}</h2>
+        </div>
+        <div id="lp-bg-b" class="absolute left-0 top-0 w-full h-full" style="transform:translateY(100%)">
+          <div id="lp-prlx-b" class="absolute inset-0 bg-cover bg-center"></div>
+          <div class="absolute inset-0 bg-linear-to-t from-[rgba(30,30,30,0.65)] to-transparent pointer-events-none"></div>
+          <div class="absolute inset-0 bg-linear-to-b from-[rgba(30,30,30,0.35)] to-transparent pointer-events-none"></div>
+          <h2 id="lp-nom-b" class="absolute left-18.25 top-94.5 text-white w-102.75 m-0"></h2>
         </div>
       </div>
-      <div id="lp-card-b" class="absolute left-0 top-0 w-full h-full" style="transform:translateX(-100%)">
-        <div class="absolute left-0 top-39 w-82 h-126.25 bg-white rounded-l-2.5 shadow-[-15px_15px_30px_0px_rgba(0,0,0,0.15)]"></div>
-        <p id="lp-adr-b"  class="absolute left-19.5 top-53.5 w-54.5 text-base font-medium leading-[1.4] text-black"></p>
-        <p id="lp-desc-b" class="absolute left-19.5 top-85.75 w-44.25 text-sm font-medium leading-[1.1] text-neutral-500"></p>
-        <a id="lp-link-b" href="#" class="absolute left-19.5 top-131.5 w-54.5 h-20 bg-neutral-800 inline-flex items-center justify-center text-white text-base font-medium no-underline">En savoir plus</a>
-        <div class="absolute left-82 top-39 w-109.5 h-126.25 rounded-r-2.5 overflow-hidden shadow-[-15px_15px_30px_0px_rgba(0,0,0,0.25)]">
-          <PbImage id="lp-img-b" alt="" class="w-full h-full object-cover block" />
+
+      <!-- Card droite -->
+      <div id="lp-card-wrap" class="absolute left-129.25 top-0 right-0 h-full overflow-hidden">
+        <div id="lp-card-a" class="absolute left-0 top-0 w-full h-full">
+          <div class="absolute left-0 top-39 w-82 h-126.25 bg-white rounded-l-2.5 shadow-[-15px_15px_30px_0px_rgba(0,0,0,0.15)]"></div>
+          <p id="lp-adr-a"  class="absolute left-19.5 top-53.5 w-54.5 text-base font-medium leading-[1.4] text-black">{barsData[0].adresse}</p>
+          <p id="lp-desc-a" class="absolute left-19.5 top-85.75 w-44.25 text-sm font-medium leading-[1.1] text-neutral-500">{barsData[0].description}</p>
+          <a id="lp-link-a" href={`/bar/${barsData[0].id}`} class="absolute left-19.5 top-131.5 w-54.5 h-20 bg-neutral-800 inline-flex items-center justify-center text-white text-base font-medium no-underline">En savoir plus</a>
+          <div class="absolute left-82 top-39 w-109.5 h-126.25 rounded-r-2.5 overflow-hidden shadow-[-15px_15px_30px_0px_rgba(0,0,0,0.25)]">
+            <img id="lp-img-a" src={barsData[0].cardImgUrl || undefined} alt="" class="w-full h-full object-cover block" />
+          </div>
+        </div>
+        <div id="lp-card-b" class="absolute left-0 top-0 w-full h-full" style="transform:translateX(-100%)">
+          <div class="absolute left-0 top-39 w-82 h-126.25 bg-white rounded-l-2.5 shadow-[-15px_15px_30px_0px_rgba(0,0,0,0.15)]"></div>
+          <p id="lp-adr-b"  class="absolute left-19.5 top-53.5 w-54.5 text-base font-medium leading-[1.4] text-black"></p>
+          <p id="lp-desc-b" class="absolute left-19.5 top-85.75 w-44.25 text-sm font-medium leading-[1.1] text-neutral-500"></p>
+          <a id="lp-link-b" href="#" class="absolute left-19.5 top-131.5 w-54.5 h-20 bg-neutral-800 inline-flex items-center justify-center text-white text-base font-medium no-underline">En savoir plus</a>
+          <div class="absolute left-82 top-39 w-109.5 h-126.25 rounded-r-2.5 overflow-hidden shadow-[-15px_15px_30px_0px_rgba(0,0,0,0.25)]">
+            <PbImage id="lp-img-b" alt="" class="w-full h-full object-cover block" />
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Desktop: navigation -->
-    <button id="lp-bar-prev" aria-label="Bar précédent" class="hidden lg:flex absolute left-238.75 top-177 w-16.25 h-16.25 bg-transparent border-0 cursor-pointer items-center justify-center z-10">
-      <div class="absolute w-11.5 h-11.5 bg-white rounded-full"></div>
-      <Image src={chevronLeftIcon} alt="" width={18} height={18} class="relative z-1" />
-    </button>
-    <button id="lp-bar-next" aria-label="Bar suivant" class="hidden lg:flex absolute left-266 top-177 w-16.25 h-16.25 bg-transparent border-0 cursor-pointer items-center justify-center z-10">
-      <div class="absolute w-11.5 h-11.5 bg-white rounded-full"></div>
-      <Image src={chevronRightIcon} alt="" width={18} height={18} class="relative z-1" />
-    </button>
-    <p id="lp-bar-counter" class="hidden lg:block absolute left-308.5 top-181.25 text-neutral-200 text-base font-medium leading-[1.4] whitespace-nowrap z-10">1 / {barsData.length}</p>
-    <div class="hidden lg:block absolute left-39.25 top-0 w-px h-67.5 bg-[rgba(247,241,237,0.35)] z-10"></div>
-    <div class="hidden lg:block absolute left-39.25 top-131.75 w-px bottom-0 bg-[rgba(247,241,237,0.35)] z-10"></div>
+      <!-- Navigation -->
+      <button id="lp-bar-prev" aria-label="Bar précédent" class="flex absolute left-238.75 top-177 w-16.25 h-16.25 bg-transparent border-0 cursor-pointer items-center justify-center z-10">
+        <div class="absolute w-11.5 h-11.5 bg-white rounded-full"></div>
+        <Image src={chevronLeftIcon} alt="" width={18} height={18} class="relative z-1" />
+      </button>
+      <button id="lp-bar-next" aria-label="Bar suivant" class="flex absolute left-266 top-177 w-16.25 h-16.25 bg-transparent border-0 cursor-pointer items-center justify-center z-10">
+        <div class="absolute w-11.5 h-11.5 bg-white rounded-full"></div>
+        <Image src={chevronRightIcon} alt="" width={18} height={18} class="relative z-1" />
+      </button>
+      <p id="lp-bar-counter" class="block absolute left-308.5 top-181.25 text-neutral-200 text-base font-medium leading-[1.4] whitespace-nowrap z-10">1 / {barsData.length}</p>
+      <div class="absolute left-39.25 top-0 w-px h-67.5 bg-[rgba(247,241,237,0.35)] z-10"></div>
+      <div class="absolute left-39.25 top-131.75 w-px bottom-0 bg-[rgba(247,241,237,0.35)] z-10"></div>
+
+    </div><!-- /desktop wrapper -->
 
     <!-- Mobile: carte bar -->
     <div class="block lg:hidden absolute inset-0">
@@ -246,95 +258,116 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
 <!-- ========== VALEURS CAROUSEL ========== -->
 <section id="vision" class="relative w-full h-184 lg:h-190.25 overflow-hidden bg-white">
 
-  <h2 id="lp-values-h2"
-      class="absolute top-18 left-8.5 w-74.75 text-6.25 font-medium tracking-[-1px] leading-[1.4]
-             lg:top-24.5 lg:left-17.75 lg:w-304.75 lg:text-12.5 lg:font-bold lg:tracking-0.75 lg:leading-none
-             text-black z-5">
-    Ce que vous trouverez en venant chez nous
-  </h2>
-
   <!-- Track (width:300% = 3 slides × section width) -->
   <div id="lp-val-track" class="absolute top-0 left-0 h-full flex w-[300%]">
     {valeurs.map((v, i) => (
       <div class="shrink-0 w-1/3 h-full relative bg-transparent lg:bg-white">
-        <!-- Image -->
-        <div class="absolute top-37.5 left-8.5 w-81.25 h-63.75 rounded-1.25 overflow-hidden
-                    lg:top-54.5 lg:left-129.25 lg:w-210.75 lg:h-100 lg:rounded-2.5">
-          <Image src={valeursImages[i]} alt={v.titre} class="w-full h-full object-cover block" />
-        </div>
-        <!-- Texte -->
-        <div class="absolute top-110 left-8.5 w-66.25 flex flex-col gap-4
-                    lg:top-65.25 lg:left-20 lg:w-74 lg:gap-12.25">
-          <h3 class="text-black text-4 font-medium tracking-normal leading-[1.4] lg:text-6.25 lg:tracking-[-1px]">{v.titre}</h3>
-          <p class="text-black text-sm font-medium leading-[1.1] lg:text-base lg:leading-[1.4] lg:w-69.75">{v.texte}</p>
+        <!-- Wrapper centré dans le slide -->
+        <div class="absolute top-0 left-0 h-full w-full lg:max-w-360 lg:left-1/2 lg:-translate-x-1/2">
+          <!-- Image -->
+          <div class="absolute top-37.5 left-8.5 w-81.25 h-63.75 rounded-1.25 overflow-hidden
+                      lg:top-54.5 lg:left-129.25 lg:w-210.75 lg:h-100 lg:rounded-2.5">
+            <Image src={valeursImages[i]} alt={v.titre} class="w-full h-full object-cover block" />
+          </div>
+          <!-- Texte -->
+          <div class="absolute top-110 left-8.5 w-66.25 flex flex-col gap-4
+                      lg:top-65.25 lg:left-20 lg:w-74 lg:gap-12.25">
+            <h3 class="text-black text-4 font-medium tracking-normal leading-[1.4] lg:text-6.25 lg:tracking-[-1px]">{v.titre}</h3>
+            <p class="text-black text-sm font-medium leading-[1.1] lg:text-base lg:leading-[1.4] lg:w-69.75">{v.texte}</p>
+          </div>
         </div>
       </div>
     ))}
   </div>
 
-  <!-- Boutons nav -->
-  <button id="lp-val-prev" aria-label="Précédent"
-          class="absolute top-149.5 left-71 w-7.75 h-7.75
-                 lg:top-143.75 lg:left-20 lg:w-10.75 lg:h-10.75
-                 bg-transparent border-0 cursor-pointer flex items-center justify-center">
-    <div class="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 w-5.5 h-5.5 lg:w-7.5 lg:h-7.5 bg-black rounded-full"></div>
-    <Image src={chevronLeftIcon} alt="" width={14} height={14} class="relative z-1 brightness-0 invert" />
-  </button>
-  <button id="lp-val-next" aria-label="Suivant"
-          class="absolute top-149.5 left-82 w-7.75 h-7.75
-                 lg:top-143.75 lg:left-35.5 lg:w-10.75 lg:h-10.75
-                 bg-transparent border-0 cursor-pointer flex items-center justify-center">
-    <div class="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 w-5.5 h-5.5 lg:w-7.5 lg:h-7.5 bg-black rounded-full"></div>
-    <Image src={chevronRightIcon} alt="" width={14} height={14} class="relative z-1 brightness-0 invert" />
-  </button>
+  <!-- Wrapper centré pour les contrôles et le titre -->
+  <div class="absolute top-0 left-0 h-full w-full lg:max-w-360 lg:left-1/2 lg:-translate-x-1/2 z-5">
+    <h2 id="lp-values-h2"
+        class="absolute top-18 left-8.5 w-74.75 text-6.25 font-medium tracking-[-1px] leading-[1.4]
+               lg:top-24.5 lg:left-17.75 lg:w-304.75 lg:text-12.5 lg:font-bold lg:tracking-0.75 lg:leading-none
+               text-black">
+      Ce que vous trouverez en venant chez nous
+    </h2>
 
-  <!-- En savoir plus -->
-  <a href="/Apropos"
-     class="absolute top-148.25 left-8.5 w-40.5 h-10 text-sm
-            lg:top-167.25 lg:left-[calc(75%+43px)] lg:w-59.25 lg:h-15 lg:text-base lg:font-medium
-            bg-primary-600 inline-flex items-center justify-center text-white no-underline">
-    En savoir plus
-  </a>
+    <!-- Boutons nav -->
+    <button id="lp-val-prev" aria-label="Précédent"
+            class="absolute top-149.5 left-71 w-7.75 h-7.75
+                   lg:top-143.75 lg:left-20 lg:w-10.75 lg:h-10.75
+                   bg-transparent border-0 cursor-pointer flex items-center justify-center">
+      <div class="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 w-5.5 h-5.5 lg:w-7.5 lg:h-7.5 bg-black rounded-full"></div>
+      <Image src={chevronLeftIcon} alt="" width={14} height={14} class="relative z-1 brightness-0 invert" />
+    </button>
+    <button id="lp-val-next" aria-label="Suivant"
+            class="absolute top-149.5 left-82 w-7.75 h-7.75
+                   lg:top-143.75 lg:left-35.5 lg:w-10.75 lg:h-10.75
+                   bg-transparent border-0 cursor-pointer flex items-center justify-center">
+      <div class="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 w-5.5 h-5.5 lg:w-7.5 lg:h-7.5 bg-black rounded-full"></div>
+      <Image src={chevronRightIcon} alt="" width={14} height={14} class="relative z-1 brightness-0 invert" />
+    </button>
+
+    <!-- En savoir plus -->
+    <a href="/Apropos"
+       class="absolute top-148.25 left-8.5 w-40.5 h-10 text-sm
+              lg:top-167.25 lg:left-[calc(75%+43px)] lg:w-59.25 lg:h-15 lg:text-base lg:font-medium
+              bg-primary-600 inline-flex items-center justify-center text-white no-underline">
+      En savoir plus
+    </a>
+  </div>
 </section>
 
 <!-- ========== ÉQUIPE ========== -->
 <section id="equipe" class="relative w-full bg-white overflow-hidden lg:h-343.75">
 
-  <!-- Titre & descriptions -->
-  <h2 class="px-8.5 pt-0 lg:px-0 lg:absolute lg:top-26.5 lg:left-20 lg:w-164.25 text-6.25 font-medium tracking-[-1px] leading-[1.4] lg:text-12.5 lg:font-bold lg:tracking-0.75 lg:leading-none text-black">
+  <!-- Titre & descriptions (mobile) -->
+  <h2 class="px-8.5 pt-0 text-6.25 font-medium tracking-[-1px] leading-[1.4] text-black lg:hidden">
     L'équipe derrière Bargo
   </h2>
-  <p class="px-8.5 mt-4 lg:px-0 lg:mt-0 lg:absolute lg:top-46.25 lg:left-20 lg:w-128.75 text-neutral-500 text-base font-medium leading-[1.4]">
+  <p class="px-8.5 mt-4 text-neutral-500 text-base font-medium leading-[1.4] lg:hidden">
     Bargo est un projet réalisé par une équipe d'étudiants passionnés par le design, le numérique et l'expérience utilisateur.
   </p>
-  <p class="px-8.5 mt-4 lg:px-0 lg:mt-0 lg:absolute lg:top-68.25 lg:left-20 lg:w-101.25 text-neutral-500 text-base font-medium leading-[1.4]">
+  <p class="px-8.5 mt-4 text-neutral-500 text-base font-medium leading-[1.4] lg:hidden">
     Le projet a été conçu dans le cadre d'un travail de réflexion et de création autour d'une plateforme dédiée à l'organisation des sorties.
   </p>
-  <p class="px-8.5 mt-4 lg:px-0 lg:mt-0 lg:absolute lg:top-95.75 lg:left-20 lg:w-74 text-neutral-500 text-base font-medium leading-[1.4]">
+  <p class="px-8.5 mt-4 text-neutral-500 text-base font-medium leading-[1.4] lg:hidden">
     Notre objectif était d'imaginer une solution simple, moderne et adaptée aux habitudes des étudiants et jeunes adultes.
   </p>
 
-  <!-- Desktop: photos -->
-  <div class="hidden lg:block absolute top-26.5 left-238.75 w-101.25 h-123.75 rounded-2.5 overflow-hidden">
-    <Image src={membre3} alt="Alex Ringenbach" class="w-full h-full object-cover block" />
-  </div>
-  <h3 class="hidden lg:block absolute top-163.75 left-238.75 text-primary-500 w-82">Alex Ringenbach</h3>
-  <p class="hidden lg:block absolute top-176.75 left-238.75 text-black text-base font-medium leading-[1.4] w-74">Communication</p>
-  <p class="hidden lg:block absolute top-192.75 left-238.75 text-neutral-500 text-sm font-medium leading-[1.1] w-82">Gère l'image et la visibilité du projet. Il s'occupe de la stratégie de communication et du lien avec la communauté.</p>
+  <!-- Desktop: wrapper centré -->
+  <div class="hidden lg:block absolute top-0 left-1/2 -translate-x-1/2 h-full w-full max-w-360">
+    <h2 class="absolute top-26.5 left-20 w-164.25 text-12.5 font-bold tracking-0.75 leading-none text-black">
+      L'équipe derrière Bargo
+    </h2>
+    <p class="absolute top-46.25 left-20 w-128.75 text-neutral-500 text-base font-medium leading-[1.4]">
+      Bargo est un projet réalisé par une équipe d'étudiants passionnés par le design, le numérique et l'expérience utilisateur.
+    </p>
+    <p class="absolute top-68.25 left-20 w-101.25 text-neutral-500 text-base font-medium leading-[1.4]">
+      Le projet a été conçu dans le cadre d'un travail de réflexion et de création autour d'une plateforme dédiée à l'organisation des sorties.
+    </p>
+    <p class="absolute top-95.75 left-20 w-74 text-neutral-500 text-base font-medium leading-[1.4]">
+      Notre objectif était d'imaginer une solution simple, moderne et adaptée aux habitudes des étudiants et jeunes adultes.
+    </p>
 
-  <div class="hidden lg:block absolute top-81.5 left-129.25 w-101.5 h-123.75 rounded-2.5 overflow-hidden">
-    <Image src={membre2} alt="Pierre Mouilleseaux-Lhuillier" class="w-full h-full object-cover block" />
-  </div>
-  <h3 class="hidden lg:block absolute top-218.75 left-129.25 text-primary-500 w-101.25">Pierre Mouilleseaux-Lhuillier</h3>
-  <p class="hidden lg:block absolute top-231.75 left-129.25 text-black text-base font-medium leading-[1.4] w-54.75">Développeur</p>
-  <p class="hidden lg:block absolute top-247.75 left-129.25 text-neutral-500 text-sm font-medium leading-[1.1] w-86.25">Développe et structure la plateforme. Il transforme les idées en fonctionnalités concrètes et assure le bon fonctionnement du site.</p>
+    <div class="absolute top-26.5 left-238.75 w-101.25 h-123.75 rounded-2.5 overflow-hidden">
+      <Image src={membre3} alt="Alex Ringenbach" class="w-full h-full object-cover block" />
+    </div>
+    <h3 class="absolute top-163.75 left-238.75 text-primary-500 w-82">Alex Ringenbach</h3>
+    <p class="absolute top-176.75 left-238.75 text-black text-base font-medium leading-[1.4] w-74">Communication</p>
+    <p class="absolute top-192.75 left-238.75 text-neutral-500 text-sm font-medium leading-[1.1] w-82">Gère l'image et la visibilité du projet. Il s'occupe de la stratégie de communication et du lien avec la communauté.</p>
 
-  <div class="hidden lg:block absolute top-136.5 left-20 w-101.25 h-123.75 rounded-2.5 overflow-hidden">
-    <Image src={membre1} alt="Melvyn Philippon" class="w-full h-full object-cover block" />
+    <div class="absolute top-81.5 left-129.25 w-101.5 h-123.75 rounded-2.5 overflow-hidden">
+      <Image src={membre2} alt="Pierre Mouilleseaux-Lhuillier" class="w-full h-full object-cover block" />
+    </div>
+    <h3 class="absolute top-218.75 left-129.25 text-primary-500 w-101.25">Pierre Mouilleseaux-Lhuillier</h3>
+    <p class="absolute top-231.75 left-129.25 text-black text-base font-medium leading-[1.4] w-54.75">Développeur</p>
+    <p class="absolute top-247.75 left-129.25 text-neutral-500 text-sm font-medium leading-[1.1] w-86.25">Développe et structure la plateforme. Il transforme les idées en fonctionnalités concrètes et assure le bon fonctionnement du site.</p>
+
+    <div class="absolute top-136.5 left-20 w-101.25 h-123.75 rounded-2.5 overflow-hidden">
+      <Image src={membre1} alt="Melvyn Philippon" class="w-full h-full object-cover block" />
+    </div>
+    <h3 class="absolute top-273.75 left-20 text-primary-500 w-82">Melvyn Philippon</h3>
+    <p class="absolute top-286.5 left-20 text-black text-base font-medium leading-[1.4] w-46.75">Designer</p>
+    <p class="absolute top-302.75 left-20 text-neutral-500 text-sm font-medium leading-[1.1] w-86.5">Conçoit l'identité visuelle et l'expérience utilisateur. Il veille à la cohérence graphique et à la simplicité d'utilisation de la plateforme.</p>
   </div>
-  <h3 class="hidden lg:block absolute top-273.75 left-20 text-primary-500 w-82">Melvyn Philippon</h3>
-  <p class="hidden lg:block absolute top-286.5 left-20 text-black text-base font-medium leading-[1.4] w-46.75">Designer</p>
-  <p class="hidden lg:block absolute top-302.75 left-20 text-neutral-500 text-sm font-medium leading-[1.1] w-86.5">Conçoit l'identité visuelle et l'expérience utilisateur. Il veille à la cohérence graphique et à la simplicité d'utilisation de la plateforme.</p>
 
   <!-- Mobile: membres empilés -->
   <div class="flex lg:hidden flex-col gap-8 px-6 pt-8 pb-12">
@@ -358,65 +391,99 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
 </section>
 
 <!-- ========== INTÉRESSÉ ? ========== -->
-<section id="lp-interested" class="relative w-full h-217.5 lg:h-290 overflow-hidden">
-  <div class="absolute left-0 top-0 w-full lg:w-203.25 h-full bg-neutral-800"></div>
-  <div class="hidden lg:block absolute left-[calc(8.33%+92px)] top-0 w-307 h-full overflow-hidden">
+<section id="lp-interested" class="relative w-full overflow-hidden lg:h-290">
+  <!-- 1. Fond sombre (pleine largeur) -->
+  <div class="absolute inset-0 bg-neutral-800"></div>
+  <!-- 2. Photo desktop (sous l'overlay — position relative à la section) -->
+  <div class="hidden lg:block absolute top-0 h-full overflow-hidden" style="left: calc(50% - 508px); right: 0;">
     <Image src={carouselImg} alt="" class="w-full h-full object-cover block" />
   </div>
-  <div class="absolute left-0 top-0 w-full lg:w-203.25 h-full bg-[rgba(30,30,30,0.85)]"></div>
+  <!-- 3. Overlay sombre desktop (par-dessus la photo, partie gauche) -->
+  <div class="hidden lg:block absolute left-0 top-0 h-full bg-[rgba(30,30,30,0.85)]" style="width: max(813px, calc(50% + 93px));"></div>
 
-  <h1 class="absolute top-11 left-7 text-6.25 font-bold tracking-[-1px] leading-[1.4] whitespace-nowrap
-             lg:top-13 lg:left-20 lg:text-22.5 lg:tracking-1.35 lg:leading-none lg:w-208.25
-             text-white uppercase">
-    INTÉRESSÉ ?
-  </h1>
-  <p class="absolute top-25.25 left-7 w-83
-            lg:top-48.25 lg:left-20 lg:w-136.75
-            text-white text-base font-medium leading-[1.4]">
-    Rejoignez Bargo et découvrez une nouvelle façon de préparer vos soirées entre amis. Planifiez votre parcours, invitez votre groupe et profitez pleinement de votre soirée.
-  </p>
+  <!-- 4. Wrapper : mobile = flex colonne en flux, desktop = absolute centré -->
+  <div class="relative z-10 px-7 py-11 flex flex-col gap-5
+              lg:absolute lg:top-0 lg:left-1/2 lg:-translate-x-1/2 lg:h-full lg:w-full lg:max-w-360 lg:px-0 lg:py-0 lg:block">
 
-  <!-- Pseudo -->
-  <p class="absolute top-64.25 left-7 lg:top-79 lg:left-20 text-white text-base font-medium leading-[1.4] whitespace-nowrap">Pseudo</p>
-  <div class="absolute top-73.25 left-7 w-83.5 h-8.75 lg:top-89 lg:left-20 lg:w-156 lg:h-15.5 bg-neutral-200 rounded-0.75">
-    <input id="lp-reg-pseudo" type="text" placeholder="VotreNom" class="w-full h-full bg-transparent border-0 px-8.25 text-sm font-medium text-neutral-500 outline-none" />
-  </div>
+    <!-- Titre -->
+    <h1 class="text-6.25 font-bold tracking-[-1px] leading-[1.4] text-white uppercase m-0 shrink-0
+               lg:absolute lg:top-13 lg:left-20 lg:text-22.5 lg:tracking-1.35 lg:leading-none lg:w-208.25">
+      INTÉRESSÉ ?
+    </h1>
 
-  <!-- E-mail -->
-  <p class="absolute top-87.5 left-7 lg:top-113 lg:left-20 text-white text-base font-medium leading-[1.4] whitespace-nowrap">Adresse E-mail</p>
-  <div class="absolute top-96.5 left-7 w-83.5 h-8.75 lg:top-123 lg:left-20 lg:w-156 lg:h-15.5 bg-neutral-200 rounded-0.75">
-    <input id="lp-reg-email" type="email" placeholder="exemple@mail.com" class="w-full h-full bg-transparent border-0 px-8.25 text-sm font-medium text-neutral-500 outline-none" />
-  </div>
+    <!-- Description -->
+    <p class="text-white text-base font-medium leading-[1.4] m-0 shrink-0
+              lg:absolute lg:top-48.25 lg:left-20 lg:w-136.75">
+      Rejoignez Bargo et découvrez une nouvelle façon de préparer vos soirées entre amis. Planifiez votre parcours, invitez votre groupe et profitez pleinement de votre soirée.
+    </p>
 
-  <!-- Mot de passe -->
-  <p class="absolute top-110.75 left-7 lg:top-147 lg:left-20 text-white text-base font-medium leading-[1.4] whitespace-nowrap">Mot de passe</p>
-  <div class="absolute top-119.75 left-7 w-83.5 h-8.75 lg:top-157 lg:left-20 lg:w-156 lg:h-15.5 bg-neutral-200 rounded-0.75">
-    <input id="lp-reg-password" type="password" placeholder="••••••••" class="w-full h-full bg-transparent border-0 px-8.25 text-sm font-medium text-neutral-500 outline-none" />
-  </div>
-
-  <!-- Confirmation mot de passe -->
-  <p class="absolute top-134 left-7 lg:top-181 lg:left-20 text-white text-base font-medium leading-[1.4] whitespace-nowrap">Confirmation mot de passe</p>
-  <div class="absolute top-143 left-7 w-83.5 h-8.75 lg:top-191 lg:left-20 lg:w-156 lg:h-15.5 bg-neutral-200 rounded-0.75">
-    <input id="lp-reg-confirm" type="password" placeholder="••••••••" class="w-full h-full bg-transparent border-0 px-8.25 text-sm font-medium text-neutral-500 outline-none" />
-  </div>
-
-  <label for="lp-reg-cgu" class="absolute top-157.5 left-7 lg:top-212 lg:left-20 flex items-center gap-5.5 cursor-pointer">
-    <div class="relative w-6.25 h-6.25 shrink-0 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
-      <input id="lp-reg-cgu" type="checkbox" class="peer absolute inset-0 w-full h-full opacity-0 cursor-pointer m-0" />
-      <div class="absolute inset-0 border-2 border-white peer-checked:bg-primary-500 peer-checked:border-primary-500 pointer-events-none"></div>
-      <Image src={checkIcon} alt="" width={13} height={10} class="absolute inset-0 m-auto w-3.25 h-3.25 opacity-0 peer-checked:opacity-100 pointer-events-none brightness-0 invert" />
+    <!-- Pseudo -->
+    <div class="flex flex-col gap-1 lg:contents">
+      <p class="text-white text-base font-medium leading-[1.4] whitespace-nowrap m-0
+                lg:absolute lg:top-79 lg:left-20">Pseudo</p>
+      <div class="bg-neutral-200 rounded-0.75 h-8.75
+                  lg:absolute lg:top-89 lg:left-20 lg:w-156 lg:h-15.5">
+        <input id="lp-reg-pseudo" type="text" placeholder="VotreNom"
+               class="w-full h-full bg-transparent border-0 px-4 lg:px-8.25 text-sm font-medium text-neutral-500 outline-none" />
+      </div>
     </div>
-    <span class="text-white text-sm lg:text-base font-medium leading-[1.4] w-62.5 lg:whitespace-nowrap">J'accepte les conditions d'utilisation</span>
-  </label>
 
-  <p id="lp-reg-msg" class="absolute top-169.5 left-7 lg:top-227.5 lg:left-20 text-sm font-medium leading-[1.4] hidden"></p>
+    <!-- E-mail -->
+    <div class="flex flex-col gap-1 lg:contents">
+      <p class="text-white text-base font-medium leading-[1.4] whitespace-nowrap m-0
+                lg:absolute lg:top-113 lg:left-20">Adresse E-mail</p>
+      <div class="bg-neutral-200 rounded-0.75 h-8.75
+                  lg:absolute lg:top-123 lg:left-20 lg:w-156 lg:h-15.5">
+        <input id="lp-reg-email" type="email" placeholder="exemple@mail.com"
+               class="w-full h-full bg-transparent border-0 px-4 lg:px-8.25 text-sm font-medium text-neutral-500 outline-none" />
+      </div>
+    </div>
 
-  <button id="lp-reg-btn" type="button"
-          class="absolute top-178.5 left-50 w-40.5 h-10 text-sm
-                 lg:top-240 lg:left-[calc(25%+107px)] lg:w-59.25 lg:h-15 lg:text-base
-                 bg-transparent border-2 border-white text-white font-medium cursor-pointer inline-flex items-center justify-center">
-    S'inscrire
-  </button>
+    <!-- Mot de passe -->
+    <div class="flex flex-col gap-1 lg:contents">
+      <p class="text-white text-base font-medium leading-[1.4] whitespace-nowrap m-0
+                lg:absolute lg:top-147 lg:left-20">Mot de passe</p>
+      <div class="bg-neutral-200 rounded-0.75 h-8.75
+                  lg:absolute lg:top-157 lg:left-20 lg:w-156 lg:h-15.5">
+        <input id="lp-reg-password" type="password" placeholder="••••••••"
+               class="w-full h-full bg-transparent border-0 px-4 lg:px-8.25 text-sm font-medium text-neutral-500 outline-none" />
+      </div>
+    </div>
+
+    <!-- Confirmation mot de passe -->
+    <div class="flex flex-col gap-1 lg:contents">
+      <p class="text-white text-base font-medium leading-[1.4] whitespace-nowrap m-0
+                lg:absolute lg:top-181 lg:left-20">Confirmation mot de passe</p>
+      <div class="bg-neutral-200 rounded-0.75 h-8.75
+                  lg:absolute lg:top-191 lg:left-20 lg:w-156 lg:h-15.5">
+        <input id="lp-reg-confirm" type="password" placeholder="••••••••"
+               class="w-full h-full bg-transparent border-0 px-4 lg:px-8.25 text-sm font-medium text-neutral-500 outline-none" />
+      </div>
+    </div>
+
+    <!-- CGU -->
+    <label for="lp-reg-cgu" class="flex items-center gap-4 cursor-pointer
+                                   lg:absolute lg:top-212 lg:left-20 lg:gap-5.5">
+      <div class="relative w-6.25 h-6.25 shrink-0 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
+        <input id="lp-reg-cgu" type="checkbox" class="peer absolute inset-0 w-full h-full opacity-0 cursor-pointer m-0" />
+        <div class="absolute inset-0 border-2 border-white peer-checked:bg-primary-500 peer-checked:border-primary-500 pointer-events-none"></div>
+        <Image src={checkIcon} alt="" width={13} height={10} class="absolute inset-0 m-auto w-3.25 h-3.25 opacity-0 peer-checked:opacity-100 pointer-events-none brightness-0 invert" />
+      </div>
+      <span class="text-white text-sm lg:text-base font-medium leading-[1.4] lg:whitespace-nowrap">J'accepte les conditions d'utilisation</span>
+    </label>
+
+    <!-- Message erreur/succès -->
+    <p id="lp-reg-msg" class="text-sm font-medium leading-[1.4] hidden m-0
+                               lg:absolute lg:top-227.5 lg:left-20"></p>
+
+    <!-- Bouton S'inscrire -->
+    <button id="lp-reg-btn" type="button"
+            class="w-full h-10 text-sm
+                   lg:absolute lg:top-240 lg:left-[calc(25%+107px)] lg:w-59.25 lg:h-15 lg:text-base
+                   bg-transparent border-2 border-white text-white font-medium cursor-pointer inline-flex items-center justify-center">
+      S'inscrire
+    </button>
+  </div>
 </section>
 
 

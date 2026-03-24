@@ -187,7 +187,7 @@
       if (!u) return '';
       return '<span style="display:inline-flex;align-items:center;gap:5px;background:#347645;color:white;font-size:12px;font-weight:500;padding:3px 10px 3px 4px;border-radius:20px;">' +
         '<span style="width:22px;height:22px;border-radius:50%;overflow:hidden;flex-shrink:0;">' + av(u, 22) + '</span>' +
-        '📨 ' + esc(u.pseudo || u.prenom || 'User') +
+        esc(u.pseudo || u.prenom || 'User') +
         '<button data-rid="' + id + '" style="background:transparent;border:none;color:rgba(255,255,255,0.55);cursor:pointer;font-size:15px;padding:0;line-height:1;margin-left:1px;">×</button>' +
       '</span>';
     }).join('');
@@ -213,7 +213,7 @@
       return '<div style="display:flex;align-items:center;gap:12px;background:#2c2c2c;border-radius:6px;padding:10px 14px;">' +
         '<div style="width:40px;height:40px;flex-shrink:0;border-radius:50%;overflow:hidden;">' + av(u, 40) + '</div>' +
         '<p style="color:white;font-size:14px;font-weight:500;margin:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(u.pseudo || (u.prenom + ' ' + u.nom).trim() || 'Utilisateur') + '</p>' +
-        '<button data-uid="' + u.id + '" style="flex-shrink:0;height:32px;padding:0 14px;font-size:12px;font-weight:600;border:none;cursor:pointer;border-radius:20px;transition:all 0.15s;background:' + (sel ? '#347645' : '#094736') + ';color:white;">' + (sel ? '✓ Demande envoyée' : '+ Envoyer une demande') + '</button>' +
+        '<button data-uid="' + u.id + '" style="flex-shrink:0;height:32px;padding:0 14px;font-size:12px;font-weight:600;border:none;cursor:pointer;border-radius:20px;transition:all 0.15s;background:' + (sel ? '#347645' : '#094736') + ';color:white;">' + (sel ? 'Demande envoyée' : 'Envoyer une demande') + '</button>' +
       '</div>';
     }).join('') || '<p style="color:rgba(255,255,255,0.3);font-size:13px;margin:0;">Aucun résultat.</p>';
 

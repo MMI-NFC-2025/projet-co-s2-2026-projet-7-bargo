@@ -51,14 +51,16 @@ const bars = await getCollection('bar', { sort: 'created' });
       </a>
     </div>
 
-    <!-- Desktop : positions absolues d'origine -->
-    <h1 class="hidden lg:block absolute text-white left-20 top-66.75 uppercase m-0 text-22.5">
-      <span class="block whitespace-nowrap">"Le barathon</span>
-      <span class="block whitespace-nowrap mt-12.25">Autrement"</span>
-    </h1>
-    <p class="hidden lg:block absolute text-neutral-300 right-20 top-156 w-114.25 text-right m-0">
-      Une soirée. Un groupe. Un parcours.
-    </p>
+    <!-- Desktop : wrapper centré max 1440px -->
+    <div class="hidden lg:block absolute top-0 h-full w-full max-w-360 left-1/2 -translate-x-1/2">
+      <h1 class="absolute text-white left-20 top-66.75 uppercase m-0 text-22.5">
+        <span class="block whitespace-nowrap">"Le barathon</span>
+        <span class="block whitespace-nowrap mt-12.25">Autrement"</span>
+      </h1>
+      <p class="absolute text-neutral-300 right-20 top-156 w-114.25 text-right m-0">
+        Une soirée. Un groupe. Un parcours.
+      </p>
+    </div>
   </section>
 
   <!-- ==================== A PROPOS ==================== -->

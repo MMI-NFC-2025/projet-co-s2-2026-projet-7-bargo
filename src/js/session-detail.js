@@ -426,7 +426,7 @@
         var isSamPend = pendingInvites.some(function (p) { return p.id === user.id && p.sam; });
         var name = esc(user.pseudo || (user.prenom + ' ' + user.nom).trim() || 'Utilisateur');
         var addBg = isMembre ? '#ef4444' : (isPending ? '#646262' : '#347645');
-        var addLabel = isMembre ? '✕ Retirer' : (isPending ? '✓ Invité' : iconPlus + ' Inviter');
+        var addLabel = isMembre ? '✕ Retirer' : (isPending ? iconCheck + ' Invité' : '<span>+</span> Inviter');
         var samBorder = isSamPend ? '#72c073' : 'rgba(255,255,255,0.2)';
         return '<div style="display:flex;align-items:center;gap:12px;background:#2c2c2c;border-radius:5px;padding:12px;margin-bottom:8px;">' +
           '<div style="width:44px;height:44px;flex-shrink:0;border-radius:50%;overflow:hidden;">' + avatarHtml(user, 44) + '</div>' +

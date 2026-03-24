@@ -124,9 +124,8 @@ if (Astro.request.method === 'POST') {
         <div class="relative w-6.25 h-6.25 shrink-0">
           <input type="checkbox" name="terms" id="terms-checkbox-mobile"
             class="absolute inset-0 opacity-0 w-full h-full cursor-pointer peer" />
-          <div class="w-6.25 h-6.25 border-2 border-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] peer-checked:bg-primary-600 peer-checked:border-primary-600 transition-colors">
-            <Image src={checkIcon} alt="" width={16} height={16} class="hidden peer-checked:block w-full h-full p-0.5 brightness-0 invert" />
-          </div>
+          <div class="absolute inset-0 border-2 border-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] peer-checked:bg-primary-600 peer-checked:border-primary-600 transition-colors pointer-events-none"></div>
+          <Image src={checkIcon} alt="" width={16} height={16} class="absolute inset-0 m-auto w-3.5 h-3.5 opacity-0 peer-checked:opacity-100 pointer-events-none brightness-0 invert" />
         </div>
         <span class="text-white text-3.5 font-medium leading-[1.4]">J'accepte les conditions d'utilisation</span>
       </label>
@@ -148,13 +147,16 @@ if (Astro.request.method === 'POST') {
   <!-- ===== DESKTOP ===== -->
   <section class="hidden lg:block relative min-h-300 overflow-hidden">
 
-    <!-- Fond sombre gauche -->
-    <div class="absolute inset-0 bg-neutral-800" style="width: 813px;"></div>
+    <!-- Fond sombre (pleine largeur) -->
+    <div class="absolute inset-0 bg-neutral-800"></div>
 
     <!-- Photo droite -->
-    <div class="absolute top-0 bottom-0 right-0 overflow-hidden" style="left: 813px;">
+    <div class="absolute top-0 bottom-0 right-0 overflow-hidden" style="left: max(813px, calc(50% + 93px));">
       <Image src={bgImg} alt="" class="w-full h-full object-cover object-top" />
     </div>
+
+    <!-- Wrapper centré (max-1440px centré) -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 h-full w-full max-w-360 z-10">
 
     <!-- Erreur serveur -->
     {error && (
@@ -228,9 +230,8 @@ if (Astro.request.method === 'POST') {
         <div class="relative w-6.25 h-6.25 shrink-0">
           <input type="checkbox" name="terms" id="terms-checkbox"
             class="absolute inset-0 opacity-0 w-full h-full cursor-pointer peer" />
-          <div class="w-6.25 h-6.25 border-2 border-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] peer-checked:bg-primary-600 peer-checked:border-primary-600 transition-colors">
-            <Image src={checkIcon} alt="" width={16} height={16} class="hidden peer-checked:block w-full h-full p-0.5 brightness-0 invert" />
-          </div>
+          <div class="absolute inset-0 border-2 border-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] peer-checked:bg-primary-600 peer-checked:border-primary-600 transition-colors pointer-events-none"></div>
+          <Image src={checkIcon} alt="" width={16} height={16} class="absolute inset-0 m-auto w-3.5 h-3.5 opacity-0 peer-checked:opacity-100 pointer-events-none brightness-0 invert" />
         </div>
         <span class="text-white text-4 font-medium leading-[1.4]">J'accepte les conditions d'utilisation</span>
       </label>
@@ -249,6 +250,7 @@ if (Astro.request.method === 'POST') {
       </p>
 
     </form>
+    </div><!-- /wrapper centré -->
   </section>
 
   <script>
