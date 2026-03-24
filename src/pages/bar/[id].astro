@@ -362,11 +362,7 @@ const hasMap = lat !== 0 && lon !== 0;
     }
   </style>
 
-  <script is:inline define:vars={{ token, userId, isAuth }}>
-    if (isAuth) {
-      window.__AUTH__ = { token, userId };
-    }
-  </script>
+  {isAuth && <div id="auth-meta" data-token={token} data-user-id={userId} hidden></div>}
 
   <script>
     import '../../js/leaflet-map.js';

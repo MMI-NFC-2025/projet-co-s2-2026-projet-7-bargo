@@ -96,11 +96,7 @@ if (isAuth) {
     </div>
   </section>
 
-  <script is:inline define:vars={{ token, userId, isAuth }}>
-    if (isAuth) {
-      window.__AUTH__ = { token, userId };
-    }
-  </script>
+  {isAuth && <div id="auth-meta" data-token={token} data-user-id={userId} hidden></div>}
 
   <script>
     import '../../js/like.js';

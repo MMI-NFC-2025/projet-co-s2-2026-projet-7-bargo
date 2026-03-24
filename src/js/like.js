@@ -1,8 +1,8 @@
 (function () {
   var PB_URL = 'https://pbbargo.pierre-mouilleseaux-lhuillier.fr';
-  var auth   = window.__AUTH__ || {};
-  var token  = auth.token  || null;
-  var userId = auth.userId || null;
+  var authMeta = document.getElementById('auth-meta');
+  var token  = (authMeta && authMeta.dataset.token)  || null;
+  var userId = (authMeta && authMeta.dataset.userId) || null;
 
   var favs = { bar_favori: [], jeux_favori: [], items_favori: [] };
 
@@ -86,8 +86,6 @@
       }
     });
   }
-
-  window.__initLikes__ = initBtns;
 
   // ── Charge les favoris existants si connecté ───────────────────
   if (token && userId) {

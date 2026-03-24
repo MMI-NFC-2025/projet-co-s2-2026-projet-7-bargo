@@ -185,11 +185,41 @@ const bars = await getCollection('bar', { sort: 'created' });
 
 ### Passage de données SSR → JS client
 
+**Règle absolue : pas de `window.__X__`.**
+
+| Le script a besoin de données SSR ? | Solution |
+|---|---|
+| Oui (token, userId, données PB…) | `<script define:vars={...}>` inline dans le `.astro` |
+| Non (interactions pures DOM) | Fichier dans `src/js/` importé via `<script>` |
+
+**Script avec données SSR — inline dans l'astro :**
 ```astro
-<script is:inline>
-  window.__AUTH__ = { token: {JSON.stringify(token)}, userId: {JSON.stringify(userId)} };
+---
+const token = Astro.cookies.get('pb_token')?.value;
+const userId = Astro.cookies.get('pb_user_id')?.value;
+---
+<script define:vars={{ token, userId }}>
+  document.querySelector('#btn').addEventListener('click', async () => {
+    await fetch('/api/...', { headers: { Authorization: `Bearer ${token}` } });
+  });
 </script>
-<script src="/src/js/mon-script.js"></script>
+```
+
+**Script sans données SSR — dans `src/js/` :**
+```astro
+<script>
+  import '../js/header.js';
+</script>
+```
+
+**Script partagé sur plusieurs pages avec données SSR** (ex : like.js) :
+Le script lit les données depuis un élément DOM posé par la page :
+```astro
+<!-- Dans la page .astro -->
+<div id="auth-meta" data-token={token} data-user-id={userId} hidden></div>
+<script>
+  import '../js/like.js';  // lit document.getElementById('auth-meta').dataset
+</script>
 ```
 
 ---

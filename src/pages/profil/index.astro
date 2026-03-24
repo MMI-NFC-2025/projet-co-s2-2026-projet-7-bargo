@@ -1156,25 +1156,197 @@ const displayName = user.prenom
 
   <script id="friend-data" type="application/json" set:html={JSON.stringify({ allUsers, amiesIds, userId, token, PB_URL })}></script>
 
-  <script is:inline define:vars={{ token, userId, activeTab, decoRecord, titreRecord, themeRecord }}>
-    if (token && userId) {
-      window.__AUTH__ = { token, userId };
+  <div id="auth-meta" data-token={token} data-user-id={userId} hidden></div>
+
+  <script is:inline define:vars={{ activeTab, PB_URL: 'https://pbbargo.pierre-mouilleseaux-lhuillier.fr', token, userId, decoRecord, titreRecord, themeRecord }}>
+    // profil.js — onglets + mode édition
+    function moveIndicator(btn) {
+      var indicator = document.getElementById('tab-indicator');
+      var list      = document.getElementById('tab-list');
+      if (!indicator || !list) return;
+      var listRect = list.getBoundingClientRect();
+      var btnRect  = btn.getBoundingClientRect();
+      indicator.style.left  = (btnRect.left - listRect.left + list.scrollLeft) + 'px';
+      indicator.style.width = btnRect.width + 'px';
     }
-    window.__ACTIVE_TAB__ = activeTab;
-    window.__INVENTAIRE__ = {
-      PB_URL: 'https://pbbargo.pierre-mouilleseaux-lhuillier.fr',
-      equipped: {
+
+    function switchTab(name) {
+      document.querySelectorAll('[data-panel]').forEach(function(p) { p.classList.add('hidden'); });
+      var panel = document.getElementById('panel-' + name);
+      if (panel) panel.classList.remove('hidden');
+      var btn = document.querySelector('.tab-btn[data-tab="' + name + '"]');
+      if (btn) moveIndicator(btn);
+      if (name !== 'profil') resetEdit();
+    }
+
+    function toggleEdit() {
+      var editBtn   = document.getElementById('edit-btn');
+      var cancelBtn = document.getElementById('cancel-btn');
+      if (!editBtn || !cancelBtn) return;
+      var isView = editBtn.style.display !== 'none';
+      if (isView) {
+        switchTab('profil');
+        document.querySelectorAll('.view-field').forEach(function(el) { el.classList.add('hidden'); });
+        document.querySelectorAll('.edit-field').forEach(function(el) { el.classList.remove('hidden'); });
+        editBtn.style.display   = 'none';
+        cancelBtn.style.display = '';
+      } else {
+        resetEdit();
+      }
+    }
+
+    function resetEdit() {
+      document.querySelectorAll('.view-field').forEach(function(el) { el.classList.remove('hidden'); });
+      document.querySelectorAll('.edit-field').forEach(function(el) { el.classList.add('hidden'); });
+      var editBtn   = document.getElementById('edit-btn');
+      var cancelBtn = document.getElementById('cancel-btn');
+      if (editBtn)   editBtn.style.display   = '';
+      if (cancelBtn) cancelBtn.style.display = 'none';
+    }
+
+    function confirmDelete() {
+      if (confirm('Supprimer définitivement votre compte ? Cette action est irréversible.')) {
+        var form = document.getElementById('delete-form');
+        if (form) form.submit();
+      }
+    }
+
+    document.querySelectorAll('[data-tab]').forEach(function(btn) {
+      btn.addEventListener('click', function() { switchTab(btn.dataset.tab); });
+    });
+
+    var initTab = (activeTab || 'profil');
+    var initBtn = document.querySelector('.tab-btn[data-tab="' + initTab + '"]');
+    if (initBtn) moveIndicator(initBtn);
+    var editBtnEl = document.getElementById('edit-btn');
+    if (editBtnEl) editBtnEl.addEventListener('click', toggleEdit);
+    var cancelBtnEl = document.getElementById('cancel-btn');
+    if (cancelBtnEl) cancelBtnEl.addEventListener('click', toggleEdit);
+    var deleteBtnEl = document.getElementById('delete-btn');
+    if (deleteBtnEl) deleteBtnEl.addEventListener('click', confirmDelete);
+
+    var avatarWrap = document.getElementById('profile-avatar-wrap');
+    if (avatarWrap) {
+      avatarWrap.addEventListener('click', function() {
+        var eb = document.getElementById('edit-btn');
+        if (eb && eb.style.display === 'none') {
+          var upload = document.getElementById('avatar-upload');
+          if (upload) upload.click();
+        }
+      });
+    }
+
+    // inventaire.js
+    (function () {
+      var equipped = {
         decoration_avatar: decoRecord ? decoRecord.id : null,
         titre: titreRecord ? titreRecord.id : null,
         theme: themeRecord ? themeRecord.id : null,
+      };
+
+      var EQUIP_FIELD = { decoration_avatar: 'equiper_avatar_decoration', titre: 'equiper_titre', theme: 'equiper_theme' };
+
+      function showToast(msg, ok) {
+        var toast = document.getElementById('inv-toast');
+        if (!toast) return;
+        toast.textContent = msg;
+        toast.style.background = ok ? '#347645' : '#c0392b';
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateX(-50%) translateY(0)';
+        clearTimeout(toast._t);
+        toast._t = setTimeout(function () {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateX(-50%) translateY(20px)';
+        }, 2800);
       }
-    };
+
+      function reload() {
+        var u = new URL(window.location.href);
+        u.searchParams.set('tab', 'inventaire');
+        window.location.href = u.toString();
+      }
+
+      async function equipItem(btn) {
+        var itemId   = btn.dataset.itemId;
+        var itemType = btn.dataset.itemType;
+        var field    = EQUIP_FIELD[itemType];
+        if (!field || !token) return;
+        btn.disabled = true;
+        btn.textContent = '...';
+        try {
+          var res = await fetch(PB_URL + '/api/collections/users/records/' + userId, {
+            method: 'PATCH',
+            headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ [field]: itemId }),
+          });
+          if (!res.ok) throw new Error();
+          var oldId = equipped[itemType];
+          if (oldId && oldId !== itemId) updateCard(oldId, itemType, false);
+          equipped[itemType] = itemId;
+          showToast('Article équipé !', true);
+          setTimeout(reload, 800);
+        } catch (e) {
+          btn.disabled = false;
+          btn.textContent = 'Équiper';
+          showToast('Erreur, réessayez.', false);
+        }
+      }
+
+      async function unequipItem(btn) {
+        var itemId   = btn.dataset.itemId;
+        var itemType = btn.dataset.itemType;
+        var field    = EQUIP_FIELD[itemType];
+        if (!field || !token) return;
+        btn.disabled = true;
+        btn.textContent = '...';
+        try {
+          var res = await fetch(PB_URL + '/api/collections/users/records/' + userId, {
+            method: 'PATCH',
+            headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ [field]: '' }),
+          });
+          if (!res.ok) throw new Error();
+          equipped[itemType] = null;
+          updateCard(itemId, itemType, false);
+          showToast('Article retiré.', true);
+          setTimeout(reload, 800);
+        } catch (e) {
+          btn.disabled = false;
+          btn.textContent = 'Déséquiper';
+          showToast('Erreur, réessayez.', false);
+        }
+      }
+
+      function updateCard(itemId, itemType, isEquipped) {
+        document.querySelectorAll('[data-inv-card="' + itemId + '"]').forEach(function (card) {
+          var badge         = card.querySelector('.inv-equipped-badge');
+          var equipBtn      = card.querySelector('.inv-equip-btn');
+          var equippedState = card.querySelector('.inv-equipped-state');
+          if (isEquipped) {
+            card.classList.add('ring-2', 'ring-[#72C073]');
+            if (badge)         badge.classList.remove('hidden');
+            if (equipBtn)      equipBtn.classList.add('hidden');
+            if (equippedState) equippedState.classList.remove('hidden');
+          } else {
+            card.classList.remove('ring-2', 'ring-[#72C073]');
+            if (badge)         badge.classList.add('hidden');
+            if (equipBtn)      equipBtn.classList.remove('hidden');
+            if (equippedState) equippedState.classList.add('hidden');
+          }
+        });
+      }
+
+      document.addEventListener('click', function (e) {
+        var equipBtn   = e.target && e.target.closest('.inv-equip-btn');
+        var unequipBtn = e.target && e.target.closest('.inv-unequip-btn');
+        if (equipBtn)   equipItem(equipBtn);
+        if (unequipBtn) unequipItem(unequipBtn);
+      });
+    })();
   </script>
 
   <script>
-    import '../../js/profil.js';
     import '../../js/like.js';
     import '../../js/amis.js';
-    import '../../js/inventaire.js';
   </script>
 </Layout>
