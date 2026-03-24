@@ -2,7 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import { loginUser } from '../js/backend.js';
-import bgImg from '../assets/img/fond_connextion_inscription.avif';
+import bgImg       from '../assets/img/fond_connextion_inscription.avif';
+import arrowRightLg from '../assets/icon/arrow_right_lg.svg';
 import '../styles/connexion.css';
 
 // Déjà connecté → profil (les deux cookies doivent exister, sinon on nettoie)
@@ -84,9 +85,7 @@ if (Astro.request.method === 'POST') {
       <button type="submit" id="btn-connexion"
         class="absolute top-122.5 lg:top-145 left-5 right-5 bg-primary-600 h-15 inline-flex items-center justify-center gap-4 text-white text-4 font-medium leading-[1.4] lg:px-12 hover:opacity-90 transition-opacity cursor-pointer border-0">
         SE CONNECTER
-        <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd" clip-rule="evenodd" d="M7.29167 17.5C7.29167 17.016 7.68401 16.6237 8.16667 16.6237H23.8905L18.3959 11.1291C18.0472 10.7803 18.0472 10.2155 18.3959 9.86675C18.7447 9.51797 19.3095 9.51797 19.6582 9.86675L25.7749 15.9834C26.5251 16.7336 26.5251 17.9581 25.7749 18.7083L19.6582 24.825C19.3095 25.1737 18.7447 25.1737 18.3959 24.825C18.0472 24.4762 18.0472 23.9114 18.3959 23.5626L23.8905 18.0763H8.16667C7.68401 18.0763 7.29167 17.6839 7.29167 17.5Z" fill="white"/>
-        </svg>
+        <Image src={arrowRightLg} alt="" width={35} height={35} class="brightness-0 invert" />
       </button>
 
       <!-- ─── Lien inscription ─── -->

@@ -1,6 +1,8 @@
 ---
 // @ts-nocheck
 // Modals et écran de fin pour la page session/[id]
+import { Image } from 'astro:assets';
+import searchIcon from '../assets/icon/search.svg';
 ---
 
 <!-- ── Modal : Ajouter bars / jeux / amis ─────────────────────── -->
@@ -12,10 +14,7 @@
     </div>
     <div class="px-7 py-3.5" style="border-bottom:1px solid rgba(255,255,255,0.1);">
       <div class="flex items-center gap-3 rounded-1.25 px-3.5" style="background:#2c2c2c; height:42px;">
-        <svg width="14" height="14" viewBox="0 0 18 18" fill="none">
-          <circle cx="7.5" cy="7.5" r="5.5" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5"/>
-          <path d="M12 12L16 16" stroke="#f7f1ed" stroke-opacity="0.4" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
+        <Image src={searchIcon} alt="" width={14} height={14} class="opacity-40 shrink-0" />
         <input id="modal-search" type="text" placeholder="Rechercher…"
           style="background:transparent; flex:1; font-size:14px; font-weight:500; outline:none; border:none; color:#f7f1ed;"
           class="placeholder-neutral-200/40" />

@@ -1,13 +1,20 @@
 ---
 // @ts-nocheck
 import Layout from '../../layouts/Layout.astro';
+import { Image } from 'astro:assets';
 import { PB_URL, getImageUrl, getCollection } from '../../js/backend.js';
 import PbImage from '../../components/PbImage.astro';
-import instaIcon    from '../../assets/icon/insta.svg';
+import checkIcon      from '../../assets/icon/check.svg';
+import userRemoveIcon from '../../assets/icon/user_remove.svg';
+import likeIcon       from '../../assets/icon/like.svg';
+import userAddIcon    from '../../assets/icon/user_add.svg';
+import instaIcon      from '../../assets/icon/insta.svg';
 import facebookIcon from '../../assets/icon/facebook.svg';
 import discordIcon  from '../../assets/icon/discord.svg';
 import badgeVip     from '../../assets/icon/badge_vip.svg';
 import badgePremium from '../../assets/icon/badge_pernuim.svg';
+import panierIcon         from '../../assets/icon/panier.svg';
+import swatchesPaletteIcon from '../../assets/icon/swatches_palette.svg';
 
 const token  = Astro.cookies.get('pb_token')?.value;
 const userId = Astro.cookies.get('pb_user_id')?.value;
@@ -93,7 +100,7 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
       <!-- Avatar -->
       <div class="mx-auto w-25 h-25 rounded-full overflow-hidden" style="border: 8px solid #dfdfdf;">
         {avatarUrl
-          ? <img src={avatarUrl} alt="Avatar" class="w-full h-full object-cover" />
+          ? <PbImage src={avatarUrl} alt="Avatar" class="w-full h-full object-cover" />
           : <div class="w-full h-full bg-neutral-800 flex items-center justify-center">
               <span class="text-white font-bold" style="font-size: 36px;">{displayName[0].toUpperCase()}</span>
             </div>
@@ -103,8 +110,8 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
       {u.pseudo && (
         <div class="flex items-center justify-center gap-2 mt-1">
           <h3 class="m-0 text-primary-500">{u.pseudo}</h3>
-          {u.abonnements === 'VIP'     && <img src={badgeVip.src}     alt="VIP"     width="24" height="24" />}
-          {u.abonnements === 'Premium' && <img src={badgePremium.src} alt="Premium" width="24" height="24" />}
+          {u.abonnements === 'VIP'     && <Image src={badgeVip}     alt="VIP"     width={24} height={24} />}
+          {u.abonnements === 'Premium' && <Image src={badgePremium} alt="Premium" width={24} height={24} />}
         </div>
       )}
       <p class="m-0 mt-2 text-center text-neutral-800 text-4 font-medium">{amiesCount} ami(e)s</p>
@@ -125,7 +132,7 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
       <!-- Photo de profil -->
       <div class="absolute left-20 top-29.75 size-46.75 rounded-full overflow-hidden z-2" style="border: 15px solid #dfdfdf;">
         {avatarUrl
-          ? <img src={avatarUrl} alt="Avatar" class="w-full h-full object-cover" />
+          ? <PbImage src={avatarUrl} alt="Avatar" class="w-full h-full object-cover" />
           : <div class="w-full h-full bg-neutral-800 flex items-center justify-center">
               <span class="text-white font-bold" style="font-size: 60px;">{displayName[0].toUpperCase()}</span>
             </div>
@@ -145,8 +152,8 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
       {u.pseudo && (
         <div class="absolute flex items-center gap-2" style="left: calc(16.67% + 59px); top: 185px;">
           <h3 class="m-0 text-primary-500">{u.pseudo}</h3>
-          {u.abonnements === 'VIP'     && <img src={badgeVip.src}     alt="VIP"     width="28" height="28" />}
-          {u.abonnements === 'Premium' && <img src={badgePremium.src} alt="Premium" width="28" height="28" />}
+          {u.abonnements === 'VIP'     && <Image src={badgeVip}     alt="VIP"     width={28} height={28} />}
+          {u.abonnements === 'Premium' && <Image src={badgePremium} alt="Premium" width={28} height={28} />}
         </div>
       )}
       <!-- Ami(e)s -->
@@ -186,12 +193,12 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
           {isAlreadyFriend ? (
             <div class="flex flex-col gap-3">
               <div class="flex items-center justify-center gap-2 border-2 text-3.5 font-medium leading-[1.4] h-15 w-59.25 shrink-0" style="border-color:#72c073; color:#72c073;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+                <Image src={checkIcon} alt="" width={14} height={14} style="filter:invert(64%) sepia(54%) saturate(429%) hue-rotate(73deg) brightness(94%) contrast(88%)" />
                 Amis
               </div>
               <button id="remove-friend-btn"
                 class="flex items-center justify-center gap-2 border-2 border-neutral-500 text-neutral-400 text-3.5 font-medium leading-[1.4] h-15 w-59.25 hover:border-red-400 hover:text-red-400 transition-colors cursor-pointer bg-transparent shrink-0">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                <Image src={userRemoveIcon} alt="" width={14} height={14} class="brightness-0 opacity-40 shrink-0" />
                 Supprimer l'ami
               </button>
             </div>
@@ -201,7 +208,7 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
               <button id="accept-btn"
                 class="flex items-center justify-center gap-2 text-white text-3.5 font-medium leading-[1.4] h-15 w-59.25 cursor-pointer border-0 hover:opacity-90 transition-opacity shrink-0"
                 style="background:#347645;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+                <Image src={checkIcon} alt="" width={14} height={14} class="brightness-0 invert shrink-0" />
                 Accepter
               </button>
               <button id="refuse-btn"
@@ -218,7 +225,7 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
             <button id="send-request-btn"
               class="flex items-center justify-center gap-2 text-white text-3.5 font-medium leading-[1.4] h-15 w-59.25 cursor-pointer border-0 hover:opacity-90 transition-opacity shrink-0"
               style="background:#094736;">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+              <Image src={userAddIcon} alt="" width={14} height={14} class="brightness-0 invert shrink-0" />
               Envoyer une demande
             </button>
           )}
@@ -230,7 +237,7 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
               {u.insta && (
                 <div class="flex items-center gap-3">
                   <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background:#2c2c2c;">
-                    <img src={instaIcon.src} alt="" width="16" height="16" class="invert opacity-70" />
+                    <Image src={instaIcon} alt="" width={16} height={16} class="invert opacity-70" />
                   </div>
                   <span class="text-neutral-300 text-3.5 font-medium">@{u.insta}</span>
                 </div>
@@ -238,7 +245,7 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
               {u.facbook && (
                 <div class="flex items-center gap-3">
                   <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background:#2c2c2c;">
-                    <img src={facebookIcon.src} alt="" width="16" height="16" class="invert opacity-70" />
+                    <Image src={facebookIcon} alt="" width={16} height={16} class="invert opacity-70" />
                   </div>
                   <span class="text-neutral-300 text-3.5 font-medium">{u.facbook}</span>
                 </div>
@@ -246,7 +253,7 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
               {u.discord && (
                 <div class="flex items-center gap-3">
                   <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background:#2c2c2c;">
-                    <img src={discordIcon.src} alt="" width="16" height="16" class="invert opacity-70" />
+                    <Image src={discordIcon} alt="" width={16} height={16} class="invert opacity-70" />
                   </div>
                   <span class="text-neutral-300 text-3.5 font-medium">{u.discord}</span>
                 </div>
@@ -376,19 +383,19 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
                 <div class="flex flex-col gap-3">
                   {u.insta && (
                     <div class="flex items-center gap-3">
-                      <img src={instaIcon.src} alt="" width="18" height="18" />
+                      <Image src={instaIcon} alt="" width={18} height={18} />
                       <span class="text-black text-4 font-medium">@{u.insta}</span>
                     </div>
                   )}
                   {u.facbook && (
                     <div class="flex items-center gap-3">
-                      <img src={facebookIcon.src} alt="" width="18" height="18" />
+                      <Image src={facebookIcon} alt="" width={18} height={18} />
                       <span class="text-black text-4 font-medium">{u.facbook}</span>
                     </div>
                   )}
                   {u.discord && (
                     <div class="flex items-center gap-3">
-                      <img src={discordIcon.src} alt="" width="18" height="18" />
+                      <Image src={discordIcon} alt="" width={18} height={18} />
                       <span class="text-black text-4 font-medium">{u.discord}</span>
                     </div>
                   )}
@@ -401,7 +408,7 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
               {isAlreadyFriend ? (
                 <>
                   <div class="flex items-center justify-center gap-2 h-13 rounded-1.25 text-3.5 font-medium" style="background:rgba(114,192,115,0.1); color:#72c073; border:1.5px solid #72c073;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+                    <Image src={checkIcon} alt="" width={14} height={14} style="filter:invert(64%) sepia(54%) saturate(429%) hue-rotate(73deg) brightness(94%) contrast(88%)" />
                     Amis
                   </div>
                   <button id="remove-friend-btn-mobile"
@@ -476,9 +483,7 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
             ) : (
               <div class="flex flex-col items-center justify-center py-24">
                 <div class="w-20 h-20 rounded-full bg-neutral-300 flex items-center justify-center mb-6">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="#646262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
+                  <Image src={likeIcon} alt="" width={32} height={32} style="filter:invert(41%) sepia(6%) saturate(228%) hue-rotate(314deg) brightness(95%) contrast(88%)" />
                 </div>
                 <p class="text-neutral-500 text-4 font-medium m-0">Aucun bar favori</p>
                 <p class="text-sm text-neutral-500 m-0 mt-2">Cet utilisateur n'a pas encore ajouté de favoris.</p>
@@ -535,9 +540,7 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
             ) : (
               <div class="flex flex-col items-center justify-center py-24">
                 <div class="w-20 h-20 rounded-full bg-neutral-300 flex items-center justify-center mb-6">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" stroke="#646262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
+                  <Image src={panierIcon} alt="" width={32} height={32} style="filter:invert(41%) sepia(6%) saturate(228%) hue-rotate(314deg) brightness(95%) contrast(88%)" />
                 </div>
                 <p class="text-neutral-500 text-4 font-medium m-0">Aucun jeu favori</p>
                 <p class="text-sm text-neutral-500 m-0 mt-2">Cet utilisateur n'a pas encore ajouté de jeux favoris.</p>
@@ -563,7 +566,7 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
                 {boissonsFavori.map(b => (
                   <div class="flex flex-col gap-2">
                     <div class="h-40 lg:h-50 rounded-1.25 overflow-hidden shadow-[0px_4px_4px_0px_rgba(0,0,0,0.15)]">
-                      <img src={getImageUrl(b, b.img)} alt={b.nom} class="w-full h-full object-cover" loading="lazy" />
+                      <PbImage record={b} recordImage={b.img} alt={b.nom} class="w-full h-full object-cover" />
                     </div>
                     <p class="text-black text-4 font-medium m-0 text-center">{b.nom}</p>
                   </div>
@@ -572,9 +575,7 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
             ) : (
               <div class="flex flex-col items-center justify-center py-24">
                 <div class="w-20 h-20 rounded-full bg-neutral-300 flex items-center justify-center mb-6">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                    <path d="M8 2h8l1 8H7L8 2zM7 10c0 5 2 8 5 8s5-3 5-8" stroke="#646262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
+                  <Image src={swatchesPaletteIcon} alt="" width={32} height={32} style="filter:invert(41%) sepia(6%) saturate(228%) hue-rotate(314deg) brightness(95%) contrast(88%)" />
                 </div>
                 <p class="text-neutral-500 text-4 font-medium m-0">Aucune boisson favorite</p>
                 <p class="text-sm text-neutral-500 m-0 mt-2">Cet utilisateur n'a pas encore ajouté de boissons favorites.</p>

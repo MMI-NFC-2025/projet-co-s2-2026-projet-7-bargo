@@ -81,7 +81,7 @@ public/
 | `Layout.astro` | Enveloppe globale : head, Header, Footer, CookieBanner, NotifBubble |
 | `Header.astro` | Nav fixe top-0 (logo, liens, avatar user, hamburger mobile) |
 | `Footer.astro` | Pied de page 4 colonnes desktop / colonne mobile, fond image |
-| `PbImage.astro` | Affichage images PocketBase avec fallback gris |
+| `PbImage.astro` | Affichage images PocketBase avec fallback gris. Props: `record`, `recordImage`, `src`, `alt`, `class`, `width`, `height` |
 | `Seo.astro` | Meta, Open Graph, Twitter Card, canonical |
 | `HeroSection.astro` | Bannière hero `bg-primary-900`, props: `title`, `descMobile`, `overflow` |
 | `Faq.astro` | FAQ accordion (détails HTML, une seule ouverte à la fois) |
@@ -196,11 +196,12 @@ const bars = await getCollection('bar', { sort: 'created' });
 
 ## Images et icônes
 
-- **Images statiques** : format `.avif`, dans `src/assets/img/`, importées avec `import { Image } from 'astro:assets'`
-- **Images PocketBase** : utiliser `<PbImage>` (voir section PocketBase)
-- **Icônes SVG** : dans `src/assets/icon/`, référencées avec `<img src={icon.src} />` (pas `<Image>`)
+- **Images statiques** (`.avif`, `.svg`) : toujours utiliser `<Image src={import} />` — **jamais `<img src={x.src} />`**
+- **Images PocketBase** : toujours utiliser `<PbImage>` — **jamais `<img>` directement**
 - **Jamais** de fichiers statiques dans `/public/assets/` (seul `favicon.svg` est dans `/public/`)
-- Pour rendre un SVG noir blanc sur fond sombre : `class="invert"` (Tailwind)
+- Pour rendre un SVG blanc sur fond sombre : `class="invert"` (Tailwind)
+
+### `<Image>` — assets statiques
 
 ```astro
 ---
@@ -209,7 +210,35 @@ import monImage from '../assets/img/mon-image.avif';
 import monIcone from '../assets/icon/mon-icone.svg';
 ---
 <Image src={monImage} alt="..." class="..." />
-<img src={monIcone.src} alt="" width="24" height="24" />
+<Image src={monIcone} alt="" width={24} height={24} />
+```
+
+> ⚠️ Passer l'import **directement** (pas `.src`). `width`/`height` en nombres `{24}` pas en strings `"24"`.
+
+### `<PbImage>` — images PocketBase
+
+Props disponibles :
+
+| Prop | Type | Description |
+|---|---|---|
+| `record` | object | Enregistrement PocketBase (requis si pas de `src`) |
+| `recordImage` | string | Nom du fichier image dans le record |
+| `src` | string | URL PocketBase pré-construite (alternative à record+recordImage) |
+| `alt` | string | Texte alternatif (défaut : `record.nom`) |
+| `class` | string | Classes CSS (défaut : `w-full h-full object-cover`) |
+| `width` | number | Largeur (défaut : 400) |
+| `height` | number | Hauteur (défaut : 300) |
+
+```astro
+---
+import PbImage from '../components/PbImage.astro';
+---
+
+<!-- Avec record + fichier -->
+<PbImage record={bar} recordImage={bar.img?.[0]} width={845} height={670} />
+
+<!-- Avec URL pré-construite (avatar, décoration, etc.) -->
+<PbImage src={avatarUrl} alt="Avatar" class="w-full h-full object-cover rounded-full" />
 ```
 
 ---

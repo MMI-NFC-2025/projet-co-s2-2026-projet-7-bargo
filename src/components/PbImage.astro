@@ -1,20 +1,33 @@
 ---
 import { getImageUrl } from "../js/backend.js";
 
-const { record, recordImage, width = 400, height = 300 } = Astro.props;
+const {
+  record,
+  recordImage,
+  src: srcProp,
+  width = 400,
+  height = 300,
+  alt,
+  class: className = "w-full h-full object-cover",
+  id,
+  style,
+} = Astro.props;
 
-const imageURL = recordImage ? getImageUrl(record, recordImage) : null;
+const imageURL = srcProp || (recordImage ? getImageUrl(record, recordImage) : null);
+const altText  = alt !== undefined ? alt : (record?.nom ?? "");
 ---
 
-{imageURL ? (
+{(imageURL || id) ? (
   <img
-    src={imageURL}
-    alt={record.nom || ""}
+    src={imageURL || undefined}
+    alt={altText}
     width={width}
     height={height}
-    class="w-full h-full object-cover"
+    class={className}
     loading="lazy"
     decoding="async"
+    id={id}
+    style={style}
   />
 ) : (
   <div class="w-full h-full bg-slate-200 flex items-center justify-center">

@@ -2,7 +2,12 @@
 // @ts-nocheck
 import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
-import bgImg from '../assets/img/fond_connextion_inscription.avif';
+import bgImg      from '../assets/img/fond_connextion_inscription.avif';
+import checkIcon   from '../assets/icon/check.svg';
+import warningIcon   from '../assets/icon/warning.svg';
+import arrowLeftIcon   from '../assets/icon/arrow_left_lg.svg';
+import creditCardIcon  from '../assets/icon/credit_card.svg';
+import lockIcon        from '../assets/icon/lock.svg';
 import { PB_URL } from '../js/backend.js';
 
 const planId = Astro.url.searchParams.get('plan') ?? 'vip';
@@ -46,10 +51,7 @@ const plan = plans[planId] ?? plans.vip;
   <div id="demo-overlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;">
     <div style="background:#1e1e1e;border-radius:6px;max-width:460px;width:100%;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.6);">
       <div style="background:#f59e0b;padding:22px 28px;display:flex;align-items:center;gap:12px;">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
-          <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-        </svg>
+        <Image src={warningIcon} alt="" width={22} height={22} class="brightness-0 invert" />
         <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:white;margin:0;">Page de démonstration</p>
       </div>
       <div style="padding:28px;">
@@ -70,9 +72,7 @@ const plan = plans[planId] ?? plans.vip;
   <div id="success-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:200;align-items:center;justify-content:center;padding:16px;">
     <div style="background:#1e1e1e;border-radius:6px;max-width:440px;width:100%;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.6);text-align:center;padding:48px 36px;">
       <div style="width:68px;height:68px;background:#347645;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 6L9 17l-5-5"/>
-        </svg>
+        <Image src={checkIcon} alt="" width={32} height={32} class="brightness-0 invert" />
       </div>
       <p style="color:#72c073;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin:0 0 8px;">Paiement simulé</p>
       <p style="color:white;font-size:22px;font-weight:600;margin:0 0 12px;letter-spacing:-0.5px;">Abonnement {plan.nom} activé !</p>
@@ -90,7 +90,7 @@ const plan = plans[planId] ?? plans.vip;
   <section class="block lg:hidden bg-neutral-800 px-5 py-10 min-h-screen">
 
     <a href="/abonnement" class="inline-flex items-center gap-2 text-neutral-300 text-3.5 font-medium no-underline hover:opacity-70 transition-opacity mb-8">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      <Image src={arrowLeftIcon} alt="" width={16} height={16} style="filter:invert(85%) sepia(5%) saturate(200%) hue-rotate(314deg) brightness(110%) contrast(85%)" />
       Retour
     </a>
 
@@ -137,11 +137,7 @@ const plan = plans[planId] ?? plans.vip;
         <label class="text-white text-3.5 font-medium">Numéro de carte</label>
         <div class="bg-neutral-200 rounded-0.75 h-13 flex items-center px-4 gap-3">
           <input id="card-number-m" type="text" placeholder="1234  5678  9012  3456" maxlength="19" class="bg-transparent flex-1 text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none tracking-widest" />
-          <svg width="26" height="18" viewBox="0 0 40 28" fill="none" class="shrink-0">
-            <rect width="40" height="28" rx="4" fill="#DFDFDF"/>
-            <rect x="0" y="9" width="40" height="7" fill="#BDBDBD"/>
-            <rect x="6" y="18" width="12" height="4" rx="1" fill="#BDBDBD"/>
-          </svg>
+          <Image src={creditCardIcon} alt="" width={26} height={18} class="shrink-0" />
         </div>
       </div>
 
@@ -164,15 +160,13 @@ const plan = plans[planId] ?? plans.vip;
         <div class="relative w-6.25 h-6.25 shrink-0">
           <input type="checkbox" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer peer" />
           <div class="absolute inset-0 border-2 border-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] peer-checked:bg-primary-600 peer-checked:border-primary-600 transition-colors"></div>
-          <svg class="absolute inset-0 hidden peer-checked:block w-full h-full p-0.5" viewBox="0 0 16 16" fill="none">
-            <path d="M2 8l4 4 8-8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <Image src={checkIcon} alt="" width={16} height={16} class="absolute inset-0 hidden peer-checked:block w-full h-full p-0.5 brightness-0 invert" />
         </div>
         <span class="text-white text-3.5 font-medium leading-[1.4]">J'accepte les <a href="/mention_legal" class="underline hover:opacity-70">conditions d'utilisation</a></span>
       </label>
 
       <button type="submit" class="mt-2 h-13 w-full flex items-center justify-center gap-2 text-white text-4 font-medium hover:opacity-90 transition-opacity cursor-pointer border-0" style={`background:${plan.couleur};`}>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <Image src={lockIcon} alt="" width={16} height={16} class="brightness-0 invert" />
         Payer {plan.prix}€ / mois
       </button>
 
@@ -202,10 +196,9 @@ const plan = plans[planId] ?? plans.vip;
         <ul class="list-none m-0 p-0 flex flex-col gap-4">
           {plan.avantages.map(item => (
             <li class="flex items-center gap-3">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" class="shrink-0">
-                <circle cx="9" cy="9" r="9" fill="rgba(255,255,255,0.25)"/>
-                <path d="M4.5 9L7.5 12L13.5 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+              <div class="shrink-0 w-4.5 h-4.5 rounded-full flex items-center justify-center" style="background:rgba(255,255,255,0.25);">
+                <Image src={checkIcon} alt="" width={11} height={11} class="brightness-0 invert" />
+              </div>
               <span class="text-white text-4 font-medium">{item}</span>
             </li>
           ))}
@@ -222,7 +215,7 @@ const plan = plans[planId] ?? plans.vip;
 
     <!-- Retour -->
     <a href="/abonnement" class="absolute top-10 left-20 inline-flex items-center gap-2 text-neutral-300 text-3.5 font-medium no-underline hover:opacity-70 transition-opacity z-10">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      <Image src={arrowLeftIcon} alt="" width={16} height={16} style="filter:invert(85%) sepia(5%) saturate(200%) hue-rotate(314deg) brightness(110%) contrast(85%)" />
       Retour aux abonnements
     </a>
 
@@ -236,7 +229,7 @@ const plan = plans[planId] ?? plans.vip;
       </p>
       <!-- SSL badge -->
       <div class="flex items-center gap-1.5">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#72C073" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <Image src={lockIcon} alt="" width={13} height={13} style="filter:invert(64%) sepia(54%) saturate(429%) hue-rotate(73deg) brightness(94%) contrast(88%)" />
         <span class="text-[#72C073] text-3 font-bold">Paiement SSL sécurisé</span>
       </div>
     </div>
@@ -268,11 +261,7 @@ const plan = plans[planId] ?? plans.vip;
       <div class="absolute bg-neutral-200 rounded-0.75 h-15.5 flex items-center px-8 gap-4" style="top:494px;left:80px;width:624px;">
         <input id="card-number" type="text" placeholder="1234  5678  9012  3456" maxlength="19"
           class="bg-transparent flex-1 text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none tracking-widest" />
-        <svg width="32" height="22" viewBox="0 0 40 28" fill="none" class="shrink-0">
-          <rect width="40" height="28" rx="4" fill="#BDBDBD"/>
-          <rect x="0" y="9" width="40" height="7" fill="#9E9E9E"/>
-          <rect x="6" y="18" width="12" height="4" rx="1" fill="#9E9E9E"/>
-        </svg>
+        <Image src={creditCardIcon} alt="" width={32} height={22} class="shrink-0 brightness-0" />
       </div>
 
       <!-- Expiration + CVV -->
@@ -295,9 +284,7 @@ const plan = plans[planId] ?? plans.vip;
         <div class="relative w-6.25 h-6.25 shrink-0">
           <input type="checkbox" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer peer" />
           <div class="absolute inset-0 border-2 border-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] peer-checked:bg-primary-600 peer-checked:border-primary-600 transition-colors"></div>
-          <svg class="absolute inset-0 hidden peer-checked:block w-full h-full p-0.5" viewBox="0 0 16 16" fill="none">
-            <path d="M2 8l4 4 8-8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <Image src={checkIcon} alt="" width={16} height={16} class="absolute inset-0 hidden peer-checked:block w-full h-full p-0.5 brightness-0 invert" />
         </div>
         <span class="text-white text-4 font-medium leading-[1.4]">J'accepte les <a href="/mention_legal" class="underline hover:opacity-70 transition-opacity">conditions d'utilisation</a></span>
       </label>
@@ -306,7 +293,7 @@ const plan = plans[planId] ?? plans.vip;
       <button type="submit" id="btn-pay"
         class="absolute h-15 w-74 flex items-center justify-center gap-3 text-white text-4 font-medium hover:opacity-90 transition-opacity cursor-pointer border-0 disabled:opacity-40"
         style={`top:760px;left:calc(80px + 296px + 16px);background:${plan.couleur};`}>
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <Image src={lockIcon} alt="" width={17} height={17} class="brightness-0 invert" />
         Payer {plan.prix}€ / mois
       </button>
 

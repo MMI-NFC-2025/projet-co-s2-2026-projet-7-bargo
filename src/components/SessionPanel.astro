@@ -1,5 +1,7 @@
 ---
 // @ts-nocheck
+import { Image } from 'astro:assets';
+import arrowRightLg from '../assets/icon/arrow_right_lg.svg';
 const { session, isHote, isEnCours } = Astro.props;
 ---
 
@@ -11,7 +13,7 @@ const { session, isHote, isEnCours } = Astro.props;
     <h3 class="text-white m-0">{session.nom}</h3>
     {(session.date || session.heure_debut) && (
       <p style="font-size:13px; font-weight:500; color:rgba(247,241,237,0.5); margin:6px 0 0 0;">
-        {session.date ?? ''}{session.date && session.heure_debut ? ' · ' : ''}{session.heure_debut ?? ''}{session.heure_debut && session.heure_fin ? ' → ' + session.heure_fin : ''}
+        {session.date ?? ''}{session.date && session.heure_debut ? ' · ' : ''}{session.heure_debut ?? ''}{session.heure_debut && session.heure_fin && <><Image src={arrowRightLg} alt="" width={12} height={12} class="inline-block align-middle mx-1 opacity-50" />{session.heure_fin}</>}
       </p>
     )}
   </div>

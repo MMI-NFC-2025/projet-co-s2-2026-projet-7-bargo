@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
 import { PB_URL } from '../js/backend.js';
+import checkIcon from '../assets/icon/check.svg';
 
 // Récupère l'abonnement actuel si connecté (pas de redirect si non connecté)
 const token  = Astro.cookies.get('pb_token')?.value;
@@ -126,20 +128,18 @@ const plans = [
             <ul class="list-none m-0 p-0 flex flex-col gap-3 mb-4">
               {plan.avantages.map(item => (
                 <li class="flex items-start gap-2.5">
-                  <svg class="shrink-0 mt-0.5" width="18" height="18" viewBox="0 0 18 18" fill="none">
-                    <circle cx="9" cy="9" r="9" fill="#72c073"/>
-                    <path d="M4.5 9L7.5 12L13.5 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
+                  <div class="shrink-0 mt-0.5 w-4.5 h-4.5 rounded-full bg-primary-500 flex items-center justify-center">
+                    <Image src={checkIcon} alt="" width={11} height={11} class="brightness-0 invert" />
+                  </div>
                   <span class="text-black text-4 font-medium leading-[1.4]">{item}</span>
                 </li>
               ))}
               {plan.manques.map(item => (
                 <li class="flex items-start gap-2.5">
-                  <svg class="shrink-0 mt-0.5" width="18" height="18" viewBox="0 0 18 18" fill="none">
-                    <circle cx="9" cy="9" r="9" fill="#dfdfdf"/>
-                    <path d="M5.5 9h7" stroke="#646262" stroke-width="2" stroke-linecap="round"/>
-                  </svg>
-                  <span class="text-neutral-500 text-4 font-medium leading-[1.4] line-through">{item}</span>
+                  <div class="shrink-0 mt-0.5 w-4.5 h-4.5 rounded-full bg-neutral-300 flex items-center justify-center">
+                    <span class="block w-2.5 h-0.5 bg-neutral-500 rounded-full"></span>
+                  </div>
+                  <span class="text-neutral-500 text-4 font-medium leading-[1.4]">{item}</span>
                 </li>
               ))}
             </ul>

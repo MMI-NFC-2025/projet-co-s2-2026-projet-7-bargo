@@ -131,8 +131,8 @@ const bars = await getCollection('bar', { sort: 'created' });
             <p class="text-white w-full lg:w-74.25 m-0 mb-4 lg:mb-25.75 line-clamp-1 lg:line-clamp-none">{bar.description}</p>
             <a href={`/bar/${bar.id}`} class="inline-flex items-center gap-2 lg:gap-4 px-6 lg:px-12 py-2 border-2 border-white text-white leading-[1.4] w-fit hover:bg-white hover:text-neutral-800 transition-colors text-3.5 lg:text-4">
               Choisir mes bars
-              <img src={arrowRight.src} alt="" width="24" height="24" class="lg:hidden" />
-              <img src={arrowRight.src} alt="" width="35" height="35" class="hidden lg:block" />
+              <Image src={arrowRight} alt="" width={24} height={24} class="lg:hidden" />
+              <Image src={arrowRight} alt="" width={35} height={35} class="hidden lg:block" />
             </a>
           </div>
         </div>
@@ -142,10 +142,10 @@ const bars = await getCollection('bar', { sort: 'created' });
     <!-- Flèches navigation -->
     <div class="absolute bottom-5 lg:bottom-24.25 left-5 lg:left-auto lg:right-20 flex gap-4.25 z-10">
       <button id="bar-prev" class="w-10.75 h-10.75" aria-label="Bar précédent">
-        <img src={carouselGauche.src} alt="" width="43" height="43" />
+        <Image src={carouselGauche} alt="" width={43} height={43} />
       </button>
       <button id="bar-next" class="w-10.75 h-10.75" aria-label="Bar suivant">
-        <img src={carouselDroit.src} alt="" width="43" height="43" />
+        <Image src={carouselDroit} alt="" width={43} height={43} />
       </button>
     </div>
 
@@ -280,8 +280,8 @@ const bars = await getCollection('bar', { sort: 'created' });
       <div class="flex justify-end">
         <a href="/Apropos" class="inline-flex items-center gap-3 lg:gap-4 px-8 lg:px-12 py-3 lg:py-2 bg-neutral-800 text-white font-medium text-4 leading-[1.4] hover:opacity-80 transition-opacity">
           En savoir plus
-          <img src={arrowRight.src} alt="" width="24" height="24" class="block lg:hidden" />
-          <img src={arrowRight.src} alt="" width="35" height="35" class="hidden lg:block" />
+          <Image src={arrowRight} alt="" width={24} height={24} class="block lg:hidden" />
+          <Image src={arrowRight} alt="" width={35} height={35} class="hidden lg:block" />
         </a>
       </div>
 

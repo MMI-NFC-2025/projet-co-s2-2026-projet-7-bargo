@@ -1,7 +1,9 @@
 ---
 // @ts-nocheck
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
 import { PB_URL } from '../js/backend.js';
+import arrowLeftIcon from '../assets/icon/arrow_left_lg.svg';
 import '../styles/admin.css';
 
 // ── Auth guard ────────────────────────────────────────────────────────────────
@@ -370,7 +372,7 @@ const pageData = JSON.stringify({
     <section id="section-jeu-questions" class="admin-section hidden">
       <!-- Header avec retour -->
       <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">
-        <button data-action="back-to-jeux" style="height:36px; padding:0 14px; background:white; border:1px solid #e0e0e0; color:#555; font-size:13px; font-weight:600; cursor:pointer; border-radius:7px;">← Retour</button>
+        <button data-action="back-to-jeux" style="height:36px; padding:0 14px; background:white; border:1px solid #e0e0e0; color:#555; font-size:13px; font-weight:600; cursor:pointer; border-radius:7px; display:flex; align-items:center; gap:6px;"><Image src={arrowLeftIcon} alt="" width={14} height={14} style="filter:invert(35%) sepia(0%) saturate(0%) brightness(60%) contrast(90%)" /> Retour</button>
         <div>
           <h3 id="jeu-questions-title" style="color:#111; margin:0 0 2px;"></h3>
           <p id="jeu-questions-count" style="color:#888; font-size:14px; font-weight:500; margin:0;"></p>

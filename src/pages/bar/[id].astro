@@ -1,9 +1,11 @@
 ---
 // @ts-nocheck
 import Layout from '../../layouts/Layout.astro';
+import { Image } from 'astro:assets';
 import PbImage from '../../components/PbImage.astro';
 import { getRecord, getImageUrl } from '../../js/backend.js';
-import heartIcon     from '../../assets/icon/heart.svg';
+import heartIcon          from '../../assets/icon/heart.svg';
+import bulleMessageIcon   from '../../assets/icon/bulle_de_message.svg';
 import likeFillIcon  from '../../assets/icon/like_fill.svg';
 import partageIcon  from '../../assets/icon/partage.svg';
 import notifIcon    from '../../assets/icon/notifcation.svg';
@@ -58,18 +60,18 @@ const hasMap = lat !== 0 && lon !== 0;
     <!-- Icônes réseaux (gauche) + actions (droite) -->
     <div class="absolute bottom-4 left-5 right-5 flex items-center justify-between">
       <div class="flex gap-4">
-        <img src={instaIcon.src}    alt="Instagram" width="22" height="22" class="brightness-0 invert" />
-        <img src={linkedinIcon.src} alt="LinkedIn"  width="22" height="22" class="brightness-0 invert" />
-        <img src={discordIcon.src}  alt="Discord"   width="22" height="22" class="brightness-0 invert" />
-        <img src={fbIcon.src}       alt="Facebook"  width="22" height="22" class="brightness-0 invert" />
+        <Image src={instaIcon}    alt="Instagram" width={22} height={22} class="brightness-0 invert" />
+        <Image src={linkedinIcon} alt="LinkedIn"  width={22} height={22} class="brightness-0 invert" />
+        <Image src={discordIcon}  alt="Discord"   width={22} height={22} class="brightness-0 invert" />
+        <Image src={fbIcon}       alt="Facebook"  width={22} height={22} class="brightness-0 invert" />
       </div>
       <div class="flex gap-4">
-        <img src={notifIcon.src}   alt="Notifier" width="22" height="22" class="brightness-0 invert" />
-        <img src={partageIcon.src} alt="Partager" width="22" height="22" class="brightness-0 invert" />
+        <Image src={notifIcon}   alt="Notifier" width={22} height={22} class="brightness-0 invert" />
+        <Image src={partageIcon} alt="Partager" width={22} height={22} class="brightness-0 invert" />
         {isAuth && (
           <button class="like-btn-bar p-0 border-0 bg-transparent cursor-pointer" data-id={bar.id} type="button" aria-label="Favori">
-            <img src={heartIcon.src}   alt="" width="22" height="22" class="brightness-0 invert like-empty" />
-            <img src={likeFillIcon.src ?? heartIcon.src} alt="" width="22" height="22" class="hidden like-filled" />
+            <Image src={heartIcon}   alt="" width={22} height={22} class="brightness-0 invert like-empty" />
+            <Image src={likeFillIcon} alt="" width={22} height={22} class="hidden like-filled" />
           </button>
         )}
       </div>
@@ -142,8 +144,8 @@ const hasMap = lat !== 0 && lon !== 0;
       <div class="grid grid-cols-2 gap-3">
         {galerie.slice(0, 6).map((img) => (
           <div class="h-35 rounded-1.25 overflow-hidden">
-            <img src={getImageUrl(bar, img)} alt={bar.nom}
-              class="w-full h-full object-cover" loading="lazy" />
+            <PbImage record={bar} recordImage={img} alt={bar.nom}
+              class="w-full h-full object-cover" />
           </div>
         ))}
       </div>
@@ -160,8 +162,8 @@ const hasMap = lat !== 0 && lon !== 0;
       <div class="grid grid-cols-2 gap-3">
         {(bar.expand.boison ?? []).map((boisson) => (
           <div class="h-35 rounded-1.25 overflow-hidden">
-            <img src={getImageUrl(boisson, boisson.img)} alt={boisson.nom}
-              class="w-full h-full object-cover" loading="lazy" />
+            <PbImage record={boisson} recordImage={boisson.img} alt={boisson.nom}
+              class="w-full h-full object-cover" />
           </div>
         ))}
       </div>
@@ -190,36 +192,33 @@ const hasMap = lat !== 0 && lon !== 0;
 
   <!-- Icônes réseaux sociaux -->
   <div class="absolute top-112.25 z-2" style="left: calc(83.33% - 17px)">
-    <img src={instaIcon.src}   alt="Instagram" width="24" height="24" class="brightness-0 invert" />
+    <Image src={instaIcon}   alt="Instagram" width={24} height={24} class="brightness-0 invert" />
   </div>
   <div class="absolute top-112.25 z-2" style="left: calc(83.33% + 32px)">
-    <img src={linkedinIcon.src} alt="LinkedIn" width="24" height="24" class="brightness-0 invert" />
+    <Image src={linkedinIcon} alt="LinkedIn" width={24} height={24} class="brightness-0 invert" />
   </div>
   <div class="absolute top-112.25 z-2" style="left: calc(91.67% - 39px)">
-    <img src={discordIcon.src}  alt="Discord"   width="24" height="24" class="brightness-0 invert" />
+    <Image src={discordIcon}  alt="Discord"   width={24} height={24} class="brightness-0 invert" />
   </div>
   <div class="absolute top-112.25 z-2" style="left: calc(91.67% + 10px)">
-    <img src={fbIcon.src}       alt="Facebook"  width="24" height="24" class="brightness-0 invert" />
+    <Image src={fbIcon}       alt="Facebook"  width={24} height={24} class="brightness-0 invert" />
   </div>
 
   <!-- Actions -->
   <div class="absolute top-150.5 z-2" style="left: calc(83.33% - 17px)">
-    <img src={notifIcon.src}   alt="Notifier" width="24" height="24" />
+    <Image src={notifIcon}   alt="Notifier" width={24} height={24} />
   </div>
   <div class="absolute top-150.5 z-2" style="left: calc(83.33% + 32px)">
-    <img src={partageIcon.src} alt="Partager" width="24" height="24" />
+    <Image src={partageIcon} alt="Partager" width={24} height={24} />
   </div>
   <div class="absolute top-150.5 z-2" style="left: calc(91.67% - 39px)">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-        stroke="#1e1e1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
+    <Image src={bulleMessageIcon} alt="" width={24} height={24} class="brightness-0" />
   </div>
   {isAuth && (
     <div class="absolute top-150.5 z-2" style="left: calc(91.67% + 10px)">
       <button class="like-btn-bar p-0 border-0 bg-transparent cursor-pointer" data-id={bar.id} type="button" aria-label="Favori">
-        <img src={heartIcon.src}    alt="" width="24" height="24" class="like-empty" />
-        <img src={likeFillIcon.src} alt="" width="24" height="24" class="hidden like-filled" />
+        <Image src={heartIcon}    alt="" width={24} height={24} class="like-empty" />
+        <Image src={likeFillIcon} alt="" width={24} height={24} class="hidden like-filled" />
       </button>
     </div>
   )}
@@ -304,22 +303,22 @@ const hasMap = lat !== 0 && lon !== 0;
       {landscapePhotos[0] && (
         <div class="absolute overflow-hidden rounded-tr-1.25 rounded-br-1.25 z-2"
           style="top: 2363px; left: 0; width: 465px; height: 400px;">
-          <img src={getImageUrl(bar, landscapePhotos[0])} alt={bar.nom}
-            class="w-full h-full object-cover" loading="lazy" />
+          <PbImage record={bar} recordImage={landscapePhotos[0]} alt={bar.nom}
+            class="w-full h-full object-cover" />
         </div>
       )}
       {landscapePhotos[1] && (
         <div class="absolute overflow-hidden rounded-1.25 z-2"
           style="top: 2363px; left: calc(33.33% + 7px); width: 465px; height: 400px;">
-          <img src={getImageUrl(bar, landscapePhotos[1])} alt={bar.nom}
-            class="w-full h-full object-cover" loading="lazy" />
+          <PbImage record={bar} recordImage={landscapePhotos[1]} alt={bar.nom}
+            class="w-full h-full object-cover" />
         </div>
       )}
       {landscapePhotos[2] && (
         <div class="absolute overflow-hidden rounded-tl-1.25 rounded-bl-1.25 z-2"
           style="top: 2363px; left: calc(66.67% + 15px); width: 465px; height: 400px;">
-          <img src={getImageUrl(bar, landscapePhotos[2])} alt={bar.nom}
-            class="w-full h-full object-cover" loading="lazy" />
+          <PbImage record={bar} recordImage={landscapePhotos[2]} alt={bar.nom}
+            class="w-full h-full object-cover" />
         </div>
       )}
     </>
@@ -341,8 +340,8 @@ const hasMap = lat !== 0 && lon !== 0;
     return (
       <div class="absolute overflow-hidden rounded-1.25 z-2"
         style={`top: 2854px; ${positions[i]}; width: 296px; height: 310px;`}>
-        <img src={getImageUrl(boisson, boisson.img)} alt={boisson.nom}
-          class="w-full h-full object-cover" loading="lazy" />
+        <PbImage record={boisson} recordImage={boisson.img} alt={boisson.nom}
+          class="w-full h-full object-cover" />
       </div>
     );
   })}
