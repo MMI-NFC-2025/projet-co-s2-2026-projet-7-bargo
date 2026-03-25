@@ -25,19 +25,19 @@ const timeOptions = [
 <Layout title="Quiz Questionnaire — Bargo">
 
   <!-- ===== HERO ===== -->
-  <section class="bg-[#094736] h-70 lg:h-112.5 relative">
+  <section class="bg-primary-900 h-70 lg:h-112.5 relative">
     <h1 class="absolute top-15 left-5 lg:top-35.25 lg:left-20 text-white m-0 uppercase text-10 lg:text-22.5">Quiz</h1>
-    <p class="block lg:hidden absolute bottom-6 left-5 right-5 text-neutral-300 text-3.5 font-medium m-0 leading-[1.4]">
+    <p class="block lg:hidden absolute bottom-6 left-5 right-5 text-neutral-300 text-3.5 font-medium m-0 leading-snug">
       Testez vos connaissances en 10 questions. Répondez vite pour maximiser vos points !
     </p>
-    <p class="hidden lg:block absolute top-67 left-20 text-[#F7F1ED] text-3.5 font-medium w-136.75 m-0 leading-[1.6]">
+    <p class="hidden lg:block absolute top-67 left-20 text-[#F7F1ED] text-3.5 font-medium w-136.75 m-0 leading-relaxed">
       Testez vos connaissances en répondant à 10 questions dans le thème de votre choix.
       Répondez vite et juste pour maximiser vos points !
     </p>
   </section>
 
   <!-- ===== CONTENU ===== -->
-  <div class="bg-[#F7F1ED] px-4 lg:px-20 py-10 lg:py-20">
+  <div class="bg-neutral-200 px-4 lg:px-20 py-10 lg:py-20">
     <div class="max-w-360 mx-auto">
       <div class="flex flex-col lg:flex-row gap-10 lg:gap-20">
 
@@ -53,16 +53,16 @@ const timeOptions = [
               'Si le temps s\'écoule sans réponse, la question est comptée comme fausse.',
             ].map((rule, i) => (
               <div class="flex gap-4 items-start">
-                <span class="w-8 h-8 rounded-full bg-[#094736] text-white flex items-center justify-center text-4 font-bold shrink-0">{i + 1}</span>
-                <p class="m-0 text-black text-4 font-medium leading-[1.5]">{rule}</p>
+                <span class="w-8 h-8 rounded-full bg-primary-900 text-white flex items-center justify-center text-4 font-bold shrink-0">{i + 1}</span>
+                <p class="m-0 text-black text-4 font-medium leading-normal">{rule}</p>
               </div>
             ))}
           </div>
 
           <!-- Points -->
-          <div class="bg-[#1E1E1E] rounded-0.5 p-6">
+          <div class="bg-neutral-800 rounded-0.5 p-6">
             <h3 class="text-white m-0 mb-1">Points à gagner</h3>
-            <p class="m-0 mb-4 text-[#DFDFDF] text-3.5 font-medium opacity-70">Plus le temps par question est court, plus le multiplicateur est élevé.</p>
+            <p class="m-0 mb-4 text-neutral-300 text-3.5 font-medium opacity-70">Plus le temps par question est court, plus le multiplicateur est élevé.</p>
             <div class="flex flex-col gap-2 mb-4">
               {[
                 { label: '10 sec / question', pts: '30 pts', mult: '×3' },
@@ -73,7 +73,7 @@ const timeOptions = [
                 <div class="flex items-center justify-between gap-4">
                   <p class="m-0 text-[#F7F1ED] text-3.5 font-medium">{row.label}</p>
                   <div class="flex items-center gap-3 shrink-0">
-                    <span class="text-[#DFDFDF] text-3.5 font-medium opacity-60">{row.mult}</span>
+                    <span class="text-neutral-300 text-3.5 font-medium opacity-60">{row.mult}</span>
                     <span class="text-[#72C073] text-4 font-bold">{row.pts}</span>
                   </div>
                 </div>
@@ -82,10 +82,10 @@ const timeOptions = [
             <div class="border-t border-[#333] pt-3">
               <div class="flex items-center justify-between">
                 <p class="m-0 text-[#F7F1ED] text-3.5 font-medium">Mauvaise réponse ou temps écoulé</p>
-                <span class="text-[#DFDFDF] text-4 font-bold shrink-0">0 pt</span>
+                <span class="text-neutral-300 text-4 font-bold shrink-0">0 pt</span>
               </div>
             </div>
-            <p class="m-0 mt-3 text-[#DFDFDF] text-3 font-medium opacity-50">Le système de points sera disponible prochainement.</p>
+            <p class="m-0 mt-3 text-neutral-300 text-3 font-medium opacity-50">Le système de points sera disponible prochainement.</p>
           </div>
         </div>
 
@@ -100,14 +100,14 @@ const timeOptions = [
 
                 <!-- Bouton Tout -->
                 <button type="button" id="btn-all-themes"
-                  class="px-5 py-3 border-2 border-[#1E1E1E] rounded-0.5 text-4 font-medium text-black transition-colors cursor-pointer bg-transparent hover:opacity-80">
+                  class="px-5 py-3 border-2 border-neutral-800 rounded-0.5 text-4 font-medium text-black transition-colors cursor-pointer bg-transparent hover:opacity-80">
                   Tout
                 </button>
 
                 {themes.map(t => (
                   <label class="cursor-pointer">
                     <input type="checkbox" name="themes" value={t.value} class="peer sr-only" />
-                    <span class="peer-checked:bg-[#1E1E1E] peer-checked:text-white block px-5 py-3 border-2 border-[#1E1E1E] rounded-0.5 text-4 font-medium text-black transition-colors">
+                    <span class="peer-checked:bg-neutral-800 peer-checked:text-white block px-5 py-3 border-2 border-neutral-800 rounded-0.5 text-4 font-medium text-black transition-colors">
                       {t.label}
                     </span>
                   </label>
@@ -127,7 +127,7 @@ const timeOptions = [
                   <label class="cursor-pointer">
                     <input type="radio" name="time" value={opt.value}
                       class="peer sr-only" checked={i === 1} />
-                    <span class="peer-checked:bg-[#1E1E1E] peer-checked:text-white block px-5 py-3 border-2 border-[#1E1E1E] rounded-0.5 text-4 font-medium text-black transition-colors">
+                    <span class="peer-checked:bg-neutral-800 peer-checked:text-white block px-5 py-3 border-2 border-neutral-800 rounded-0.5 text-4 font-medium text-black transition-colors">
                       {opt.label}
                     </span>
                   </label>
@@ -137,7 +137,7 @@ const timeOptions = [
 
             <!-- Bouton lancer -->
             <button type="submit"
-              class="w-full lg:w-auto px-12 h-14 bg-[#1E1E1E] text-white text-4 font-medium hover:opacity-90 transition-opacity cursor-pointer border-0">
+              class="w-full lg:w-auto px-12 h-14 bg-neutral-800 text-white text-4 font-medium hover:opacity-90 transition-opacity cursor-pointer border-0">
               Lancer le quiz
             </button>
 

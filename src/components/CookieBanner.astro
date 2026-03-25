@@ -4,10 +4,10 @@
 
 <div
   id="cookie-banner"
-  class="cookie-banner fixed bottom-0 left-0 right-0 z-9999 hidden"
+  class="fixed bottom-0 left-0 right-0 z-9999 hidden bg-[#141414]/97 backdrop-blur border-t border-white/8"
 >
   <div class="max-w-360 mx-auto px-4 lg:px-20 py-4 lg:py-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-8">
-    <p class="text-sm text-neutral-300 m-0 lg:max-w-175 leading-[1.6]">
+    <p class="text-sm text-neutral-300 m-0 lg:max-w-175 leading-relaxed">
       Nous utilisons des cookies essentiels pour le bon fonctionnement du site (connexion, session).
       En continuant à naviguer, vous acceptez leur utilisation conformément à notre
       <a href="/mention_legal" class="underline text-primary-500 hover:opacity-80 transition-opacity">politique de confidentialité</a>.
@@ -33,10 +33,3 @@
   import '../js/cookie-banner.js';
 </script>
 
-<style>
-  .cookie-banner {
-    background: rgba(20, 20, 20, 0.97);
-    backdrop-filter: blur(8px);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-  }
-</style>

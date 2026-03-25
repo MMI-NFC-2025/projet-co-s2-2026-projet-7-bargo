@@ -37,23 +37,23 @@ if (isLoggedIn) {
     <!-- Navigation desktop — inchangé -->
     <nav class="hidden lg:flex items-center ml-13">
       <a href="/bar"
-        class={`px-8.75 py-6.25 font-medium text-3.5 leading-[1.1] text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-1.75 ${path.startsWith('/bar') ? 'border-primary-500' : 'border-transparent'}`}>
+        class={`px-8.75 py-6.25 font-medium text-3.5 leading-tight text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-1.75 ${path.startsWith('/bar') ? 'border-primary-500' : 'border-transparent'}`}>
         Nos bars
       </a>
       <a href="/Apropos"
-        class={`px-8.75 py-6.25 font-medium text-3.5 leading-[1.1] text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-1.75 ${path.startsWith('/Apropos') ? 'border-primary-500' : 'border-transparent'}`}>
+        class={`px-8.75 py-6.25 font-medium text-3.5 leading-tight text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-1.75 ${path.startsWith('/Apropos') ? 'border-primary-500' : 'border-transparent'}`}>
         A propos
       </a>
       <a href="/jeux"
-        class={`px-8.75 py-6.25 font-medium text-3.5 leading-[1.1] text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-1.75 ${path.startsWith('/jeux') ? 'border-primary-500' : 'border-transparent'}`}>
+        class={`px-8.75 py-6.25 font-medium text-3.5 leading-tight text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-1.75 ${path.startsWith('/jeux') ? 'border-primary-500' : 'border-transparent'}`}>
         Nos jeux
       </a>
       <a href="/boutique"
-        class={`px-8.75 py-6.25 font-medium text-3.5 leading-[1.1] text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-1.75 ${path.startsWith('/boutique') ? 'border-primary-500' : 'border-transparent'}`}>
+        class={`px-8.75 py-6.25 font-medium text-3.5 leading-tight text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-1.75 ${path.startsWith('/boutique') ? 'border-primary-500' : 'border-transparent'}`}>
         Boutique
       </a>
       <a href="/abonnement"
-        class={`px-8.75 py-6.25 font-medium text-3.5 leading-[1.1] text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-1.75 ${path.startsWith('/abonnement') ? 'border-primary-500' : 'border-transparent'}`}>
+        class={`px-8.75 py-6.25 font-medium text-3.5 leading-tight text-black hover:opacity-70 transition-opacity whitespace-nowrap border-b-1.75 ${path.startsWith('/abonnement') ? 'border-primary-500' : 'border-transparent'}`}>
         Abonnement
       </a>
     </nav>
@@ -70,7 +70,7 @@ if (isLoggedIn) {
           <Image src={userIcon} alt="" width={31} height={31} />
         )}
       </a>
-      <a href={isLoggedIn ? '/session' : '/inscription'} class="inline-flex items-center justify-center px-12.5 h-11.25 bg-black text-white font-medium text-3.5 leading-[1.1] whitespace-nowrap hover:opacity-80 transition-opacity">
+      <a href={isLoggedIn ? '/session' : '/inscription'} class="inline-flex items-center justify-center px-12.5 h-11.25 bg-black text-white font-medium text-3.5 leading-tight whitespace-nowrap hover:opacity-80 transition-opacity">
         {isLoggedIn ? 'Crée un barathon' : "S'inscrire"}
       </a>
     </div>

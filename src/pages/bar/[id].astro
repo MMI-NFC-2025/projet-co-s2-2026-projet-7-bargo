@@ -80,26 +80,26 @@ const hasMap = lat !== 0 && lon !== 0;
 
   <!-- Description -->
   <div class="px-5 py-6 bg-white">
-    <p class="text-neutral-500 text-4 font-medium leading-[1.4] m-0">{bar.description ?? ''}</p>
+    <p class="text-neutral-500 text-4 font-medium leading-snug m-0">{bar.description ?? ''}</p>
   </div>
 
   <!-- Infos : Adresse, Spécialités, Disponibilité, Contact -->
   <div class="bg-neutral-800 px-5 py-6 flex flex-col gap-6">
     <div>
       <h3 class="text-white m-0 mb-2">Adresse</h3>
-      <p class="text-neutral-300 text-4 font-medium leading-[1.4] m-0">{bar.adresse ?? '—'}</p>
+      <p class="text-neutral-300 text-4 font-medium leading-snug m-0">{bar.adresse ?? '—'}</p>
     </div>
     <div>
       <h3 class="text-white m-0 mb-2">Spécialités</h3>
-      <p class="text-neutral-300 text-4 font-medium leading-[1.4] m-0">{bar.specialites ?? '—'}</p>
+      <p class="text-neutral-300 text-4 font-medium leading-snug m-0">{bar.specialites ?? '—'}</p>
     </div>
     <div>
       <h3 class="text-white m-0 mb-2">Disponibilité</h3>
-      <p class="text-neutral-300 text-4 font-medium leading-[1.4] m-0">{bar.disponibilite ?? '—'}</p>
+      <p class="text-neutral-300 text-4 font-medium leading-snug m-0">{bar.disponibilite ?? '—'}</p>
     </div>
     <div>
       <h3 class="text-white m-0 mb-2">Contact</h3>
-      <p class="text-neutral-300 text-4 font-medium leading-[1.4] m-0">{bar.contact ?? '—'}</p>
+      <p class="text-neutral-300 text-4 font-medium leading-snug m-0">{bar.contact ?? '—'}</p>
     </div>
   </div>
 
@@ -156,7 +156,7 @@ const hasMap = lat !== 0 && lon !== 0;
   {(bar.expand?.boison ?? []).length > 0 && (
     <div class="px-5 py-6 bg-neutral-200">
       <h2 class="text-black m-0 mb-4 text-7">Boissons</h2>
-      <p class="text-neutral-500 text-3.5 font-medium leading-[1.4] m-0 mb-5">
+      <p class="text-neutral-500 text-3.5 font-medium leading-snug m-0 mb-5">
         Explorez une sélection variée de cocktails et de bières, idéale pour partager un moment entre amis.
       </p>
       <div class="grid grid-cols-2 gap-3">
@@ -196,7 +196,7 @@ const hasMap = lat !== 0 && lon !== 0;
     data-lat={lat}
     data-lon={lon}
     data-name={bar.nom}
-    class="absolute left-0 w-full z-1 bg-neutral-300 flex items-center justify-center"
+    class="absolute left-0 w-full z-3 bg-neutral-300 flex items-center justify-center"
     style="top: 1464px; height: 541px;">
     {!hasMap && (
       <p class="text-neutral-500 text-4 font-medium m-0">Localisation non disponible</p>
@@ -245,25 +245,25 @@ const hasMap = lat !== 0 && lon !== 0;
     )}
 
     <!-- Description -->
-    <p class="absolute top-152.25 left-20 w-183.25 text-neutral-500 text-4 font-medium leading-[1.4] m-0">
+    <p class="absolute top-152.25 left-20 w-183.25 text-neutral-500 text-4 font-medium leading-snug m-0">
       {bar.description ?? ''}
     </p>
 
     <!-- INFOS GAUCHE -->
     <h3 class="absolute top-213 left-20 text-white m-0">Adresse</h3>
-    <p class="absolute top-227.25 left-20 text-neutral-300 text-4 font-medium leading-[1.4] m-0">
+    <p class="absolute top-227.25 left-20 text-neutral-300 text-4 font-medium leading-snug m-0">
       {bar.adresse ?? '—'}
     </p>
     <h3 class="absolute top-247.5 left-20 text-white m-0">Spécialités</h3>
-    <p class="absolute top-261.75 left-20 text-neutral-300 text-4 font-medium leading-[1.4] m-0 w-135">
+    <p class="absolute top-261.75 left-20 text-neutral-300 text-4 font-medium leading-snug m-0 w-135">
       {bar.specialites ?? '—'}
     </p>
     <h3 class="absolute top-282 left-20 text-white m-0">Disponibilité</h3>
-    <p class="absolute top-296.25 left-20 text-neutral-300 text-4 font-medium leading-[1.4] m-0 w-135">
+    <p class="absolute top-296.25 left-20 text-neutral-300 text-4 font-medium leading-snug m-0 w-135">
       {bar.disponibilite ?? '—'}
     </p>
     <h3 class="absolute top-316.5 left-20 text-white m-0">Contact</h3>
-    <p class="absolute top-330.75 left-20 text-neutral-300 text-4 font-medium leading-[1.4] m-0">
+    <p class="absolute top-330.75 left-20 text-neutral-300 text-4 font-medium leading-snug m-0">
       {bar.contact ?? '—'}
     </p>
 
@@ -278,13 +278,13 @@ const hasMap = lat !== 0 && lon !== 0;
           style={`top: ${top}px; left: calc(50% + 16px); box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.25);`}>
           <div class="absolute top-0 left-0 h-full bg-primary-600 rounded-l-1.25 flex items-center justify-center"
             style="width: 21.63%;">
-            <span class="text-neutral-200 text-4 font-medium leading-[1.4] text-center px-2">
+            <span class="text-neutral-200 text-4 font-medium leading-snug text-center px-2">
               {jour.label}
             </span>
           </div>
           <div class="absolute top-0 right-0 h-full bg-neutral-200 rounded-r-1.25 flex items-center"
             style="left: 21.63%; padding-left: 35px;">
-            <span class={`text-4 font-medium leading-[1.4] ${isFerme ? 'text-neutral-500' : 'text-black'}`}>
+            <span class={`text-4 font-medium leading-snug ${isFerme ? 'text-neutral-500' : 'text-black'}`}>
               {jour.value || 'Fermé'}
             </span>
           </div>
@@ -296,7 +296,7 @@ const hasMap = lat !== 0 && lon !== 0;
     <h2 class="absolute left-20 text-black m-0" style="top: 2136px;">Galerie</h2>
 
     {(bar.expand?.boison ?? []).length > 0 && (
-      <p class="absolute left-20 w-101.25 text-neutral-500 text-4 font-medium leading-[1.4] m-0" style="top: 2223px;">
+      <p class="absolute left-20 w-101.25 text-neutral-500 text-4 font-medium leading-snug m-0" style="top: 2223px;">
         Explorez une sélection variée de cocktails et de bières, idéale pour partager un moment entre amis.
       </p>
     )}

@@ -43,7 +43,7 @@ const bars = await getCollection('bar', { sort: 'created' });
         <span class="block">"Le barathon</span>
         <span class="block mt-4">Autrement"</span>
       </h1>
-      <p class="text-neutral-300 m-0 mt-4 text-3.5 font-medium leading-[1.4]">
+      <p class="text-neutral-300 m-0 mt-4 text-3.5 font-medium leading-snug">
         Une soirée. Un groupe. Un parcours.
       </p>
       <a href="/session" class="mt-6 inline-flex items-center justify-center h-12 px-8 bg-primary-600 text-white text-4 font-medium no-underline hover:opacity-90 transition-opacity w-fit">
@@ -84,8 +84,8 @@ const bars = await getCollection('bar', { sort: 'created' });
         <div class="flex">
           <span class="font-['Manrope'] font-bold text-[60px] lg:text-[90px] leading-none tracking-1.35 text-primary-500 w-20 lg:w-27.25 shrink-0">1</span>
           <div class="flex flex-col pt-2.5 lg:pt-3.75">
-            <p class="text-neutral-800 leading-[1.4] m-0">Créez votre profil</p>
-            <p class="text-neutral-500 text-3.5 leading-[1.1] mt-4 lg:mt-6 w-full lg:w-74 m-0">Inscrivez-vous en quelques secondes pour accéder à toutes les fonctionnalités. Personnalisez votre profil et préparez votre prochaine soirée entre amis.</p>
+            <p class="text-neutral-800 leading-snug m-0">Créez votre profil</p>
+            <p class="text-neutral-500 text-3.5 leading-tight mt-4 lg:mt-6 w-full lg:w-74 m-0">Inscrivez-vous en quelques secondes pour accéder à toutes les fonctionnalités. Personnalisez votre profil et préparez votre prochaine soirée entre amis.</p>
           </div>
         </div>
 
@@ -93,8 +93,8 @@ const bars = await getCollection('bar', { sort: 'created' });
         <div class="flex">
           <span class="font-['Manrope'] font-bold text-[60px] lg:text-[90px] leading-none tracking-1.35 text-primary-600 w-20 lg:w-27.25 shrink-0">2</span>
           <div class="flex flex-col pt-2.5 lg:pt-3.75">
-            <p class="text-neutral-800 leading-[1.4] m-0">Invitez vos amis</p>
-            <p class="text-neutral-500 text-3.5 leading-[1.1] mt-4 lg:mt-6 w-full lg:w-74 m-0">Ajoutez vos proches à votre groupe et formez votre équipe. Plus vous êtes nombreux, plus l'expérience devient conviviale et dynamique.</p>
+            <p class="text-neutral-800 leading-snug m-0">Invitez vos amis</p>
+            <p class="text-neutral-500 text-3.5 leading-tight mt-4 lg:mt-6 w-full lg:w-74 m-0">Ajoutez vos proches à votre groupe et formez votre équipe. Plus vous êtes nombreux, plus l'expérience devient conviviale et dynamique.</p>
           </div>
         </div>
 
@@ -102,8 +102,8 @@ const bars = await getCollection('bar', { sort: 'created' });
         <div class="flex">
           <span class="font-['Manrope'] font-bold text-[60px] lg:text-[90px] leading-none tracking-1.35 text-primary-900 w-20 lg:w-27.25 shrink-0">3</span>
           <div class="flex flex-col pt-2.5 lg:pt-3.75">
-            <p class="text-neutral-800 leading-[1.4] m-0">Organisez votre tournée</p>
-            <p class="text-neutral-500 text-3.5 leading-[1.1] mt-4 lg:mt-6 w-full lg:w-74 m-0">Sélectionnez les bars, définissez l'itinéraire et lancez votre session. Suivez la progression de la soirée et profitez d'un parcours structuré et ludique.</p>
+            <p class="text-neutral-800 leading-snug m-0">Organisez votre tournée</p>
+            <p class="text-neutral-500 text-3.5 leading-tight mt-4 lg:mt-6 w-full lg:w-74 m-0">Sélectionnez les bars, définissez l'itinéraire et lancez votre session. Suivez la progression de la soirée et profitez d'un parcours structuré et ludique.</p>
           </div>
         </div>
 
@@ -129,9 +129,9 @@ const bars = await getCollection('bar', { sort: 'created' });
           <!-- Infos -->
           <div class="bg-neutral-800 flex-1 flex flex-col pt-5 lg:pt-19 pl-5 lg:pl-27.25 pr-5 lg:pr-20 overflow-hidden">
             <h2 class="text-white m-0 mb-3 lg:mb-8.75 text-7 lg:text-12.5">{bar.nom}</h2>
-            <p class="text-neutral-200 text-3.5 leading-[1.1] m-0 mb-2 lg:mb-13">{bar.adresse}</p>
+            <p class="text-neutral-200 text-3.5 leading-tight m-0 mb-2 lg:mb-13">{bar.adresse}</p>
             <p class="text-white w-full lg:w-74.25 m-0 mb-4 lg:mb-25.75 line-clamp-1 lg:line-clamp-none">{bar.description}</p>
-            <a href={`/bar/${bar.id}`} class="inline-flex items-center gap-2 lg:gap-4 px-6 lg:px-12 py-2 border-2 border-white text-white leading-[1.4] w-fit hover:bg-white hover:text-neutral-800 transition-colors text-3.5 lg:text-4">
+            <a href={`/bar/${bar.id}`} class="inline-flex items-center gap-2 lg:gap-4 px-6 lg:px-12 py-2 border-2 border-white text-white leading-snug w-fit hover:bg-white hover:text-neutral-800 transition-colors text-3.5 lg:text-4">
               Choisir mes bars
               <Image src={arrowRight} alt="" width={24} height={24} class="lg:hidden" />
               <Image src={arrowRight} alt="" width={35} height={35} class="hidden lg:block" />
@@ -223,15 +223,15 @@ const bars = await getCollection('bar', { sort: 'created' });
     <div class="grid grid-cols-1 lg:grid-cols-3 w-full">
       <div class="bg-primary-500 px-5 lg:px-20 pt-10 lg:pt-22.5 pb-8 lg:pb-16 flex flex-col gap-6 lg:gap-15.25">
         <h3 class="text-white m-0">Convivialité</h3>
-        <p class="font-medium text-4 leading-[1.4] text-neutral-300 m-0">Nous plaçons l'expérience collective au cœur de chaque barathon. BARGO favorise les moments partagés, l'esprit d'équipe et la bonne ambiance afin que chaque sortie reste un souvenir positif entre amis.</p>
+        <p class="font-medium text-4 leading-snug text-neutral-300 m-0">Nous plaçons l'expérience collective au cœur de chaque barathon. BARGO favorise les moments partagés, l'esprit d'équipe et la bonne ambiance afin que chaque sortie reste un souvenir positif entre amis.</p>
       </div>
       <div class="bg-primary-600 px-5 lg:px-20 pt-10 lg:pt-22.5 pb-8 lg:pb-16 flex flex-col gap-6 lg:gap-15.25">
         <h3 class="text-white m-0">Sécurité</h3>
-        <p class="font-medium text-4 leading-[1.4] text-neutral-300 m-0">La sécurité fait partie intégrante de l'organisation. Attribution d'un conducteur pour la soirée, informations utiles et repères clairs permettent de profiter pleinement tout en gardant le contrôle.</p>
+        <p class="font-medium text-4 leading-snug text-neutral-300 m-0">La sécurité fait partie intégrante de l'organisation. Attribution d'un conducteur pour la soirée, informations utiles et repères clairs permettent de profiter pleinement tout en gardant le contrôle.</p>
       </div>
       <div class="bg-primary-900 px-5 lg:px-20 pt-10 lg:pt-22.5 pb-8 lg:pb-16 flex flex-col gap-6 lg:gap-15.25">
         <h3 class="text-white m-0">Responsabilité</h3>
-        <p class="font-medium text-4 leading-[1.4] text-neutral-300 m-0">Un barathon réussi est un barathon maîtrisé. BARGO encourage un comportement responsable et respectueux, pour soi, pour les autres et pour les établissements visités.</p>
+        <p class="font-medium text-4 leading-snug text-neutral-300 m-0">Un barathon réussi est un barathon maîtrisé. BARGO encourage un comportement responsable et respectueux, pour soi, pour les autres et pour les établissements visités.</p>
       </div>
     </div>
   </section>
@@ -245,7 +245,7 @@ const bars = await getCollection('bar', { sort: 'created' });
         <div class="w-full lg:w-191.25 lg:shrink-0">
           <h2 class="text-neutral-800 m-0 text-7.5 lg:text-12.5">Notre équipe</h2>
         </div>
-        <p class="font-medium text-4 leading-[1.4] text-neutral-500 m-0 lg:pt-3.25 w-full lg:w-95.5">Derrière BARGO, une équipe passionnée par l'organisation d'expériences collectives. Nous avons imaginé une plateforme simple, structurée et conviviale pour faciliter vos sorties entre amis.</p>
+        <p class="font-medium text-4 leading-snug text-neutral-500 m-0 lg:pt-3.25 w-full lg:w-95.5">Derrière BARGO, une équipe passionnée par l'organisation d'expériences collectives. Nous avons imaginé une plateforme simple, structurée et conviviale pour faciliter vos sorties entre amis.</p>
       </div>
 
       <!-- Cards membres -->
@@ -256,8 +256,8 @@ const bars = await getCollection('bar', { sort: 'created' });
             <Image src={membre1} alt="Melvyn Philippon" class="w-full h-full object-cover block" />
           </div>
           <h3 class="text-primary-500 m-0 mb-4">Melvyn Philippon</h3>
-          <p class="font-medium text-4 leading-[1.4] text-neutral-800 m-0 mb-4 lg:mb-10.75">Designer</p>
-          <p class="font-medium text-3.5 leading-[1.1] text-neutral-500 m-0">Conçoit l'identité visuelle et l'expérience utilisateur. Il veille à la cohérence graphique et à la simplicité d'utilisation de la plateforme.</p>
+          <p class="font-medium text-4 leading-snug text-neutral-800 m-0 mb-4 lg:mb-10.75">Designer</p>
+          <p class="font-medium text-3.5 leading-tight text-neutral-500 m-0">Conçoit l'identité visuelle et l'expérience utilisateur. Il veille à la cohérence graphique et à la simplicité d'utilisation de la plateforme.</p>
         </div>
 
         <div class="flex flex-col">
@@ -265,8 +265,8 @@ const bars = await getCollection('bar', { sort: 'created' });
             <Image src={membre2} alt="Pierre Mouilleseaux-Lhuillier" class="w-full h-full object-cover block" />
           </div>
           <h3 class="text-primary-500 m-0 mb-4">Pierre Mouilleseaux-Lhuillier</h3>
-          <p class="font-medium text-4 leading-[1.4] text-neutral-800 m-0 mb-4 lg:mb-10.75">Développeur</p>
-          <p class="font-medium text-3.5 leading-[1.1] text-neutral-500 m-0">Développe et structure la plateforme. Il transforme les idées en fonctionnalités concrètes et assure le bon fonctionnement du site.</p>
+          <p class="font-medium text-4 leading-snug text-neutral-800 m-0 mb-4 lg:mb-10.75">Développeur</p>
+          <p class="font-medium text-3.5 leading-tight text-neutral-500 m-0">Développe et structure la plateforme. Il transforme les idées en fonctionnalités concrètes et assure le bon fonctionnement du site.</p>
         </div>
 
         <div class="flex flex-col">
@@ -274,15 +274,15 @@ const bars = await getCollection('bar', { sort: 'created' });
             <Image src={membre3} alt="Alex Ringenbach" class="w-full h-full object-cover block" />
           </div>
           <h3 class="text-primary-500 m-0 mb-4">Alex Ringenbach</h3>
-          <p class="font-medium text-4 leading-[1.4] text-neutral-800 m-0 mb-4 lg:mb-10.75">Communication</p>
-          <p class="font-medium text-3.5 leading-[1.1] text-neutral-500 m-0">Gère l'image et la visibilité du projet. Il s'occupe de la stratégie de communication et du lien avec la communauté.</p>
+          <p class="font-medium text-4 leading-snug text-neutral-800 m-0 mb-4 lg:mb-10.75">Communication</p>
+          <p class="font-medium text-3.5 leading-tight text-neutral-500 m-0">Gère l'image et la visibilité du projet. Il s'occupe de la stratégie de communication et du lien avec la communauté.</p>
         </div>
 
       </div>
 
       <!-- CTA -->
       <div class="flex justify-end">
-        <a href="/Apropos" class="inline-flex items-center gap-3 lg:gap-4 px-8 lg:px-12 py-3 lg:py-2 bg-neutral-800 text-white font-medium text-4 leading-[1.4] hover:opacity-80 transition-opacity">
+        <a href="/Apropos" class="inline-flex items-center gap-3 lg:gap-4 px-8 lg:px-12 py-3 lg:py-2 bg-neutral-800 text-white font-medium text-4 leading-snug hover:opacity-80 transition-opacity">
           En savoir plus
           <Image src={arrowRight} alt="" width={24} height={24} class="block lg:hidden" />
           <Image src={arrowRight} alt="" width={35} height={35} class="hidden lg:block" />

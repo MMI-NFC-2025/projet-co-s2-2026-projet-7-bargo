@@ -50,26 +50,26 @@ const questions = allQ.slice(0, 10).map(q => ({
   </div>
 
   {questions.length === 0 ? (
-    <div class="min-h-screen bg-[#1E1E1E] flex flex-col items-center justify-center px-4 text-center">
+    <div class="min-h-screen bg-neutral-800 flex flex-col items-center justify-center px-4 text-center">
       <p class="text-[#F7F1ED] text-4 font-medium mb-6">Aucune question trouvée pour ce thème.</p>
       {fetchError && <p class="text-red-400 text-3.5 font-medium mb-4 opacity-80">{fetchError}</p>}
-      <a href="/jeux_questionaire" class="bg-[#347645] text-white px-8 h-12 flex items-center text-4 font-medium no-underline hover:opacity-90 transition-opacity">
+      <a href="/jeux_questionaire" class="bg-primary-600 text-white px-8 h-12 flex items-center text-4 font-medium no-underline hover:opacity-90 transition-opacity">
         Retour
       </a>
     </div>
   ) : (
 
-    <main class="min-h-screen bg-[#1E1E1E] flex flex-col items-center justify-center px-4 py-16">
+    <main class="min-h-screen bg-neutral-800 flex flex-col items-center justify-center px-4 py-16">
 
       <!-- ===== PHASE JEU ===== -->
       <div id="phase-playing" class="w-full max-w-2xl">
 
         <!-- En-tête : compteur + timer texte -->
         <div class="flex items-center justify-between mb-3">
-          <span id="q-counter" class="text-[#DFDFDF] text-3.5 font-medium tracking-wide uppercase opacity-70">Question 1 / {questions.length}</span>
+          <span id="q-counter" class="text-neutral-300 text-3.5 font-medium tracking-wide uppercase opacity-70">Question 1 / {questions.length}</span>
           <div class="flex items-center gap-2">
             <span id="timer-text" class="font-bold text-5 tabular-nums" style="color:#72C073">{time}</span>
-            <span class="text-[#DFDFDF] text-3.5 opacity-50">sec</span>
+            <span class="text-neutral-300 text-3.5 opacity-50">sec</span>
           </div>
         </div>
 
@@ -111,13 +111,13 @@ const questions = allQ.slice(0, 10).map(q => ({
             <div class="w-28 h-28 rounded-full flex flex-col items-center justify-center shrink-0" style="background: conic-gradient(#72C073 0deg, #72C073 calc(var(--pct,0) * 360deg), #333 calc(var(--pct,0) * 360deg)); padding: 4px;">
               <div class="w-full h-full rounded-full bg-[#252525] flex flex-col items-center justify-center">
                 <span id="result-correct" class="text-white font-bold text-8 leading-none"></span>
-                <span class="text-[#DFDFDF] text-3 font-medium opacity-60">/ {questions.length}</span>
+                <span class="text-neutral-300 text-3 font-medium opacity-60">/ {questions.length}</span>
               </div>
             </div>
             <div class="text-left">
-              <h2 id="result-title" class="text-white m-0 mb-1 text-[22px]">Résultat</h2>
+              <h2 id="result-title" class="text-white m-0 mb-1 text-5.5">Résultat</h2>
               <p id="result-score" class="text-[#72C073] text-7 font-bold m-0"></p>
-              <p id="result-mult" class="text-[#DFDFDF] text-3 font-medium opacity-50 m-0 mt-1"></p>
+              <p id="result-mult" class="text-neutral-300 text-3 font-medium opacity-50 m-0 mt-1"></p>
             </div>
           </div>
 
@@ -140,7 +140,7 @@ const questions = allQ.slice(0, 10).map(q => ({
               Changer les paramètres
             </a>
             <a href="/jeux"
-              class="lg:flex-1 h-12 bg-transparent border border-[#3a3a3a] text-[#DFDFDF] text-4 font-medium flex items-center justify-center no-underline hover:opacity-80 transition-opacity rounded-0.5">
+              class="lg:flex-1 h-12 bg-transparent border border-[#3a3a3a] text-neutral-300 text-4 font-medium flex items-center justify-center no-underline hover:opacity-80 transition-opacity rounded-0.5">
               Retour aux jeux
             </a>
           </div>

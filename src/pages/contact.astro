@@ -61,7 +61,7 @@ import LeafletMap   from '../components/LeafletMap.astro';
         <!-- Newsletter -->
         <label class="flex items-center gap-2 cursor-pointer">
           <input type="checkbox" name="newsletter" class="size-4 rounded-1 border border-white accent-primary-600" />
-          <span class="text-white text-3.5 font-medium leading-[1.1]">J'aimerais recevoir les News Letter</span>
+          <span class="text-white text-3.5 font-medium leading-tight">J'aimerais recevoir les News Letter</span>
         </label>
 
         <!-- Bouton Envoyer -->
@@ -81,19 +81,21 @@ import LeafletMap   from '../components/LeafletMap.astro';
       <div class="px-5 py-10 lg:px-0 lg:py-0 flex flex-col gap-7 lg:absolute lg:top-83.5 lg:left-35.25 lg:w-101.75">
 
         <!-- Description -->
-        <p class="text-black text-4 font-medium leading-[1.4] m-0">
+        <p class="text-black text-4 font-medium leading-snug m-0">
           Si vous voulez nous contacter pour des demandes spécifiques, n'hésitez pas à nous
           contacter via les informations ci-dessous&nbsp;!
         </p>
 
         <!-- Carte OpenStreetMap — IUT de Montbéliard -->
-        <LeafletMap
-          id="contact-map"
-          lat={47.5072}
-          lon={6.7955}
-          name="IUT de Montbéliard"
-          class="w-full h-43.5 rounded-2.5 overflow-hidden z-0 bg-neutral-300"
-        />
+        <div class="w-full h-43.5 rounded-2.5 overflow-hidden z-0 bg-neutral-300">
+          <LeafletMap
+            id="contact-map"
+            lat={47.5072}
+            lon={6.7955}
+            name="IUT de Montbéliard"
+            class="w-full h-full"
+          />
+        </div>
 
         <!-- Informations de contact -->
         <div class="flex flex-col gap-3.5">

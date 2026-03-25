@@ -270,7 +270,7 @@ const displayName = user.prenom
       {user.description && (
         <div class="mt-4">
           <p class="m-0 text-4 font-medium text-black uppercase">DESCRIPTION</p>
-          <p class="m-0 mt-1 text-neutral-500 text-4 font-medium leading-[1.4]">{user.description}</p>
+          <p class="m-0 mt-1 text-neutral-500 text-4 font-medium leading-snug">{user.description}</p>
         </div>
       )}
     </div>
@@ -310,11 +310,11 @@ const displayName = user.prenom
       </div>
       <!-- Titre équipé -->
       {equippedTitre && (
-        <p class="absolute m-0 text-primary-600 font-bold text-4 leading-[1.4]"
+        <p class="absolute m-0 text-primary-600 font-bold text-4 leading-snug"
           style="left: calc(16.67% + 59px); top: 215px;">{equippedTitre}</p>
       )}
       <!-- Ami(e)s -->
-      <p class="absolute m-0 text-neutral-800 text-4 font-medium leading-[1.4]"
+      <p class="absolute m-0 text-neutral-800 text-4 font-medium leading-snug"
         style="left: calc(33.33% + 79px); top: 198px;">
         {amiesIds.length} ami(e)s
       </p>
@@ -325,12 +325,12 @@ const displayName = user.prenom
         <h3 class="text-white m-0">{user.points ?? 0}</h3>
       </div>
       <!-- DESCRIPTION label -->
-      <p class="absolute m-0 text-4 font-medium text-black uppercase leading-[1.4]"
+      <p class="absolute m-0 text-4 font-medium text-black uppercase leading-snug"
         style="left: calc(50% + 17px); top: 127px;">
         DESCRIPTION
       </p>
       <!-- Description text -->
-      <p class="absolute m-0 text-neutral-500 text-4 font-medium leading-[1.4] w-155.75"
+      <p class="absolute m-0 text-neutral-500 text-4 font-medium leading-snug w-155.75"
         style="left: calc(50% + 16px); top: 174px;">
         {user.description ?? '—'}
       </p>
@@ -348,13 +348,13 @@ const displayName = user.prenom
 
           <!-- Boutique -->
           <a href="/boutique"
-            class="flex items-center justify-center border-2 border-white text-white text-4 font-medium leading-[1.4] h-15 w-59.25 hover:bg-white hover:text-neutral-800 transition-colors shrink-0">
+            class="flex items-center justify-center border-2 border-white text-white text-4 font-medium leading-snug h-15 w-59.25 hover:bg-white hover:text-neutral-800 transition-colors shrink-0">
             Boutique
           </a>
 
           <!-- Ajouter des amis -->
           <button id="btn-open-friends"
-            class="flex items-center justify-center border-2 border-white text-white text-4 font-medium leading-[1.4] h-15 w-59.25 hover:bg-white hover:text-neutral-800 transition-colors cursor-pointer bg-transparent shrink-0">
+            class="flex items-center justify-center border-2 border-white text-white text-4 font-medium leading-snug h-15 w-59.25 hover:bg-white hover:text-neutral-800 transition-colors cursor-pointer bg-transparent shrink-0">
             Ajouter des amis
           </button>
 
@@ -458,20 +458,20 @@ const displayName = user.prenom
                 <h3 class="text-black m-0 mb-8.75">Informations personnel</h3>
                 <div class="flex flex-col lg:flex-row gap-4 lg:gap-25">
                   <div class="flex flex-col gap-1">
-                    <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Ville</span>
-                    <span class="view-field text-black text-4 font-medium leading-[1.4]">{user.ville ?? '—'}</span>
+                    <span class="text-neutral-500 text-4 font-medium leading-snug">Ville</span>
+                    <span class="view-field text-black text-4 font-medium leading-snug">{user.ville ?? '—'}</span>
                     <input type="text" name="ville" value={user.ville ?? ''} placeholder="Ville"
                       class="edit-field hidden text-4 font-medium text-neutral-800 bg-neutral-200 border border-neutral-300 rounded px-3 py-1 outline-none w-35" />
                   </div>
                   <div class="flex flex-col gap-1">
-                    <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Âge</span>
-                    <span class="view-field text-black text-4 font-medium leading-[1.4]">{user.age ? `${user.age} ans` : '—'}</span>
+                    <span class="text-neutral-500 text-4 font-medium leading-snug">Âge</span>
+                    <span class="view-field text-black text-4 font-medium leading-snug">{user.age ? `${user.age} ans` : '—'}</span>
                     <input type="number" name="age" value={user.age ?? ''} placeholder="Âge" min="13" max="120"
                       class="edit-field hidden text-4 font-medium text-neutral-800 bg-neutral-200 border border-neutral-300 rounded px-3 py-1 outline-none w-25" />
                   </div>
                   <div class="flex flex-col gap-1">
-                    <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Membre depuis</span>
-                    <span class="text-black text-4 font-medium leading-[1.4]">{createdAt}</span>
+                    <span class="text-neutral-500 text-4 font-medium leading-snug">Membre depuis</span>
+                    <span class="text-black text-4 font-medium leading-snug">{createdAt}</span>
                   </div>
                 </div>
               </div>
@@ -481,20 +481,20 @@ const displayName = user.prenom
                 <h3 class="text-black m-0 mb-8.75">Activité sur Bargo</h3>
                 <div class="flex flex-col lg:flex-row gap-4 lg:gap-25">
                   <div class="flex flex-col gap-1">
-                    <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Sorties organisées</span>
-                    <span class="text-black text-4 font-medium leading-[1.4]">
+                    <span class="text-neutral-500 text-4 font-medium leading-snug">Sorties organisées</span>
+                    <span class="text-black text-4 font-medium leading-snug">
                       {user.barathon_organiser ? `${user.barathon_organiser} sorties` : '—'}
                     </span>
                   </div>
                   <div class="flex flex-col gap-1">
-                    <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Barathons réalisés</span>
-                    <span class="text-black text-4 font-medium leading-[1.4]">
+                    <span class="text-neutral-500 text-4 font-medium leading-snug">Barathons réalisés</span>
+                    <span class="text-black text-4 font-medium leading-snug">
                       {user.barathon_participer ? `${user.barathon_participer} parcours` : '—'}
                     </span>
                   </div>
                   <div class="flex flex-col gap-1">
-                    <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Bars découverts</span>
-                    <span class="text-black text-4 font-medium leading-[1.4]">{barDecouver.length}/{totalBars}</span>
+                    <span class="text-neutral-500 text-4 font-medium leading-snug">Bars découverts</span>
+                    <span class="text-black text-4 font-medium leading-snug">{barDecouver.length}/{totalBars}</span>
                   </div>
                 </div>
               </div>
@@ -504,28 +504,28 @@ const displayName = user.prenom
                 <h3 class="text-black m-0 mb-8.75">Réseaux sociaux</h3>
                 <div class="flex flex-wrap gap-10">
                   <div class="flex flex-col gap-1">
-                    <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Instagram</span>
+                    <span class="text-neutral-500 text-4 font-medium leading-snug">Instagram</span>
                     <div class="view-field flex items-center gap-2">
                       <Image src={instaIcon} alt="" width={18} height={18} />
-                      <span class="text-black text-4 font-medium leading-[1.4]">{user.insta || '—'}</span>
+                      <span class="text-black text-4 font-medium leading-snug">{user.insta || '—'}</span>
                     </div>
                     <input type="text" name="insta" value={user.insta ?? ''} placeholder="@pseudo"
                       class="edit-field hidden text-4 font-medium text-neutral-800 bg-neutral-200 border border-neutral-300 rounded px-3 py-1 outline-none w-40" />
                   </div>
                   <div class="flex flex-col gap-1">
-                    <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Facebook</span>
+                    <span class="text-neutral-500 text-4 font-medium leading-snug">Facebook</span>
                     <div class="view-field flex items-center gap-2">
                       <Image src={facebookIcon} alt="" width={18} height={18} />
-                      <span class="text-black text-4 font-medium leading-[1.4]">{user.facbook || '—'}</span>
+                      <span class="text-black text-4 font-medium leading-snug">{user.facbook || '—'}</span>
                     </div>
                     <input type="text" name="facbook" value={user.facbook ?? ''} placeholder="Nom Facebook"
                       class="edit-field hidden text-4 font-medium text-neutral-800 bg-neutral-200 border border-neutral-300 rounded px-3 py-1 outline-none w-40" />
                   </div>
                   <div class="flex flex-col gap-1">
-                    <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Discord</span>
+                    <span class="text-neutral-500 text-4 font-medium leading-snug">Discord</span>
                     <div class="view-field flex items-center gap-2">
                       <Image src={discordIcon} alt="" width={18} height={18} />
-                      <span class="text-black text-4 font-medium leading-[1.4]">{user.discord || '—'}</span>
+                      <span class="text-black text-4 font-medium leading-snug">{user.discord || '—'}</span>
                     </div>
                     <input type="text" name="discord" value={user.discord ?? ''} placeholder="@pseudo"
                       class="edit-field hidden text-4 font-medium text-neutral-800 bg-neutral-200 border border-neutral-300 rounded px-3 py-1 outline-none w-40" />
@@ -563,7 +563,7 @@ const displayName = user.prenom
                     class="text-sm text-neutral-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-primary-600 file:text-white file:cursor-pointer cursor-pointer" />
                 </div>
                 <button type="submit"
-                  class="inline-flex items-center gap-4 bg-primary-900 text-white text-4 font-medium leading-[1.4] px-12.5 py-2 hover:opacity-90 transition-opacity cursor-pointer border-0 w-fit">
+                  class="inline-flex items-center gap-4 bg-primary-900 text-white text-4 font-medium leading-snug px-12.5 py-2 hover:opacity-90 transition-opacity cursor-pointer border-0 w-fit">
                   Sauvegarder
                 </button>
               </div></div>
@@ -731,7 +731,7 @@ const displayName = user.prenom
                       <Image src={bellIcon} alt="" width={18} height={18} class="brightness-0 invert" />
                     </div>
                     <div class="flex-1">
-                      <p class={`text-4 m-0 leading-[1.4] ${!notif.lu ? 'font-bold' : 'font-medium'} text-black`}>
+                      <p class={`text-4 m-0 leading-snug ${!notif.lu ? 'font-bold' : 'font-medium'} text-black`}>
                         {notif.message ?? notif.texte ?? notif.contenu ?? 'Notification'}
                       </p>
                       <p class="text-sm text-neutral-500 m-0 mt-1">{timeAgo(notif.created)}</p>
@@ -800,7 +800,7 @@ const displayName = user.prenom
                             <div data-inv-card={item.id} class={`bg-white rounded-0.5 shadow-[0px_4px_6px_0px_rgba(0,0,0,0.15)] overflow-hidden relative${isEquipped ? ' ring-2 ring-[#72C073]' : ''}`}>
                               <div class="h-36 lg:h-44 bg-neutral-500 flex items-center justify-center relative">
                                 {item.type === 'titre' ? (
-                                  <div class="size-20 rounded-full bg-[#094736] flex items-center justify-center px-2">
+                                  <div class="size-20 rounded-full bg-primary-900 flex items-center justify-center px-2">
                                     <p class="text-white font-bold text-3 text-center m-0 leading-snug">{item.type_titre || item.nom}</p>
                                   </div>
                                 ) : item.imageUrl ? (
@@ -810,9 +810,9 @@ const displayName = user.prenom
                                 ) : (
                                   <div class="size-20 rounded-full bg-neutral-600"></div>
                                 )}
-                                <span class={`inv-equipped-badge absolute top-2 left-2 bg-[#72C073] text-[#094736] text-[10px] font-bold px-2 py-0.5${isEquipped ? '' : ' hidden'}`}>Équipé</span>
+                                <span class={`inv-equipped-badge absolute top-2 left-2 bg-primary-500 text-primary-900 text-2.5 font-bold px-2 py-0.5${isEquipped ? '' : ' hidden'}`}>Équipé</span>
                                 {!isPossessed && (
-                                  <span class="absolute top-2 right-2 bg-black/50 text-white text-[10px] font-medium px-2 py-0.5">Non possédé</span>
+                                  <span class="absolute top-2 right-2 bg-black/50 text-white text-2.5 font-medium px-2 py-0.5">Non possédé</span>
                                 )}
                               </div>
                               <div class="p-4">
@@ -861,7 +861,7 @@ const displayName = user.prenom
                             ) : (
                               <div class="size-20 rounded-full bg-neutral-600"></div>
                             )}
-                            <span class={`inv-equipped-badge absolute top-2 left-2 bg-[#72C073] text-[#094736] text-[10px] font-bold px-2 py-0.5${item.isEquipped ? '' : ' hidden'}`}>Équipé</span>
+                            <span class={`inv-equipped-badge absolute top-2 left-2 bg-primary-500 text-primary-900 text-2.5 font-bold px-2 py-0.5${item.isEquipped ? '' : ' hidden'}`}>Équipé</span>
                           </div>
                           <div class="p-4">
                             <h3 class="m-0 text-black text-sm mb-3 truncate">{item.nom}</h3>
@@ -892,10 +892,10 @@ const displayName = user.prenom
                       {possedTitres.map(item => (
                         <div data-inv-card={item.id} class={`bg-white rounded-0.5 shadow-[0px_4px_6px_0px_rgba(0,0,0,0.15)] overflow-hidden relative${item.isEquipped ? ' ring-2 ring-[#72C073]' : ''}`}>
                           <div class="h-36 lg:h-44 bg-neutral-500 flex items-center justify-center relative">
-                            <div class="size-20 rounded-full bg-[#094736] flex items-center justify-center px-2">
+                            <div class="size-20 rounded-full bg-primary-900 flex items-center justify-center px-2">
                               <p class="text-white font-bold text-3 text-center m-0 leading-snug">{item.type_titre || item.nom}</p>
                             </div>
-                            <span class={`inv-equipped-badge absolute top-2 left-2 bg-[#72C073] text-[#094736] text-[10px] font-bold px-2 py-0.5${item.isEquipped ? '' : ' hidden'}`}>Équipé</span>
+                            <span class={`inv-equipped-badge absolute top-2 left-2 bg-primary-500 text-primary-900 text-2.5 font-bold px-2 py-0.5${item.isEquipped ? '' : ' hidden'}`}>Équipé</span>
                           </div>
                           <div class="p-4">
                             <h3 class="m-0 text-black text-sm mb-3 truncate">{item.nom}</h3>
@@ -933,7 +933,7 @@ const displayName = user.prenom
                             ) : (
                               <div class="size-20 rounded-full bg-neutral-600"></div>
                             )}
-                            <span class={`inv-equipped-badge absolute top-2 left-2 bg-[#72C073] text-[#094736] text-[10px] font-bold px-2 py-0.5${item.isEquipped ? '' : ' hidden'}`}>Équipé</span>
+                            <span class={`inv-equipped-badge absolute top-2 left-2 bg-primary-500 text-primary-900 text-2.5 font-bold px-2 py-0.5${item.isEquipped ? '' : ' hidden'}`}>Équipé</span>
                           </div>
                           <div class="p-4">
                             <h3 class="m-0 text-black text-sm mb-3 truncate">{item.nom}</h3>

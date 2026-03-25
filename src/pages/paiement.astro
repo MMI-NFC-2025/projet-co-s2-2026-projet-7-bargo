@@ -107,7 +107,7 @@ const plan = plans[planId] ?? plans.vip;
     </div>
 
     <h2 class="text-white m-0 mb-2 uppercase text-8">Paiement</h2>
-    <p class="text-3.5 font-medium leading-[1.1] text-neutral-300 m-0 mb-6">Finalisez votre abonnement en toute sécurité.</p>
+    <p class="text-3.5 font-medium leading-tight text-neutral-300 m-0 mb-6">Finalisez votre abonnement en toute sécurité.</p>
 
     <form id="payment-form-mobile" class="flex flex-col gap-5" novalidate>
 
@@ -162,7 +162,7 @@ const plan = plans[planId] ?? plans.vip;
           <div class="absolute inset-0 border-2 border-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] peer-checked:bg-primary-600 peer-checked:border-primary-600 transition-colors"></div>
           <Image src={checkIcon} alt="" width={16} height={16} class="absolute inset-0 hidden peer-checked:block w-full h-full p-0.5 brightness-0 invert" />
         </div>
-        <span class="text-white text-3.5 font-medium leading-[1.4]">J'accepte les <a href="/mention_legal" class="underline hover:opacity-70">conditions d'utilisation</a></span>
+        <span class="text-white text-3.5 font-medium leading-snug">J'accepte les <a href="/mention_legal" class="underline hover:opacity-70">conditions d'utilisation</a></span>
       </label>
 
       <button type="submit" class="mt-2 h-13 w-full flex items-center justify-center gap-2 text-white text-4 font-medium hover:opacity-90 transition-opacity cursor-pointer border-0" style={`background:${plan.couleur};`}>
@@ -224,7 +224,7 @@ const plan = plans[planId] ?? plans.vip;
       Paiement
     </h2>
     <div class="absolute flex flex-col gap-1.5" style="top:172px;left:80px;">
-      <p class="text-3.5 font-medium leading-[1.1] text-neutral-300 m-0">
+      <p class="text-3.5 font-medium leading-tight text-neutral-300 m-0">
         Finalisez votre abonnement en toute sécurité.
       </p>
       <!-- SSL badge -->
@@ -237,27 +237,27 @@ const plan = plans[planId] ?? plans.vip;
     <form id="payment-form" novalidate>
 
       <!-- Prénom + Nom -->
-      <label class="absolute text-white text-4 font-medium leading-[1.4]" style="top:214px;left:80px;">Prénom</label>
+      <label class="absolute text-white text-4 font-medium leading-snug" style="top:214px;left:80px;">Prénom</label>
       <div class="absolute bg-neutral-200 rounded-0.75 h-15.5 w-74 flex items-center px-8" style="top:254px;left:80px;">
         <input type="text" placeholder="Jean"
           class="bg-transparent w-full text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none" />
       </div>
 
-      <label class="absolute text-white text-4 font-medium leading-[1.4]" style="top:214px;left:calc(80px + 296px + 16px);">Nom</label>
+      <label class="absolute text-white text-4 font-medium leading-snug" style="top:214px;left:calc(80px + 296px + 16px);">Nom</label>
       <div class="absolute bg-neutral-200 rounded-0.75 h-15.5 w-74 flex items-center px-8" style="top:254px;left:calc(80px + 296px + 16px);">
         <input type="text" placeholder="Dupont"
           class="bg-transparent w-full text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none" />
       </div>
 
       <!-- Email -->
-      <label class="absolute text-white text-4 font-medium leading-[1.4]" style="top:334px;left:80px;">Adresse e-mail</label>
+      <label class="absolute text-white text-4 font-medium leading-snug" style="top:334px;left:80px;">Adresse e-mail</label>
       <div class="absolute bg-neutral-200 rounded-0.75 h-15.5 flex items-center px-8" style="top:374px;left:80px;width:624px;">
         <input type="email" placeholder="jean.dupont@email.com"
           class="bg-transparent w-full text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none" />
       </div>
 
       <!-- Numéro de carte -->
-      <label class="absolute text-white text-4 font-medium leading-[1.4]" style="top:454px;left:80px;">Numéro de carte</label>
+      <label class="absolute text-white text-4 font-medium leading-snug" style="top:454px;left:80px;">Numéro de carte</label>
       <div class="absolute bg-neutral-200 rounded-0.75 h-15.5 flex items-center px-8 gap-4" style="top:494px;left:80px;width:624px;">
         <input id="card-number" type="text" placeholder="1234  5678  9012  3456" maxlength="19"
           class="bg-transparent flex-1 text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none tracking-widest" />
@@ -265,13 +265,13 @@ const plan = plans[planId] ?? plans.vip;
       </div>
 
       <!-- Expiration + CVV -->
-      <label class="absolute text-white text-4 font-medium leading-[1.4]" style="top:574px;left:80px;">Date d'expiration</label>
+      <label class="absolute text-white text-4 font-medium leading-snug" style="top:574px;left:80px;">Date d'expiration</label>
       <div class="absolute bg-neutral-200 rounded-0.75 h-15.5 w-74 flex items-center px-8" style="top:614px;left:80px;">
         <input id="card-expiry" type="text" placeholder="MM / AA" maxlength="7"
           class="bg-transparent w-full text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none" />
       </div>
 
-      <label class="absolute text-white text-4 font-medium leading-[1.4]" style="top:574px;left:calc(80px + 296px + 16px);">CVV
+      <label class="absolute text-white text-4 font-medium leading-snug" style="top:574px;left:calc(80px + 296px + 16px);">CVV
         <span class="text-neutral-400 text-3 font-medium ml-1">(3 chiffres)</span>
       </label>
       <div class="absolute bg-neutral-200 rounded-0.75 h-15.5 w-74 flex items-center px-8" style="top:614px;left:calc(80px + 296px + 16px);">
@@ -286,7 +286,7 @@ const plan = plans[planId] ?? plans.vip;
           <div class="absolute inset-0 border-2 border-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] peer-checked:bg-primary-600 peer-checked:border-primary-600 transition-colors"></div>
           <Image src={checkIcon} alt="" width={16} height={16} class="absolute inset-0 hidden peer-checked:block w-full h-full p-0.5 brightness-0 invert" />
         </div>
-        <span class="text-white text-4 font-medium leading-[1.4]">J'accepte les <a href="/mention_legal" class="underline hover:opacity-70 transition-opacity">conditions d'utilisation</a></span>
+        <span class="text-white text-4 font-medium leading-snug">J'accepte les <a href="/mention_legal" class="underline hover:opacity-70 transition-opacity">conditions d'utilisation</a></span>
       </label>
 
       <!-- Bouton payer -->
@@ -306,7 +306,7 @@ const plan = plans[planId] ?? plans.vip;
 
 </Layout>
 
-<script define:vars={{ PB_URL, token, userId, planPbValue, planId }}>
+<script is:inline define:vars={{ PB_URL, token, userId, planPbValue, planId }}>
   document.getElementById('demo-close').addEventListener('click', function () {
     document.getElementById('demo-overlay').style.display = 'none';
   });

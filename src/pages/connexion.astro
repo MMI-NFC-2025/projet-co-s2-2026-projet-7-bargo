@@ -59,40 +59,40 @@ if (Astro.request.method === 'POST') {
       </h2>
 
       <!-- Sous-titre -->
-      <p class="absolute top-30 lg:top-43 left-5 lg:left-20 text-3.5 font-medium leading-[1.1] text-white m-0 w-[calc(100%-40px)] lg:w-136.75">
+      <p class="absolute top-30 lg:top-43 left-5 lg:left-20 text-3.5 font-medium leading-tight text-white m-0 w-[calc(100%-40px)] lg:w-136.75">
         Accédez à votre espace BARGO et retrouvez vos barathons.
       </p>
 
       <form method="POST" enctype="application/x-www-form-urlencoded">
 
         <!-- ─── Adresse E-mail ─── -->
-        <label class="absolute top-47.5 lg:top-63.5 left-5 lg:left-20 text-white text-4 font-medium leading-[1.4]">Adresse E-mail</label>
+        <label class="absolute top-47.5 lg:top-63.5 left-5 lg:left-20 text-white text-4 font-medium leading-snug">Adresse E-mail</label>
         <div class="absolute top-56.25 lg:top-73.5 left-5 lg:left-20 right-5 lg:right-auto bg-neutral-200 rounded-0.75 h-15.5 lg:w-156 flex items-center px-8">
           <input type="email" name="email" placeholder="Mail" required
             class="bg-transparent w-full text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none" />
         </div>
 
         <!-- ─── Mot de passe ─── -->
-        <label class="absolute top-78.75 lg:top-98 left-5 lg:left-20 text-white text-4 font-medium leading-[1.4]">Mots de passe</label>
+        <label class="absolute top-78.75 lg:top-98 left-5 lg:left-20 text-white text-4 font-medium leading-snug">Mots de passe</label>
         <div class="absolute top-87.5 lg:top-108 left-5 lg:left-20 right-5 lg:right-auto bg-neutral-200 rounded-0.75 h-15.5 lg:w-156 flex items-center px-8">
           <input type="password" name="password" placeholder="Mots de passe" required
             class="bg-transparent w-full text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none" />
         </div>
 
         <!-- ─── Mot de passe oublié ─── -->
-        <p class="absolute top-108 lg:top-128.5 left-5 lg:left-20 text-3.5 font-medium leading-[1.1] text-neutral-300 m-0">
+        <p class="absolute top-108 lg:top-128.5 left-5 lg:left-20 text-3.5 font-medium leading-tight text-neutral-300 m-0">
           Mot de passe oublié ?
         </p>
 
         <!-- ─── Bouton SE CONNECTER ─── -->
         <button type="submit" id="btn-connexion"
-          class="absolute top-122.5 lg:top-145 left-5 lg:left-[calc(25%+107px)] w-[calc(100%-40px)] lg:w-59.25 bg-primary-600 h-15 inline-flex items-center justify-center gap-4 text-white text-4 font-medium leading-[1.4] hover:opacity-90 transition-opacity cursor-pointer border-0">
+          class="absolute top-122.5 lg:top-145 left-5 lg:left-[calc(25%+107px)] w-[calc(100%-40px)] lg:w-59.25 bg-primary-600 h-15 inline-flex items-center justify-center gap-4 text-white text-4 font-medium leading-snug hover:opacity-90 transition-opacity cursor-pointer border-0">
           SE CONNECTER
           <Image src={arrowRightLg} alt="" width={35} height={35} class="brightness-0 invert" />
         </button>
 
         <!-- ─── Lien inscription ─── -->
-        <p class="absolute top-143.75 lg:top-166 left-5 lg:left-[calc(25%+344px)] lg:-translate-x-full text-3.5 font-medium leading-[1.1] text-white m-0">
+        <p class="absolute top-143.75 lg:top-166 left-5 lg:left-[calc(25%+344px)] lg:-translate-x-full text-3.5 font-medium leading-tight text-white m-0">
           Pas encore de compte ?&nbsp;<a href="/inscription" class="underline hover:opacity-70 transition-opacity">S'inscrire</a>
         </p>
 

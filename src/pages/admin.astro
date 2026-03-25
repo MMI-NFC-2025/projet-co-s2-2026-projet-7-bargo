@@ -113,7 +113,7 @@ const pageData = JSON.stringify({
   <!-- ══════════════════════════════════════════════════════════════════════ -->
   <!-- SIDEBAR                                                               -->
   <!-- ══════════════════════════════════════════════════════════════════════ -->
-  <aside class="admin-sidebar fixed top-[148px] left-0 bottom-0 w-[280px] z-50 -translate-x-full overflow-y-auto bg-neutral-800 flex flex-col shadow-[4px_0_24px_rgba(0,0,0,0.4)] lg:static lg:top-auto lg:bottom-auto lg:left-auto lg:w-60 lg:shrink-0 lg:z-auto lg:translate-x-0 lg:overflow-y-visible lg:shadow-none lg:py-7 lg:px-4">
+  <aside class="admin-sidebar fixed top-37 left-0 bottom-0 w-70 z-50 -translate-x-full overflow-y-auto bg-neutral-800 flex flex-col shadow-[4px_0_24px_rgba(0,0,0,0.4)] lg:static lg:top-auto lg:bottom-auto lg:left-auto lg:w-60 lg:shrink-0 lg:z-auto lg:translate-x-0 lg:overflow-y-visible lg:shadow-none lg:py-7 lg:px-4">
 
     <div class="hidden lg:block px-2 pb-6 border-b border-white/8">
       <p style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:#72c073; margin:0 0 2px;">Bargo</p>
@@ -133,9 +133,9 @@ const pageData = JSON.stringify({
         <button
           class={`nav-item flex items-center gap-2.5 w-full h-13 px-3 border-0 rounded-lg cursor-pointer text-left mb-0.5 hover:bg-white/7 hover:text-[rgba(247,241,237,0.85)] transition-colors lg:h-auto lg:py-2.5 lg:rounded-md ${i === 0 ? 'bg-[rgba(114,192,115,0.15)] text-primary-500' : 'bg-transparent text-[rgba(247,241,237,0.55)]'}`}
           data-section={item.id}>
-          <span class="text-[14px] lg:text-[13px] font-semibold lg:font-medium flex-1 leading-tight">{item.label}</span>
+          <span class="text-3.5 lg:text-3.25 font-semibold lg:font-medium flex-1 leading-tight">{item.label}</span>
           {item.count !== undefined && (
-            <span class={`inline-flex items-center justify-center text-[11px] font-bold px-2 py-0.5 rounded-full min-w-7 ${i === 0 ? 'bg-[rgba(114,192,115,0.2)] text-primary-500' : 'bg-white/8 text-[rgba(247,241,237,0.4)]'}`}>{item.count}</span>
+            <span class={`inline-flex items-center justify-center text-2.75 font-bold px-2 py-0.5 rounded-full min-w-7 ${i === 0 ? 'bg-[rgba(114,192,115,0.2)] text-primary-500' : 'bg-white/8 text-[rgba(247,241,237,0.4)]'}`}>{item.count}</span>
           )}
         </button>
       ))}
@@ -242,7 +242,7 @@ const pageData = JSON.stringify({
 
       <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
         <div class="hidden lg:grid lg:grid-cols-[1fr_200px_80px_90px_80px] lg:px-5 lg:py-3 lg:bg-[#f9fafb] lg:border-b lg:border-[#e8eaed]">
-          <p class="text-[11px] font-bold uppercase tracking-[1px] text-[#aaa] m-0">Utilisateur</p><p class="text-[11px] font-bold uppercase tracking-[1px] text-[#aaa] m-0">Email</p><p class="text-[11px] font-bold uppercase tracking-[1px] text-[#aaa] m-0">Points</p><p class="text-[11px] font-bold uppercase tracking-[1px] text-[#aaa] m-0">Rôle</p><p class="text-[11px] font-bold uppercase tracking-[1px] text-[#aaa] m-0"></p>
+          <p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Utilisateur</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Email</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Points</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Rôle</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0"></p>
         </div>
         {allUsers.map(u => (
           <div data-row-user={u.id} class="grid grid-cols-[1fr_auto_auto] lg:grid-cols-[1fr_200px_80px_90px_80px] items-center px-5 py-3.5 border-b border-[#f3f4f6]">
@@ -283,12 +283,12 @@ const pageData = JSON.stringify({
           <h3 style="color:#111; margin:0 0 4px;">Bars</h3>
           <p style="color:#888; font-size:14px; font-weight:500; margin:0;">{allBars.length} bar{allBars.length > 1 ? 's' : ''} dans la base</p>
         </div>
-        <button data-action="open-bar-form" data-id="" class="h-9.5 px-4.5 bg-primary-600 border-0 text-white text-[13px] font-bold cursor-pointer rounded-[7px] hover:bg-[#2a5e38] transition-colors">+ Ajouter un bar</button>
+        <button data-action="open-bar-form" data-id="" class="h-9.5 px-4.5 bg-primary-600 border-0 text-white text-3.25 font-bold cursor-pointer rounded-[7px] hover:bg-[#2a5e38] transition-colors">+ Ajouter un bar</button>
       </div>
 
       <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
         <div class="hidden lg:grid lg:grid-cols-[1fr_220px_100px] lg:px-5 lg:py-3 lg:bg-[#f9fafb] lg:border-b lg:border-[#e8eaed]">
-          <p class="text-[11px] font-bold uppercase tracking-[1px] text-[#aaa] m-0">Nom</p><p class="text-[11px] font-bold uppercase tracking-[1px] text-[#aaa] m-0">Adresse</p><p class="text-[11px] font-bold uppercase tracking-[1px] text-[#aaa] m-0"></p>
+          <p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Adresse</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0"></p>
         </div>
         {allBars.map(b => (
           <div data-row-bar={b.id} class="grid grid-cols-[1fr_auto] lg:grid-cols-[1fr_220px_100px] items-center px-5 py-3.5 border-b border-[#f3f4f6]">
@@ -316,7 +316,7 @@ const pageData = JSON.stringify({
 
       <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
         <div style="display:grid; grid-template-columns:1fr 130px 140px 80px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
-          <p class="text-[11px] font-bold uppercase tracking-[1px] text-[#aaa] m-0">Nom</p><p class="text-[11px] font-bold uppercase tracking-[1px] text-[#aaa] m-0">Date</p><p class="text-[11px] font-bold uppercase tracking-[1px] text-[#aaa] m-0">État</p><p class="text-[11px] font-bold uppercase tracking-[1px] text-[#aaa] m-0"></p>
+          <p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Date</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">État</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0"></p>
         </div>
         {allSessions.map(s => {
           const etat = s.etat_session ?? 'pas_commencer';
@@ -353,7 +353,7 @@ const pageData = JSON.stringify({
 
       <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
         <div style="display:grid; grid-template-columns:1fr 150px 130px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
-          <p class="text-[11px] font-bold uppercase tracking-[1px] text-[#aaa] m-0">Nom</p><p class="text-[11px] font-bold uppercase tracking-[1px] text-[#aaa] m-0">Type</p><p class="text-[11px] font-bold uppercase tracking-[1px] text-[#aaa] m-0"></p>
+          <p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Type</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0"></p>
         </div>
         {allJeux.map(j => (
           <div data-row-jeu={j.id} style="display:grid; grid-template-columns:1fr 150px 130px; align-items:center; padding:14px 20px; border-bottom:1px solid #f3f4f6;">
@@ -434,12 +434,12 @@ const pageData = JSON.stringify({
           <h3 style="color:#111; margin:0 0 4px;">Boissons</h3>
           <p style="color:#888; font-size:14px; font-weight:500; margin:0;">{allBoisons.length} boisson{allBoisons.length > 1 ? 's' : ''} dans la base</p>
         </div>
-        <button data-action="open-boison-form" data-id="" class="h-9.5 px-4.5 bg-primary-600 border-0 text-white text-[13px] font-bold cursor-pointer rounded-[7px] hover:bg-[#2a5e38] transition-colors">+ Ajouter une boisson</button>
+        <button data-action="open-boison-form" data-id="" class="h-9.5 px-4.5 bg-primary-600 border-0 text-white text-3.25 font-bold cursor-pointer rounded-[7px] hover:bg-[#2a5e38] transition-colors">+ Ajouter une boisson</button>
       </div>
 
       <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
         <div style="display:grid; grid-template-columns:1fr 100px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
-          <p class="text-[11px] font-bold uppercase tracking-[1px] text-[#aaa] m-0">Nom</p><p class="text-[11px] font-bold uppercase tracking-[1px] text-[#aaa] m-0"></p>
+          <p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0"></p>
         </div>
         {allBoisons.map(b => (
           <div data-row-boison={b.id} style="display:grid; grid-template-columns:1fr 100px; align-items:center; padding:14px 20px; border-bottom:1px solid #f3f4f6;">
@@ -461,12 +461,12 @@ const pageData = JSON.stringify({
           <h3 style="color:#111; margin:0 0 4px;">Boutique</h3>
           <p style="color:#888; font-size:14px; font-weight:500; margin:0;">{allBoutique.length} article{allBoutique.length > 1 ? 's' : ''} disponible{allBoutique.length > 1 ? 's' : ''}</p>
         </div>
-        <button data-action="open-boutique-form" data-id="" class="h-9.5 px-4.5 bg-primary-600 border-0 text-white text-[13px] font-bold cursor-pointer rounded-[7px] hover:bg-[#2a5e38] transition-colors">+ Ajouter un article</button>
+        <button data-action="open-boutique-form" data-id="" class="h-9.5 px-4.5 bg-primary-600 border-0 text-white text-3.25 font-bold cursor-pointer rounded-[7px] hover:bg-[#2a5e38] transition-colors">+ Ajouter un article</button>
       </div>
 
       <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
         <div style="display:grid; grid-template-columns:56px 1fr 160px 80px 110px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
-          <p class="text-[11px] font-bold uppercase tracking-[1px] text-[#aaa] m-0"></p><p class="text-[11px] font-bold uppercase tracking-[1px] text-[#aaa] m-0">Nom</p><p class="text-[11px] font-bold uppercase tracking-[1px] text-[#aaa] m-0">Type</p><p class="text-[11px] font-bold uppercase tracking-[1px] text-[#aaa] m-0">Prix</p><p class="text-[11px] font-bold uppercase tracking-[1px] text-[#aaa] m-0"></p>
+          <p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0"></p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Type</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Prix</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0"></p>
         </div>
         {allBoutique.map(b => {
           const typeLabels = { decoration_avatar: 'Décoration', theme: 'Thème', titre: 'Titre' };

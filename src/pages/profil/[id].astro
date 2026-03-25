@@ -122,7 +122,7 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
       {u.description && (
         <div class="mt-4">
           <p class="m-0 text-4 font-medium text-black uppercase">DESCRIPTION</p>
-          <p class="m-0 mt-1 text-neutral-500 text-4 font-medium leading-[1.4]">{u.description}</p>
+          <p class="m-0 mt-1 text-neutral-500 text-4 font-medium leading-snug">{u.description}</p>
         </div>
       )}
     </div>
@@ -157,7 +157,7 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
         </div>
       )}
       <!-- Ami(e)s -->
-      <p class="absolute m-0 text-neutral-800 text-4 font-medium leading-[1.4]"
+      <p class="absolute m-0 text-neutral-800 text-4 font-medium leading-snug"
         style="left: calc(33.33% + 79px); top: 198px;">
         {amiesCount} ami(e)s
       </p>
@@ -168,12 +168,12 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
         <h3 class="text-white m-0">{u.points ?? 0}</h3>
       </div>
       <!-- DESCRIPTION label -->
-      <p class="absolute m-0 text-4 font-medium text-black uppercase leading-[1.4]"
+      <p class="absolute m-0 text-4 font-medium text-black uppercase leading-snug"
         style="left: calc(50% + 17px); top: 127px;">
         DESCRIPTION
       </p>
       <!-- Description text -->
-      <p class="absolute m-0 text-neutral-500 text-4 font-medium leading-[1.4] w-155.75"
+      <p class="absolute m-0 text-neutral-500 text-4 font-medium leading-snug w-155.75"
         style="left: calc(50% + 16px); top: 174px;">
         {u.description || '—'}
       </p>
@@ -192,12 +192,12 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
           <!-- Bouton relation -->
           {isAlreadyFriend ? (
             <div class="flex flex-col gap-3">
-              <div class="flex items-center justify-center gap-2 border-2 text-3.5 font-medium leading-[1.4] h-15 w-59.25 shrink-0" style="border-color:#72c073; color:#72c073;">
+              <div class="flex items-center justify-center gap-2 border-2 text-3.5 font-medium leading-snug h-15 w-59.25 shrink-0" style="border-color:#72c073; color:#72c073;">
                 <Image src={checkIcon} alt="" width={14} height={14} style="filter:invert(64%) sepia(54%) saturate(429%) hue-rotate(73deg) brightness(94%) contrast(88%)" />
                 Amis
               </div>
               <button id="remove-friend-btn"
-                class="flex items-center justify-center gap-2 border-2 border-neutral-500 text-neutral-400 text-3.5 font-medium leading-[1.4] h-15 w-59.25 hover:border-red-400 hover:text-red-400 transition-colors cursor-pointer bg-transparent shrink-0">
+                class="flex items-center justify-center gap-2 border-2 border-neutral-500 text-neutral-400 text-3.5 font-medium leading-snug h-15 w-59.25 hover:border-red-400 hover:text-red-400 transition-colors cursor-pointer bg-transparent shrink-0">
                 <Image src={userRemoveIcon} alt="" width={14} height={14} class="brightness-0 invert opacity-60 shrink-0" />
                 Supprimer l'ami
               </button>
@@ -206,24 +206,24 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
             <div class="flex flex-col gap-3">
               <p class="text-neutral-400 text-3 font-medium m-0">Demande reçue</p>
               <button id="accept-btn"
-                class="flex items-center justify-center gap-2 text-white text-3.5 font-medium leading-[1.4] h-15 w-59.25 cursor-pointer border-0 hover:opacity-90 transition-opacity shrink-0"
+                class="flex items-center justify-center gap-2 text-white text-3.5 font-medium leading-snug h-15 w-59.25 cursor-pointer border-0 hover:opacity-90 transition-opacity shrink-0"
                 style="background:#347645;">
                 <Image src={checkIcon} alt="" width={14} height={14} class="brightness-0 invert shrink-0" />
                 Accepter
               </button>
               <button id="refuse-btn"
-                class="flex items-center justify-center gap-2 border-2 border-neutral-500 text-neutral-400 text-3.5 font-medium leading-[1.4] h-15 w-59.25 hover:border-red-400 hover:text-red-400 transition-colors cursor-pointer bg-transparent shrink-0">
+                class="flex items-center justify-center gap-2 border-2 border-neutral-500 text-neutral-400 text-3.5 font-medium leading-snug h-15 w-59.25 hover:border-red-400 hover:text-red-400 transition-colors cursor-pointer bg-transparent shrink-0">
                 Refuser
               </button>
             </div>
           ) : requestSentByMe ? (
-            <div class="flex items-center justify-center gap-2 text-3.5 font-medium leading-[1.4] h-15 w-59.25 shrink-0" style="background:#2c2c2c; color:#646262; border:1px solid #3a3a3a;">
+            <div class="flex items-center justify-center gap-2 text-3.5 font-medium leading-snug h-15 w-59.25 shrink-0" style="background:#2c2c2c; color:#646262; border:1px solid #3a3a3a;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#646262" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
               Demande envoyée
             </div>
           ) : (
             <button id="send-request-btn"
-              class="flex items-center justify-center gap-2 text-white text-3.5 font-medium leading-[1.4] h-15 w-59.25 cursor-pointer border-0 hover:opacity-90 transition-opacity shrink-0"
+              class="flex items-center justify-center gap-2 text-white text-3.5 font-medium leading-snug h-15 w-59.25 cursor-pointer border-0 hover:opacity-90 transition-opacity shrink-0"
               style="background:#094736;">
               <Image src={userAddIcon} alt="" width={14} height={14} class="brightness-0 invert shrink-0" />
               Envoyer une demande
@@ -321,26 +321,26 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
               <h3 class="text-black m-0 mb-8.75">Statistiques</h3>
               <div class="flex flex-col lg:flex-row gap-4 lg:gap-25">
                 <div class="flex flex-col gap-1">
-                  <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Points</span>
-                  <span class="text-black text-4 font-medium leading-[1.4]">{u.points ?? 0}</span>
+                  <span class="text-neutral-500 text-4 font-medium leading-snug">Points</span>
+                  <span class="text-black text-4 font-medium leading-snug">{u.points ?? 0}</span>
                 </div>
                 <div class="flex flex-col gap-1">
-                  <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Ami(e)s</span>
-                  <span class="text-black text-4 font-medium leading-[1.4]">{amiesCount}</span>
+                  <span class="text-neutral-500 text-4 font-medium leading-snug">Ami(e)s</span>
+                  <span class="text-black text-4 font-medium leading-snug">{amiesCount}</span>
                 </div>
                 <div class="flex flex-col gap-1">
-                  <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Âge</span>
-                  <span class="text-black text-4 font-medium leading-[1.4]">{u.age ? `${u.age} ans` : '—'}</span>
+                  <span class="text-neutral-500 text-4 font-medium leading-snug">Âge</span>
+                  <span class="text-black text-4 font-medium leading-snug">{u.age ? `${u.age} ans` : '—'}</span>
                 </div>
                 {u.ville && (
                   <div class="flex flex-col gap-1">
-                    <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Ville</span>
-                    <span class="text-black text-4 font-medium leading-[1.4]">{u.ville}</span>
+                    <span class="text-neutral-500 text-4 font-medium leading-snug">Ville</span>
+                    <span class="text-black text-4 font-medium leading-snug">{u.ville}</span>
                   </div>
                 )}
                 <div class="flex flex-col gap-1">
-                  <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Membre depuis</span>
-                  <span class="text-black text-4 font-medium leading-[1.4]">{createdAt}</span>
+                  <span class="text-neutral-500 text-4 font-medium leading-snug">Membre depuis</span>
+                  <span class="text-black text-4 font-medium leading-snug">{createdAt}</span>
                 </div>
               </div>
             </div>
@@ -350,28 +350,28 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
               <h3 class="text-black m-0 mb-8.75">Activité sur Bargo</h3>
               <div class="flex flex-col lg:flex-row gap-4 lg:gap-25">
                 <div class="flex flex-col gap-1">
-                  <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Sorties organisées</span>
-                  <span class="text-black text-4 font-medium leading-[1.4]">
+                  <span class="text-neutral-500 text-4 font-medium leading-snug">Sorties organisées</span>
+                  <span class="text-black text-4 font-medium leading-snug">
                     {u.barathon_organiser ? `${u.barathon_organiser} sorties` : '—'}
                   </span>
                 </div>
                 <div class="flex flex-col gap-1">
-                  <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Barathons réalisés</span>
-                  <span class="text-black text-4 font-medium leading-[1.4]">
+                  <span class="text-neutral-500 text-4 font-medium leading-snug">Barathons réalisés</span>
+                  <span class="text-black text-4 font-medium leading-snug">
                     {u.barathon_participer ? `${u.barathon_participer} parcours` : '—'}
                   </span>
                 </div>
                 <div class="flex flex-col gap-1">
-                  <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Bars favoris</span>
-                  <span class="text-black text-4 font-medium leading-[1.4]">{barsFavori.length}</span>
+                  <span class="text-neutral-500 text-4 font-medium leading-snug">Bars favoris</span>
+                  <span class="text-black text-4 font-medium leading-snug">{barsFavori.length}</span>
                 </div>
                 <div class="flex flex-col gap-1">
-                  <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Jeux favoris</span>
-                  <span class="text-black text-4 font-medium leading-[1.4]">{jeuxFavori.length}</span>
+                  <span class="text-neutral-500 text-4 font-medium leading-snug">Jeux favoris</span>
+                  <span class="text-black text-4 font-medium leading-snug">{jeuxFavori.length}</span>
                 </div>
                 <div class="flex flex-col gap-1">
-                  <span class="text-neutral-500 text-4 font-medium leading-[1.4]">Boissons favorites</span>
-                  <span class="text-black text-4 font-medium leading-[1.4]">{boissonsFavori.length}</span>
+                  <span class="text-neutral-500 text-4 font-medium leading-snug">Boissons favorites</span>
+                  <span class="text-black text-4 font-medium leading-snug">{boissonsFavori.length}</span>
                 </div>
               </div>
             </div>

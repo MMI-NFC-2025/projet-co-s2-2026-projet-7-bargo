@@ -37,11 +37,11 @@ const items = [
     <div class="lg:ml-[calc(33.33%+38px)]">
       {items.map((item) => (
         <details class="faq-item border-b border-neutral-300/30 first:border-t first:border-neutral-300/30">
-          <summary class="flex items-center justify-between py-5 font-medium text-4 leading-[1.4] text-neutral-300 cursor-pointer list-none gap-5 select-none [&::-webkit-details-marker]:hidden">
+          <summary class="flex items-center justify-between py-5 font-medium text-4 leading-snug text-neutral-300 cursor-pointer list-none gap-5 select-none">
             <span>{item.question}</span>
             <span class="faq-icon shrink-0 text-neutral-300 text-xl leading-none transition-transform duration-200">+</span>
           </summary>
-          <p class="font-medium text-3.5 leading-[1.4] text-neutral-500 m-0 pb-5 pr-2 lg:pr-10">
+          <p class="font-medium text-3.5 leading-snug text-neutral-500 m-0 pb-5 pr-2 lg:pr-10">
             {item.answer}
           </p>
         </details>
