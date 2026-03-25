@@ -93,7 +93,7 @@ const pageData = JSON.stringify({
 <script is:inline>document.body.classList.add('admin-page')</script>
 
 <!-- Barre mobile admin -->
-<div id="admin-mob-bar" class="flex lg:hidden items-center justify-between bg-neutral-800 px-4 h-14 sticky top-23 z-49 shadow-[0_4px_4px_rgba(0,0,0,0.25)]">
+<div id="admin-mob-bar" class="flex lg:hidden items-center justify-between bg-neutral-800 px-4 h-14 sticky top-23 z-49 shadow-md">
   <div style="display:flex; align-items:center; gap:10px;">
     <span style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:#72c073;">Bargo</span>
     <span style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:rgba(247,241,237,0.5);">Admin</span>
@@ -268,7 +268,7 @@ const pageData = JSON.stringify({
             </div>
             <div class="flex justify-end">
               {u.id !== userId && (
-                <button data-action="delete-user" data-id={u.id} class="h-7 px-3 bg-[#fff5f5] border border-[#fecaca] text-[#ef4444] text-[12px] font-semibold cursor-pointer rounded-md hover:bg-[#fee2e2] transition-colors">Supprimer</button>
+                <button data-action="delete-user" data-id={u.id} class="h-7 px-3 bg-[#fff5f5] border border-[#fecaca] text-[#ef4444] text-3 font-semibold cursor-pointer rounded-md hover:bg-[#fee2e2] transition-colors">Supprimer</button>
               )}
             </div>
           </div>
@@ -283,7 +283,7 @@ const pageData = JSON.stringify({
           <h3 style="color:#111; margin:0 0 4px;">Bars</h3>
           <p style="color:#888; font-size:14px; font-weight:500; margin:0;">{allBars.length} bar{allBars.length > 1 ? 's' : ''} dans la base</p>
         </div>
-        <button data-action="open-bar-form" data-id="" class="h-9.5 px-4.5 bg-primary-600 border-0 text-white text-3.25 font-bold cursor-pointer rounded-[7px] hover:bg-[#2a5e38] transition-colors">+ Ajouter un bar</button>
+        <button data-action="open-bar-form" data-id="" class="h-9.5 px-4.5 bg-primary-600 border-0 text-white text-3.25 font-bold cursor-pointer rounded-lg hover:bg-primary-900 transition-colors">+ Ajouter un bar</button>
       </div>
 
       <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
@@ -298,8 +298,8 @@ const pageData = JSON.stringify({
             </div>
             <p style="font-size:13px; color:#555; margin:0;">{b.adresse ?? '—'}</p>
             <div class="flex justify-end gap-2">
-              <button data-action="open-bar-form" data-id={b.id} class="h-7 px-3 bg-[#f0fdf4] border border-[#d1fae5] text-primary-600 text-[12px] font-semibold cursor-pointer rounded-md hover:bg-[#d1fae5] transition-colors">Modifier</button>
-              <button data-action="delete-bar" data-id={b.id} class="h-7 px-3 bg-[#fff5f5] border border-[#fecaca] text-[#ef4444] text-[12px] font-semibold cursor-pointer rounded-md hover:bg-[#fee2e2] transition-colors">Supp.</button>
+              <button data-action="open-bar-form" data-id={b.id} class="h-7 px-3 bg-[#f0fdf4] border border-[#d1fae5] text-primary-600 text-3 font-semibold cursor-pointer rounded-md hover:bg-[#d1fae5] transition-colors">Modifier</button>
+              <button data-action="delete-bar" data-id={b.id} class="h-7 px-3 bg-[#fff5f5] border border-[#fecaca] text-[#ef4444] text-3 font-semibold cursor-pointer rounded-md hover:bg-[#fee2e2] transition-colors">Supp.</button>
             </div>
           </div>
         ))}
@@ -335,7 +335,7 @@ const pageData = JSON.stringify({
               <p style="font-size:13px; color:#555; margin:0;">{s.date_heur_depart?.split(' ')[0] ?? '—'}</p>
               <span style={`font-size:11px; font-weight:700; color:${color}; background:${bg}; padding:4px 11px; border-radius:20px; width:fit-content;`}>{label}</span>
               <div class="flex justify-end">
-                <button data-action="delete-session" data-id={s.id} class="h-7 px-3 bg-[#fff5f5] border border-[#fecaca] text-[#ef4444] text-[12px] font-semibold cursor-pointer rounded-md hover:bg-[#fee2e2] transition-colors">Supp.</button>
+                <button data-action="delete-session" data-id={s.id} class="h-7 px-3 bg-[#fff5f5] border border-[#fecaca] text-[#ef4444] text-3 font-semibold cursor-pointer rounded-md hover:bg-[#fee2e2] transition-colors">Supp.</button>
               </div>
             </div>
           );
@@ -360,8 +360,8 @@ const pageData = JSON.stringify({
             <p style="font-size:14px; font-weight:600; color:#222; margin:0;">{j.nom ?? '—'}</p>
             <span style="font-size:12px; font-weight:600; color:#7c3aed; background:#f5f3ff; padding:3px 10px; border-radius:20px; width:fit-content;">{j.type_du_jeux ?? '—'}</span>
             <div class="flex justify-end gap-2">
-              <button data-action="open-jeu-form" data-id={j.id} class="h-7 px-3 bg-[#f0fdf4] border border-[#d1fae5] text-primary-600 text-[12px] font-semibold cursor-pointer rounded-md hover:bg-[#d1fae5] transition-colors">Modifier</button>
-              <button data-action="open-jeu-questions" data-id={j.id} class="h-7 px-3 bg-primary-600 border-0 text-white text-[12px] font-bold cursor-pointer rounded-[7px] hover:bg-[#2a5e38] transition-colors">Questions</button>
+              <button data-action="open-jeu-form" data-id={j.id} class="h-7 px-3 bg-[#f0fdf4] border border-[#d1fae5] text-primary-600 text-3 font-semibold cursor-pointer rounded-md hover:bg-[#d1fae5] transition-colors">Modifier</button>
+              <button data-action="open-jeu-questions" data-id={j.id} class="h-7 px-3 bg-primary-600 border-0 text-white text-3 font-bold cursor-pointer rounded-lg hover:bg-primary-900 transition-colors">Questions</button>
             </div>
           </div>
         ))}
@@ -434,7 +434,7 @@ const pageData = JSON.stringify({
           <h3 style="color:#111; margin:0 0 4px;">Boissons</h3>
           <p style="color:#888; font-size:14px; font-weight:500; margin:0;">{allBoisons.length} boisson{allBoisons.length > 1 ? 's' : ''} dans la base</p>
         </div>
-        <button data-action="open-boison-form" data-id="" class="h-9.5 px-4.5 bg-primary-600 border-0 text-white text-3.25 font-bold cursor-pointer rounded-[7px] hover:bg-[#2a5e38] transition-colors">+ Ajouter une boisson</button>
+        <button data-action="open-boison-form" data-id="" class="h-9.5 px-4.5 bg-primary-600 border-0 text-white text-3.25 font-bold cursor-pointer rounded-lg hover:bg-primary-900 transition-colors">+ Ajouter une boisson</button>
       </div>
 
       <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
@@ -445,8 +445,8 @@ const pageData = JSON.stringify({
           <div data-row-boison={b.id} style="display:grid; grid-template-columns:1fr 100px; align-items:center; padding:14px 20px; border-bottom:1px solid #f3f4f6;">
             <p style="font-size:14px; font-weight:600; color:#222; margin:0;">{b.nom ?? b.name ?? '—'}</p>
             <div class="flex justify-end gap-2">
-              <button data-action="open-boison-form" data-id={b.id} class="h-7 px-3 bg-[#f0fdf4] border border-[#d1fae5] text-primary-600 text-[12px] font-semibold cursor-pointer rounded-md hover:bg-[#d1fae5] transition-colors">Modifier</button>
-              <button data-action="delete-boison" data-id={b.id} class="h-7 px-3 bg-[#fff5f5] border border-[#fecaca] text-[#ef4444] text-[12px] font-semibold cursor-pointer rounded-md hover:bg-[#fee2e2] transition-colors">Supp.</button>
+              <button data-action="open-boison-form" data-id={b.id} class="h-7 px-3 bg-[#f0fdf4] border border-[#d1fae5] text-primary-600 text-3 font-semibold cursor-pointer rounded-md hover:bg-[#d1fae5] transition-colors">Modifier</button>
+              <button data-action="delete-boison" data-id={b.id} class="h-7 px-3 bg-[#fff5f5] border border-[#fecaca] text-[#ef4444] text-3 font-semibold cursor-pointer rounded-md hover:bg-[#fee2e2] transition-colors">Supp.</button>
             </div>
           </div>
         ))}
@@ -461,7 +461,7 @@ const pageData = JSON.stringify({
           <h3 style="color:#111; margin:0 0 4px;">Boutique</h3>
           <p style="color:#888; font-size:14px; font-weight:500; margin:0;">{allBoutique.length} article{allBoutique.length > 1 ? 's' : ''} disponible{allBoutique.length > 1 ? 's' : ''}</p>
         </div>
-        <button data-action="open-boutique-form" data-id="" class="h-9.5 px-4.5 bg-primary-600 border-0 text-white text-3.25 font-bold cursor-pointer rounded-[7px] hover:bg-[#2a5e38] transition-colors">+ Ajouter un article</button>
+        <button data-action="open-boutique-form" data-id="" class="h-9.5 px-4.5 bg-primary-600 border-0 text-white text-3.25 font-bold cursor-pointer rounded-lg hover:bg-primary-900 transition-colors">+ Ajouter un article</button>
       </div>
 
       <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
@@ -504,8 +504,8 @@ const pageData = JSON.stringify({
               <p style="font-size:13px; font-weight:700; color:#222; margin:0;">{b.prix} pts</p>
               <!-- Actions -->
               <div class="flex justify-end gap-2">
-                <button data-action="open-boutique-form" data-id={b.id} class="h-7 px-3 bg-[#f0fdf4] border border-[#d1fae5] text-primary-600 text-[12px] font-semibold cursor-pointer rounded-md hover:bg-[#d1fae5] transition-colors">Modifier</button>
-                <button data-action="delete-boutique" data-id={b.id} class="h-7 px-3 bg-[#fff5f5] border border-[#fecaca] text-[#ef4444] text-[12px] font-semibold cursor-pointer rounded-md hover:bg-[#fee2e2] transition-colors">Supp.</button>
+                <button data-action="open-boutique-form" data-id={b.id} class="h-7 px-3 bg-[#f0fdf4] border border-[#d1fae5] text-primary-600 text-3 font-semibold cursor-pointer rounded-md hover:bg-[#d1fae5] transition-colors">Modifier</button>
+                <button data-action="delete-boutique" data-id={b.id} class="h-7 px-3 bg-[#fff5f5] border border-[#fecaca] text-[#ef4444] text-3 font-semibold cursor-pointer rounded-md hover:bg-[#fee2e2] transition-colors">Supp.</button>
               </div>
             </div>
           );

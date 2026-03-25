@@ -51,7 +51,7 @@ const questions = allQ.slice(0, 10).map(q => ({
 
   {questions.length === 0 ? (
     <div class="min-h-screen bg-neutral-800 flex flex-col items-center justify-center px-4 text-center">
-      <p class="text-[#F7F1ED] text-4 font-medium mb-6">Aucune question trouvée pour ce thème.</p>
+      <p class="text-neutral-200 text-4 font-medium mb-6">Aucune question trouvée pour ce thème.</p>
       {fetchError && <p class="text-red-400 text-3.5 font-medium mb-4 opacity-80">{fetchError}</p>}
       <a href="/jeux_questionaire" class="bg-primary-600 text-white px-8 h-12 flex items-center text-4 font-medium no-underline hover:opacity-90 transition-opacity">
         Retour
@@ -74,13 +74,13 @@ const questions = allQ.slice(0, 10).map(q => ({
         </div>
 
         <!-- Barre timer -->
-        <div class="w-full h-1 bg-[#2c2c2c] rounded-full mb-8">
+        <div class="w-full h-1 bg-zinc-800 rounded-full mb-8">
           <div id="timer-bar" class="h-full rounded-full" style="width:100%;background:#72C073;transition:width 0.9s linear,background 0.5s"></div>
         </div>
 
         <!-- Carte question -->
-        <div class="bg-[#252525] border border-[#333] rounded-1 px-6 py-7 mb-5">
-          <span id="q-theme-badge" class="inline-block text-[#72C073] text-3 font-medium uppercase tracking-widest mb-3 opacity-80"></span>
+        <div class="bg-zinc-800 border border-neutral-700 rounded-1 px-6 py-7 mb-5">
+          <span id="q-theme-badge" class="inline-block text-primary-500 text-3 font-medium uppercase tracking-widest mb-3 opacity-80"></span>
           <p id="q-text" class="m-0 text-white text-4.5 lg:text-5 font-medium leading-normal"></p>
         </div>
 
@@ -90,9 +90,9 @@ const questions = allQ.slice(0, 10).map(q => ({
             <button
               id={`choice-${i}`}
               data-index={String(i)}
-              class="choice-btn min-h-14 px-5 py-3.5 bg-[#252525] border border-[#3a3a3a] text-white text-3.5 font-medium text-left rounded-0.5 hover:border-[#72C073] hover:bg-[#2c3a2c] transition-all cursor-pointer flex items-center gap-4"
+              class="choice-btn min-h-14 px-5 py-3.5 bg-zinc-800 border border-zinc-700 text-white text-3.5 font-medium text-left rounded-0.5 hover:border-primary-500 hover:bg-[#2c3a2c] transition-all cursor-pointer flex items-center gap-4"
             >
-              <span class="w-7 h-7 rounded-full border border-[#72C073] text-[#72C073] text-3 font-bold flex items-center justify-center shrink-0">{String.fromCharCode(65 + i)}</span>
+              <span class="w-7 h-7 rounded-full border border-primary-500 text-primary-500 text-3 font-bold flex items-center justify-center shrink-0">{String.fromCharCode(65 + i)}</span>
               <span class="choice-text leading-snug"></span>
             </button>
           ))}
@@ -104,19 +104,19 @@ const questions = allQ.slice(0, 10).map(q => ({
       <div id="phase-result" class="hidden w-full max-w-lg">
 
         <!-- Score card -->
-        <div class="bg-[#252525] border border-[#333] rounded-1 p-8 lg:p-10 mb-6 text-center">
+        <div class="bg-zinc-800 border border-neutral-700 rounded-1 p-8 lg:p-10 mb-6 text-center">
 
           <!-- Score visuel -->
           <div id="result-circle-section" class="flex items-center justify-center gap-6 mb-6">
             <div class="w-28 h-28 rounded-full flex flex-col items-center justify-center shrink-0" style="background: conic-gradient(#72C073 0deg, #72C073 calc(var(--pct,0) * 360deg), #333 calc(var(--pct,0) * 360deg)); padding: 4px;">
-              <div class="w-full h-full rounded-full bg-[#252525] flex flex-col items-center justify-center">
+              <div class="w-full h-full rounded-full bg-zinc-800 flex flex-col items-center justify-center">
                 <span id="result-correct" class="text-white font-bold text-8 leading-none"></span>
                 <span class="text-neutral-300 text-3 font-medium opacity-60">/ {questions.length}</span>
               </div>
             </div>
             <div class="text-left">
               <h2 id="result-title" class="text-white m-0 mb-1 text-5.5">Résultat</h2>
-              <p id="result-score" class="text-[#72C073] text-7 font-bold m-0"></p>
+              <p id="result-score" class="text-primary-500 text-7 font-bold m-0"></p>
               <p id="result-mult" class="text-neutral-300 text-3 font-medium opacity-50 m-0 mt-1"></p>
             </div>
           </div>
@@ -136,11 +136,11 @@ const questions = allQ.slice(0, 10).map(q => ({
           </a>
           <div class="flex flex-col lg:flex-row gap-3">
             <a href="/jeux_questionaire"
-              class="lg:flex-1 h-12 bg-[#2c2c2c] border border-[#3a3a3a] text-white text-4 font-medium flex items-center justify-center no-underline hover:opacity-80 transition-opacity rounded-0.5">
+              class="lg:flex-1 h-12 bg-zinc-800 border border-zinc-700 text-white text-4 font-medium flex items-center justify-center no-underline hover:opacity-80 transition-opacity rounded-0.5">
               Changer les paramètres
             </a>
             <a href="/jeux"
-              class="lg:flex-1 h-12 bg-transparent border border-[#3a3a3a] text-neutral-300 text-4 font-medium flex items-center justify-center no-underline hover:opacity-80 transition-opacity rounded-0.5">
+              class="lg:flex-1 h-12 bg-transparent border border-zinc-700 text-neutral-300 text-4 font-medium flex items-center justify-center no-underline hover:opacity-80 transition-opacity rounded-0.5">
               Retour aux jeux
             </a>
           </div>

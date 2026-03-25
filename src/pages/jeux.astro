@@ -37,7 +37,7 @@ const totalPages = Math.ceil((data.totalItems ?? 0) / perPage);
         {jeux.map(jeu => {
           const imageFile = Array.isArray(jeu.img) ? jeu.img[0] : jeu.img;
           return (
-            <div class="bg-white rounded-0.5 shadow-[0px_7px_4px_0px_rgba(0,0,0,0.25)] overflow-hidden">
+            <div class="bg-white rounded-0.5 shadow-md overflow-hidden">
 
               <!-- Image -->
               <div class="w-full h-50 lg:h-75 overflow-hidden">

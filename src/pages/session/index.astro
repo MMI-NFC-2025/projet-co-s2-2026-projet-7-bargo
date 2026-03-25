@@ -113,7 +113,7 @@ const sessions = (data.items ?? []).map(s => {
 
           <!-- Liste des sessions -->
           {sessions.length === 0 ? (
-            <div class="bg-white rounded-0.5 shadow-[0px_4px_6px_0px_rgba(0,0,0,0.1)] px-6 py-10 text-center">
+            <div class="bg-white rounded-0.5 shadow-sm px-6 py-10 text-center">
               <p class="text-neutral-500 text-4 font-medium m-0">Vous n'avez aucune session active pour le moment.</p>
               <p class="text-neutral-500 text-3.5 font-medium m-0 mt-2 opacity-70">Créez votre premier barathon pour commencer !</p>
             </div>
@@ -124,7 +124,7 @@ const sessions = (data.items ?? []).map(s => {
                 const etatBg    = s.etat === 'en_cours' ? 'background:#72C073;color:#094736;' : 'background:#DFDFDF;color:#646262;';
                 return (
                   <a href={`/session/${s.id}`}
-                    class="bg-white rounded-0.5 shadow-[0px_4px_6px_0px_rgba(0,0,0,0.1)] overflow-hidden flex no-underline hover:shadow-[0px_8px_20px_0px_rgba(0,0,0,0.15)] transition-shadow">
+                    class="bg-white rounded-0.5 shadow-sm overflow-hidden flex no-underline hover:shadow-lg transition-shadow">
 
                     <!-- Image (premier bar ou placeholder) -->
                     <div class="w-28 lg:w-44 shrink-0 overflow-hidden" style="background:#2c2c2c;">

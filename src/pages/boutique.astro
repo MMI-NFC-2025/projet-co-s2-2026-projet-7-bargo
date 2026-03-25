@@ -90,7 +90,7 @@ function getButtonState(produit) {
 
     <!-- Tab bar -->
     <div class="pt-5.75">
-      <div class="border-b-2 border-neutral-350 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25)]">
+      <div class="border-b-2 border-neutral-350 shadow-md">
         <div class="lg:px-20 flex items-center justify-between h-14 lg:h-13">
 
           <!-- Onglets -->
@@ -142,7 +142,7 @@ function getButtonState(produit) {
             return (
               <div>
                 <!-- MOBILE -->
-                <div class="block lg:hidden bg-white rounded-0.5 shadow-[0px_7px_4px_0px_rgba(0,0,0,0.25)] overflow-hidden">
+                <div class="block lg:hidden bg-white rounded-0.5 shadow-md overflow-hidden">
                   <div class="h-40 bg-neutral-500 flex items-center justify-center">
                     {produit.type === 'titre' ? (
                       <div class="flex items-center justify-center px-4">
@@ -184,7 +184,7 @@ function getButtonState(produit) {
                 </div>
 
                 <!-- DESKTOP -->
-                <div class="hidden lg:block h-91.75 rounded-0.5 shadow-[0px_4px_6px_0px_rgba(0,0,0,0.25)] relative overflow-hidden bg-neutral-500">
+                <div class="hidden lg:block h-91.75 rounded-0.5 shadow-md relative overflow-hidden bg-neutral-500">
                   <div class="absolute bottom-0 left-0 right-0 h-35.75 bg-white rounded-bl-0.5 rounded-br-0.5"></div>
 
                   {produit.type === 'titre' ? (
@@ -495,7 +495,7 @@ function getButtonState(produit) {
       : '<a href="/connexion" class="absolute top-73.75 bottom-3 left-7.25 right-7.5 bg-neutral-800 flex items-center justify-center hover:opacity-90 transition-opacity no-underline"><span class="text-white text-4 font-medium">Se connecter</span></a>';
 
     return '<div>' +
-      '<div class="block lg:hidden bg-white rounded-0.5 shadow-[0px_7px_4px_0px_rgba(0,0,0,0.25)] overflow-hidden">' +
+      '<div class="block lg:hidden bg-white rounded-0.5 shadow-md overflow-hidden">' +
         '<div class="h-40 bg-neutral-500 flex items-center justify-center">' + circleContent + '</div>' +
         '<div class="p-4">' +
           '<div class="flex items-center justify-between mb-3">' +
@@ -505,7 +505,7 @@ function getButtonState(produit) {
           btnMobile +
         '</div>' +
       '</div>' +
-      '<div class="hidden lg:block h-91.75 rounded-0.5 shadow-[0px_4px_6px_0px_rgba(0,0,0,0.25)] relative overflow-hidden bg-neutral-500">' +
+      '<div class="hidden lg:block h-91.75 rounded-0.5 shadow-md relative overflow-hidden bg-neutral-500">' +
         '<div class="absolute bottom-0 left-0 right-0 h-35.75 bg-white rounded-bl-0.5 rounded-br-0.5"></div>' +
         circleContentD +
         '<div class="absolute top-59.75 left-7.25 right-6.75 flex items-center justify-between">' +

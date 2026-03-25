@@ -1,6 +1,12 @@
 @import "tailwindcss";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/manrope/500.css";
+@import "@fontsource/manrope/700.css";
 
 @theme {
+  --font-manrope: 'Manrope', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+
   --color-primary-900: #094736;
   --color-primary-600: #347645;
   --color-primary-550: #5aad5b;

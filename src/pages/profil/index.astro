@@ -319,7 +319,7 @@ const displayName = user.prenom
         {amiesIds.length} ami(e)s
       </p>
       <!-- Points badge -->
-      <div class="absolute h-16.25 w-86 bg-primary-900 rounded-1.25 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25)] flex items-center pl-4 gap-4"
+      <div class="absolute h-16.25 w-86 bg-primary-900 rounded-1.25 shadow-md flex items-center pl-4 gap-4"
         style="left: calc(16.67% + 59px); top: 241px;">
         <h3 class="text-white m-0">Points :</h3>
         <h3 class="text-white m-0">{user.points ?? 0}</h3>
@@ -337,7 +337,7 @@ const displayName = user.prenom
     </div>
 
     <!-- Séparateur shadow (desktop only) -->
-    <div class="hidden lg:block h-4.5 bg-neutral-200 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] z-3"></div>
+    <div class="hidden lg:block h-4.5 bg-neutral-200 shadow-md z-3"></div>
 
     <!-- ===== DEUX COLONNES ===== -->
     <div class="flex flex-col lg:flex-row">
@@ -395,7 +395,7 @@ const displayName = user.prenom
       <div class="flex-1 bg-neutral-200" style={themeUrl ? `background-image:url('${themeUrl}');background-size:cover;background-position:center;background-attachment:local;` : ''}>
 
         <!-- BARRE D'ONGLETS BLANCHE -->
-        <div class="bg-white flex items-stretch lg:px-20 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] h-14 lg:h-25">
+        <div class="bg-white flex items-stretch lg:px-20 shadow-md h-14 lg:h-25">
           <div id="tab-list" class="relative flex items-stretch flex-1 lg:flex-none h-full overflow-x-auto">
             <button data-tab="profil"
               class="tab-btn flex-1 lg:flex-none lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap flex items-center justify-center">
@@ -580,7 +580,7 @@ const displayName = user.prenom
             {barsFavori.length > 0 ? (
               <div class="grid grid-cols-1 lg:grid-cols-3 gap-8.25">
                 {barsFavori.map(bar => (
-                  <div class="relative bg-white rounded-0.5 h-87.75 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
+                  <div class="relative bg-white rounded-0.5 h-87.75 shadow-md">
                     <div class="absolute top-0 left-0 right-0 h-50 overflow-hidden rounded-tl-0.5 rounded-tr-0.5">
                       <PbImage record={bar} recordImage={bar.img?.[0]} width={280} height={200} class="w-full h-full object-cover" />
                     </div>
@@ -611,7 +611,7 @@ const displayName = user.prenom
                 {jeuxFavori.map(jeu => {
                   const imgFile = Array.isArray(jeu.img) ? jeu.img[0] : jeu.img;
                   return (
-                    <div class="relative bg-white rounded-0.5 h-87.75 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
+                    <div class="relative bg-white rounded-0.5 h-87.75 shadow-md">
                       <div class="absolute top-0 left-0 right-0 h-50 overflow-hidden rounded-tl-0.5 rounded-tr-0.5">
                         <PbImage record={jeu} recordImage={imgFile} width={280} height={200} class="w-full h-full object-cover" />
                       </div>
@@ -641,7 +641,7 @@ const displayName = user.prenom
             {boissonsFavori.length > 0 ? (
               <div class="grid grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-8.25">
                 {boissonsFavori.map(b => (
-                  <div class="relative bg-white rounded-0.5 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]" style="height: 270px;">
+                  <div class="relative bg-white rounded-0.5 shadow-md" style="height: 270px;">
                     <div class="absolute top-0 left-0 right-0 h-44 overflow-hidden rounded-tl-0.5 rounded-tr-0.5 bg-neutral-500">
                       <PbImage record={b} recordImage={b.img} alt={b.nom} class="w-full h-full object-cover" />
                     </div>
@@ -797,7 +797,7 @@ const displayName = user.prenom
                             : item.type === 'titre'           ? titreRecord?.id === item.id
                                                               : themeRecord?.id === item.id;
                           return (
-                            <div data-inv-card={item.id} class={`bg-white rounded-0.5 shadow-[0px_4px_6px_0px_rgba(0,0,0,0.15)] overflow-hidden relative${isEquipped ? ' ring-2 ring-[#72C073]' : ''}`}>
+                            <div data-inv-card={item.id} class={`bg-white rounded-0.5 shadow-sm overflow-hidden relative${isEquipped ? ' ring-2 ring-primary-500' : ''}`}>
                               <div class="h-36 lg:h-44 bg-neutral-500 flex items-center justify-center relative">
                                 {item.type === 'titre' ? (
                                   <div class="size-20 rounded-full bg-primary-900 flex items-center justify-center px-2">
@@ -852,7 +852,7 @@ const displayName = user.prenom
                     </div>
                     <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
                       {possedDecorations.map(item => (
-                        <div data-inv-card={item.id} class={`bg-white rounded-0.5 shadow-[0px_4px_6px_0px_rgba(0,0,0,0.15)] overflow-hidden relative${item.isEquipped ? ' ring-2 ring-[#72C073]' : ''}`}>
+                        <div data-inv-card={item.id} class={`bg-white rounded-0.5 shadow-sm overflow-hidden relative${item.isEquipped ? ' ring-2 ring-primary-500' : ''}`}>
                           <div class="h-36 lg:h-44 bg-neutral-500 flex items-center justify-center relative">
                             {item.imageUrl ? (
                               <div class="size-20 rounded-full overflow-hidden">
@@ -890,7 +890,7 @@ const displayName = user.prenom
                     </div>
                     <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
                       {possedTitres.map(item => (
-                        <div data-inv-card={item.id} class={`bg-white rounded-0.5 shadow-[0px_4px_6px_0px_rgba(0,0,0,0.15)] overflow-hidden relative${item.isEquipped ? ' ring-2 ring-[#72C073]' : ''}`}>
+                        <div data-inv-card={item.id} class={`bg-white rounded-0.5 shadow-sm overflow-hidden relative${item.isEquipped ? ' ring-2 ring-primary-500' : ''}`}>
                           <div class="h-36 lg:h-44 bg-neutral-500 flex items-center justify-center relative">
                             <div class="size-20 rounded-full bg-primary-900 flex items-center justify-center px-2">
                               <p class="text-white font-bold text-3 text-center m-0 leading-snug">{item.type_titre || item.nom}</p>
@@ -924,7 +924,7 @@ const displayName = user.prenom
                     </div>
                     <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
                       {possedThemes.map(item => (
-                        <div data-inv-card={item.id} class={`bg-white rounded-0.5 shadow-[0px_4px_6px_0px_rgba(0,0,0,0.15)] overflow-hidden relative${item.isEquipped ? ' ring-2 ring-[#72C073]' : ''}`}>
+                        <div data-inv-card={item.id} class={`bg-white rounded-0.5 shadow-sm overflow-hidden relative${item.isEquipped ? ' ring-2 ring-primary-500' : ''}`}>
                           <div class="h-36 lg:h-44 bg-neutral-500 flex items-center justify-center relative">
                             {item.imageUrl ? (
                               <div class="size-20 rounded-full overflow-hidden">
@@ -1323,12 +1323,12 @@ const displayName = user.prenom
           var equipBtn      = card.querySelector('.inv-equip-btn');
           var equippedState = card.querySelector('.inv-equipped-state');
           if (isEquipped) {
-            card.classList.add('ring-2', 'ring-[#72C073]');
+            card.classList.add('ring-2', 'ring-primary-500');
             if (badge)         badge.classList.remove('hidden');
             if (equipBtn)      equipBtn.classList.add('hidden');
             if (equippedState) equippedState.classList.remove('hidden');
           } else {
-            card.classList.remove('ring-2', 'ring-[#72C073]');
+            card.classList.remove('ring-2', 'ring-primary-500');
             if (badge)         badge.classList.add('hidden');
             if (equipBtn)      equipBtn.classList.remove('hidden');
             if (equippedState) equippedState.classList.add('hidden');
