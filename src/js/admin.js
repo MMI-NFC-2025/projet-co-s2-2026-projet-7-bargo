@@ -48,6 +48,7 @@
   function openSidebar() {
     if (!sidebar) return;
     sidebar.classList.add('open');
+    sidebar.style.transform = 'translateX(0)';
     if (burger)   burger.classList.add('is-open');
     if (backdrop) backdrop.style.display = 'block';
     document.body.style.overflow = 'hidden';
@@ -56,6 +57,7 @@
   function closeSidebar() {
     if (!sidebar) return;
     sidebar.classList.remove('open');
+    sidebar.style.transform = 'translateX(-100%)';
     if (burger)   burger.classList.remove('is-open');
     if (backdrop) backdrop.style.display = 'none';
     document.body.style.overflow = '';

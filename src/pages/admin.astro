@@ -108,12 +108,12 @@ const pageData = JSON.stringify({
 <!-- Backdrop mobile -->
 <div id="admin-backdrop" style="display:none;" class="fixed inset-0 bg-black/55 z-49"></div>
 
-<div class="flex min-h-0 lg:min-h-[calc(100vh-92px)] bg-[#f4f5f7]">
+<div class="flex min-h-0 lg:min-h-[calc(100vh-92px)] bg-zinc-100">
 
   <!-- ══════════════════════════════════════════════════════════════════════ -->
   <!-- SIDEBAR                                                               -->
   <!-- ══════════════════════════════════════════════════════════════════════ -->
-  <aside class="admin-sidebar fixed top-37 left-0 bottom-0 w-70 z-50 -translate-x-full overflow-y-auto bg-neutral-800 flex flex-col shadow-[4px_0_24px_rgba(0,0,0,0.4)] lg:static lg:top-auto lg:bottom-auto lg:left-auto lg:w-60 lg:shrink-0 lg:z-auto lg:translate-x-0 lg:overflow-y-visible lg:shadow-none lg:py-7 lg:px-4">
+  <aside class="admin-sidebar fixed top-37 left-0 bottom-0 w-70 z-50 overflow-y-auto bg-neutral-800 flex flex-col shadow-[4px_0_24px_rgba(0,0,0,0.4)] lg:static lg:top-auto lg:bottom-auto lg:left-auto lg:w-60 lg:shrink-0 lg:z-auto lg:overflow-y-visible lg:shadow-none lg:py-7 lg:px-4">
 
     <div class="hidden lg:block px-2 pb-6 border-b border-white/8">
       <p style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:#72c073; margin:0 0 2px;">Bargo</p>
@@ -241,11 +241,11 @@ const pageData = JSON.stringify({
       </div>
 
       <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
-        <div class="hidden lg:grid lg:grid-cols-[1fr_200px_80px_90px_80px] lg:px-5 lg:py-3 lg:bg-[#f9fafb] lg:border-b lg:border-[#e8eaed]">
-          <p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Utilisateur</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Email</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Points</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Rôle</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0"></p>
+        <div class="hidden lg:grid lg:grid-cols-[1fr_200px_80px_90px_80px] lg:px-5 lg:py-3 lg:bg-gray-50 lg:border-b lg:border-gray-200">
+          <p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Utilisateur</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Email</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Points</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Rôle</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0"></p>
         </div>
         {allUsers.map(u => (
-          <div data-row-user={u.id} class="grid grid-cols-[1fr_auto_auto] lg:grid-cols-[1fr_200px_80px_90px_80px] items-center px-5 py-3.5 border-b border-[#f3f4f6]">
+          <div data-row-user={u.id} class="grid grid-cols-[1fr_auto_auto] lg:grid-cols-[1fr_200px_80px_90px_80px] items-center px-5 py-3.5 border-b border-gray-100">
             <div style="display:flex; align-items:center; gap:10px;">
               <div style="width:34px; height:34px; border-radius:50%; background:#347645; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
                 <span style="color:white; font-size:13px; font-weight:700;">{(u.pseudo || u.prenom || '?').charAt(0).toUpperCase()}</span>
@@ -268,7 +268,7 @@ const pageData = JSON.stringify({
             </div>
             <div class="flex justify-end">
               {u.id !== userId && (
-                <button data-action="delete-user" data-id={u.id} class="h-7 px-3 bg-[#fff5f5] border border-[#fecaca] text-[#ef4444] text-3 font-semibold cursor-pointer rounded-md hover:bg-[#fee2e2] transition-colors">Supprimer</button>
+                <button data-action="delete-user" data-id={u.id} class="h-7 px-3 bg-red-50 border border-red-200 text-red-500 text-3 font-semibold cursor-pointer rounded-md hover:bg-red-100 transition-colors">Supprimer</button>
               )}
             </div>
           </div>
@@ -287,19 +287,19 @@ const pageData = JSON.stringify({
       </div>
 
       <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
-        <div class="hidden lg:grid lg:grid-cols-[1fr_220px_100px] lg:px-5 lg:py-3 lg:bg-[#f9fafb] lg:border-b lg:border-[#e8eaed]">
-          <p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Adresse</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0"></p>
+        <div class="hidden lg:grid lg:grid-cols-[1fr_220px_100px] lg:px-5 lg:py-3 lg:bg-gray-50 lg:border-b lg:border-gray-200">
+          <p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Adresse</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0"></p>
         </div>
         {allBars.map(b => (
-          <div data-row-bar={b.id} class="grid grid-cols-[1fr_auto] lg:grid-cols-[1fr_220px_100px] items-center px-5 py-3.5 border-b border-[#f3f4f6]">
+          <div data-row-bar={b.id} class="grid grid-cols-[1fr_auto] lg:grid-cols-[1fr_220px_100px] items-center px-5 py-3.5 border-b border-gray-100">
             <div>
               <p style="font-size:14px; font-weight:600; color:#222; margin:0;">{b.nom}</p>
               <p style="font-size:11px; color:#aaa; margin:0;">ID: {b.id.slice(0,8)}…</p>
             </div>
             <p style="font-size:13px; color:#555; margin:0;">{b.adresse ?? '—'}</p>
             <div class="flex justify-end gap-2">
-              <button data-action="open-bar-form" data-id={b.id} class="h-7 px-3 bg-[#f0fdf4] border border-[#d1fae5] text-primary-600 text-3 font-semibold cursor-pointer rounded-md hover:bg-[#d1fae5] transition-colors">Modifier</button>
-              <button data-action="delete-bar" data-id={b.id} class="h-7 px-3 bg-[#fff5f5] border border-[#fecaca] text-[#ef4444] text-3 font-semibold cursor-pointer rounded-md hover:bg-[#fee2e2] transition-colors">Supp.</button>
+              <button data-action="open-bar-form" data-id={b.id} class="h-7 px-3 bg-green-50 border border-green-100 text-primary-600 text-3 font-semibold cursor-pointer rounded-md hover:bg-green-100 transition-colors">Modifier</button>
+              <button data-action="delete-bar" data-id={b.id} class="h-7 px-3 bg-red-50 border border-red-200 text-red-500 text-3 font-semibold cursor-pointer rounded-md hover:bg-red-100 transition-colors">Supp.</button>
             </div>
           </div>
         ))}
@@ -316,7 +316,7 @@ const pageData = JSON.stringify({
 
       <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
         <div style="display:grid; grid-template-columns:1fr 130px 140px 80px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
-          <p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Date</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">État</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0"></p>
+          <p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Date</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">État</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0"></p>
         </div>
         {allSessions.map(s => {
           const etat = s.etat_session ?? 'pas_commencer';
@@ -335,7 +335,7 @@ const pageData = JSON.stringify({
               <p style="font-size:13px; color:#555; margin:0;">{s.date_heur_depart?.split(' ')[0] ?? '—'}</p>
               <span style={`font-size:11px; font-weight:700; color:${color}; background:${bg}; padding:4px 11px; border-radius:20px; width:fit-content;`}>{label}</span>
               <div class="flex justify-end">
-                <button data-action="delete-session" data-id={s.id} class="h-7 px-3 bg-[#fff5f5] border border-[#fecaca] text-[#ef4444] text-3 font-semibold cursor-pointer rounded-md hover:bg-[#fee2e2] transition-colors">Supp.</button>
+                <button data-action="delete-session" data-id={s.id} class="h-7 px-3 bg-red-50 border border-red-200 text-red-500 text-3 font-semibold cursor-pointer rounded-md hover:bg-red-100 transition-colors">Supp.</button>
               </div>
             </div>
           );
@@ -353,14 +353,14 @@ const pageData = JSON.stringify({
 
       <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
         <div style="display:grid; grid-template-columns:1fr 150px 130px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
-          <p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Type</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0"></p>
+          <p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Type</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0"></p>
         </div>
         {allJeux.map(j => (
           <div data-row-jeu={j.id} style="display:grid; grid-template-columns:1fr 150px 130px; align-items:center; padding:14px 20px; border-bottom:1px solid #f3f4f6;">
             <p style="font-size:14px; font-weight:600; color:#222; margin:0;">{j.nom ?? '—'}</p>
             <span style="font-size:12px; font-weight:600; color:#7c3aed; background:#f5f3ff; padding:3px 10px; border-radius:20px; width:fit-content;">{j.type_du_jeux ?? '—'}</span>
             <div class="flex justify-end gap-2">
-              <button data-action="open-jeu-form" data-id={j.id} class="h-7 px-3 bg-[#f0fdf4] border border-[#d1fae5] text-primary-600 text-3 font-semibold cursor-pointer rounded-md hover:bg-[#d1fae5] transition-colors">Modifier</button>
+              <button data-action="open-jeu-form" data-id={j.id} class="h-7 px-3 bg-green-50 border border-green-100 text-primary-600 text-3 font-semibold cursor-pointer rounded-md hover:bg-green-100 transition-colors">Modifier</button>
               <button data-action="open-jeu-questions" data-id={j.id} class="h-7 px-3 bg-primary-600 border-0 text-white text-3 font-bold cursor-pointer rounded-lg hover:bg-primary-900 transition-colors">Questions</button>
             </div>
           </div>
@@ -439,14 +439,14 @@ const pageData = JSON.stringify({
 
       <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
         <div style="display:grid; grid-template-columns:1fr 100px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
-          <p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0"></p>
+          <p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0"></p>
         </div>
         {allBoisons.map(b => (
           <div data-row-boison={b.id} style="display:grid; grid-template-columns:1fr 100px; align-items:center; padding:14px 20px; border-bottom:1px solid #f3f4f6;">
             <p style="font-size:14px; font-weight:600; color:#222; margin:0;">{b.nom ?? b.name ?? '—'}</p>
             <div class="flex justify-end gap-2">
-              <button data-action="open-boison-form" data-id={b.id} class="h-7 px-3 bg-[#f0fdf4] border border-[#d1fae5] text-primary-600 text-3 font-semibold cursor-pointer rounded-md hover:bg-[#d1fae5] transition-colors">Modifier</button>
-              <button data-action="delete-boison" data-id={b.id} class="h-7 px-3 bg-[#fff5f5] border border-[#fecaca] text-[#ef4444] text-3 font-semibold cursor-pointer rounded-md hover:bg-[#fee2e2] transition-colors">Supp.</button>
+              <button data-action="open-boison-form" data-id={b.id} class="h-7 px-3 bg-green-50 border border-green-100 text-primary-600 text-3 font-semibold cursor-pointer rounded-md hover:bg-green-100 transition-colors">Modifier</button>
+              <button data-action="delete-boison" data-id={b.id} class="h-7 px-3 bg-red-50 border border-red-200 text-red-500 text-3 font-semibold cursor-pointer rounded-md hover:bg-red-100 transition-colors">Supp.</button>
             </div>
           </div>
         ))}
@@ -466,7 +466,7 @@ const pageData = JSON.stringify({
 
       <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
         <div style="display:grid; grid-template-columns:56px 1fr 160px 80px 110px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
-          <p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0"></p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Type</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0">Prix</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-[#aaa] m-0"></p>
+          <p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0"></p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Type</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Prix</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0"></p>
         </div>
         {allBoutique.map(b => {
           const typeLabels = { decoration_avatar: 'Décoration', theme: 'Thème', titre: 'Titre' };
@@ -504,8 +504,8 @@ const pageData = JSON.stringify({
               <p style="font-size:13px; font-weight:700; color:#222; margin:0;">{b.prix} pts</p>
               <!-- Actions -->
               <div class="flex justify-end gap-2">
-                <button data-action="open-boutique-form" data-id={b.id} class="h-7 px-3 bg-[#f0fdf4] border border-[#d1fae5] text-primary-600 text-3 font-semibold cursor-pointer rounded-md hover:bg-[#d1fae5] transition-colors">Modifier</button>
-                <button data-action="delete-boutique" data-id={b.id} class="h-7 px-3 bg-[#fff5f5] border border-[#fecaca] text-[#ef4444] text-3 font-semibold cursor-pointer rounded-md hover:bg-[#fee2e2] transition-colors">Supp.</button>
+                <button data-action="open-boutique-form" data-id={b.id} class="h-7 px-3 bg-green-50 border border-green-100 text-primary-600 text-3 font-semibold cursor-pointer rounded-md hover:bg-green-100 transition-colors">Modifier</button>
+                <button data-action="delete-boutique" data-id={b.id} class="h-7 px-3 bg-red-50 border border-red-200 text-red-500 text-3 font-semibold cursor-pointer rounded-md hover:bg-red-100 transition-colors">Supp.</button>
               </div>
             </div>
           );
@@ -556,8 +556,8 @@ const pageData = JSON.stringify({
 
   <!-- Footer -->
   <div style="padding:20px 28px; border-top:1px solid #f0f0f0; flex-shrink:0;">
-    <p id="drawer-error" style="color:#ef4444; font-size:13px; font-weight:500; margin:0 0 12px; display:none; background:#fef2f2; padding:10px 14px; border-radius:7px;"></p>
-    <button id="drawer-submit" style="width:100%; height:44px; background:#347645; border:none; color:white; font-size:14px; font-weight:700; cursor:pointer; border-radius:8px; letter-spacing:0.3px;">Enregistrer</button>
+    <p id="drawer-error" class="text-red-500 text-3.25 font-medium mb-3 hidden bg-red-50 py-2.5 px-3.5 rounded-lg"></p>
+    <button id="drawer-submit" class="w-full h-11 bg-primary-600 border-0 text-white text-3.5 font-bold cursor-pointer rounded-lg tracking-[0.3px]">Enregistrer</button>
   </div>
 </div>
 

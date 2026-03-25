@@ -13,8 +13,10 @@ import badgeVip     from '../../assets/icon/badge_vip.svg';
 import badgePremium from '../../assets/icon/badge_pernuim.svg';
 import arrowRightLg  from '../../assets/icon/arrow_right_lg.svg';
 import bellIcon       from '../../assets/icon/bell.svg';
+import notifIcon      from '../../assets/icon/notifcation.svg';
 import panierIcon     from '../../assets/icon/panier.svg';
 import searchIcon     from '../../assets/icon/search.svg';
+import settingsIcon   from '../../assets/icon/settings.svg';
 
 // Auth guard
 const token  = Astro.cookies.get('pb_token')?.value;
@@ -401,13 +403,6 @@ const displayName = user.prenom
               class="tab-btn flex-1 lg:flex-none lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap flex items-center justify-center">
               Mon profil
             </button>
-            <button data-tab="notifications"
-              class="tab-btn flex-1 lg:flex-none lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 inline-flex items-center justify-center gap-2 whitespace-nowrap">
-              Notifications
-              {(unreadNotifs + demandeAmies.length + demandeSession.length) > 0 && (
-                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white text-2.75 font-bold">{unreadNotifs + demandeAmies.length + demandeSession.length}</span>
-              )}
-            </button>
             <button data-tab="amis"
               class="tab-btn lg:hidden flex-1 h-full text-3.5 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap flex items-center justify-center">
               Amis
@@ -416,9 +411,18 @@ const displayName = user.prenom
               class="tab-btn flex-1 lg:flex-none lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap flex items-center justify-center">
               Inventaire
             </button>
+            <button data-tab="notifications"
+              class="tab-btn flex-1 lg:flex-none lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 inline-flex items-center justify-center gap-2 whitespace-nowrap">
+              <Image src={notifIcon} alt="Notifications" width={20} height={20} class="block lg:hidden" />
+              <span class="hidden lg:block">Notifications</span>
+              {(unreadNotifs + demandeAmies.length + demandeSession.length) > 0 && (
+                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white text-2.75 font-bold">{unreadNotifs + demandeAmies.length + demandeSession.length}</span>
+              )}
+            </button>
             <button data-tab="parametres"
               class="tab-btn flex-1 lg:flex-none lg:px-6.25 h-full text-3.5 lg:text-4 font-medium text-black cursor-pointer bg-transparent border-0 whitespace-nowrap flex items-center justify-center">
-              Paramètres
+              <Image src={settingsIcon} alt="Paramètres" width={20} height={20} class="block lg:hidden brightness-0" />
+              <span class="hidden lg:block">Paramètres</span>
             </button>
             <!-- Trait animé -->
             <div id="tab-indicator" class="absolute bottom-0 h-1.5 rounded-full" style="background:#72c073; transition: left 0.3s cubic-bezier(.4,0,.2,1), width 0.3s cubic-bezier(.4,0,.2,1); left:0; width:0;"></div>
