@@ -273,6 +273,30 @@ import PbImage from '../components/PbImage.astro';
 
 ---
 
+## Polices d'écriture
+
+Installées via `@fontsource` (npm). Importées en tête de `global.css`, déclarées dans `@theme`.
+
+```css
+/* global.css */
+@import "@fontsource/inter/500.css";
+@import "@fontsource/manrope/500.css";
+@import "@fontsource/manrope/700.css";
+
+@theme {
+  --font-manrope: 'Manrope', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+}
+```
+
+**Classes Tailwind :**
+- `font-manrope` → Manrope (titres)
+- `font-inter` → Inter (corps de texte)
+
+> **Jamais** `font-['Manrope']` ou `font-['Inter']` — toujours `font-manrope` / `font-inter`.
+
+---
+
 ## Typographie — 5 variantes fixes
 
 Définies dans `global.css` avec responsive intégré. Toujours utiliser les balises sémantiques.
@@ -377,6 +401,81 @@ Conteneur 1440px, padding 80px × 2 = **1280px utiles**.
 
 ---
 
+## Classes Tailwind — bonnes pratiques
+
+### Minimiser les valeurs arbitraires `[...]`
+
+Toujours préférer la classe Tailwind standard la plus proche. Les `[...]` ne sont acceptés que pour :
+- `calc()` ou `min()` (pas de classe équivalente)
+- Ombres directionnelles spécifiques (ex: `shadow-[0_0_0_3px_...]` pour ring custom)
+- Couleurs hors palette (gris sombres de l'interface quiz : `bg-zinc-800`, `border-zinc-700`)
+
+### Polices
+
+| À éviter | À utiliser |
+|---|---|
+| `font-['Manrope']` | `font-manrope` |
+| `font-['Inter']` | `font-inter` |
+
+### Couleurs — toujours les tokens, jamais le hex
+
+| À éviter | À utiliser |
+|---|---|
+| `bg-[#094736]` | `bg-primary-900` |
+| `text-[#72C073]` | `text-primary-500` |
+| `bg-[#1E1E1E]` | `bg-neutral-800` |
+| `bg-[#F7F1ED]` | `bg-neutral-200` |
+| `text-[#DFDFDF]` | `text-neutral-300` |
+| `bg-[#252525]` / `bg-[#2c2c2c]` | `bg-zinc-800` |
+| `border-[#333]` | `border-neutral-700` |
+| `border-[#3a3a3a]` | `border-zinc-700` |
+| `bg-[#141414]/97` | `bg-neutral-900/97` |
+
+### Line-height
+
+| Valeur | Classe Tailwind |
+|---|---|
+| `leading-[1.1]` | `leading-tight` |
+| `leading-[1.4]` | `leading-snug` |
+| `leading-[1.5]` | `leading-normal` |
+| `leading-[1.6]` | `leading-relaxed` |
+
+### Tailles de texte — échelle numérique (pas de `[px]`)
+
+| Valeur px | Classe Tailwind |
+|---|---|
+| 10px | `text-2.5` |
+| 11px | `text-2.75` |
+| 12px | `text-3` |
+| 13px | `text-3.25` |
+| 14px | `text-3.5` |
+| 15px | `text-3.75` |
+| 22px | `text-5.5` |
+
+### Ombres
+
+| À éviter | À utiliser |
+|---|---|
+| `shadow-[0px_4px_6px_0px_rgba(0,0,0,0.1)]` | `shadow-sm` |
+| `shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]` | `shadow-md` |
+| `shadow-[0px_8px_20px_0px_rgba(0,0,0,0.15)]` | `shadow-lg` |
+| Grande ombre prononcée | `shadow-2xl` |
+
+### Webkit — à ne jamais utiliser
+
+| À éviter | Alternative |
+|---|---|
+| `[&::-webkit-details-marker]:hidden` | `list-none` (nativement cachés) |
+| `::-webkit-scrollbar { display:none }` en CSS | `scrollbar-width: none` (dans `global.css`) |
+
+### Valeurs arbitraires autorisées (irremplaçables)
+
+- Positions/dimensions issues de la grille Figma : `w-[280px]`, `top-[148px]`, `gap-[109px]` → **préférer l'échelle Tailwind** quand possible (`w-70`, `top-37`)
+- `h-[calc(100vh-92px)]` — pas d'équivalent Tailwind
+- Ombres directionnelles custom (ex: `shadow-[inset_0_0_0_2px_...]`)
+
+---
+
 ## JavaScript
 
 ### Fichiers JS dans `src/js/`
@@ -391,15 +490,15 @@ Conteneur 1440px, padding 80px × 2 = **1280px utiles**.
 | `cookie-banner.js` | Consentement cookies |
 | `notif-bubble.js` | Panel notifications flottant |
 | `like.js` | Système favoris (bar, jeux, boutique) |
-| `profil.js` | Gestion profil (upload avatar, tabs, edit) |
-| `profil-id.js` | Profil tiers (demande ami, etc.) |
-| `inventaire.js` | Équiper articles depuis l'inventaire |
-| `boutique.js` | Boutique (acheter, équiper, tabs) |
 | `session-detail.js` | Session active (modales, onglets) |
 | `session-creer.js` | Création session |
 | `amis.js` | Gestion demandes d'amis |
 | `inscription.js` | Validation formulaire inscription |
 | `leaflet-map.js` | Init carte Leaflet (CDN) |
+| `admin.js` | Scripts page admin |
+| `lp-register.js` | Inscription rapide depuis la landing page |
+| `age-verification.js` | Vérification d'âge |
+| `quiz-form.js` | Formulaire création/édition questionnaire |
 
 ### Règles JS
 
@@ -432,7 +531,7 @@ Conteneur 1440px, padding 80px × 2 = **1280px utiles**.
 
 ### Carte bar / jeu / boutique
 ```html
-<div class="bg-white rounded-0.5 shadow-[0px_7px_4px_0px_rgba(0,0,0,0.25)] overflow-hidden">
+<div class="bg-white rounded-0.5 shadow-md overflow-hidden">
   <div class="h-40 lg:h-50 overflow-hidden"><!-- Image --></div>
   <div class="p-4">
     <h3 class="m-0 text-black">{nom}</h3>
