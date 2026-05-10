@@ -495,7 +495,7 @@ const pageData = JSON.stringify({
       </div>
 
       <div class="admin-table-wrap bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div class="grid grid-cols-[56px_1fr_160px_80px_110px] px-5 py-3 bg-gray-50 border-b border-gray-200">
+        <div class="grid grid-cols-[56px_1fr_160px_110px_130px] px-5 py-3 bg-gray-50 border-b border-gray-200">
           <p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0"></p><p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0">Type</p><p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0">Prix</p><p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0"></p>
         </div>
         {allBoutique.map(b => {
@@ -508,7 +508,7 @@ const pageData = JSON.stringify({
             ? `${PB_URL}/api/files/${b.collectionName}/${b.id}/${imgFile}`
             : null;
           return (
-            <div data-row-boutique={b.id} class="grid grid-cols-[56px_1fr_160px_80px_110px] items-center px-5 py-3 border-b border-gray-100">
+            <div data-row-boutique={b.id} class="grid grid-cols-[56px_1fr_160px_110px_130px] items-center px-5 py-3 border-b border-gray-100">
               <!-- Aperçu image -->
               <div class="w-10 h-10 rounded-md overflow-hidden bg-gray-100 shrink-0 flex items-center justify-center">
                 {imgSrc ? (
