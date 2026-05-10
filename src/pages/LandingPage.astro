@@ -392,14 +392,8 @@ const valeursImages = [cotelImg, heroImg, carouselImg];
 
 <!-- ========== INTÉRESSÉ ? ========== -->
 <section id="lp-interested" class="relative w-full overflow-hidden lg:h-290">
-  <!-- 1. Fond sombre (pleine largeur) -->
+  <!-- Fond sombre uni (pleine largeur) -->
   <div class="absolute inset-0 bg-neutral-800"></div>
-  <!-- 2. Photo desktop (sous l'overlay — position relative à la section) -->
-  <div class="hidden lg:block absolute top-0 h-full overflow-hidden" style="left: calc(50% - 508px); right: 0;">
-    <Image src={carouselImg} alt="" class="w-full h-full object-cover block" />
-  </div>
-  <!-- 3. Overlay sombre desktop (par-dessus la photo, partie gauche) -->
-  <div class="hidden lg:block absolute left-0 top-0 h-full bg-[rgba(30,30,30,0.85)]" style="width: max(813px, calc(50% + 93px));"></div>
 
   <!-- 4. Wrapper : mobile = flex colonne en flux, desktop = absolute centré -->
   <div class="relative z-10 px-7 py-11 flex flex-col gap-5

@@ -45,6 +45,8 @@
   var burger   = document.getElementById('admin-burger');
   var backdrop = document.getElementById('admin-backdrop');
 
+  function isMobile() { return window.innerWidth < 1024; }
+
   function openSidebar() {
     if (!sidebar) return;
     sidebar.classList.add('open');
@@ -57,7 +59,8 @@
   function closeSidebar() {
     if (!sidebar) return;
     sidebar.classList.remove('open');
-    sidebar.style.transform = 'translateX(-100%)';
+    if (isMobile()) sidebar.style.transform = 'translateX(-100%)';
+    else            sidebar.style.transform = '';
     if (burger)   burger.classList.remove('is-open');
     if (backdrop) backdrop.style.display = 'none';
     document.body.style.overflow = '';

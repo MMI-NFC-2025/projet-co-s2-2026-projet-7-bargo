@@ -170,6 +170,12 @@ const plan = plans[planId] ?? plans.vip;
         Payer {plan.prix}€ / mois
       </button>
 
+      <!-- SSL badge -->
+      <div class="flex items-center justify-center gap-1.5 mt-3">
+        <Image src={lockIcon} alt="" width={13} height={13} style="filter:invert(64%) sepia(54%) saturate(429%) hue-rotate(73deg) brightness(94%) contrast(88%)" />
+        <span class="text-primary-500 text-3 font-bold">Paiement SSL sécurisé</span>
+      </div>
+
     </form>
   </section>
 
@@ -223,16 +229,9 @@ const plan = plans[planId] ?? plans.vip;
     <h2 class="absolute text-white m-0 uppercase" style="top:96px;left:80px;">
       Paiement
     </h2>
-    <div class="absolute flex flex-col gap-1.5" style="top:172px;left:80px;">
-      <p class="text-3.5 font-medium leading-tight text-neutral-300 m-0">
-        Finalisez votre abonnement en toute sécurité.
-      </p>
-      <!-- SSL badge -->
-      <div class="flex items-center gap-1.5">
-        <Image src={lockIcon} alt="" width={13} height={13} style="filter:invert(64%) sepia(54%) saturate(429%) hue-rotate(73deg) brightness(94%) contrast(88%)" />
-        <span class="text-[#72C073] text-3 font-bold">Paiement SSL sécurisé</span>
-      </div>
-    </div>
+    <p class="absolute text-3.5 font-medium leading-tight text-neutral-300 m-0" style="top:172px;left:80px;">
+      Finalisez votre abonnement en toute sécurité.
+    </p>
 
     <form id="payment-form" novalidate>
 
@@ -296,6 +295,12 @@ const plan = plans[planId] ?? plans.vip;
         <Image src={lockIcon} alt="" width={17} height={17} class="brightness-0 invert" />
         Payer {plan.prix}€ / mois
       </button>
+
+      <!-- SSL badge -->
+      <div class="absolute flex items-center justify-center gap-1.5" style="top:836px;left:80px;width:624px;">
+        <Image src={lockIcon} alt="" width={13} height={13} style="filter:invert(64%) sepia(54%) saturate(429%) hue-rotate(73deg) brightness(94%) contrast(88%)" />
+        <span class="text-primary-500 text-3 font-bold">Paiement SSL sécurisé</span>
+      </div>
 
     </form>
 

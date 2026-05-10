@@ -48,18 +48,19 @@ import searchIcon from '../assets/icon/search.svg';
 <!-- ── Modal : Arrêter la session ─────────────────────────────── -->
 <div id="stop-modal" class="hidden fixed inset-0 bg-black/70 z-60 items-center justify-center">
   <div class="bg-neutral-800 w-[min(440px,92vw)] rounded-1.25 overflow-hidden shadow-2xl">
-    <div class="bg-amber-500 px-7 py-5">
-      <p class="text-2.75 font-bold uppercase tracking-widest text-white/75 m-0 mb-1.5">Confirmation</p>
-      <h3 class="text-white m-0 tracking-tight">Arrêter la session</h3>
+    <div class="bg-red-500 px-7 py-5">
+      <p class="text-2.75 font-bold uppercase tracking-widest text-white/75 m-0 mb-1.5">Confirmation requise</p>
+      <h3 class="text-white m-0 tracking-tight">Arrêter la session ?</h3>
     </div>
     <div class="px-7 py-6">
       <p class="text-neutral-200/70 text-3.5 font-medium m-0 leading-normal">
-        La session sera marquée comme terminée. Tous les participants perdront l'accès à la session en cours.
+        La session sera marquée comme terminée. Tous les participants perdront l'accès à la session en cours.<br/><br/>
+        <span class="text-red-400 font-semibold">Cette action est irréversible.</span>
       </p>
     </div>
     <div class="flex gap-3 px-7 pb-6 justify-end">
-      <button id="stop-modal-cancel" class="h-10.5 px-6 bg-transparent border border-white/25 text-neutral-200/70 text-3.5 font-medium cursor-pointer rounded">Annuler</button>
-      <button id="stop-modal-confirm" class="h-10.5 px-6 bg-amber-500 border-0 text-white text-3.5 font-medium cursor-pointer rounded">Arrêter</button>
+      <button id="stop-modal-cancel" class="h-10.5 px-6 bg-transparent border border-white/25 text-neutral-200/70 text-3.5 font-semibold cursor-pointer rounded hover:bg-white/5 transition-colors">Non, continuer</button>
+      <button id="stop-modal-confirm" class="h-10.5 px-6 bg-red-500 border-0 text-white text-3.5 font-semibold cursor-pointer rounded hover:bg-red-600 transition-colors">Oui, arrêter</button>
     </div>
   </div>
 </div>

@@ -40,9 +40,23 @@ const allBoutique = ((await boutiqueRes.json()).items ?? []);
 
 const vipCount      = allUsers.filter(u => u.abonnements === 'VIP').length;
 const premiumCount  = allUsers.filter(u => u.abonnements === 'Premium').length;
+const gratuitCount  = allUsers.length - vipCount - premiumCount;
 const monthlyRev    = (vipCount * 4.99 + premiumCount * 9.99);
 const weeklyRev     = monthlyRev / 4.33;
 const fmtEur = (n) => n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+
+const sessionEnAttente  = allSessions.filter(s => (s.etat_session ?? 'pas_commencer') === 'pas_commencer').length;
+const sessionEnCours    = allSessions.filter(s => s.etat_session === 'en_cours').length;
+const sessionTerminees  = allSessions.filter(s => s.etat_session === 'fini').length;
+
+const jeuxTypesMap = {};
+allJeux.forEach(j => { const t = j.type_du_jeux || 'Autre'; jeuxTypesMap[t] = (jeuxTypesMap[t] || 0) + 1; });
+
+const chartData = {
+  abonnements: { labels: ['Gratuit', 'VIP', 'Premium'],       data: [gratuitCount,      vipCount,       premiumCount]       },
+  sessions:    { labels: ['En attente', 'En cours', 'Terminées'], data: [sessionEnAttente, sessionEnCours, sessionTerminees] },
+  jeux:        { labels: Object.keys(jeuxTypesMap),           data: Object.values(jeuxTypesMap)                              },
+};
 
 const questionsRes = await fetch(`${PB_URL}/api/collections/jeux_questionaire/records?perPage=500&sort=theme`,
   { headers: { Authorization: `Bearer ${token}` } });
@@ -94,19 +108,19 @@ const pageData = JSON.stringify({
 
 <!-- Barre mobile admin -->
 <div id="admin-mob-bar" class="flex lg:hidden items-center justify-between bg-neutral-800 px-4 h-14 sticky top-23 z-49 shadow-md">
-  <div style="display:flex; align-items:center; gap:10px;">
-    <span style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:#72c073;">Bargo</span>
-    <span style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:rgba(247,241,237,0.5);">Admin</span>
+  <div class="flex items-center gap-2.5">
+    <span class="text-2.5 font-bold uppercase tracking-widest text-primary-500">Bargo</span>
+    <span class="text-2.5 font-bold uppercase tracking-widest text-neutral-200/50">Admin</span>
   </div>
-  <button id="admin-burger" style="position:relative; width:26px; height:20px; background:none; border:none; cursor:pointer; padding:0; flex-shrink:0;">
-    <span class="adm-bar" style="position:absolute; left:0; width:100%; height:2px; background:#f7f1ed; top:0; border-radius:2px; transform-origin:center; transition:transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;"></span>
-    <span class="adm-bar" style="position:absolute; left:0; width:100%; height:2px; background:#f7f1ed; top:9px; border-radius:2px; transform-origin:center; transition:transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;"></span>
-    <span class="adm-bar" style="position:absolute; left:0; width:100%; height:2px; background:#f7f1ed; top:18px; border-radius:2px; transform-origin:center; transition:transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;"></span>
+  <button id="admin-burger" class="relative w-6.5 h-5 bg-transparent border-0 cursor-pointer p-0 shrink-0">
+    <span class="adm-bar absolute left-0 w-full h-0.5 bg-neutral-200 top-0 rounded-sm" style="transform-origin:center; transition:transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;"></span>
+    <span class="adm-bar absolute left-0 w-full h-0.5 bg-neutral-200 top-2.25 rounded-sm" style="transform-origin:center; transition:transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;"></span>
+    <span class="adm-bar absolute left-0 w-full h-0.5 bg-neutral-200 top-4.5 rounded-sm" style="transform-origin:center; transition:transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;"></span>
   </button>
 </div>
 
 <!-- Backdrop mobile -->
-<div id="admin-backdrop" style="display:none;" class="fixed inset-0 bg-black/55 z-49"></div>
+<div id="admin-backdrop" class="fixed inset-0 bg-black/55 z-49 hidden"></div>
 
 <div class="flex min-h-0 lg:min-h-[calc(100vh-92px)] bg-zinc-100">
 
@@ -116,8 +130,8 @@ const pageData = JSON.stringify({
   <aside class="admin-sidebar fixed top-37 left-0 bottom-0 w-70 z-50 overflow-y-auto bg-neutral-800 flex flex-col shadow-[4px_0_24px_rgba(0,0,0,0.4)] lg:static lg:top-auto lg:bottom-auto lg:left-auto lg:w-60 lg:shrink-0 lg:z-auto lg:overflow-y-visible lg:shadow-none lg:py-7 lg:px-4">
 
     <div class="hidden lg:block px-2 pb-6 border-b border-white/8">
-      <p style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:#72c073; margin:0 0 2px;">Bargo</p>
-      <p style="font-size:16px; font-weight:600; color:white; margin:0;">Administration</p>
+      <p class="text-2.5 font-bold uppercase tracking-widest text-primary-500 m-0 mb-0.5">Bargo</p>
+      <p class="text-4 font-semibold text-white m-0">Administration</p>
     </div>
 
     <nav class="mt-2 px-2 flex-1 lg:mt-4 lg:px-0">
@@ -142,8 +156,8 @@ const pageData = JSON.stringify({
     </nav>
 
     <div class="hidden lg:block pt-4 px-2 border-t border-white/8">
-      <p style="font-size:12px; font-weight:500; color:rgba(247,241,237,0.35); margin:0 0 2px;">Connecté en tant que</p>
-      <p style="font-size:13px; font-weight:600; color:rgba(247,241,237,0.7); margin:0;">{me.pseudo || me.prenom || me.email}</p>
+      <p class="text-3 font-medium text-neutral-200/35 m-0 mb-0.5">Connecté en tant que</p>
+      <p class="text-3.25 font-semibold text-neutral-200/70 m-0">{me.pseudo || me.prenom || me.email}</p>
     </div>
   </aside>
 
@@ -154,77 +168,93 @@ const pageData = JSON.stringify({
 
     <!-- ── Section : Tableau de bord ──────────────────────────────────────── -->
     <section id="section-dashboard" class="admin-section">
-      <h3 style="color:#111; margin:0 0 6px;">Tableau de bord</h3>
-      <p style="color:#888; font-size:14px; font-weight:500; margin:0 0 28px;">Vue d'ensemble de la plateforme.</p>
+      <h3 class="text-zinc-900 m-0 mb-1.5">Tableau de bord</h3>
+      <p class="text-zinc-400 text-3.5 font-medium m-0 mb-7">Vue d'ensemble de la plateforme.</p>
 
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" style="margin-bottom:36px;">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-9">
         {[
           { label: 'Utilisateurs', value: allUsers.length,    color: '#347645', bg: '#edf7ee' },
           { label: 'Bars',         value: allBars.length,     color: '#2563eb', bg: '#eff6ff' },
           { label: 'Sessions',     value: allSessions.length, color: '#d97706', bg: '#fffbeb' },
           { label: 'Jeux',         value: allJeux.length,     color: '#7c3aed', bg: '#f5f3ff' },
         ].map(s => (
-          <div style={`background:white; border-radius:10px; padding:22px 24px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06);`}>
+          <div class="bg-white rounded-xl px-6 py-5.5 border border-gray-200 shadow-sm">
             <p style={`font-size:36px; font-weight:700; color:${s.color}; margin:0 0 6px; line-height:1;`}>{s.value}</p>
-            <p style="font-size:13px; font-weight:500; color:#888; margin:0;">{s.label}</p>
+            <p class="text-3.25 font-medium text-zinc-400 m-0">{s.label}</p>
           </div>
         ))}
       </div>
 
       <!-- ── Abonnements & Revenus ─────────────────────────────────────────── -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" style="margin-bottom:36px;">
-        <div style="background:white; border-radius:10px; padding:22px 24px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-          <p style="font-size:36px; font-weight:700; color:#7c3aed; margin:0 0 4px; line-height:1;">{vipCount}</p>
-          <p style="font-size:13px; font-weight:500; color:#888; margin:0 0 6px;">Abonnés VIP</p>
-          <span style="font-size:11px; font-weight:700; color:#7c3aed; background:#f5f3ff; padding:2px 8px; border-radius:20px;">4,99 € / mois</span>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-9">
+        <div class="bg-white rounded-xl px-6 py-5.5 border border-gray-200 shadow-sm">
+          <p class="text-9 font-bold text-violet-700 m-0 mb-1 leading-none">{vipCount}</p>
+          <p class="text-3.25 font-medium text-zinc-400 m-0 mb-1.5">Abonnés VIP</p>
+          <span class="text-2.75 font-bold text-violet-700 bg-violet-50 px-2 py-0.5 rounded-full">4,99 € / mois</span>
         </div>
-        <div style="background:white; border-radius:10px; padding:22px 24px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-          <p style="font-size:36px; font-weight:700; color:#0891b2; margin:0 0 4px; line-height:1;">{premiumCount}</p>
-          <p style="font-size:13px; font-weight:500; color:#888; margin:0 0 6px;">Abonnés Premium</p>
-          <span style="font-size:11px; font-weight:700; color:#0891b2; background:#ecfeff; padding:2px 8px; border-radius:20px;">9,99 € / mois</span>
+        <div class="bg-white rounded-xl px-6 py-5.5 border border-gray-200 shadow-sm">
+          <p class="text-9 font-bold text-cyan-600 m-0 mb-1 leading-none">{premiumCount}</p>
+          <p class="text-3.25 font-medium text-zinc-400 m-0 mb-1.5">Abonnés Premium</p>
+          <span class="text-2.75 font-bold text-cyan-600 bg-cyan-50 px-2 py-0.5 rounded-full">9,99 € / mois</span>
         </div>
-        <div style="background:white; border-radius:10px; padding:22px 24px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-          <p style="font-size:28px; font-weight:700; color:#16a34a; margin:0 0 4px; line-height:1;">{fmtEur(weeklyRev)}</p>
-          <p style="font-size:13px; font-weight:500; color:#888; margin:0 0 6px;">Revenus / semaine</p>
-          <span style="font-size:11px; font-weight:700; color:#16a34a; background:#f0fdf4; padding:2px 8px; border-radius:20px;">estimé</span>
+        <div class="bg-white rounded-xl px-6 py-5.5 border border-gray-200 shadow-sm">
+          <p class="text-7 font-bold text-green-600 m-0 mb-1 leading-none">{fmtEur(weeklyRev)}</p>
+          <p class="text-3.25 font-medium text-zinc-400 m-0 mb-1.5">Revenus / semaine</p>
+          <span class="text-2.75 font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">estimé</span>
         </div>
-        <div style="background:white; border-radius:10px; padding:22px 24px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-          <p style="font-size:28px; font-weight:700; color:#d97706; margin:0 0 4px; line-height:1;">{fmtEur(monthlyRev)}</p>
-          <p style="font-size:13px; font-weight:500; color:#888; margin:0 0 6px;">Revenus / mois</p>
-          <span style="font-size:11px; font-weight:700; color:#d97706; background:#fffbeb; padding:2px 8px; border-radius:20px;">estimé</span>
+        <div class="bg-white rounded-xl px-6 py-5.5 border border-gray-200 shadow-sm">
+          <p class="text-7 font-bold text-amber-600 m-0 mb-1 leading-none">{fmtEur(monthlyRev)}</p>
+          <p class="text-3.25 font-medium text-zinc-400 m-0 mb-1.5">Revenus / mois</p>
+          <span class="text-2.75 font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">estimé</span>
+        </div>
+      </div>
+
+      <!-- ── Graphiques ───────────────────────────────────────────────────── -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-9">
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm px-6 py-5.5">
+          <p class="text-3.25 font-bold uppercase tracking-wider text-zinc-400 m-0 mb-4">Abonnements</p>
+          <div class="relative h-52"><canvas id="chart-abonnements"></canvas></div>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm px-6 py-5.5">
+          <p class="text-3.25 font-bold uppercase tracking-wider text-zinc-400 m-0 mb-4">Sessions par état</p>
+          <div class="relative h-52"><canvas id="chart-sessions"></canvas></div>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm px-6 py-5.5">
+          <p class="text-3.25 font-bold uppercase tracking-wider text-zinc-400 m-0 mb-4">Jeux par type</p>
+          <div class="relative h-52"><canvas id="chart-jeux"></canvas></div>
         </div>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <!-- Sessions récentes -->
-        <div style="background:white; border-radius:10px; padding:22px 24px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-          <p style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#aaa; margin:0 0 16px;">Sessions récentes</p>
+        <div class="bg-white rounded-xl px-6 py-5.5 border border-gray-200 shadow-sm">
+          <p class="text-3.25 font-bold uppercase tracking-wider text-zinc-400 m-0 mb-4">Sessions récentes</p>
           {allSessions.slice(0, 5).map(s => {
             const etat = s.etat_session ?? 'pas_commencer';
             const map = { pas_commencer: ['En attente', '#d97706', '#fffbeb'], en_cours: ['En cours', '#16a34a', '#f0fdf4'], fini: ['Terminée', '#9ca3af', '#f9fafb'] };
             const [label, color, bg] = map[etat] ?? ['—', '#aaa', '#f9fafb'];
             return (
-              <div style="display:flex; align-items:center; justify-content:space-between; padding:9px 0; border-bottom:1px solid #f3f4f6;">
-                <p style="font-size:14px; font-weight:500; color:#222; margin:0;">{s.nom ?? '—'}</p>
+              <div class="flex items-center justify-between py-2.25 border-b border-gray-100">
+                <p class="text-3.5 font-medium text-zinc-900 m-0">{s.nom ?? '—'}</p>
                 <span style={`font-size:11px; font-weight:700; color:${color}; background:${bg}; padding:3px 9px; border-radius:20px;`}>{label}</span>
               </div>
             );
           })}
-          {allSessions.length === 0 && <p style="color:#bbb; font-size:14px;">Aucune session.</p>}
+          {allSessions.length === 0 && <p class="text-zinc-300 text-3.5">Aucune session.</p>}
         </div>
         <!-- Derniers inscrits -->
-        <div style="background:white; border-radius:10px; padding:22px 24px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-          <p style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#aaa; margin:0 0 16px;">Derniers inscrits</p>
+        <div class="bg-white rounded-xl px-6 py-5.5 border border-gray-200 shadow-sm">
+          <p class="text-3.25 font-bold uppercase tracking-wider text-zinc-400 m-0 mb-4">Derniers inscrits</p>
           {allUsers.slice(-5).reverse().map(u => (
-            <div style="display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid #f3f4f6;">
-              <div style="width:32px; height:32px; border-radius:50%; background:#347645; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                <span style="color:white; font-size:13px; font-weight:700;">{(u.pseudo || u.prenom || '?').charAt(0).toUpperCase()}</span>
+            <div class="flex items-center gap-2.5 py-2.25 border-b border-gray-100">
+              <div class="w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center shrink-0">
+                <span class="text-white text-3.25 font-bold">{(u.pseudo || u.prenom || '?').charAt(0).toUpperCase()}</span>
               </div>
-              <div style="flex:1; min-width:0;">
-                <p style="font-size:13px; font-weight:600; color:#222; margin:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{u.pseudo || `${u.prenom ?? ''} ${u.nom ?? ''}`.trim() || '—'}</p>
-                <p style="font-size:11px; color:#aaa; margin:0;">{u.email}</p>
+              <div class="flex-1 min-w-0">
+                <p class="text-3.25 font-semibold text-zinc-900 m-0 truncate">{u.pseudo || `${u.prenom ?? ''} ${u.nom ?? ''}`.trim() || '—'}</p>
+                <p class="text-2.75 text-zinc-400 m-0">{u.email}</p>
               </div>
-              {u.admin && <span style="font-size:10px; font-weight:700; color:#347645; background:#edf7ee; padding:2px 7px; border-radius:20px;">Admin</span>}
+              {u.admin && <span class="text-2.5 font-bold text-primary-600 bg-green-50 px-1.75 py-0.5 rounded-full">Admin</span>}
             </div>
           ))}
         </div>
@@ -233,33 +263,33 @@ const pageData = JSON.stringify({
 
     <!-- ── Section : Utilisateurs ──────────────────────────────────────────── -->
     <section id="section-users" class="admin-section hidden">
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px;">
+      <div class="flex items-center justify-between mb-6">
         <div>
-          <h3 style="color:#111; margin:0 0 4px;">Utilisateurs</h3>
-          <p style="color:#888; font-size:14px; font-weight:500; margin:0;">{allUsers.length} compte{allUsers.length > 1 ? 's' : ''} enregistré{allUsers.length > 1 ? 's' : ''}</p>
+          <h3 class="text-zinc-900 m-0 mb-1">Utilisateurs</h3>
+          <p class="text-zinc-400 text-3.5 font-medium m-0">{allUsers.length} compte{allUsers.length > 1 ? 's' : ''} enregistré{allUsers.length > 1 ? 's' : ''}</p>
         </div>
       </div>
 
-      <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
+      <div class="admin-table-wrap bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="hidden lg:grid lg:grid-cols-[1fr_200px_80px_90px_80px] lg:px-5 lg:py-3 lg:bg-gray-50 lg:border-b lg:border-gray-200">
-          <p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Utilisateur</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Email</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Points</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Rôle</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0"></p>
+          <p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0">Utilisateur</p><p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0">Email</p><p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0">Points</p><p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0">Rôle</p><p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0"></p>
         </div>
         {allUsers.map(u => (
           <div data-row-user={u.id} class="grid grid-cols-[1fr_auto_auto] lg:grid-cols-[1fr_200px_80px_90px_80px] items-center px-5 py-3.5 border-b border-gray-100">
-            <div style="display:flex; align-items:center; gap:10px;">
-              <div style="width:34px; height:34px; border-radius:50%; background:#347645; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                <span style="color:white; font-size:13px; font-weight:700;">{(u.pseudo || u.prenom || '?').charAt(0).toUpperCase()}</span>
+            <div class="flex items-center gap-2.5">
+              <div class="w-8.5 h-8.5 rounded-full bg-primary-600 flex items-center justify-center shrink-0">
+                <span class="text-white text-3.25 font-bold">{(u.pseudo || u.prenom || '?').charAt(0).toUpperCase()}</span>
               </div>
               <div>
-                <p style="font-size:14px; font-weight:600; color:#222; margin:0;">{u.pseudo || `${u.prenom ?? ''} ${u.nom ?? ''}`.trim() || '—'}</p>
-                <p style="font-size:11px; color:#aaa; margin:0;">ID: {u.id.slice(0,8)}…</p>
+                <p class="text-3.5 font-semibold text-zinc-900 m-0">{u.pseudo || `${u.prenom ?? ''} ${u.nom ?? ''}`.trim() || '—'}</p>
+                <p class="text-2.75 text-zinc-400 m-0">ID: {u.id.slice(0,8)}…</p>
               </div>
             </div>
-            <p style="font-size:13px; color:#555; margin:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding-right:16px;">{u.email}</p>
-            <p style="font-size:13px; font-weight:600; color:#222; margin:0;">{u.points ?? 0}</p>
+            <p class="text-3.25 text-zinc-600 m-0 truncate pr-4">{u.email}</p>
+            <p class="text-3.25 font-semibold text-zinc-900 m-0">{u.points ?? 0}</p>
             <div>
               {u.id === userId
-                ? <span style="font-size:11px; font-weight:700; color:#347645; background:#edf7ee; padding:3px 10px; border-radius:20px;">Vous</span>
+                ? <span class="text-2.75 font-bold text-primary-600 bg-green-50 px-2.5 py-0.75 rounded-full">Vous</span>
                 : <button data-action="toggle-admin" data-id={u.id} data-admin={String(u.admin ?? false)}
                     style={`height:26px; padding:0 12px; font-size:11px; font-weight:700; border:none; cursor:pointer; border-radius:20px; background:${u.admin ? '#edf7ee' : '#f3f4f6'}; color:${u.admin ? '#347645' : '#888'};`}>
                     {u.admin ? 'Admin' : 'User'}
@@ -278,45 +308,45 @@ const pageData = JSON.stringify({
 
     <!-- ── Section : Bars ──────────────────────────────────────────────────── -->
     <section id="section-bars" class="admin-section hidden">
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px;">
+      <div class="flex items-center justify-between mb-6">
         <div>
-          <h3 style="color:#111; margin:0 0 4px;">Bars</h3>
-          <p style="color:#888; font-size:14px; font-weight:500; margin:0;">{allBars.length} bar{allBars.length > 1 ? 's' : ''} dans la base</p>
+          <h3 class="text-zinc-900 m-0 mb-1">Bars</h3>
+          <p class="text-zinc-400 text-3.5 font-medium m-0">{allBars.length} bar{allBars.length > 1 ? 's' : ''} dans la base</p>
         </div>
         <button data-action="open-bar-form" data-id="" class="h-9.5 px-4.5 bg-primary-600 border-0 text-white text-3.25 font-bold cursor-pointer rounded-lg hover:bg-primary-900 transition-colors">+ Ajouter un bar</button>
       </div>
 
-      <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
-        <div class="hidden lg:grid lg:grid-cols-[1fr_220px_100px] lg:px-5 lg:py-3 lg:bg-gray-50 lg:border-b lg:border-gray-200">
-          <p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Adresse</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0"></p>
+      <div class="admin-table-wrap bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="hidden lg:grid lg:grid-cols-[1fr_1fr_120px] lg:px-5 lg:py-3 lg:bg-gray-50 lg:border-b lg:border-gray-200">
+          <p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0">Adresse</p><p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0"></p>
         </div>
         {allBars.map(b => (
-          <div data-row-bar={b.id} class="grid grid-cols-[1fr_auto] lg:grid-cols-[1fr_220px_100px] items-center px-5 py-3.5 border-b border-gray-100">
+          <div data-row-bar={b.id} class="grid grid-cols-[1fr_auto] lg:grid-cols-[1fr_1fr_120px] items-center px-5 py-3.5 border-b border-gray-100">
             <div>
-              <p style="font-size:14px; font-weight:600; color:#222; margin:0;">{b.nom}</p>
-              <p style="font-size:11px; color:#aaa; margin:0;">ID: {b.id.slice(0,8)}…</p>
+              <p class="text-3.5 font-semibold text-zinc-900 m-0">{b.nom}</p>
+              <p class="text-2.75 text-zinc-400 m-0">ID: {b.id.slice(0,8)}…</p>
             </div>
-            <p style="font-size:13px; color:#555; margin:0;">{b.adresse ?? '—'}</p>
+            <p class="hidden lg:block text-3.25 text-zinc-600 m-0 truncate pr-4">{b.adresse ?? '—'}</p>
             <div class="flex justify-end gap-2">
               <button data-action="open-bar-form" data-id={b.id} class="h-7 px-3 bg-green-50 border border-green-100 text-primary-600 text-3 font-semibold cursor-pointer rounded-md hover:bg-green-100 transition-colors">Modifier</button>
               <button data-action="delete-bar" data-id={b.id} class="h-7 px-3 bg-red-50 border border-red-200 text-red-500 text-3 font-semibold cursor-pointer rounded-md hover:bg-red-100 transition-colors">Supp.</button>
             </div>
           </div>
         ))}
-        {allBars.length === 0 && <p style="color:#bbb; font-size:14px; padding:20px;">Aucun bar.</p>}
+        {allBars.length === 0 && <p class="text-zinc-300 text-3.5 p-5">Aucun bar.</p>}
       </div>
     </section>
 
     <!-- ── Section : Sessions ─────────────────────────────────────────────── -->
     <section id="section-sessions" class="admin-section hidden">
-      <div style="margin-bottom:24px;">
-        <h3 style="color:#111; margin:0 0 4px;">Sessions</h3>
-        <p style="color:#888; font-size:14px; font-weight:500; margin:0;">{allSessions.length} session{allSessions.length > 1 ? 's' : ''} créée{allSessions.length > 1 ? 's' : ''}</p>
+      <div class="mb-6">
+        <h3 class="text-zinc-900 m-0 mb-1">Sessions</h3>
+        <p class="text-zinc-400 text-3.5 font-medium m-0">{allSessions.length} session{allSessions.length > 1 ? 's' : ''} créée{allSessions.length > 1 ? 's' : ''}</p>
       </div>
 
-      <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
-        <div style="display:grid; grid-template-columns:1fr 130px 140px 80px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
-          <p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Date</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">État</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0"></p>
+      <div class="admin-table-wrap bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="grid grid-cols-[1fr_130px_140px_80px] px-5 py-3 bg-gray-50 border-b border-gray-200">
+          <p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0">Date</p><p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0">État</p><p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0"></p>
         </div>
         {allSessions.map(s => {
           const etat = s.etat_session ?? 'pas_commencer';
@@ -327,12 +357,12 @@ const pageData = JSON.stringify({
           };
           const [label, color, bg] = map[etat] ?? ['—', '#aaa', '#f9fafb'];
           return (
-            <div data-row-session={s.id} style="display:grid; grid-template-columns:1fr 130px 140px 80px; align-items:center; padding:14px 20px; border-bottom:1px solid #f3f4f6;">
+            <div data-row-session={s.id} class="grid grid-cols-[1fr_130px_140px_80px] items-center px-5 py-3.5 border-b border-gray-100">
               <div>
-                <p style="font-size:14px; font-weight:600; color:#222; margin:0;">{s.nom ?? '—'}</p>
-                <p style="font-size:11px; color:#aaa; margin:0;">ID: {s.id.slice(0,8)}…</p>
+                <p class="text-3.5 font-semibold text-zinc-900 m-0">{s.nom ?? '—'}</p>
+                <p class="text-2.75 text-zinc-400 m-0">ID: {s.id.slice(0,8)}…</p>
               </div>
-              <p style="font-size:13px; color:#555; margin:0;">{s.date_heur_depart?.split(' ')[0] ?? '—'}</p>
+              <p class="text-3.25 text-zinc-600 m-0">{s.date_heur_depart?.split(' ')[0] ?? '—'}</p>
               <span style={`font-size:11px; font-weight:700; color:${color}; background:${bg}; padding:4px 11px; border-radius:20px; width:fit-content;`}>{label}</span>
               <div class="flex justify-end">
                 <button data-action="delete-session" data-id={s.id} class="h-7 px-3 bg-red-50 border border-red-200 text-red-500 text-3 font-semibold cursor-pointer rounded-md hover:bg-red-100 transition-colors">Supp.</button>
@@ -340,73 +370,73 @@ const pageData = JSON.stringify({
             </div>
           );
         })}
-        {allSessions.length === 0 && <p style="color:#bbb; font-size:14px; padding:20px;">Aucune session.</p>}
+        {allSessions.length === 0 && <p class="text-zinc-300 text-3.5 p-5">Aucune session.</p>}
       </div>
     </section>
 
     <!-- ── Section : Jeux ─────────────────────────────────────────────────── -->
     <section id="section-jeux" class="admin-section hidden">
-      <div style="margin-bottom:24px;">
-        <h3 style="color:#111; margin:0 0 4px;">Jeux</h3>
-        <p style="color:#888; font-size:14px; font-weight:500; margin:0;">{allJeux.length} jeu{allJeux.length > 1 ? 'x' : ''} disponible{allJeux.length > 1 ? 's' : ''}</p>
+      <div class="mb-6">
+        <h3 class="text-zinc-900 m-0 mb-1">Jeux</h3>
+        <p class="text-zinc-400 text-3.5 font-medium m-0">{allJeux.length} jeu{allJeux.length > 1 ? 'x' : ''} disponible{allJeux.length > 1 ? 's' : ''}</p>
       </div>
 
-      <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
-        <div style="display:grid; grid-template-columns:1fr 150px 130px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
-          <p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Type</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0"></p>
+      <div class="admin-table-wrap bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="grid grid-cols-[1fr_1fr_180px] px-5 py-3 bg-gray-50 border-b border-gray-200">
+          <p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0">Type</p><p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0"></p>
         </div>
         {allJeux.map(j => (
-          <div data-row-jeu={j.id} style="display:grid; grid-template-columns:1fr 150px 130px; align-items:center; padding:14px 20px; border-bottom:1px solid #f3f4f6;">
-            <p style="font-size:14px; font-weight:600; color:#222; margin:0;">{j.nom ?? '—'}</p>
-            <span style="font-size:12px; font-weight:600; color:#7c3aed; background:#f5f3ff; padding:3px 10px; border-radius:20px; width:fit-content;">{j.type_du_jeux ?? '—'}</span>
+          <div data-row-jeu={j.id} class="grid grid-cols-[1fr_1fr_180px] items-center px-5 py-3.5 border-b border-gray-100">
+            <p class="text-3.5 font-semibold text-zinc-900 m-0">{j.nom ?? '—'}</p>
+            <span class="text-3 font-semibold text-violet-700 bg-violet-50 px-2.5 py-0.75 rounded-full w-fit max-w-full truncate">{j.type_du_jeux ?? '—'}</span>
             <div class="flex justify-end gap-2">
               <button data-action="open-jeu-form" data-id={j.id} class="h-7 px-3 bg-green-50 border border-green-100 text-primary-600 text-3 font-semibold cursor-pointer rounded-md hover:bg-green-100 transition-colors">Modifier</button>
               <button data-action="open-jeu-questions" data-id={j.id} class="h-7 px-3 bg-primary-600 border-0 text-white text-3 font-bold cursor-pointer rounded-lg hover:bg-primary-900 transition-colors">Questions</button>
             </div>
           </div>
         ))}
-        {allJeux.length === 0 && <p style="color:#bbb; font-size:14px; padding:20px;">Aucun jeu.</p>}
+        {allJeux.length === 0 && <p class="text-zinc-300 text-3.5 p-5">Aucun jeu.</p>}
       </div>
     </section>
 
     <!-- ── Section : Questions d'un jeu ───────────────────────────────────── -->
     <section id="section-jeu-questions" class="admin-section hidden">
       <!-- Header avec retour -->
-      <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">
-        <button data-action="back-to-jeux" style="height:36px; padding:0 14px; background:white; border:1px solid #e0e0e0; color:#555; font-size:13px; font-weight:600; cursor:pointer; border-radius:7px; display:flex; align-items:center; gap:6px;"><Image src={arrowLeftIcon} alt="" width={14} height={14} style="filter:invert(35%) sepia(0%) saturate(0%) brightness(60%) contrast(90%)" /> Retour</button>
+      <div class="flex items-center gap-3 mb-6">
+        <button data-action="back-to-jeux" class="h-9 px-3.5 bg-white border border-zinc-300 text-zinc-600 text-3.25 font-semibold cursor-pointer rounded-lg flex items-center gap-1.5"><Image src={arrowLeftIcon} alt="" width={14} height={14} style="filter:invert(35%) sepia(0%) saturate(0%) brightness(60%) contrast(90%)" /> Retour</button>
         <div>
-          <h3 id="jeu-questions-title" style="color:#111; margin:0 0 2px;"></h3>
-          <p id="jeu-questions-count" style="color:#888; font-size:14px; font-weight:500; margin:0;"></p>
+          <h3 id="jeu-questions-title" class="text-zinc-900 m-0 mb-0.5"></h3>
+          <p id="jeu-questions-count" class="text-zinc-400 text-3.5 font-medium m-0"></p>
         </div>
       </div>
 
       <!-- Liste des questions -->
-      <div id="questions-list" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); margin-bottom:24px; overflow:hidden;"></div>
+      <div id="questions-list" class="bg-white rounded-xl border border-gray-200 shadow-sm mb-6 overflow-hidden"></div>
 
       <!-- Formulaire ajout question -->
-      <div style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); padding:24px;">
-        <p style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#aaa; margin:0 0 20px; padding-bottom:12px; border-bottom:1px solid #f0f0f0;">Ajouter une question</p>
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+        <p class="text-3.25 font-bold uppercase tracking-wider text-zinc-400 m-0 mb-5 pb-3 border-b border-gray-100">Ajouter une question</p>
 
-        <div id="add-question-error" style="display:none; background:#fef2f2; border-radius:7px; padding:10px 14px; color:#ef4444; font-size:13px; font-weight:500; margin-bottom:16px;"></div>
+        <div id="add-question-error" class="hidden bg-red-50 rounded-lg px-3.5 py-2.5 text-red-500 text-3.25 font-medium mb-4"></div>
 
-        <div style="margin-bottom:16px;">
-          <label style="font-size:12px; font-weight:700; color:#444; display:block; margin-bottom:6px;">Question *</label>
-          <input id="q-question" type="text" placeholder="ex : Quelle est la capitale de la France ?" style="width:100%; background:#f9fafb; border:1.5px solid #e5e7eb; border-radius:8px; padding:10px 14px; color:#111; font-size:14px; outline:none; box-sizing:border-box;" />
+        <div class="mb-4">
+          <label class="text-3 font-bold text-zinc-700 block mb-1.5">Question *</label>
+          <input id="q-question" type="text" placeholder="ex : Quelle est la capitale de la France ?" class="w-full bg-gray-50 border-[1.5px] border-gray-200 rounded-lg px-3.5 py-2.5 text-zinc-900 text-3.5 outline-none box-border" />
         </div>
 
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+        <div class="grid grid-cols-2 gap-3 mb-4">
           {[1,2,3,4].map(n => (
             <div>
-              <label style="font-size:12px; font-weight:700; color:#444; display:block; margin-bottom:6px;">Choix {n}</label>
-              <input id={`q-choix-${n}`} type="text" placeholder={`Réponse ${n}`} style="width:100%; background:#f9fafb; border:1.5px solid #e5e7eb; border-radius:8px; padding:10px 14px; color:#111; font-size:14px; outline:none; box-sizing:border-box;" />
+              <label class="text-3 font-bold text-zinc-700 block mb-1.5">Choix {n}</label>
+              <input id={`q-choix-${n}`} type="text" placeholder={`Réponse ${n}`} class="w-full bg-gray-50 border-[1.5px] border-gray-200 rounded-lg px-3.5 py-2.5 text-zinc-900 text-3.5 outline-none box-border" />
             </div>
           ))}
         </div>
 
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
+        <div class="grid grid-cols-2 gap-3 mb-5">
           <div>
-            <label style="font-size:12px; font-weight:700; color:#444; display:block; margin-bottom:6px;">Bonne réponse *</label>
-            <select id="q-reponse" style="width:100%; background:#f9fafb; border:1.5px solid #e5e7eb; border-radius:8px; padding:10px 14px; color:#111; font-size:14px; outline:none; box-sizing:border-box;">
+            <label class="text-3 font-bold text-zinc-700 block mb-1.5">Bonne réponse *</label>
+            <select id="q-reponse" class="w-full bg-gray-50 border-[1.5px] border-gray-200 rounded-lg px-3.5 py-2.5 text-zinc-900 text-3.5 outline-none box-border">
               <option value="1">Choix 1</option>
               <option value="2">Choix 2</option>
               <option value="3">Choix 3</option>
@@ -414,8 +444,8 @@ const pageData = JSON.stringify({
             </select>
           </div>
           <div>
-            <label style="font-size:12px; font-weight:700; color:#444; display:block; margin-bottom:6px;">Thème *</label>
-            <select id="q-theme" style="width:100%; background:#f9fafb; border:1.5px solid #e5e7eb; border-radius:8px; padding:10px 14px; color:#111; font-size:14px; outline:none; box-sizing:border-box;">
+            <label class="text-3 font-bold text-zinc-700 block mb-1.5">Thème *</label>
+            <select id="q-theme" class="w-full bg-gray-50 border-[1.5px] border-gray-200 rounded-lg px-3.5 py-2.5 text-zinc-900 text-3.5 outline-none box-border">
               <option value="cultrue_g">Culture générale</option>
               <option value="jeux_video">Jeux vidéo</option>
               <option value="histoire">Histoire</option>
@@ -423,50 +453,50 @@ const pageData = JSON.stringify({
           </div>
         </div>
 
-        <button id="btn-add-question" style="height:42px; padding:0 24px; background:#347645; border:none; color:white; font-size:14px; font-weight:700; cursor:pointer; border-radius:8px;">Ajouter la question</button>
+        <button id="btn-add-question" class="h-10.5 px-6 bg-primary-600 border-0 text-white text-3.5 font-bold cursor-pointer rounded-lg">Ajouter la question</button>
       </div>
     </section>
 
     <!-- ── Section : Boissons ─────────────────────────────────────────────── -->
     <section id="section-boisons" class="admin-section hidden">
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px;">
+      <div class="flex items-center justify-between mb-6">
         <div>
-          <h3 style="color:#111; margin:0 0 4px;">Boissons</h3>
-          <p style="color:#888; font-size:14px; font-weight:500; margin:0;">{allBoisons.length} boisson{allBoisons.length > 1 ? 's' : ''} dans la base</p>
+          <h3 class="text-zinc-900 m-0 mb-1">Boissons</h3>
+          <p class="text-zinc-400 text-3.5 font-medium m-0">{allBoisons.length} boisson{allBoisons.length > 1 ? 's' : ''} dans la base</p>
         </div>
         <button data-action="open-boison-form" data-id="" class="h-9.5 px-4.5 bg-primary-600 border-0 text-white text-3.25 font-bold cursor-pointer rounded-lg hover:bg-primary-900 transition-colors">+ Ajouter une boisson</button>
       </div>
 
-      <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
-        <div style="display:grid; grid-template-columns:1fr 100px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
-          <p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0"></p>
+      <div class="admin-table-wrap bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="grid grid-cols-[1fr_100px] px-5 py-3 bg-gray-50 border-b border-gray-200">
+          <p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0"></p>
         </div>
         {allBoisons.map(b => (
-          <div data-row-boison={b.id} style="display:grid; grid-template-columns:1fr 100px; align-items:center; padding:14px 20px; border-bottom:1px solid #f3f4f6;">
-            <p style="font-size:14px; font-weight:600; color:#222; margin:0;">{b.nom ?? b.name ?? '—'}</p>
+          <div data-row-boison={b.id} class="grid grid-cols-[1fr_100px] items-center px-5 py-3.5 border-b border-gray-100">
+            <p class="text-3.5 font-semibold text-zinc-900 m-0">{b.nom ?? b.name ?? '—'}</p>
             <div class="flex justify-end gap-2">
               <button data-action="open-boison-form" data-id={b.id} class="h-7 px-3 bg-green-50 border border-green-100 text-primary-600 text-3 font-semibold cursor-pointer rounded-md hover:bg-green-100 transition-colors">Modifier</button>
               <button data-action="delete-boison" data-id={b.id} class="h-7 px-3 bg-red-50 border border-red-200 text-red-500 text-3 font-semibold cursor-pointer rounded-md hover:bg-red-100 transition-colors">Supp.</button>
             </div>
           </div>
         ))}
-        {allBoisons.length === 0 && <p style="color:#bbb; font-size:14px; padding:20px;">Aucune boisson.</p>}
+        {allBoisons.length === 0 && <p class="text-zinc-300 text-3.5 p-5">Aucune boisson.</p>}
       </div>
     </section>
 
     <!-- ── Section : Boutique ────────────────────────────────────────────── -->
     <section id="section-boutique" class="admin-section hidden">
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px;">
+      <div class="flex items-center justify-between mb-6">
         <div>
-          <h3 style="color:#111; margin:0 0 4px;">Boutique</h3>
-          <p style="color:#888; font-size:14px; font-weight:500; margin:0;">{allBoutique.length} article{allBoutique.length > 1 ? 's' : ''} disponible{allBoutique.length > 1 ? 's' : ''}</p>
+          <h3 class="text-zinc-900 m-0 mb-1">Boutique</h3>
+          <p class="text-zinc-400 text-3.5 font-medium m-0">{allBoutique.length} article{allBoutique.length > 1 ? 's' : ''} disponible{allBoutique.length > 1 ? 's' : ''}</p>
         </div>
         <button data-action="open-boutique-form" data-id="" class="h-9.5 px-4.5 bg-primary-600 border-0 text-white text-3.25 font-bold cursor-pointer rounded-lg hover:bg-primary-900 transition-colors">+ Ajouter un article</button>
       </div>
 
-      <div class="admin-table-wrap" style="background:white; border-radius:10px; border:1px solid #e8eaed; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
-        <div style="display:grid; grid-template-columns:56px 1fr 160px 80px 110px; padding:12px 20px; background:#f9fafb; border-bottom:1px solid #e8eaed;">
-          <p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0"></p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Type</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0">Prix</p><p class="text-2.75 font-bold uppercase tracking-[1px] text-zinc-400 m-0"></p>
+      <div class="admin-table-wrap bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="grid grid-cols-[56px_1fr_160px_80px_110px] px-5 py-3 bg-gray-50 border-b border-gray-200">
+          <p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0"></p><p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0">Nom</p><p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0">Type</p><p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0">Prix</p><p class="text-2.75 font-bold uppercase tracking-wider text-zinc-400 m-0"></p>
         </div>
         {allBoutique.map(b => {
           const typeLabels = { decoration_avatar: 'Décoration', theme: 'Thème', titre: 'Titre' };
@@ -478,22 +508,22 @@ const pageData = JSON.stringify({
             ? `${PB_URL}/api/files/${b.collectionName}/${b.id}/${imgFile}`
             : null;
           return (
-            <div data-row-boutique={b.id} style="display:grid; grid-template-columns:56px 1fr 160px 80px 110px; align-items:center; padding:12px 20px; border-bottom:1px solid #f3f4f6;">
+            <div data-row-boutique={b.id} class="grid grid-cols-[56px_1fr_160px_80px_110px] items-center px-5 py-3 border-b border-gray-100">
               <!-- Aperçu image -->
-              <div style="width:40px; height:40px; border-radius:6px; overflow:hidden; background:#f0f0f0; flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+              <div class="w-10 h-10 rounded-md overflow-hidden bg-gray-100 shrink-0 flex items-center justify-center">
                 {imgSrc ? (
-                  <img src={imgSrc} alt="" style="width:100%; height:100%; object-fit:cover;" />
+                  <img src={imgSrc} alt="" class="w-full h-full object-cover" />
                 ) : b.type === 'titre' ? (
-                  <span style="font-size:10px; font-weight:700; color:#888;">T</span>
+                  <span class="text-2.5 font-bold text-zinc-400">T</span>
                 ) : (
-                  <span style="font-size:16px;">🖼</span>
+                  <span class="text-4">🖼</span>
                 )}
               </div>
               <!-- Nom -->
               <div>
-                <p style="font-size:14px; font-weight:600; color:#222; margin:0;">{b.nom}</p>
+                <p class="text-3.5 font-semibold text-zinc-900 m-0">{b.nom}</p>
                 {b.type === 'titre' && b.type_titre && (
-                  <p style="font-size:11px; color:#aaa; margin:0;">"{b.type_titre}"</p>
+                  <p class="text-2.75 text-zinc-400 m-0">"{b.type_titre}"</p>
                 )}
               </div>
               <!-- Type badge -->
@@ -501,7 +531,7 @@ const pageData = JSON.stringify({
                 {typeLabels[b.type] ?? b.type}
               </span>
               <!-- Prix -->
-              <p style="font-size:13px; font-weight:700; color:#222; margin:0;">{b.prix} pts</p>
+              <p class="text-3.25 font-bold text-zinc-900 m-0">{b.prix} pts</p>
               <!-- Actions -->
               <div class="flex justify-end gap-2">
                 <button data-action="open-boutique-form" data-id={b.id} class="h-7 px-3 bg-green-50 border border-green-100 text-primary-600 text-3 font-semibold cursor-pointer rounded-md hover:bg-green-100 transition-colors">Modifier</button>
@@ -510,7 +540,7 @@ const pageData = JSON.stringify({
             </div>
           );
         })}
-        {allBoutique.length === 0 && <p style="color:#bbb; font-size:14px; padding:20px;">Aucun article.</p>}
+        {allBoutique.length === 0 && <p class="text-zinc-300 text-3.5 p-5">Aucun article.</p>}
       </div>
     </section>
 
@@ -520,18 +550,18 @@ const pageData = JSON.stringify({
 <!-- ══════════════════════════════════════════════════════════════════════════ -->
 <!-- CONFIRM MODAL                                                             -->
 <!-- ══════════════════════════════════════════════════════════════════════════ -->
-<div id="confirm-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:60; align-items:center; justify-content:center;">
-  <div style="background:white; width:min(420px,92vw); border-radius:12px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.2);">
-    <div style="padding:24px 28px; border-bottom:1px solid #f0f0f0;">
-      <p style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:#ef4444; margin:0 0 4px;">Action irréversible</p>
-      <h3 id="confirm-title" style="color:#111; margin:0; font-size:20px;"></h3>
+<div id="confirm-modal" class="hidden fixed inset-0 bg-black/45 z-60 items-center justify-center">
+  <div class="bg-white w-[min(420px,92vw)] rounded-xl overflow-hidden shadow-2xl">
+    <div class="px-7 py-6 border-b border-gray-100">
+      <p class="text-2.75 font-bold uppercase tracking-widest text-red-500 m-0 mb-1">Action irréversible</p>
+      <h3 id="confirm-title" class="text-zinc-900 m-0 text-5"></h3>
     </div>
-    <div style="padding:20px 28px;">
-      <p id="confirm-body" style="color:#555; font-size:14px; font-weight:500; margin:0; line-height:1.6;"></p>
+    <div class="px-7 py-5">
+      <p id="confirm-body" class="text-zinc-600 text-3.5 font-medium m-0 leading-relaxed"></p>
     </div>
-    <div style="display:flex; gap:10px; padding:0 28px 24px; justify-content:flex-end;">
-      <button id="confirm-cancel" style="height:38px; padding:0 20px; background:white; border:1px solid #e0e0e0; color:#555; font-size:13px; font-weight:600; cursor:pointer; border-radius:7px;">Annuler</button>
-      <button id="confirm-ok" style="height:38px; padding:0 20px; background:#ef4444; border:none; color:white; font-size:13px; font-weight:600; cursor:pointer; border-radius:7px;">Confirmer</button>
+    <div class="flex gap-2.5 px-7 pb-6 justify-end">
+      <button id="confirm-cancel" class="h-9.5 px-5 bg-white border border-zinc-300 text-zinc-600 text-3.25 font-semibold cursor-pointer rounded-lg">Annuler</button>
+      <button id="confirm-ok" class="h-9.5 px-5 bg-red-500 border-0 text-white text-3.25 font-semibold cursor-pointer rounded-lg">Confirmer</button>
     </div>
   </div>
 </div>
@@ -539,23 +569,23 @@ const pageData = JSON.stringify({
 <!-- ══════════════════════════════════════════════════════════════════════════ -->
 <!-- DRAWER                                                                    -->
 <!-- ══════════════════════════════════════════════════════════════════════════ -->
-<div id="drawer-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.3); z-index:70;"></div>
-<div id="drawer" style="position:fixed; top:0; right:0; height:100%; width:min(500px,100vw); background:white; z-index:80; transform:translateX(100%); transition:transform 0.3s cubic-bezier(.4,0,.2,1); overflow-y:auto; display:flex; flex-direction:column; box-shadow:-8px 0 40px rgba(0,0,0,0.12);">
+<div id="drawer-overlay" class="hidden fixed inset-0 bg-black/30 z-70"></div>
+<div id="drawer" class="fixed top-0 right-0 h-full w-[min(500px,100vw)] bg-white z-80 overflow-y-auto flex flex-col shadow-[-8px_0_40px_rgba(0,0,0,0.12)]" style="transform:translateX(100%); transition:transform 0.3s cubic-bezier(.4,0,.2,1);">
 
   <!-- Header -->
-  <div style="display:flex; justify-content:space-between; align-items:center; padding:24px 28px; border-bottom:1px solid #f0f0f0; flex-shrink:0;">
+  <div class="flex justify-between items-center px-7 py-6 border-b border-gray-100 shrink-0">
     <div>
-      <p id="drawer-label" style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:#347645; margin:0 0 3px;"></p>
-      <h3 id="drawer-title" style="color:#111; margin:0; font-size:20px;"></h3>
+      <p id="drawer-label" class="text-2.75 font-bold uppercase tracking-widest text-primary-600 m-0 mb-0.75"></p>
+      <h3 id="drawer-title" class="text-zinc-900 m-0 text-5"></h3>
     </div>
-    <button id="drawer-close" style="background:#f4f5f7; border:none; color:#555; font-size:20px; line-height:1; cursor:pointer; width:34px; height:34px; border-radius:7px; display:flex; align-items:center; justify-content:center;">×</button>
+    <button id="drawer-close" class="bg-zinc-100 border-0 text-zinc-600 text-5 leading-none cursor-pointer w-8.5 h-8.5 rounded-lg flex items-center justify-center">×</button>
   </div>
 
   <!-- Body -->
-  <div id="drawer-body" class="flex-1" style="padding:28px;"></div>
+  <div id="drawer-body" class="flex-1 p-7"></div>
 
   <!-- Footer -->
-  <div style="padding:20px 28px; border-top:1px solid #f0f0f0; flex-shrink:0;">
+  <div class="px-7 py-5 border-t border-gray-100 shrink-0">
     <p id="drawer-error" class="text-red-500 text-3.25 font-medium mb-3 hidden bg-red-50 py-2.5 px-3.5 rounded-lg"></p>
     <button id="drawer-submit" class="w-full h-11 bg-primary-600 border-0 text-white text-3.5 font-bold cursor-pointer rounded-lg tracking-[0.3px]">Enregistrer</button>
   </div>
@@ -564,6 +594,71 @@ const pageData = JSON.stringify({
 <script is:inline id="page-data" type="application/json" set:html={pageData}></script>
 <script>
 import '../js/admin.js';
+</script>
+
+<script is:inline src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<script define:vars={{ chartData }}>
+  function buildDonut(labels, data, colors) {
+    return {
+      type: 'doughnut',
+      data: {
+        labels,
+        datasets: [{
+          data,
+          backgroundColor: colors,
+          borderWidth: 3,
+          borderColor: '#ffffff',
+          hoverBorderColor: '#ffffff',
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        cutout: '62%',
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              font: { size: 11, family: 'Inter, sans-serif' },
+              color: '#646262',
+              padding: 14,
+              boxWidth: 10,
+              boxHeight: 10,
+              usePointStyle: true,
+              pointStyle: 'circle',
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(ctx) {
+                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                const pct   = total ? Math.round(ctx.parsed / total * 100) : 0;
+                return ' ' + ctx.label + ' : ' + ctx.parsed + ' (' + pct + '%)';
+              }
+            }
+          }
+        }
+      }
+    };
+  }
+
+  new Chart(
+    document.getElementById('chart-abonnements'),
+    buildDonut(chartData.abonnements.labels, chartData.abonnements.data, ['#d1d5db', '#7c3aed', '#0891b2'])
+  );
+
+  new Chart(
+    document.getElementById('chart-sessions'),
+    buildDonut(chartData.sessions.labels, chartData.sessions.data, ['#fbbf24', '#22c55e', '#9ca3af'])
+  );
+
+  if (chartData.jeux.labels.length > 0) {
+    const palette = ['#72c073', '#7c3aed', '#0891b2', '#d97706', '#ef4444', '#ec4899', '#14b8a6'];
+    new Chart(
+      document.getElementById('chart-jeux'),
+      buildDonut(chartData.jeux.labels, chartData.jeux.data, palette.slice(0, chartData.jeux.labels.length))
+    );
+  }
 </script>
 
 

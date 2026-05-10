@@ -87,11 +87,17 @@
     var avHtml = avUrl
       ? '<img src="' + avUrl + '" alt="' + esc(ami.pseudo) + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />'
       : '<div style="width:100%;height:100%;background:#347645;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:' + Math.round(size * 0.38) + 'px;">' + esc((ami.pseudo || ami.prenom || '?').charAt(0).toUpperCase()) + '</div>';
+    var samBtn = isHote
+      ? (isSamRole
+          ? '<button data-sam-toggle="' + esc(ami.id) + '" style="flex-shrink:0;height:28px;padding:0 12px;font-size:11px;font-weight:700;border:none;border-radius:20px;cursor:pointer;background:#fef2f2;color:#ef4444;">Retirer SAM</button>'
+          : '<button data-sam-toggle="' + esc(ami.id) + '" style="flex-shrink:0;height:28px;padding:0 12px;font-size:11px;font-weight:700;border:none;border-radius:20px;cursor:pointer;background:rgba(114,192,115,0.15);color:#72c073;">SAM +</button>')
+      : '';
     return '<div style="display:flex;align-items:center;gap:12px;background:#2c2c2c;border-radius:5px;padding:12px;margin-bottom:10px;">' +
       '<div style="width:44px;height:44px;flex-shrink:0;border-radius:50%;overflow:hidden;">' + avHtml + '</div>' +
       '<div style="flex:1;min-width:0;"><p style="color:white;font-size:14px;font-weight:500;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + esc(ami.pseudo || (ami.prenom + ' ' + ami.nom).trim() || 'Utilisateur') + '</p>' +
         (isSamRole ? '<span style="display:inline-block;background:#f7f1ed;color:#094736;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:4px;">SAM</span>' : '') +
       '</div>' +
+      samBtn +
     '</div>';
   }
   function bonusRow(label, value) {
@@ -231,7 +237,7 @@
         param('Heure de fin',    session.heure_fin || '—') +
         param('Lancement auto',  session.automatique ? '✓ Activé' : 'Désactivé') +
         (session.description ? param('Description', session.description) : '') +
-        (isHote ? '<div style="margin-top:8px;"><button id="btn-stop-session" style="background:#f59e0b;border:none;color:white;font-size:13px;font-weight:600;height:36px;padding:0 18px;border-radius:3px;cursor:pointer;">⏹ Arrêter la session</button></div>' : '') +
+        (isHote ? '<div style="margin-top:20px;"><button id="btn-stop-session" style="width:100%;height:46px;background:#ef4444;border:none;color:white;font-size:14px;font-weight:700;border-radius:5px;cursor:pointer;letter-spacing:0.3px;">⏹ Arrêter la session</button></div>' : '') +
       '</div>';
       document.getElementById('btn-stop-session')?.addEventListener('click', function () {
         document.getElementById('stop-modal').style.display = 'flex';
@@ -553,6 +559,26 @@
     } catch (_) {}
   }
 
+  async function toggleSam(amiId) {
+    var isSamNow = samIds.indexOf(amiId) >= 0;
+    try {
+      await fetch(PB_URL + '/api/collections/session_barathon/records/' + session.id, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
+        body: isSamNow
+          ? JSON.stringify({ 'id_sam-': [amiId] })
+          : JSON.stringify({ 'id_sam+': [amiId] }),
+      });
+      if (isSamNow) {
+        samIds = samIds.filter(function (id) { return id !== amiId; });
+      } else {
+        samIds.push(amiId);
+      }
+      amis = amis.map(function (a) { return Object.assign({}, a, { sam: samIds.indexOf(a.id) >= 0 }); });
+      renderTab();
+    } catch (_) {}
+  }
+
   // ── Carte Leaflet ─────────────────────────────────────────────────
   var leafletMarkers = [];
   function initMap() {
@@ -598,6 +624,11 @@
   // ── Événements ───────────────────────────────────────────────────
   document.querySelectorAll('.final-tab').forEach(function (btn) {
     btn.addEventListener('click', function () { switchTab(btn.dataset.tab); });
+  });
+
+  document.getElementById('tab-content').addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-sam-toggle]');
+    if (btn && isHote) toggleSam(btn.dataset.samToggle);
   });
 
   document.getElementById('btn-add-more')?.addEventListener('click', function () {
