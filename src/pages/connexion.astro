@@ -1,0 +1,104 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import { loginUser } from '../js/backend.js';
+import bgImg       from '../assets/img/fond_connextion_inscription.avif';
+import arrowRightLg from '../assets/icon/arrow_right_lg.svg';
+import '../styles/connexion.css';
+
+// Déjà connecté → profil (les deux cookies doivent exister, sinon on nettoie)
+const _token  = Astro.cookies.get('pb_token')?.value;
+const _userId = Astro.cookies.get('pb_user_id')?.value;
+if (_token && _userId) {
+  return Astro.redirect('/profil');
+}
+// Nettoyage d'un état incohérent (un cookie présent sans l'autre)
+if (_token  && !_userId) Astro.cookies.delete('pb_token',   { path: '/' });
+if (_userId && !_token)  Astro.cookies.delete('pb_user_id', { path: '/' });
+
+let error = '';
+
+if (Astro.request.method === 'POST') {
+  const body = await Astro.request.text();
+  const params = new URLSearchParams(body);
+  const email    = params.get('email') ?? '';
+  const password = params.get('password') ?? '';
+
+  const result = await loginUser(email, password);
+  if (result?.token) {
+    Astro.cookies.set('pb_token',   result.token,     { httpOnly: true, path: '/', maxAge: 60 * 60 * 24 * 7, sameSite: 'lax' });
+    Astro.cookies.set('pb_user_id', result.record.id, { httpOnly: true, path: '/', maxAge: 60 * 60 * 24 * 7, sameSite: 'lax' });
+    return Astro.redirect('/profil');
+  }
+  error = 'Email ou mot de passe incorrect.';
+}
+---
+
+<Layout title="Connexion — Bargo">
+  <section class="relative min-h-200 overflow-hidden">
+
+    <!-- Fond sombre (pleine largeur) -->
+    <div class="absolute inset-0 bg-neutral-800"></div>
+
+    <!-- Photo droite — desktop uniquement -->
+    <div class="hidden lg:block absolute top-0 bottom-0 right-0 overflow-hidden" style="left: max(813px, calc(50% + 93px));">
+      <Image src={bgImg} alt="" class="w-full h-full object-cover object-top" />
+    </div>
+
+    <!-- Wrapper centré (pleine largeur mobile, max-1440px centré desktop) -->
+    <div class="absolute top-0 left-0 h-full w-full lg:max-w-360 lg:left-1/2 lg:-translate-x-1/2 z-10">
+
+      <!-- Erreur serveur -->
+      {error && (
+        <p class="absolute top-23.75 left-5 lg:left-20 text-red-400 text-3.5 font-medium m-0 z-10">{error}</p>
+      )}
+
+      <!-- H2 -->
+      <h2 class="absolute top-15 lg:top-23.75 left-5 lg:left-19.75 text-white m-0 uppercase text-8 lg:text-12.5">
+        CONNECTEZ-VOUS
+      </h2>
+
+      <!-- Sous-titre -->
+      <p class="absolute top-30 lg:top-43 left-5 lg:left-20 text-3.5 font-medium leading-tight text-white m-0 w-[calc(100%-40px)] lg:w-136.75">
+        Accédez à votre espace BARGO et retrouvez vos barathons.
+      </p>
+
+      <form method="POST" enctype="application/x-www-form-urlencoded">
+
+        <!-- ─── Adresse E-mail ─── -->
+        <label class="absolute top-47.5 lg:top-63.5 left-5 lg:left-20 text-white text-4 font-medium leading-snug">Adresse E-mail</label>
+        <div class="absolute top-56.25 lg:top-73.5 left-5 lg:left-20 right-5 lg:right-auto bg-neutral-200 rounded-0.75 h-15.5 lg:w-156 flex items-center px-8">
+          <input type="email" name="email" placeholder="Mail" required
+            class="bg-transparent w-full text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none" />
+        </div>
+
+        <!-- ─── Mot de passe ─── -->
+        <label class="absolute top-78.75 lg:top-98 left-5 lg:left-20 text-white text-4 font-medium leading-snug">Mots de passe</label>
+        <div class="absolute top-87.5 lg:top-108 left-5 lg:left-20 right-5 lg:right-auto bg-neutral-200 rounded-0.75 h-15.5 lg:w-156 flex items-center px-8">
+          <input type="password" name="password" placeholder="Mots de passe" required
+            class="bg-transparent w-full text-3.5 font-medium text-neutral-500 placeholder-neutral-500 outline-none" />
+        </div>
+
+        <!-- ─── Mot de passe oublié ─── -->
+        <p class="absolute top-108 lg:top-128.5 left-5 lg:left-20 text-3.5 font-medium leading-tight text-neutral-300 m-0">
+          Mot de passe oublié ?
+        </p>
+
+        <!-- ─── Bouton SE CONNECTER ─── -->
+        <button type="submit" id="btn-connexion"
+          class="absolute top-122.5 lg:top-145 left-5 lg:left-[calc(25%+107px)] w-[calc(100%-40px)] lg:w-59.25 bg-primary-600 h-15 inline-flex items-center justify-center gap-4 text-white text-4 font-medium leading-snug hover:opacity-90 transition-opacity cursor-pointer border-0">
+          SE CONNECTER
+          <Image src={arrowRightLg} alt="" width={35} height={35} class="brightness-0 invert" />
+        </button>
+
+        <!-- ─── Lien inscription ─── -->
+        <p class="absolute top-143.75 lg:top-166 left-5 lg:left-[calc(25%+344px)] lg:-translate-x-full text-3.5 font-medium leading-tight text-white m-0">
+          Pas encore de compte ?&nbsp;<a href="/inscription" class="underline hover:opacity-70 transition-opacity">S'inscrire</a>
+        </p>
+
+      </form>
+    </div>
+
+  </section>
+
+</Layout>
