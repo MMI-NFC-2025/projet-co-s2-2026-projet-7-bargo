@@ -155,13 +155,13 @@ const plans = [
               </div>
             ) : plan.id === 'gratuit' ? (
               <a href="/"
-                class="mt-6 w-full h-13 flex items-center justify-center text-white text-4 font-medium hover:opacity-90 transition-opacity no-underline rounded-0.75"
+                class="mt-6 w-full h-13 flex items-center justify-center text-white text-4 font-medium hover:brightness-110 active:scale-[0.97] transition-all no-underline rounded-0.75"
                 style={`background-color: ${plan.couleurBtn};`}>
                 {plan.cta}
               </a>
             ) : (
               <a href={`/paiement?plan=${plan.id}`}
-                class="mt-6 w-full h-13 flex items-center justify-center text-white text-4 font-medium hover:opacity-90 transition-opacity no-underline rounded-0.75"
+                class="mt-6 w-full h-13 flex items-center justify-center text-white text-4 font-medium hover:brightness-110 active:scale-[0.97] transition-all no-underline rounded-0.75"
                 style={`background-color: ${plan.couleurBtn};`}>
                 {plan.cta}
               </a>
