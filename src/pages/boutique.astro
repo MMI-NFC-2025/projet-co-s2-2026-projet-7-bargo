@@ -604,4 +604,16 @@ function getButtonState(produit) {
 })();
   </script>
 
+<style>
+  .boutique-action-btn {
+    transition: filter 0.15s ease, transform 0.15s ease;
+  }
+  .boutique-action-btn:not(:disabled):hover {
+    filter: brightness(1.12);
+  }
+  .boutique-action-btn:not(:disabled):active {
+    transform: scale(0.97);
+  }
+</style>
+
 </Layout>

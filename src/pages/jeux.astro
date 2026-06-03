@@ -63,10 +63,12 @@ const totalPages = Math.ceil((data.totalItems ?? 0) / perPage);
                       ? '/connexion'
                       : jeu.type_du_jeux === 'questionaire' ? '/jeux_questionaire'
                       : jeu.type_du_jeux === 'memorie'      ? '/jeux_memoire'
+                      : jeu.type_du_jeux === 'reflex'       ? '/jeux_reflexe'
+                      : jeu.type_du_jeux === 'rythme'       ? '/jeux_rythme'
                       : '#';
                     return (
                       <a href={href}
-                        class="flex-1 lg:flex-none lg:absolute lg:top-35.5 lg:bottom-7.5 lg:left-4.75 lg:w-59.25 h-12 lg:h-auto bg-neutral-800 flex items-center justify-center text-white text-4 font-medium hover:opacity-90 transition-opacity no-underline">
+                        class="flex-1 lg:flex-none lg:absolute lg:top-35.5 lg:bottom-7.5 lg:left-4.75 lg:w-59.25 h-12 lg:h-auto bg-neutral-800 flex items-center justify-center text-white text-4 font-medium hover:bg-primary-900 active:scale-95 transition-all no-underline">
                         {isAuth ? 'Jouer' : 'Se connecter'}
                       </a>
                     );

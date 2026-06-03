@@ -288,6 +288,18 @@ const appData = JSON.stringify({ bars, jeux, users: amieUsers, PB_URL, token, us
   </div>
 </div>
 
+<style>
+  #step-view button {
+    transition: filter 0.15s ease, transform 0.15s ease;
+  }
+  #step-view button:hover {
+    filter: brightness(1.15);
+  }
+  #step-view button:active {
+    transform: scale(0.97);
+  }
+</style>
+
 <!-- Error toast -->
 <div id="error-toast" style="display:none; position:fixed; bottom:32px; left:50%; transform:translateX(-50%); background:#c0392b; color:white; font-size:14px; font-weight:500; padding:14px 28px; border-radius:5px; z-index:100;"></div>
 
