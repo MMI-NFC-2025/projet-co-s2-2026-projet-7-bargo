@@ -3,7 +3,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import PbImage from '../../components/PbImage.astro';
-import { getRecord, getImageUrl } from '../../js/backend.js';
+import { getRecord, getImageUrl } from '../../../backend/backend.js';
 import heartIcon          from '../../assets/icon/heart.svg';
 import bulleMessageIcon   from '../../assets/icon/bulle_de_message.svg';
 import likeFillIcon  from '../../assets/icon/like_fill.svg';
@@ -56,7 +56,7 @@ const hasMap = lat !== 0 && lon !== 0;
     <!-- Gradient sombre en bas -->
     <div class="absolute inset-0 pointer-events-none bar-hero-gradient-mobile"></div>
     <!-- Titre -->
-    <h1 class="absolute left-5 text-white uppercase m-0 text-8 leading-tight" style="bottom: 68px;">{bar.nom}</h1>
+    <h1 class="absolute left-5 text-white uppercase m-0 text-8 leading-tight" style="bottom: 88px;">{bar.nom}</h1>
     <!-- Icônes réseaux (gauche) + actions (droite) -->
     <div class="absolute bottom-4 left-5 right-5 flex items-center justify-between">
       <div class="flex gap-4">
@@ -207,7 +207,7 @@ const hasMap = lat !== 0 && lon !== 0;
   <div class="absolute top-0 left-1/2 -translate-x-1/2 h-full w-full max-w-360 z-2">
 
     <!-- Nom du bar -->
-    <h1 class="absolute top-95.5 left-20 text-white uppercase m-0">
+    <h1 class="absolute top-88 left-20 text-white uppercase m-0">
       {bar.nom}
     </h1>
 

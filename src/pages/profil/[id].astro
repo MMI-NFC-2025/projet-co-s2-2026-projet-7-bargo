@@ -2,7 +2,7 @@
 // @ts-nocheck
 import Layout from '../../layouts/Layout.astro';
 import { Image } from 'astro:assets';
-import { PB_URL, getImageUrl, getCollection } from '../../js/backend.js';
+import { PB_URL, getImageUrl, getCollection } from '../../../backend/backend.js';
 import PbImage from '../../components/PbImage.astro';
 import checkIcon      from '../../assets/icon/check.svg';
 import userRemoveIcon from '../../assets/icon/user_remove.svg';
@@ -308,7 +308,7 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
       </div>
 
       <!-- CONTENU PRINCIPAL -->
-      <div class="flex-1 bg-neutral-200" style={themeUrl ? `background-image:url('${themeUrl}');background-size:cover;background-position:center;background-attachment:local;` : ''}>
+      <div class={`flex-1 bg-neutral-200${themeUrl ? ' theme-active' : ''}`} style={themeUrl ? `background-image:url('${themeUrl}');background-size:cover;background-position:center;background-attachment:local;` : ''}>
 
         <!-- BARRE D'ONGLETS BLANCHE -->
         <div class="bg-white flex items-stretch lg:px-20 shadow-md h-14 lg:h-25">
@@ -632,6 +632,20 @@ const activeTab = Astro.url.searchParams.get('tab') ?? 'profil';
     </div>
 
   </section>
+
+  <style is:global>
+    /* Titres de section blancs quand un thème est équipé */
+    .theme-active h2,
+    .theme-active h3 {
+      color: white;
+    }
+    /* H3 dans les cartes blanches restent noirs */
+    .theme-active .bg-white h2,
+    .theme-active .bg-white h3 {
+      color: rgb(0 0 0);
+    }
+  </style>
+
 </Layout>
 
 <script is:inline define:vars={{ pbUrl: PB_URL, pbToken: token, pbUserId: userId, targetUserId: id, activeTab }}>

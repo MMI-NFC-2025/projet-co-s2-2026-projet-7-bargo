@@ -4,7 +4,7 @@ import logoDark from '../assets/icon/logo-dark.svg';
 import arrowRightLg from '../assets/icon/arrow_right_lg.svg';
 import userIcon  from '../assets/icon/user.svg';
 import PbImage from '../components/PbImage.astro';
-import { getImageUrl } from '../js/backend.js';
+import { getImageUrl } from '../../backend/backend.js';
 import '../styles/header.css';
 
 const token  = Astro.cookies.get('pb_token')?.value;

@@ -1,7 +1,7 @@
 ---
 // @ts-nocheck
 import Layout from '../../layouts/Layout.astro';
-import { PB_URL } from '../../js/backend.js';
+import { PB_URL } from '../../../backend/backend.js';
 
 const token  = Astro.cookies.get('pb_token')?.value ?? '';
 const userId = Astro.cookies.get('pb_user_id')?.value ?? '';
