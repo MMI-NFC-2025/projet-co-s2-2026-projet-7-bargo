@@ -4,7 +4,7 @@ import { Image } from 'astro:assets';
 import notifIcon from '../assets/icon/notifcation.svg';
 import notifSessionIcon from '../assets/icon/notif_session.svg';
 import arrowRightLg from '../assets/icon/arrow_right_lg.svg';
-import { PB_URL } from '../js/backend.js';
+import { PB_URL } from '../../backend/backend.js';
 
 const token  = Astro.cookies.get('pb_token')?.value;
 const userId = Astro.cookies.get('pb_user_id')?.value;

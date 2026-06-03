@@ -8,7 +8,7 @@ import warningIcon   from '../assets/icon/warning.svg';
 import arrowLeftIcon   from '../assets/icon/arrow_left_lg.svg';
 import creditCardIcon  from '../assets/icon/credit_card.svg';
 import lockIcon        from '../assets/icon/lock.svg';
-import { PB_URL } from '../js/backend.js';
+import { PB_URL } from '../../backend/backend.js';
 
 const planId = Astro.url.searchParams.get('plan') ?? 'vip';
 const token  = Astro.cookies.get('pb_token')?.value ?? null;

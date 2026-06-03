@@ -2,7 +2,7 @@
 // @ts-nocheck
 import Layout from '../../layouts/Layout.astro';
 import { Image } from 'astro:assets';
-import { getUserAuth, updateUser, deleteUser, getCollection, getImageUrl, PB_URL } from '../../js/backend.js';
+import { getUserAuth, updateUser, deleteUser, getCollection, getImageUrl, PB_URL } from '../../../backend/backend.js';
 import PbImage from '../../components/PbImage.astro';
 import heartIcon    from '../../assets/icon/like.svg';
 import likeFillIcon from '../../assets/icon/like_fill.svg';
@@ -401,7 +401,7 @@ const displayName = user.prenom
       </div>
 
       <!-- CONTENU PRINCIPAL -->
-      <div class="flex-1 bg-neutral-200" style={themeUrl ? `background-image:url('${themeUrl}');background-size:cover;background-position:center;background-attachment:local;` : ''}>
+      <div class={`flex-1 bg-neutral-200${themeUrl ? ' theme-active' : ''}`} style={themeUrl ? `background-image:url('${themeUrl}');background-size:cover;background-position:center;background-attachment:local;` : ''}>
 
         <!-- BARRE D'ONGLETS BLANCHE -->
         <div class="bg-white flex items-stretch lg:px-20 shadow-md h-14 lg:h-25">
@@ -1362,4 +1362,22 @@ const displayName = user.prenom
     import '../../js/like.js';
     import '../../js/amis.js';
   </script>
+
+  <style is:global>
+    /* Quand un thème est équipé, les titres de section passent en blanc */
+    .theme-active h2,
+    .theme-active h3 {
+      color: white;
+    }
+    /* Les h3 à l'intérieur de cartes blanches restent noirs */
+    .theme-active .bg-white h2,
+    .theme-active .bg-white h3 {
+      color: rgb(0 0 0);
+    }
+    /* Les spans de compteur dans les séparateurs restent neutres */
+    .theme-active h3 > span.text-neutral-500 {
+      color: rgb(100 98 98);
+    }
+  </style>
+
 </Layout>

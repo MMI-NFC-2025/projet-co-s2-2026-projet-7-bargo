@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import PbImage from '../../components/PbImage.astro';
-import { getCollection } from '../../js/backend.js';
+import { getCollection } from '../../../backend/backend.js';
 import LikeButton from '../../components/LikeButton.astro';
 
 const bars = await getCollection('bar', { sort: 'nom', perPage: 200 });
