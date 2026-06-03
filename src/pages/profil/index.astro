@@ -235,24 +235,27 @@ const displayName = user.prenom
 
     <!-- ===== MOBILE PROFILE HEADER ===== -->
     <div class="block lg:hidden px-5 pt-8 pb-6">
-      <!-- Avatar -->
-      <div class="mx-auto relative w-25 h-25 rounded-full">
-        <!-- Anneau gris -->
-        <div class="absolute inset-0 rounded-full" style="border: 8px solid #dfdfdf; z-index:1;"></div>
-        <!-- Photo (inset = épaisseur du border) -->
-        <div class="absolute inset-2 rounded-full overflow-hidden" style="z-index:2;">
-          {avatarUrl
-            ? <PbImage src={avatarUrl} alt="Avatar" class="w-full h-full object-cover" />
-            : <div class="w-full h-full bg-neutral-800 flex items-center justify-center">
-                <span class="text-white font-bold" style="font-size: 36px;">
-                  {(user.pseudo || user.email || '?')[0].toUpperCase()}
-                </span>
-              </div>
-          }
+      <!-- Avatar — conteneur large pour la décoration -->
+      <div class="mx-auto relative" style="width:144px; height:144px;">
+        <!-- Ring + photo : centrés à 100px dans le conteneur de 200px -->
+        <div class="absolute rounded-full" style="width:100px; height:100px; top:50%; left:50%; transform:translate(-50%,-50%);">
+          <div class="absolute inset-0 rounded-full" style="border: 8px solid #dfdfdf; z-index:1;"></div>
+          <div class="absolute inset-2 rounded-full overflow-hidden" style="z-index:2;">
+            {avatarUrl
+              ? <PbImage src={avatarUrl} alt="Avatar" class="w-full h-full object-cover" />
+              : <div class="w-full h-full bg-neutral-800 flex items-center justify-center">
+                  <span class="text-white font-bold" style="font-size: 36px;">
+                    {(user.pseudo || user.email || '?')[0].toUpperCase()}
+                  </span>
+                </div>
+            }
+          </div>
         </div>
-        <!-- Décoration par-dessus (couvre le cercle entier) -->
+        <!-- Décoration : remplit le conteneur de 200px (2× la taille de l'avatar) -->
         {decoUrl && (
-          <PbImage src={decoUrl} alt="" class="absolute inset-0 w-full h-full object-contain pointer-events-none" style="z-index:3;" />
+          <div class="absolute inset-0 pointer-events-none" style="z-index:3;">
+            <PbImage src={decoUrl} alt="" class="w-full h-full object-contain" />
+          </div>
         )}
       </div>
       <h2 class="text-black m-0 mt-4 text-center text-7">{displayName}</h2>
@@ -294,11 +297,13 @@ const displayName = user.prenom
               </div>
           }
         </div>
-        <!-- Décoration par-dessus (couvre le cercle entier) -->
-        {decoUrl && (
-          <PbImage src={decoUrl} alt="" class="absolute inset-0 w-full h-full object-contain pointer-events-none" style="z-index:3;" />
-        )}
       </div>
+      <!-- Décoration desktop : 218px centrés sur l'avatar (187px), légèrement plus bas -->
+      {decoUrl && (
+        <div class="absolute pointer-events-none" style="z-index:5; width:224px; height:224px; left:calc(80px - 20px); top:calc(119px - 18px + 5px);">
+          <PbImage src={decoUrl} alt="" class="w-full h-full object-contain" />
+        </div>
+      )}
       <!-- Nom -->
       <h2 class="absolute m-0 text-black overflow-hidden text-ellipsis whitespace-nowrap w-86"
         style="left: calc(16.67% + 59px); top: 119px;">
@@ -365,8 +370,8 @@ const displayName = user.prenom
             <div class="flex flex-col gap-5 mt-3">
               {amiesExpand.map(ami => (
                 <a href={`/profil/${ami.id}`} class="flex items-center gap-4 no-underline hover:opacity-80 transition-opacity">
-                  <div class="relative w-16 h-16 rounded-full shrink-0">
-                    <div class="absolute inset-0 rounded-full overflow-hidden" style="z-index:1;">
+                  <div class="relative shrink-0" style="width:96px; height:96px;">
+                    <div class="absolute rounded-full overflow-hidden" style="width:64px; height:64px; top:50%; left:50%; transform:translate(-50%,-50%); z-index:1;">
                       {ami.avatar
                         ? <PbImage record={ami} recordImage={ami.avatar} alt={ami.pseudo} class="w-full h-full object-cover" />
                         : <div class="w-full h-full bg-primary-600 flex items-center justify-center">
@@ -375,7 +380,9 @@ const displayName = user.prenom
                       }
                     </div>
                     {ami.decoUrl && (
-                      <PbImage src={ami.decoUrl} alt="" class="absolute inset-0 w-full h-full object-contain pointer-events-none" style="z-index:2;" />
+                      <div class="absolute inset-0 pointer-events-none" style="z-index:2;">
+                        <PbImage src={ami.decoUrl} alt="" class="w-full h-full object-contain" />
+                      </div>
                     )}
                   </div>
                   <div class="min-w-0">
@@ -1105,8 +1112,8 @@ const displayName = user.prenom
               <div class="flex flex-col gap-5">
                 {amiesExpand.map(ami => (
                   <a href={`/profil/${ami.id}`} class="flex items-center gap-4 no-underline hover:opacity-80 transition-opacity">
-                    <div class="relative w-14 h-14 rounded-full shrink-0">
-                      <div class="absolute inset-0 rounded-full overflow-hidden" style="z-index:1;">
+                    <div class="relative shrink-0" style="width:84px; height:84px;">
+                      <div class="absolute rounded-full overflow-hidden" style="width:56px; height:56px; top:50%; left:50%; transform:translate(-50%,-50%); z-index:1;">
                         {ami.avatar
                           ? <PbImage record={ami} recordImage={ami.avatar} alt={ami.pseudo} class="w-full h-full object-cover" />
                           : <div class="w-full h-full bg-primary-600 flex items-center justify-center">
@@ -1115,7 +1122,9 @@ const displayName = user.prenom
                         }
                       </div>
                       {ami.decoUrl && (
-                        <PbImage src={ami.decoUrl} alt="" class="absolute inset-0 w-full h-full object-contain pointer-events-none" style="z-index:2;" />
+                        <div class="absolute inset-0 pointer-events-none" style="z-index:2;">
+                          <PbImage src={ami.decoUrl} alt="" class="w-full h-full object-contain" />
+                        </div>
                       )}
                     </div>
                     <div class="min-w-0">
